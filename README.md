@@ -1,3 +1,5 @@
+[![Stories in Ready](https://badge.waffle.io/craftsmenlabs/stories.png?label=ready&title=Ready)](http://waffle.io/craftsmenlabs/stories)
+
 # stories
 Stories is a Jenkins plugin and is a validator for checking the quality of a backlog (checking all user stories). 
 
