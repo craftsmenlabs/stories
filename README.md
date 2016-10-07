@@ -1,4 +1,6 @@
 [![Stories in Ready](https://badge.waffle.io/craftsmenlabs/stories.png?label=ready&title=Ready)](http://waffle.io/craftsmenlabs/stories)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/f5732d9ff2ce42158989edaffd298688)](https://www.codacy.com/app/ntalens/stories?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=craftsmenlabs/stories&amp;utm_campaign=Badge_Grade)
+
 
 # stories
 Stories is a Jenkins plugin and is a validator for checking the quality of a backlog (checking all user stories). 
