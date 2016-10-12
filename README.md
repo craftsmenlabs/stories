@@ -1,6 +1,6 @@
 [![Stories in Ready](https://badge.waffle.io/craftsmenlabs/stories.png?label=ready&title=Ready)](http://waffle.io/craftsmenlabs/stories)
 [![Build Status](https://travis-ci.org/craftsmenlabs/stories.svg?branch=master)](https://travis-ci.org/craftsmenlabs/stories)
-[![Coverage Status](https://coveralls.io/repos/github/craftsmenlabs/gareth-jvm/badge.svg)](https://coveralls.io/github/craftsmenlabs/gareth-jvm)
+[![Coverage Status](https://coveralls.io/repos/github/craftsmenlabs/stories/badge.svg)](https://coveralls.io/github/craftsmenlabs/stories)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/f5732d9ff2ce42158989edaffd298688)](https://www.codacy.com/app/ntalens/stories?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=craftsmenlabs/stories&amp;utm_campaign=Badge_Grade)
 
 
