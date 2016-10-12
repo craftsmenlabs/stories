@@ -1,0 +1,16 @@
+language: java
+
+sudo: false
+
+jdk:
+  - oraclejdk8
+
+script: mvn clean package
+
+after_success:
+  - mvn jacoco:report coveralls:report
+
+notifications:
+  slack:
+    rooms:
+      - codecentric:i0Ekrt5ujN7hHqmZviq64SsI#stories
