@@ -7,17 +7,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 public class ConsoleReporter
 {
 	private final Logger logger = LoggerFactory.getLogger(ConsoleReporter.class);
-    private String prefix;
+    private String prefix = ANSI_PURPLE;
     private String postfix = ANSI_RESET;
 
     public void report(BacklogValidatorEntry backlogValidatorEntry){
         //header
-        log("\n\n\n" + storynator + " \n\n\n");
+        Random r = new Random();
+        String stry = storynator.chars().mapToObj(chr ->"" + COLORS[r.nextInt(COLORS.length)] + (char)chr + ANSI_RESET).collect(Collectors.joining(""));
+
+        log("\n\n\n" + stry + " \n\n\n");
         log("------------------------------------------------------------");
         log("--               verbose output                           --");
         log("------------------------------------------------------------");
@@ -27,7 +33,7 @@ public class ConsoleReporter
         entries.forEach(issue -> reportOnIssue(issue));
 
         //Summary
-        log("\n\n\n" + storynator + " \n\n\n");
+        log("\n\n\n" + stry + " \n\n\n");
         log("------------------------------------------------------------");
         log("--                  Storynator report                     --");
         log("------------------------------------------------------------");
@@ -116,5 +122,14 @@ public class ConsoleReporter
     public static final String ANSI_PURPLE = "\u001B[35m";
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_WHITE = "\u001B[37m";
+    public static final String[] COLORS = {
+            ANSI_BLACK,
+            ANSI_RED,
+            ANSI_GREEN,
+            ANSI_YELLOW,
+            ANSI_BLUE,
+            ANSI_PURPLE,
+            ANSI_CYAN,
+            ANSI_WHITE};
 
 }
