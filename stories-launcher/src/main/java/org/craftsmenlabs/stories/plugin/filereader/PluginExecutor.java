@@ -34,12 +34,10 @@ public class PluginExecutor {
         String data = importer.getDataAsString();
         Parser parser = getParser(cfg.getDataformat());
 
-        List<Issue> issues =
-                parser.getIssues(data)
-                        .stream()
-                        .filter(issue -> issue.getUserstory() != null )
-                        .filter(issue -> !issue.getUserstory().isEmpty())
-                        .collect(Collectors.toList());
+        List<Issue> issues = parser.getIssues(data).stream()
+                .filter(issue -> issue.getUserstory() != null )
+                .filter(issue -> !issue.getUserstory().isEmpty())
+                .collect(Collectors.toList());
 
         Backlog backlog = new Backlog();
         backlog.setIssues(issues);
@@ -62,7 +60,7 @@ public class PluginExecutor {
     public Importer getImporter(ApplicationConfig cfg){
         if(restApiParametersAreSet(cfg)){
             logger.info("rest Api parameters are set, using JiraAPIImporter");
-            return new JiraAPIImporter(cfg.getUrl(), cfg.getProjectkey(), cfg.getAuthkey(), STATUS);
+            return new JiraAPIImporter(cfg.getUrl(), cfg.getProjectkey(), cfg.getAuthkey(), cfg.getStatus());
         }else{
             logger.info("No rest Api parameters are set, using FileImporter on file: " + cfg.getInputfile());
             return new FileImporter(cfg.getInputfile());
