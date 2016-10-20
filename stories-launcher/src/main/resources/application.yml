@@ -1,15 +1,15 @@
 application:
     dataformat: jirajson
-    inputfile: "/Users/youritjang/IdeaProjects/stories/temp/issuesfile.json"
-    outputfile: "/Users/youritjang/IdeaProjects/stories/temp/output.json"
+    inputfile:
+    outputfile: "stories-output.json"
     url:
     authkey:
     projectkey:
     status: To Do
 
 ranking:
-    desiredMiniumStableRanking: 70
-    desiredMinimumUnstableRanking: 60
+    desiredMiniumStableRanking: 50
+    desiredMinimumUnstableRanking: 50
     desiredRankingStrategy: Curved
 
 validation:
