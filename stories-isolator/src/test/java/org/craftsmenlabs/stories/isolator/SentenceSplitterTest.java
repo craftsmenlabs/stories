@@ -1,20 +1,18 @@
 package org.craftsmenlabs.stories.isolator;
 
-import mockit.Expectations;
-import mockit.Mocked;
-import mockit.Tested;
-import opennlp.tools.sentdetect.SentenceDetectorME;
+import static org.assertj.core.api.Assertions.assertThat;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
 import org.junit.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import mockit.*;
+import opennlp.tools.sentdetect.SentenceDetectorME;
 
 public class SentenceSplitterTest{
 
-	@Mocked SentenceDetectorME sentenceDetector;
+	@Mocked
+	private SentenceDetectorME sentenceDetector;
 
 	@Tested
-	SentenceSplitter sentenceSplitter;
+	private SentenceSplitter sentenceSplitter;
 
 	@Test
 	public void splitSentenceTest() throws Exception

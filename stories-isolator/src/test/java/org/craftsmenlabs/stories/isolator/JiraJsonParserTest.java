@@ -1,5 +1,11 @@
 package org.craftsmenlabs.stories.isolator;
 
+import static org.junit.Assert.assertTrue;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.Comparator;
+import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
 import org.craftsmenlabs.stories.isolator.model.JiraJsonIssue;
@@ -7,17 +13,9 @@ import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.Comparator;
-import java.util.List;
-
-import static org.junit.Assert.assertTrue;
-
 public class JiraJsonParserTest {
 
-    JiraJsonParser jiraJsonParser = new JiraJsonParser();
+    private JiraJsonParser jiraJsonParser = new JiraJsonParser();
 
     @Ignore("Test to be implemented")
     @Test
@@ -31,6 +29,7 @@ public class JiraJsonParserTest {
                     .filter(jiraJsonIssue -> jiraJsonIssue.getFields().getIssuetype().name.equals("Story"))
                     .forEach(jiraJsonIssue -> System.out.println(jiraJsonIssue));
 
+            //TODO: Fix this test
             assertTrue(false);
         } catch (IOException e) {
             e.printStackTrace();

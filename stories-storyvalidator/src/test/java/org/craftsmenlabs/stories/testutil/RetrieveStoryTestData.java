@@ -1,10 +1,9 @@
 package org.craftsmenlabs.stories.testutil;
 
-import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
 
 public class RetrieveStoryTestData
 {

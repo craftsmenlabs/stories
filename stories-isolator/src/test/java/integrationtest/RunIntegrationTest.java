@@ -1,15 +1,13 @@
 package integrationtest;
 
+import static org.junit.Assert.assertEquals;
+import java.util.List;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
 import org.craftsmenlabs.stories.isolator.parser.JiraCSVParser;
 import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
 import org.craftsmenlabs.stories.isolator.testutil.RetrieveTestData;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
 
 public class RunIntegrationTest {
 

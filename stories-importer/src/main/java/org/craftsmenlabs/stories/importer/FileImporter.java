@@ -1,13 +1,12 @@
 package org.craftsmenlabs.stories.importer;
 
-import org.apache.commons.io.FileUtils;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import org.apache.commons.io.FileUtils;
 
 public class FileImporter implements Importer{
-    String filename;
+    private String filename;
 
     public FileImporter(String filename) {
         this.filename = filename;

@@ -5,6 +5,6 @@ import lombok.Value;
 @Value
 public class CriteriaViolation implements Violation
 {
-	ViolationType violationType;
-	String cause;
+	private ViolationType violationType;
+	private String cause;
 }

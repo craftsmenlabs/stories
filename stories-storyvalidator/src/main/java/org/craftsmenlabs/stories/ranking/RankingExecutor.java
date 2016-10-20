@@ -1,9 +1,8 @@
 package org.craftsmenlabs.stories.ranking;
 
+import java.util.List;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 import org.craftsmenlabs.stories.api.models.validatorentry.IssueValidatorEntry;
-
-import java.util.List;
 
 /**
  *

@@ -1,9 +1,9 @@
 package org.craftsmenlabs.stories.plugin.filereader;
 
-import lombok.Data;
 import org.craftsmenlabs.stories.api.models.validatorentry.validatorconfig.ScorerConfigCopy;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+import lombok.Data;
 
 @Data
 @Component

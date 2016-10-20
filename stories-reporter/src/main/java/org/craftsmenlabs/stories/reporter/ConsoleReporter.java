@@ -1,16 +1,14 @@
 package org.craftsmenlabs.stories.reporter;
 
+import java.text.DecimalFormat;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.Violation;
 import org.craftsmenlabs.stories.api.models.validatorentry.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.text.DecimalFormat;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
 
 public class ConsoleReporter
 {
@@ -99,8 +97,8 @@ public class ConsoleReporter
                 log("\t\t Violation found: " + violation.toString()));
     }
 
-    String storynator =
-            "   ,d88~/\\   d8                                                d8                   \n" +
+    private String storynator =
+        "   ,d88~/\\   d8                                                d8                   \n" +
             "   8888/   _d88__  e88~-_  888-~\\ Y88b  / 888-~88e   /~~~8e  _d88__  e88~-_  888-~\\ \n" +
             "   `Y88b    888   d888   i 888     Y888/  888  888       88b  888   d888   i 888    \n" +
             "    `Y88b,  888   8888   | 888      Y8/   888  888  e88~-888  888   8888   | 888    \n" +

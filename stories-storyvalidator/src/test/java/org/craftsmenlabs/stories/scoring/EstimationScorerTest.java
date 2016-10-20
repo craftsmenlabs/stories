@@ -1,19 +1,16 @@
 package org.craftsmenlabs.stories.scoring;
 
-import mockit.Expectations;
-import mockit.Injectable;
-import mockit.Tested;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.withinPercentage;
 import org.craftsmenlabs.stories.api.models.validatorentry.IssueValidatorEntry;
 import org.craftsmenlabs.stories.api.models.validatorentry.validatorconfig.ScorerConfigCopy;
 import org.junit.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.withinPercentage;
+import mockit.*;
 
 public class EstimationScorerTest {
 
     @Tested
-    EstimationScorer estimationScorer;
+    private EstimationScorer estimationScorer;
 
     @Test
     public void performScorer_ReturnsZeroOnNull(@Injectable IssueValidatorEntry entry, @Injectable ScorerConfigCopy validationConfig) throws Exception {
