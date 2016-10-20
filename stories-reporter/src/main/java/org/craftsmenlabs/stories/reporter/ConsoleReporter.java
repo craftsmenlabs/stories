@@ -1,5 +1,6 @@
 package org.craftsmenlabs.stories.reporter;
 
+import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.Violation;
 import org.craftsmenlabs.stories.api.models.validatorentry.*;
 import org.slf4j.Logger;
@@ -11,33 +12,37 @@ import java.util.List;
 public class ConsoleReporter
 {
 	private final Logger logger = LoggerFactory.getLogger(ConsoleReporter.class);
+    private String prefix;
+    private String postfix = ANSI_RESET;
 
     public void report(BacklogValidatorEntry backlogValidatorEntry){
         //header
-        logger.info("\n\n\n" + storynator + " \n\n\n");
-        logger.info("------------------------------------------------------------");
-        logger.info("--               verbose output                           --");
-        logger.info("------------------------------------------------------------");
+        log("\n\n\n" + storynator + " \n\n\n");
+        log("------------------------------------------------------------");
+        log("--               verbose output                           --");
+        log("------------------------------------------------------------");
 
         //verbose output
         List<IssueValidatorEntry> entries = backlogValidatorEntry.getIssueValidatorEntries();
         entries.forEach(issue -> reportOnIssue(issue));
 
         //Summary
-        logger.info("\n\n\n" + storynator + " \n\n\n");
-        logger.info("------------------------------------------------------------");
-        logger.info("--                  Storynator report                     --");
-        logger.info("------------------------------------------------------------");
+        log("\n\n\n" + storynator + " \n\n\n");
+        log("------------------------------------------------------------");
+        log("--                  Storynator report                     --");
+        log("------------------------------------------------------------");
 
-        logger.info("Processed a total of " + entries.size() + " issues.");
-        logger.info("Backlog score of " + new DecimalFormat("#.##").format(backlogValidatorEntry.getPointsValuation()*100f) + "% ");
-        logger.info("Rated: " + backlogValidatorEntry.getRating());
+        log("Processed a total of " + entries.size() + " issues.");
+        log("Backlog score of " + new DecimalFormat("#.##").format(backlogValidatorEntry.getPointsValuation()*100f) + "% ");
+        log("Rated: " + backlogValidatorEntry.getRating());
     }
 
 
     public void reportOnIssue(IssueValidatorEntry issue){
-        logger.info("------------------------------------------------------------");
-        logger.info("Issue "
+        prefix = issue.getRating() == Rating.SUCCES ? ANSI_GREEN : ANSI_RED;
+
+        log("------------------------------------------------------------");
+        log("Issue "
                         + issue.getIssue().getKey()
                         + " Total (" + issue.getPointsValuation() + ") \t"
                         + " US("+ issue.getUserStoryValidatorEntry().getPointsValuation() +")\t"
@@ -45,7 +50,7 @@ public class ConsoleReporter
                   );
         issue.getViolations()
                 .forEach(violation ->
-                        logger.info("Violation found:" + violation.toColoredString()));
+                        log("Violation found:" + violation.toString()));
 
         reportOnUserstory(issue.getUserStoryValidatorEntry());
         reportOnAcceptanceCriteria(issue.getAcceptanceCriteriaValidatorEntry());
@@ -54,23 +59,30 @@ public class ConsoleReporter
 
 
     public void reportOnUserstory(UserStoryValidatorEntry entry){
+        prefix = entry.getRating() == Rating.SUCCES ? ANSI_GREEN : ANSI_RED;
+
+
         String userstory = entry.getUserStory().replace("\n", " ").replace("\r", "");
-        logger.info("\t Userstory: (" + entry.getPointsValuation() + ") " + userstory);
+        log("\t Userstory: (" + entry.getPointsValuation() + ") " + userstory);
 
         reportOnViolations(entry.getViolations());
     }
 
 
     public void reportOnAcceptanceCriteria(AcceptanceCriteriaValidatorEntry entry){
+        prefix = entry.getRating() == Rating.SUCCES ? ANSI_GREEN : ANSI_RED;
+
         String criteria = entry.getAcceptanceCriteria().replace("\n", " ").replace("\r", "");
-        logger.info("\t Criteria: (" + entry.getPointsValuation() + ") " + criteria );
+        log("\t Criteria: (" + entry.getPointsValuation() + ") " + criteria );
 
         reportOnViolations(entry.getViolations());
     }
 
     public void reportOnEstimation(EstimationValidatorEntry entry){
+        prefix = entry.getRating() == Rating.SUCCES ? ANSI_GREEN : ANSI_RED;
+
         Float estimation = entry.getEstimation();
-        logger.info("\t Estimation: (" +entry.getPointsValuation() + ")" + estimation );
+        log("\t Estimation: (" +entry.getPointsValuation() + ")" + estimation );
 
         reportOnViolations(entry.getViolations());
     }
@@ -78,7 +90,7 @@ public class ConsoleReporter
 
     public void reportOnViolations(List<Violation> violations){
         violations.forEach(violation ->
-                logger.info("\t\t Violation found: " + violation.toColoredString()));
+                log("\t\t Violation found: " + violation.toString()));
     }
 
     String storynator =
@@ -89,5 +101,20 @@ public class ConsoleReporter
             "     /8888  888   Y888   ' 888       Y    888  888 C888  888  888   Y888   ' 888    \n" +
             "   \\/_88P'  \"88_/  \"88_-~  888      /     888  888  \"88_-888  \"88_/  \"88_-~  888    \n" +
             "                                  _/";
+
+
+    private void log(String msg){
+        logger.info(prefix + msg + postfix);
+    }
+
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_BLACK = "\u001B[30m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_PURPLE = "\u001B[35m";
+    public static final String ANSI_CYAN = "\u001B[36m";
+    public static final String ANSI_WHITE = "\u001B[37m";
 
 }
