@@ -1,0 +1,24 @@
+application:
+    dataformat: jirajson
+    inputfile: "/Users/youritjang/IdeaProjects/stories2/temp/output.json"
+    outputfile: "/Users/youritjang/IdeaProjects/stories2/temp/issuesfile.json"
+    url:
+    authkey:
+    projectkey:
+
+ranking:
+    desiredMiniumStableRanking: 70
+    desiredMinimumUnstableRanking: 60
+    desiredRankingStrategy: Curved
+
+validation:
+        backlog:
+            ratingtreshold: 0.7
+        issue:
+            ratingtreshold: 0.7
+        story:
+            ratingtreshold: 0.7
+        criteria:
+            ratingtreshold: 0.7
+        estimation:
+            ratingtreshold: 0.7
