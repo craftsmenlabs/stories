@@ -5,44 +5,55 @@ import org.craftsmenlabs.stories.api.models.validatorentry.validatorconfig.Score
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
+import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 
 @SpringBootApplication
-public class BootApp {
+public class BootApp
+{
 
-    @Autowired
-    private ApplicationConfig applicationConfig;
+	private final Logger logger = LoggerFactory.getLogger(BootApp.class);
+	@Autowired
+	private ApplicationConfig applicationConfig;
+	@Autowired
+	private ValidationConfig validationConfig;
 
-    @Autowired
-    private ValidationConfig validationConfig;
+	public static void main(String[] args)
+	{
+		SpringApplication application = new SpringApplication(BootApp.class);
+		application.setBannerMode(Banner.Mode.OFF);
+		ApplicationContext context = application.run(args);
 
-    private final Logger logger = LoggerFactory.getLogger(BootApp.class);
+		BootApp app = context.getBean(BootApp.class);
+		int result = app.startApplication(args);
 
-    public static void main(String[] args) {
-        ApplicationContext context = SpringApplication.run(BootApp.class, args);
+		LoggerFactory.getLogger(BootApp.class).info("Finished stories plugin succes.");
+		SpringApplication.exit(context, new ExitCodeGenerator()
+		{
+			@Override public int getExitCode()
+			{
+				return result;
+			}
+		});
 
-        BootApp app = context.getBean(BootApp.class);
-        app.startApplication(args);
-    }
+	}
 
-    public void startApplication(String[] args) {
-        logger.info("Starting stories plugin.");
+	public int startApplication(String[] args)
+	{
+		logger.info("Starting stories plugin.");
 
-        PluginExecutor pluginExecutor = new PluginExecutor();
-        ScorerConfigCopy scorerConfigCopy = validationConfig.clone();
+		PluginExecutor pluginExecutor = new PluginExecutor();
+		ScorerConfigCopy scorerConfigCopy = validationConfig.clone();
 
-        Rating rating = pluginExecutor.execute(applicationConfig, scorerConfigCopy);
-        if (rating == Rating.SUCCES)
-        {
-            System.exit(0);
-        }
-        else
-        {
-            System.exit(-1);
-        }
-
-        logger.info("Finished stories plugin.");
-    }
+		Rating rating = pluginExecutor.execute(applicationConfig, scorerConfigCopy);
+		if (rating == Rating.SUCCES)
+		{
+			return 0;
+		}
+		else
+		{
+			return -1;
+		}
+	}
 }

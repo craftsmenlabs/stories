@@ -26,22 +26,39 @@ Things we meassure:
 * [Jira](https://jira.atlassian.com) - Issue & Project tracking. Currently Stories has been tested on Jira version 6.4 
 
 ## Build
-    mvn package
+    mvn clean install package
 
 ## Usage
-    java -jar stories-<version>.jar [PARAMETERS]
+    java -jar stories-launcher/stories-launcher<version>.jar [OPTIONAL PARAMETERS]
 
-Parameters
-* -f path to the file containing the stories (an export from Jira)
-* -df the data format used in the above mentioned file. Choose from: {jirajson, jiracsv}
-* -d (optional) The delimiter by which the data is separated
-* -url (optional) The url to the Jira api
-* -pk (optional) the Jira project key
-* -a (optional) the Jira authentication key
+
+### Parameters for ranking:
+* -- application.dataformat = jirajson
+* -- application.inputfile = <PATH+FILENAME TO JSON FILE>
+* -- application.outputfile = <output filepath+name storynator.json>
+* -- application.url = <http://jira.demo.com host without the jira api extension>
+* -- application.authkey = <base64 encoded username:password for Jira>
+* -- application.projectkey = <projectkey used in Jira>
+* -- application.status = <status for backlogitems used in Jira>
+
+### Parameters for ranking:
+* -- ranking.desiredMiniumStableRanking = 70
+* -- ranking.desiredMinimumUnstableRanking = 60
+* -- ranking.desiredRankingStrategy = Curved
+
+### Parameters for rating
+* -- validation.backlog.ratingtreshold = 70
+* -- validation.issue.ratingtreshold = 70
+* -- validation.story.ratingtreshold = 70
+* -- validation.criteria.ratingtreshold = 70
+* -- validation.estimation.ratingtreshold = 70
+
 
 ### Constraints
 At the moment there are some constraints on the data. 
 In order to function properly:
 * User stories should end with a dot (.), and
+* User stories should be in a format: As a...I...So i
 * Acceptance criteria should end with a dot (.)
+* User stories should use Gherkin language: Given..When..Then
 
