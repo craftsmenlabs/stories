@@ -1,10 +1,9 @@
 package org.craftsmenlabs.stories.api.models.scrumitems;
 
-import lombok.Data;
-
 import java.util.List;
+import lombok.Data;
 
 @Data
 public class Backlog implements ScrumItem{
-    List<Issue> issues;
+    private List<Issue> issues;
 }

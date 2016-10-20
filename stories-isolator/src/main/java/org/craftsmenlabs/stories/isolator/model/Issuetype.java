@@ -1,11 +1,10 @@
 
 package org.craftsmenlabs.stories.isolator.model;
 
-import com.fasterxml.jackson.annotation.*;
-
-import javax.annotation.Generated;
 import java.util.HashMap;
 import java.util.Map;
+import javax.annotation.Generated;
+import com.fasterxml.jackson.annotation.*;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")

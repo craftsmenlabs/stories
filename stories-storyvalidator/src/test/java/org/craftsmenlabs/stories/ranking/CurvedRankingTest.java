@@ -1,8 +1,5 @@
 package org.craftsmenlabs.stories.ranking;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.withinPercentage;
-
 public class CurvedRankingTest// implements RankingTest
 {
 //

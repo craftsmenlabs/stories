@@ -1,11 +1,10 @@
 package org.craftsmenlabs.stories.isolator;
 
-import opennlp.tools.sentdetect.SentenceDetectorME;
-import opennlp.tools.sentdetect.SentenceModel;
-import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
-
 import java.io.IOException;
 import java.io.InputStream;
+import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
+import opennlp.tools.sentdetect.SentenceDetectorME;
+import opennlp.tools.sentdetect.SentenceModel;
 
 /**
  * The Isolator can map a string to a card

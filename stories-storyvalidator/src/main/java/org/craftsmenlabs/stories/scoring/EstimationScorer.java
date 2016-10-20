@@ -1,10 +1,9 @@
 package org.craftsmenlabs.stories.scoring;
 
+import java.util.ArrayList;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.validatorentry.EstimationValidatorEntry;
 import org.craftsmenlabs.stories.api.models.validatorentry.validatorconfig.ScorerConfigCopy;
-
-import java.util.ArrayList;
 
 /**
  * Assigns points if a estimation is ok

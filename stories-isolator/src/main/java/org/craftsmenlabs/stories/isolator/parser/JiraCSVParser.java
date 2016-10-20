@@ -1,13 +1,10 @@
 package org.craftsmenlabs.stories.isolator.parser;
 
+import java.util.*;
+import java.util.stream.Collectors;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
 import org.craftsmenlabs.stories.isolator.SentenceSplitter;
 import org.craftsmenlabs.stories.isolator.model.JiraCSVIssueDTO;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Deprecated
 public class JiraCSVParser implements Parser {

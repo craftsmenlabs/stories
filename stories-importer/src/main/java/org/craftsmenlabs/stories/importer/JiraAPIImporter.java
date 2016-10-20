@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
  */
 public class JiraAPIImporter implements Importer
 {
-	static final URL SOURCE_PATHS = JiraAPIImporter.class.getResource("logback.xml");
+	//private static final URL SOURCE_PATHS = JiraAPIImporter.class.getResource("logback.xml");
 
 	public static final int CONNECTION_TIMEOUT = 5000;
 	public static final int DOWNLOAD_TIMEOUT = 60000;

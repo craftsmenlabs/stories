@@ -1,14 +1,10 @@
 package org.craftsmenlabs.stories.scoring;
 
-import org.craftsmenlabs.stories.api.models.Rating;
-import org.craftsmenlabs.stories.api.models.StoryViolation;
-import org.craftsmenlabs.stories.api.models.Violation;
-import org.craftsmenlabs.stories.api.models.ViolationType;
-import org.craftsmenlabs.stories.api.models.validatorentry.UserStoryValidatorEntry;
-import org.craftsmenlabs.stories.api.models.validatorentry.validatorconfig.ScorerConfigCopy;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.craftsmenlabs.stories.api.models.*;
+import org.craftsmenlabs.stories.api.models.validatorentry.UserStoryValidatorEntry;
+import org.craftsmenlabs.stories.api.models.validatorentry.validatorconfig.ScorerConfigCopy;
 
 public class StoryScorer {
 

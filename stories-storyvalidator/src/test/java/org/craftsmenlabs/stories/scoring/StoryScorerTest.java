@@ -1,22 +1,18 @@
 package org.craftsmenlabs.stories.scoring;
 
-import mockit.Expectations;
-import mockit.Injectable;
-import mockit.Tested;
+import static org.assertj.core.api.Assertions.assertThat;
+import java.util.ArrayList;
+import java.util.List;
 import org.craftsmenlabs.stories.api.models.Violation;
 import org.craftsmenlabs.stories.api.models.validatorentry.IssueValidatorEntry;
 import org.craftsmenlabs.stories.api.models.validatorentry.validatorconfig.ScorerConfigCopy;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import mockit.*;
 
 public class StoryScorerTest {
 
     @Tested
-    StoryScorer storyScorer;
+    private StoryScorer storyScorer;
 
     @Test
     public void testPerformScorer(@Injectable IssueValidatorEntry entry, @Injectable ScorerConfigCopy validationConfig) throws Exception {
