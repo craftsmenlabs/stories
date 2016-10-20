@@ -1,5 +1,7 @@
 package org.craftsmenlabs.stories.importer;
 
+import java.util.Optional;
+
 public interface Importer {
-    String getDataAsString();
+    Optional<String> getDataAsString();
 }

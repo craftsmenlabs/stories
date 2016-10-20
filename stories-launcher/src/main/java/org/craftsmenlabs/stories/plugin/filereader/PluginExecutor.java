@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class PluginExecutor {
@@ -27,28 +28,29 @@ public class PluginExecutor {
     private final Logger logger = LoggerFactory.getLogger(PluginExecutor.class);
     private ConsoleReporter validationConsoleReporter = new ConsoleReporter();
 
-    String STATUS = "To Do";
-
     public Rating execute(ApplicationConfig cfg, ScorerConfigCopy validationConfig) {
-        Importer importer = getImporter(cfg);
-        String data = importer.getDataAsString();
         Parser parser = getParser(cfg.getDataformat());
 
-        List<Issue> issues = parser.getIssues(data).stream()
-                .filter(issue -> issue.getUserstory() != null )
-                .filter(issue -> !issue.getUserstory().isEmpty())
-                .collect(Collectors.toList());
-
-        Backlog backlog = new Backlog();
-        backlog.setIssues(issues);
-
-        BacklogValidatorEntry backlogValidatorEntry = BacklogScorer.performScorer(backlog, new CurvedRanking(), validationConfig);
+        BacklogValidatorEntry backlogValidatorEntry =
+                getImporter(cfg)
+                    .flatMap(importer -> importer.getDataAsString())
+                    .map(s -> parser.getIssues(s).stream()
+                            .filter(issue -> issue.getUserstory() != null )
+                            .filter(issue -> !issue.getUserstory().isEmpty())
+                            .collect(Collectors.toList()))
+                    .map(issues -> {
+                        Backlog backlog = new Backlog();
+                        backlog.setIssues(issues);
+                        return backlog;
+                    })
+                    .map(backlog -> BacklogScorer.performScorer(backlog, new CurvedRanking(), validationConfig))
+                        .orElse(BacklogValidatorEntry.builder().build());
 
         //console report
         validationConsoleReporter.report(backlogValidatorEntry);
 
         //write file report
-        if(cfg.getOutputfile() != null && !cfg.getOutputfile().isEmpty()) {
+        if(isOutputFileSet(cfg)) {
             new JsonFileReporter(new File(cfg.getOutputfile()))
                     .report(backlogValidatorEntry);
         }
@@ -57,13 +59,26 @@ public class PluginExecutor {
         return backlogValidatorEntry.getRating();
     }
 
-    public Importer getImporter(ApplicationConfig cfg){
+    private boolean isOutputFileSet(ApplicationConfig cfg) {
+        return cfg.getOutputfile() != null && !cfg.getOutputfile().isEmpty();
+    }
+
+    public Optional<Importer> getImporter(ApplicationConfig cfg){
         if(restApiParametersAreSet(cfg)){
             logger.info("rest Api parameters are set, using JiraAPIImporter");
-            return new JiraAPIImporter(cfg.getUrl(), cfg.getProjectkey(), cfg.getAuthkey(), cfg.getStatus());
+            return Optional.of(new JiraAPIImporter(cfg.getUrl(), cfg.getProjectkey(), cfg.getAuthkey(), cfg.getStatus()));
+        }else if(fileParametersAreSet(cfg)){
+            logger.info("input file is set: " + cfg.getInputfile());
+            return Optional.of(new FileImporter(cfg.getInputfile()));
         }else{
-            logger.info("No rest Api parameters are set, using FileImporter on file: " + cfg.getInputfile());
-            return new FileImporter(cfg.getInputfile());
+            logger.error("No api parameters or file is set. For the api please use:\n\n" +
+                    "-- application.url = <http://jira.demo.com host without the jira api extension>\n" +
+                    "-- application.authkey = <base64 encoded username:password for Jira>\n" +
+                    "-- application.projectkey = <projectkey used in Jira>\n" +
+                    "-- application.status = <status for backlogitems used in Jira>\n\n\n" +
+                    "or to use a file use:\n" +
+                    "-- application.inputfile = <PATH+FILENAME TO JSON FILE>");
+            return Optional.empty();
         }
     }
 
@@ -73,6 +88,11 @@ public class PluginExecutor {
                 !cfg.getUrl().isEmpty() &&
                 cfg.getAuthkey() != null &&
                 !cfg.getAuthkey().isEmpty();
+    }
+
+    private boolean fileParametersAreSet(ApplicationConfig cfg){
+        return cfg.getInputfile()!= null &&
+                !cfg.getInputfile().isEmpty();
     }
 
 

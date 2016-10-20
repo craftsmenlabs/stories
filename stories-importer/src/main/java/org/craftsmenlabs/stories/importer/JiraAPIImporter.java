@@ -2,8 +2,12 @@ package org.craftsmenlabs.stories.importer;
 
 import java.io.*;
 import java.net.*;
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.swing.text.html.Option;
 
 /**
  * Importer
@@ -31,7 +35,7 @@ public class JiraAPIImporter implements Importer
         this.statusKey = statusKey;
     }
 
-    public String getDataAsString()
+    public Optional<String> getDataAsString()
 	{
 		String returnsResponse = "";
 		try
@@ -55,8 +59,9 @@ public class JiraAPIImporter implements Importer
 			//execute call
 			if (conn.getResponseCode() != 200)
 			{
-				throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode() + "\n" + conn
+				logger.error("Failed : HTTP error code : " + conn.getResponseCode() + "\n" + conn
 					.getResponseMessage());
+				return Optional.empty();
 			}
 
 			// Buffer the result into a string
@@ -77,19 +82,15 @@ public class JiraAPIImporter implements Importer
 		}
 		catch (MalformedURLException e)
 		{
-
 			e.printStackTrace();
-
+			return Optional.empty();
 		}
 		catch (IOException e)
 		{
-
 			e.printStackTrace();
-
+			return Optional.empty();
 		}
-		//writeToFile("tmp.json",returnsResponse.toString());
-
-		return returnsResponse;
+		return Optional.of(returnsResponse);
 	}
 
 	public void writeToFile(String filename, String data)

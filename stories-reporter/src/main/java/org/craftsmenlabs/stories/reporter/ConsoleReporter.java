@@ -19,6 +19,11 @@ public class ConsoleReporter
     private String postfix = ANSI_RESET;
 
     public void report(BacklogValidatorEntry backlogValidatorEntry){
+        if(!( backlogValidatorEntry != null
+                && backlogValidatorEntry.getIssueValidatorEntries() != null)){
+            logger.error("no valid backlog validator entry is given.");
+            return;
+        }
         //header
         Random r = new Random();
         String stry = storynator.chars().mapToObj(chr ->"" + COLORS[r.nextInt(COLORS.length)] + (char)chr + ANSI_RESET).collect(Collectors.joining(""));

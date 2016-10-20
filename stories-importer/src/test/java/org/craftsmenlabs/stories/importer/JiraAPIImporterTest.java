@@ -16,7 +16,7 @@ public class JiraAPIImporterTest
 	public void testimportFrom() throws Exception
 	{
 		_jiraAPIImporter = new JiraAPIImporter("http://foo.bar", "1", "2", "To Do");
-		String dataImport = _jiraAPIImporter.getDataAsString();
+		String dataImport = _jiraAPIImporter.getDataAsString().get();
 		assertThat(dataImport).contains("");
 	}
 }
