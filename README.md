@@ -33,13 +33,13 @@ Things we meassure:
 
 
 ### Parameters for ranking:
-* -- application.dataformat = jirajson
-* -- application.inputfile = <PATH+FILENAME TO JSON FILE>
-* -- application.outputfile = <output filepath+name storynator.json>
-* -- application.url = <http://jira.demo.com host without the jira api extension>
-* -- application.authkey = <base64 encoded username:password for Jira>
-* -- application.projectkey = <projectkey used in Jira>
-* -- application.status = <status for backlogitems used in Jira>
+* --application.dataformat = jirajson
+* --application.inputfile = <PATH+FILENAME TO JSON FILE>
+* --application.outputfile = <output filepath+name storynator.json>
+* --application.url = <http://jira.demo.com host without the jira api extension>
+* --application.authkey = <base64 encoded username:password for Jira>
+* --application.projectkey = <projectkey used in Jira>
+* --application.status = <status for backlogitems used in Jira>
 
 ### Parameters for ranking:
 * -- ranking.desiredMiniumStableRanking = 70

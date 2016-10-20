@@ -55,8 +55,18 @@ public class JiraAPIImporter implements Importer
 			//execute call
 			if (conn.getResponseCode() != 200)
 			{
-				throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode() + "\n" + conn
+				logger.error("Failed to connect to "
+					+ url
+					+ ". Connection returned HTTP code: "
+					+ conn.getResponseCode()
+					+ "\n"
+					+ conn
 					.getResponseMessage());
+
+				throw new RuntimeException("Failed (HTTP: "
+					+ conn.getResponseCode()
+					+ ") to retrieve the data from the URL:"
+					+ url);
 			}
 
 			// Buffer the result into a string

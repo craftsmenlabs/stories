@@ -5,7 +5,8 @@ import org.craftsmenlabs.stories.api.models.validatorentry.validatorconfig.Score
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.*;
+import org.springframework.boot.Banner;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 
@@ -29,14 +30,14 @@ public class BootApp
 		int result = app.startApplication(args);
 
 		LoggerFactory.getLogger(BootApp.class).info("Finished stories plugin succes.");
-		SpringApplication.exit(context, new ExitCodeGenerator()
+		if (result == 0)
 		{
-			@Override public int getExitCode()
-			{
-				return result;
-			}
-		});
-
+			System.exit(0);
+		}
+		else
+		{
+			System.exit(-1);
+		}
 	}
 
 	public int startApplication(String[] args)
