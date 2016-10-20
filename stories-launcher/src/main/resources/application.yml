@@ -5,6 +5,7 @@ application:
     url:
     authkey:
     projectkey:
+    status: To Do
 
 ranking:
     desiredMiniumStableRanking: 70
