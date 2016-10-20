@@ -19,6 +19,11 @@
 
 	<url>https://github.com/craftsmenlabs</url>
 
+	<scm>
+		<connection>scm:git:git@github.com:craftsmenlabs/stories.git</connection>
+		<tag>HEAD</tag>
+	</scm>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
