@@ -5,6 +5,7 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.Optional;
 
 public class FileImporter implements Importer{
     String filename;
@@ -13,15 +14,13 @@ public class FileImporter implements Importer{
         this.filename = filename;
     }
 
-    public String getDataAsString() {
-        String input = null;
+    public Optional<String> getDataAsString() {
         try {
-            input = FileUtils.readFileToString(new File(filename), Charset.defaultCharset());
+            return Optional.of(FileUtils.readFileToString(new File(filename), Charset.defaultCharset()));
         } catch (IOException e) {
             e.printStackTrace();
+            return Optional.empty();
+
         }
-        return input;
     }
-
-
 }
