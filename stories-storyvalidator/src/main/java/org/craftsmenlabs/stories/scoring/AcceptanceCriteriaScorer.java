@@ -54,6 +54,7 @@ public class AcceptanceCriteriaScorer {
                 .acceptanceCriteria(criteria)
                 .violations(violations)
                 .pointsValuation(points)
+                .rating(rating)
                 .build();
     }
 }

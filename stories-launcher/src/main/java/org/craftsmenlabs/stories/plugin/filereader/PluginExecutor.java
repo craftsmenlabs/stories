@@ -44,9 +44,7 @@ public class PluginExecutor {
         Backlog backlog = new Backlog();
         backlog.setIssues(issues);
 
-        //TODO validateconfig causes a cyclic dependency here!!
         BacklogValidatorEntry backlogValidatorEntry = BacklogScorer.performScorer(backlog, new CurvedRanking(), validationConfig);
-
 
         //console report
         validationConsoleReporter.report(backlogValidatorEntry);
