@@ -4,7 +4,7 @@
 
 	<groupId>org.craftsmenlabs.stories</groupId>
 	<artifactId>stories</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0</version>
 	<modules>
         <module>stories-launcher</module>
         <module>stories-importer</module>
@@ -18,6 +18,11 @@
 	<name>Stories components</name>
 
 	<url>https://github.com/craftsmenlabs</url>
+
+	<scm>
+		<connection>scm:git:git@github.com:craftsmenlabs/stories.git</connection>
+		<tag>HEAD</tag>
+	</scm>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
