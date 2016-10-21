@@ -10,13 +10,13 @@ import org.craftsmenlabs.stories.api.models.validatorentry.IssueValidatorEntry;
 import org.craftsmenlabs.stories.api.models.validatorentry.validatorconfig.ScorerConfigCopy;
 import org.craftsmenlabs.stories.ranking.Ranking;
 
-
 public class BacklogScorer {
 
-    //static ScorerConfig cfg = ConfigFactory.create(ScorerConfig.class, System.getenv());
-
     public static BacklogValidatorEntry performScorer(Backlog backlog, Ranking ranking, ScorerConfigCopy validationConfig ) {
-
+        if (backlog == null || backlog.getIssues() == null || backlog.getIssues().size() == 0)
+        {
+            throw new IllegalArgumentException("Scoring can only be performed on a filled backlog.");
+        }
 
         List<IssueValidatorEntry> issueValidatorEntries = getValidatedIssues(backlog, validationConfig);
 

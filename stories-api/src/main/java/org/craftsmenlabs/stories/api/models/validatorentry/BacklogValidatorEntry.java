@@ -12,7 +12,6 @@ import lombok.Data;
 public class BacklogValidatorEntry {
     private Backlog backlog;
     private List<IssueValidatorEntry> issueValidatorEntries;
-
     private float pointsValuation = 0.0f;
     private List<Violation> violations;
     private Rating rating;
