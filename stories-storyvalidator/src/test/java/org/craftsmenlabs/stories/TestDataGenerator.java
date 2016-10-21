@@ -2,6 +2,7 @@ package org.craftsmenlabs.stories;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 import org.craftsmenlabs.stories.api.models.validatorentry.IssueValidatorEntry;
@@ -53,6 +54,18 @@ public class TestDataGenerator
 		return testData;
 	}
 
+	public List<Issue> getBadValidatorItems(int amount)
+	{
+		List<Issue> testData = new ArrayList<>();
+		List<Issue> issues = getIssues();
+
+		for (int i = 0; i < amount; i++)
+		{
+			testData.add(Issue.builder().userstory("TEST").acceptanceCriteria("TEST").build());
+		}
+		return testData;
+	}
+
     public BacklogValidatorEntry getGoodBacklog(int amount){
         return BacklogValidatorEntry.builder().issueValidatorEntries(
             getGoodIssues(amount).stream()
@@ -79,5 +92,10 @@ public class TestDataGenerator
         ).build();
     }
 
-
+	public static Backlog getBacklog(List<Issue> issues)
+	{
+		Backlog b = new Backlog();
+		b.setIssues(issues);
+		return b;
+	}
 }
