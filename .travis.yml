@@ -8,7 +8,7 @@ jdk:
 script: mvn clean package
 
 after_success:
-  - mvn jacoco:report coveralls:report
+  - coveralls
 
 notifications:
   slack:
