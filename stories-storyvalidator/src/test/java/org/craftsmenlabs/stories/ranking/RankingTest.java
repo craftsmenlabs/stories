@@ -3,7 +3,7 @@ package org.craftsmenlabs.stories.ranking;
 import org.junit.Test;
 
 /**
- *
+ * Interface to implement all ranking algo's with.
  */
 public interface RankingTest
 {
