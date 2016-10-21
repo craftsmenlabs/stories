@@ -43,7 +43,8 @@
 		<guava.version>19.0</guava.version>
 		<commons.csv.version>1.4</commons.csv.version>
         <owner.version>1.0.9</owner.version>
-
+		<jacoco-maven-plugin.version>0.7.7.201606060606</jacoco-maven-plugin.version>
+		<coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
 	</properties>
 
 	<dependencyManagement>
@@ -197,6 +198,42 @@
 					<historyOutputFile>${basedir}/target/pittest</historyOutputFile>
 					<!-- For the majority of sub-projects mutation tests are not applicable, hence default skip-->
 					<skip>true</skip>
+				</configuration>
+			</plugin>
+
+			<!-- Coverage report  -->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${jacoco-maven-plugin.version}</version>
+				<executions>
+					<!-- Prepares the property pointing to the JaCoCo
+                    runtime agent which is passed as VM argument when Maven the Surefire plugin
+                    is executed. -->
+					<execution>
+						<id>pre-unit-test</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+
+					<!-- Ensures that the code coverage report for
+                    unit tests is created after unit tests have been run. -->
+					<execution>
+						<id>post-unit-test</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.eluder.coveralls</groupId>
+				<artifactId>coveralls-maven-plugin</artifactId>
+				<version>${coveralls-maven-plugin.version}</version>
+				<configuration>
+					<repoToken>tWQK4jMid9qac2njZVjgB3MaFgneooL7W</repoToken>
 				</configuration>
 			</plugin>
 		</plugins>
