@@ -19,10 +19,14 @@ public class ValidationConfig {
     @Data
     public static class ValidatorEntry {
         private float ratingtreshold;
+        private boolean active;
 
         public ScorerConfigCopy.ValidatorEntryCopy clone(){
             ScorerConfigCopy.ValidatorEntryCopy validatorEntryCopy = new ScorerConfigCopy.ValidatorEntryCopy();
+
             validatorEntryCopy.setRatingtreshold(getRatingtreshold());
+            validatorEntryCopy.setActive(isActive());
+
             return validatorEntryCopy;
         }
     }

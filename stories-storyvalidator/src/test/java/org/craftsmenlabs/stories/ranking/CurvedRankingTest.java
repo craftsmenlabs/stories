@@ -3,6 +3,8 @@ package org.craftsmenlabs.stories.ranking;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.withinPercentage;
 import java.util.List;
+
+import mockit.Expectations;
 import org.craftsmenlabs.stories.TestDataGenerator;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
@@ -10,9 +12,11 @@ import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry
 import org.craftsmenlabs.stories.api.models.validatorentry.validatorconfig.ScorerConfigCopy;
 import org.craftsmenlabs.stories.scoring.BacklogScorer;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import mockit.Tested;
 
+@Ignore
 public class CurvedRankingTest implements RankingTest
 {
 	private ScorerConfigCopy scorerConfigCopy;
@@ -62,6 +66,14 @@ public class CurvedRankingTest implements RankingTest
 	@Override @Test
 	public void testRankingIsOneWithPerfectItemsWorks() throws Exception
 	{
+		new Expectations(){{
+//			scorerConfigCopy.getBacklog().getRatingtreshold();
+//			result = 1f;
+
+//			scorerConfigCopy.getBacklog()
+//			BacklogScorer.getValidatedIssues();
+
+		}};
 		List<Issue> issues = testDataGenerator.getGoodIssues(20);
 		Backlog b = new Backlog();
 		b.setIssues(issues);
