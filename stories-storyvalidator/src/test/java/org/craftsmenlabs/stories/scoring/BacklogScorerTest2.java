@@ -45,7 +45,7 @@ public class BacklogScorerTest2 {
             result = 50f;
         }};
 
-        BacklogValidatorEntry result = backlogScorer.performScorer(backlog, ranking, scorerConfigCopy);
+        BacklogValidatorEntry result = BacklogScorer.performScorer(backlog, ranking, scorerConfigCopy);
         assertThat(result.getRating()).isEqualTo(Rating.SUCCES);
     }
 
@@ -66,7 +66,7 @@ public class BacklogScorerTest2 {
             result = 50f;
         }};
 
-        BacklogValidatorEntry result = backlogScorer.performScorer(backlog, ranking, scorerConfigCopy);
+        BacklogValidatorEntry result = BacklogScorer.performScorer(backlog, ranking, scorerConfigCopy);
         assertThat(result.getRating()).isEqualTo(Rating.FAIL);
     }
 }

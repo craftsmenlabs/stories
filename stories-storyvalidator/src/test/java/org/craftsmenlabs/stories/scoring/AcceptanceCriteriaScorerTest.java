@@ -1,12 +1,8 @@
 package org.craftsmenlabs.stories.scoring;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.withinPercentage;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
+import mockit.Expectations;
+import mockit.Injectable;
+import mockit.Tested;
 import org.craftsmenlabs.stories.api.models.CriteriaViolation;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.Violation;
@@ -15,7 +11,14 @@ import org.craftsmenlabs.stories.api.models.validatorentry.AcceptanceCriteriaVal
 import org.craftsmenlabs.stories.api.models.validatorentry.IssueValidatorEntry;
 import org.craftsmenlabs.stories.api.models.validatorentry.validatorconfig.ScorerConfigCopy;
 import org.junit.Test;
-import mockit.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.withinPercentage;
 
 public class AcceptanceCriteriaScorerTest {
 
@@ -35,7 +38,7 @@ public class AcceptanceCriteriaScorerTest {
             result = 0.7f;
         }};
 
-        float score = criteriaScorer.performScorer(entry.getIssue().getAcceptanceCriteria(), validationConfig).getPointsValuation();
+        float score = AcceptanceCriteriaScorer.performScorer(entry.getIssue().getAcceptanceCriteria(), validationConfig).getPointsValuation();
         assertThat(score).isCloseTo(1.0f, withinPercentage(5));
     }
 
@@ -51,7 +54,7 @@ public class AcceptanceCriteriaScorerTest {
 
         }};
 
-        float score = criteriaScorer.performScorer(entry.getIssue().getAcceptanceCriteria(), validationConfig).getPointsValuation();
+        float score = AcceptanceCriteriaScorer.performScorer(entry.getIssue().getAcceptanceCriteria(), validationConfig).getPointsValuation();
         assertThat(score).isCloseTo(0.0f, withinPercentage(1));
     }
 
@@ -66,7 +69,7 @@ public class AcceptanceCriteriaScorerTest {
             result = 0.7f;
         }};
 
-        float score = criteriaScorer.performScorer(entry.getIssue().getAcceptanceCriteria(), validationConfig).getPointsValuation();
+        float score = AcceptanceCriteriaScorer.performScorer(entry.getIssue().getAcceptanceCriteria(), validationConfig).getPointsValuation();
         assertThat(score).isCloseTo(0.0f, withinPercentage(1));
     }
 
@@ -79,18 +82,18 @@ public class AcceptanceCriteriaScorerTest {
 
         new Expectations(){{
             entryTooShort.getIssue().getAcceptanceCriteria();
-            result = testCriteria.substring(0, criteriaScorer.MINIMUM_LENGTH_OF_ACC_CRITERIA-1);
+            result = testCriteria.substring(0, AcceptanceCriteriaScorer.MINIMUM_LENGTH_OF_ACC_CRITERIA - 1);
 
 
             entryLong.getIssue().getAcceptanceCriteria();
-            result = testCriteria.substring(0, criteriaScorer.MINIMUM_LENGTH_OF_ACC_CRITERIA);
+            result = testCriteria.substring(0, AcceptanceCriteriaScorer.MINIMUM_LENGTH_OF_ACC_CRITERIA);
 
             validationConfig.getCriteria().getRatingtreshold();
             result = 0.7f;
         }};
 
-        float scoreTooShort = criteriaScorer.performScorer(entryTooShort.getIssue().getAcceptanceCriteria(), validationConfig).getPointsValuation();
-        float scoreLong = criteriaScorer.performScorer(entryLong.getIssue().getAcceptanceCriteria(), validationConfig).getPointsValuation();
+        float scoreTooShort = AcceptanceCriteriaScorer.performScorer(entryTooShort.getIssue().getAcceptanceCriteria(), validationConfig).getPointsValuation();
+        float scoreLong = AcceptanceCriteriaScorer.performScorer(entryLong.getIssue().getAcceptanceCriteria(), validationConfig).getPointsValuation();
         assertThat(scoreTooShort).isLessThan(scoreLong);
     }
 

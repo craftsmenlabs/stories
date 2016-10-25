@@ -2,9 +2,7 @@ package org.craftsmenlabs.stories.scoring;
 
 import mockit.Expectations;
 import mockit.Injectable;
-import mockit.Tested;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
-import org.craftsmenlabs.stories.api.models.validatorentry.IssueValidatorEntry;
 import org.craftsmenlabs.stories.api.models.validatorentry.UserStoryValidatorEntry;
 import org.craftsmenlabs.stories.api.models.validatorentry.validatorconfig.ScorerConfigCopy;
 import org.junit.Ignore;
@@ -77,9 +75,6 @@ public class IssueScorerTest {
     public void performScorer_ReturnsOneOnOnlyPerfectUerstoryActive(@Injectable Issue issue, @Injectable ScorerConfigCopy validationConfig) {
         UserStoryValidatorEntry entry = UserStoryValidatorEntry.builder().pointsValuation(1f).userStory("").build();
         new Expectations(){{
-//            issue.getUserstory();
-//            result = "";
-//
             StoryScorer.performScorer("", validationConfig);
             result = entry;
 

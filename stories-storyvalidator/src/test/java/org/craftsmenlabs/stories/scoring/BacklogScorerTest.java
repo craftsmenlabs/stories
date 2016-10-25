@@ -1,14 +1,17 @@
 package org.craftsmenlabs.stories.scoring;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.withinPercentage;
+import mockit.Expectations;
+import mockit.Injectable;
+import mockit.Tested;
 import org.craftsmenlabs.stories.TestDataGenerator;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 import org.craftsmenlabs.stories.api.models.validatorentry.validatorconfig.ScorerConfigCopy;
 import org.craftsmenlabs.stories.ranking.CurvedRanking;
 import org.junit.Test;
-import mockit.*;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.withinPercentage;
 
 public class BacklogScorerTest
 {
@@ -54,7 +57,7 @@ public class BacklogScorerTest
 		@Injectable BacklogValidatorEntry entry, @Injectable
 	ScorerConfigCopy validationConfig) throws Exception
 	{
-		float score = backlogScorer.performScorer(null, null, validationConfig).getPointsValuation();
-		assertThat(score).isCloseTo(0.0f, withinPercentage(1));
-	}
+        float score = BacklogScorer.performScorer(null, null, validationConfig).getPointsValuation();
+        assertThat(score).isCloseTo(0.0f, withinPercentage(1));
+    }
 }
