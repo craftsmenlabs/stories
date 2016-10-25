@@ -19,7 +19,13 @@ validation:
             ratingtreshold: 0.7
         story:
             ratingtreshold: 0.7
+            active: true
+            asKeywords: ["As a", "as"]
+            iKeywords: ["I would like", "I"]
+            soKeywords: ["So I can", "so", "because"]
         criteria:
             ratingtreshold: 0.7
+            active: true
         estimation:
             ratingtreshold: 0.7
+            active: true

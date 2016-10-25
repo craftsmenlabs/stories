@@ -11,18 +11,13 @@ import org.craftsmenlabs.stories.importer.JiraAPIImporter;
 import org.craftsmenlabs.stories.isolator.parser.JiraCSVParser;
 import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
 import org.craftsmenlabs.stories.isolator.parser.Parser;
-import org.craftsmenlabs.stories.reporter.ConsoleReporter;
-import org.craftsmenlabs.stories.reporter.JsonFileReporter;
 import org.craftsmenlabs.stories.ranking.CurvedRanking;
-import org.craftsmenlabs.stories.reporter.SummaryConsoleReporter;
+import org.craftsmenlabs.stories.reporter.ConsoleReporter;
 import org.craftsmenlabs.stories.scoring.BacklogScorer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.util.InputMismatchException;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class PluginExecutor {

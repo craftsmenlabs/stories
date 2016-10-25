@@ -1,10 +1,7 @@
 package org.craftsmenlabs.stories.ranking;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.withinPercentage;
-import java.util.List;
-
 import mockit.Expectations;
+import mockit.Tested;
 import org.craftsmenlabs.stories.TestDataGenerator;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
@@ -14,7 +11,11 @@ import org.craftsmenlabs.stories.scoring.BacklogScorer;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import mockit.Tested;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.withinPercentage;
 
 @Ignore
 public class CurvedRankingTest implements RankingTest
@@ -30,8 +31,8 @@ public class CurvedRankingTest implements RankingTest
 	public void setUp() throws Exception
 	{
 		scorerConfigCopy = new ScorerConfigCopy();
-		scorerConfigCopy.setStory(new ScorerConfigCopy.ValidatorEntryCopy());
-		scorerConfigCopy.setCriteria(new ScorerConfigCopy.ValidatorEntryCopy());
+        scorerConfigCopy.setStory(new ScorerConfigCopy.StoryValidatorEntryCopy());
+        scorerConfigCopy.setCriteria(new ScorerConfigCopy.ValidatorEntryCopy());
 		scorerConfigCopy.setEstimation(new ScorerConfigCopy.ValidatorEntryCopy());
 		scorerConfigCopy.setIssue(new ScorerConfigCopy.ValidatorEntryCopy());
 		scorerConfigCopy.setBacklog(new ScorerConfigCopy.ValidatorEntryCopy());
