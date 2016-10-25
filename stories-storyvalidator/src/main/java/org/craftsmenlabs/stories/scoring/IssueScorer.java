@@ -1,25 +1,23 @@
 package org.craftsmenlabs.stories.scoring;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Stream;
-
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
 import org.craftsmenlabs.stories.api.models.validatorentry.*;
 import org.craftsmenlabs.stories.api.models.validatorentry.validatorconfig.ScorerConfigCopy;
 
+import java.util.ArrayList;
+import java.util.stream.Stream;
+
 /**
  * Assigns points to an issue, based on all
- * underlying fields, such as user story, acceptancecriteria, estimated points
+ * underlying fields, such as user story, acceptance criteria, estimated points
  */
 public class IssueScorer {
 
     public static IssueValidatorEntry performScorer(Issue issue, ScorerConfigCopy validationConfig) {
         if(  issue != null
           && issue.getUserstory() != null
-          && issue.getAcceptanceCriteria() != null ) {
+                && issue.getAcceptanceCriteria() != null) {
 
             UserStoryValidatorEntry userStoryValidatorEntry = StoryScorer.performScorer(issue.getUserstory(), validationConfig);
             AcceptanceCriteriaValidatorEntry acceptanceCriteriaValidatorEntry = AcceptanceCriteriaScorer.performScorer(issue.getAcceptanceCriteria(), validationConfig);

@@ -1,13 +1,17 @@
 package org.craftsmenlabs.stories.scoring;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import java.util.ArrayList;
-import java.util.List;
+import mockit.Expectations;
+import mockit.Injectable;
+import mockit.Tested;
 import org.craftsmenlabs.stories.api.models.Violation;
 import org.craftsmenlabs.stories.api.models.validatorentry.IssueValidatorEntry;
 import org.craftsmenlabs.stories.api.models.validatorentry.validatorconfig.ScorerConfigCopy;
 import org.junit.Test;
-import mockit.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class StoryScorerTest {
 
@@ -26,7 +30,7 @@ public class StoryScorerTest {
             result = 0.7f;
         }};
 
-        float score = storyScorer.performScorer(entry.getIssue().getUserstory(), validationConfig).getPointsValuation();
+        float score = StoryScorer.performScorer(entry.getIssue().getUserstory(), validationConfig).getPointsValuation();
         assertThat(score).isEqualTo(1.0f);
     }
 
@@ -41,7 +45,7 @@ public class StoryScorerTest {
             result = 0.7f;
         }};
 
-        float score = storyScorer.performScorer(entry.getIssue().getUserstory(), validationConfig).getPointsValuation();
+        float score = StoryScorer.performScorer(entry.getIssue().getUserstory(), validationConfig).getPointsValuation();
         assertThat(score).isEqualTo(0.0f);
     }
 
@@ -55,7 +59,7 @@ public class StoryScorerTest {
             result = 0.7f;
         }};
 
-        float score = storyScorer.performScorer(entry.getIssue().getUserstory(), validationConfig).getPointsValuation();
+        float score = StoryScorer.performScorer(entry.getIssue().getUserstory(), validationConfig).getPointsValuation();
         assertThat(score).isEqualTo(0.0f);
     }
 }
