@@ -1,12 +1,17 @@
 package org.craftsmenlabs.stories.scoring;
 
-import java.util.ArrayList;
-import java.util.List;
-import org.craftsmenlabs.stories.api.models.*;
+import org.craftsmenlabs.stories.api.models.Rating;
+import org.craftsmenlabs.stories.api.models.StoryViolation;
+import org.craftsmenlabs.stories.api.models.Violation;
+import org.craftsmenlabs.stories.api.models.ViolationType;
 import org.craftsmenlabs.stories.api.models.validatorentry.UserStoryValidatorEntry;
 import org.craftsmenlabs.stories.api.models.validatorentry.validatorconfig.ScorerConfigCopy;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class StoryScorer {
+    final static int USERSTORY_MINIMUM_LENGTH = 20;
 
     public static UserStoryValidatorEntry performScorer(String userStory, ScorerConfigCopy validationConfig) {
 
@@ -18,23 +23,25 @@ public class StoryScorer {
         {
             violations.add(new StoryViolation(ViolationType.StoryEmptyViolation, "This story is empty."));
         }else {
-            userStory = userStory.toLowerCase();
-            if (userStory.length() > 20) {
+            final String userStoryLower = userStory.toLowerCase();
+
+
+            if (userStoryLower.length() > USERSTORY_MINIMUM_LENGTH) {
                 points += 0.2f;
             } else {
                 violations.add(new StoryViolation(ViolationType.StoryLengthClauseViolation, "Story is to short."));
             }
-            if (userStory.contains("as a")) {
+            if (validationConfig.getStory().getAsKeywords().stream().anyMatch(s -> userStoryLower.contains(s.toLowerCase()))) {
                 points += 0.2f;
             } else {
                 violations.add(new StoryViolation(ViolationType.StoryAsIsClauseViolation, "<As a> section is not described properly."));
             }
-            if (userStory.contains("i")) {
+            if (validationConfig.getStory().getIKeywords().stream().anyMatch(s -> userStoryLower.contains(s.toLowerCase()))) {
                 points += 0.2f;
             } else {
                 violations.add(new StoryViolation(ViolationType.StoryIClauseViolation, "<I want> section is not described properly."));
             }
-            if (userStory.contains("so")) {
+            if (validationConfig.getStory().getSoKeywords().stream().anyMatch(s -> userStoryLower.contains(s.toLowerCase()))) {
                 points += 0.4f;
             } else {
                 violations.add(new StoryViolation(ViolationType.StorySoClauseViolation, "<So that> section is not described properly."));
