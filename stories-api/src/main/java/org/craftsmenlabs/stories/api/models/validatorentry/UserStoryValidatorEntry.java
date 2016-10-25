@@ -6,11 +6,15 @@ import org.craftsmenlabs.stories.api.models.Violation;
 import lombok.*;
 
 @Data
-@AllArgsConstructor
-@Builder
-public class UserStoryValidatorEntry {
+public class UserStoryValidatorEntry extends AbstractValidatorEntry{
     private String userStory;
-    private float pointsValuation = 0.0f;
-    private List<Violation> violations;
-    private Rating rating;
+
+    @Builder
+    public UserStoryValidatorEntry(String userStory, float pointsValuation, List<Violation> violations, Rating rating, boolean isActive) {
+        this.userStory = userStory;
+        super.setPointsValuation(pointsValuation);
+        super.setViolations(violations);
+        super.setRating(rating);
+        super.setActive(isActive);
+    }
 }

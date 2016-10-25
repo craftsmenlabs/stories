@@ -49,6 +49,7 @@ public class StoryScorer {
                 .pointsValuation(points)
                 .violations(violations)
                 .rating(rating)
+                .isActive(validationConfig.getStory().isActive())
                 .build();
     }
 

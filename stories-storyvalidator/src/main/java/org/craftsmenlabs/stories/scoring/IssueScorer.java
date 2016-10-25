@@ -1,6 +1,10 @@
 package org.craftsmenlabs.stories.scoring;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Stream;
+
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
 import org.craftsmenlabs.stories.api.models.validatorentry.*;
@@ -13,26 +17,41 @@ import org.craftsmenlabs.stories.api.models.validatorentry.validatorconfig.Score
 public class IssueScorer {
 
     public static IssueValidatorEntry performScorer(Issue issue, ScorerConfigCopy validationConfig) {
-        UserStoryValidatorEntry userStoryValidatorEntry = StoryScorer.performScorer(issue.getUserstory(), validationConfig);
-        AcceptanceCriteriaValidatorEntry acceptanceCriteriaValidatorEntry = AcceptanceCriteriaScorer.performScorer(issue.getAcceptanceCriteria(), validationConfig);
-        EstimationValidatorEntry estimationValidatorEntry = EstimationScorer.performScorer(issue.getEstimation(), validationConfig);
+        if(  issue != null
+          && issue.getUserstory() != null
+          && issue.getAcceptanceCriteria() != null ) {
 
-        float points =
-                (userStoryValidatorEntry.getPointsValuation()
-                + acceptanceCriteriaValidatorEntry.getPointsValuation())
-                / 2;
+            UserStoryValidatorEntry userStoryValidatorEntry = StoryScorer.performScorer(issue.getUserstory(), validationConfig);
+            AcceptanceCriteriaValidatorEntry acceptanceCriteriaValidatorEntry = AcceptanceCriteriaScorer.performScorer(issue.getAcceptanceCriteria(), validationConfig);
+            EstimationValidatorEntry estimationValidatorEntry = EstimationScorer.performScorer(issue.getEstimation(), validationConfig);
 
-        Rating rating = points >= validationConfig.getIssue().getRatingtreshold()? Rating.SUCCES : Rating.FAIL;
+            float points = (float)
+                    Stream.of(userStoryValidatorEntry, acceptanceCriteriaValidatorEntry, estimationValidatorEntry)
+                            .filter(entry -> entry.isActive())
+                            .mapToDouble(AbstractValidatorEntry::getPointsValuation)
+                            .average()
+                            .orElse(0.0);
 
-        return IssueValidatorEntry
-                .builder()
-                .issue(issue)
-                .violations(new ArrayList<>())
-                .pointsValuation(points)
-                .rating(rating)
-                .userStoryValidatorEntry(userStoryValidatorEntry)
-                .acceptanceCriteriaValidatorEntry(acceptanceCriteriaValidatorEntry)
-                .estimationValidatorEntry(estimationValidatorEntry)
-                .build();
+            Rating rating = points >= validationConfig.getIssue().getRatingtreshold() ? Rating.SUCCES : Rating.FAIL;
+
+            return IssueValidatorEntry
+                    .builder()
+                    .issue(issue)
+                    .violations(new ArrayList<>())
+                    .pointsValuation(points)
+                    .rating(rating)
+                    .userStoryValidatorEntry(userStoryValidatorEntry)
+                    .acceptanceCriteriaValidatorEntry(acceptanceCriteriaValidatorEntry)
+                    .estimationValidatorEntry(estimationValidatorEntry)
+                    .build();
+        }else{
+            return IssueValidatorEntry
+                    .builder()
+                    .issue(issue)
+                    .violations(new ArrayList<>())
+                    .pointsValuation(0f)
+                    .rating(Rating.FAIL)
+                    .build();
+        }
     }
 }

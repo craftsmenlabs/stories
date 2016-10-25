@@ -30,9 +30,13 @@ public class BacklogScorer {
         Float points = ranking.createRanking(backlogValidatorEntry);
         backlogValidatorEntry.setPointsValuation(points);
 
-        backlogValidatorEntry.setRating(points * 100f >= validationConfig.getBacklog().getRatingtreshold() ? Rating.SUCCES : Rating.FAIL);
+        rateScore(validationConfig, backlogValidatorEntry);
 
         return backlogValidatorEntry;
+    }
+
+    private static void rateScore(ScorerConfigCopy validationConfig, BacklogValidatorEntry backlogValidatorEntry) {
+        backlogValidatorEntry.setRating(backlogValidatorEntry.getPointsValuation() * 100f >= validationConfig.getBacklog().getRatingtreshold() ? Rating.SUCCES : Rating.FAIL);
     }
 
     private static List<IssueValidatorEntry> getValidatedIssues(Backlog backlog, ScorerConfigCopy validationConfig) {

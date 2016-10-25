@@ -12,7 +12,7 @@ import org.craftsmenlabs.stories.api.models.validatorentry.validatorconfig.Score
  */
 public class AcceptanceCriteriaScorer {
 
-    public static final int MINIMUM_LENGTH_OF_ACC_CRITERIA = 10;
+    public static final int MINIMUM_LENGTH_OF_ACC_CRITERIA = 20;
 
     public static AcceptanceCriteriaValidatorEntry performScorer(String criteria, ScorerConfigCopy validationConfig) {
 
@@ -51,6 +51,7 @@ public class AcceptanceCriteriaScorer {
                 .violations(violations)
                 .pointsValuation(points)
                 .rating(rating)
+                .isActive(validationConfig.getCriteria().isActive())
                 .build();
     }
 }

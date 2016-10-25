@@ -6,11 +6,17 @@ import org.craftsmenlabs.stories.api.models.Violation;
 import lombok.*;
 
 @Data
-@AllArgsConstructor
-@Builder
-public class AcceptanceCriteriaValidatorEntry {
+//@AllArgsConstructor
+public class AcceptanceCriteriaValidatorEntry extends AbstractValidatorEntry{
     private String acceptanceCriteria;
-    private float pointsValuation = 0.0f;
-    private List<Violation> violations;
-    private Rating rating;
+
+    @Builder
+    public AcceptanceCriteriaValidatorEntry(float pointsValuation, List<Violation> violations, Rating rating, boolean isActive, String acceptanceCriteria) {
+        super(pointsValuation, violations, rating, isActive);
+        this.acceptanceCriteria = acceptanceCriteria;
+        super.setPointsValuation (pointsValuation);
+        super.setViolations (violations);
+        super.setRating (rating);
+        super.setActive(isActive);
+    }
 }

@@ -6,11 +6,15 @@ import org.craftsmenlabs.stories.api.models.Violation;
 import lombok.*;
 
 @Data
-@AllArgsConstructor
-@Builder
-public class EstimationValidatorEntry {
+public class EstimationValidatorEntry extends AbstractValidatorEntry {
     private Float estimation;
-    private float pointsValuation = 0.0f;
-    private List<Violation> violations;
-    private Rating rating;
+
+    @Builder
+    public EstimationValidatorEntry(Float estimation, float pointsValuation, List<Violation> violations, Rating rating, boolean isActive) {
+        this.estimation = estimation;
+        super.setPointsValuation(pointsValuation);
+        super.setViolations(violations);
+        super.setRating(rating);
+        super.setActive(isActive);
+    }
 }

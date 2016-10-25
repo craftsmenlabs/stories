@@ -10,11 +10,9 @@ public class ScorerConfigCopy {
     private ValidatorEntryCopy criteria;
     private ValidatorEntryCopy estimation;
 
-
     @Data
     public static class ValidatorEntryCopy {
         private float ratingtreshold;
-
-
+        private boolean active;
     }
 }

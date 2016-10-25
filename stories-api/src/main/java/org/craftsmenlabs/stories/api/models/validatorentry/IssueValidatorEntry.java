@@ -14,6 +14,7 @@ public class IssueValidatorEntry {
     private float pointsValuation = 0.0f;
     private List<Violation> violations;
     private Rating rating;
+    private boolean isActive;
 
     private UserStoryValidatorEntry userStoryValidatorEntry;
     private AcceptanceCriteriaValidatorEntry acceptanceCriteriaValidatorEntry;

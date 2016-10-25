@@ -65,6 +65,13 @@
             <version>${lombok.version}</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/net.logstash.logback/logstash-logback-encoder -->
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>4.7</version>
+        </dependency>
+
         <!-- test dependencies -->
         <!--<dependency>-->
             <!--<groupId>org.jmockit</groupId>-->

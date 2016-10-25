@@ -25,6 +25,7 @@ public class EstimationScorer {
                 .violations(new ArrayList<>())
                 .pointsValuation(points)
                 .rating(rating)
+                .isActive(validationConfig.getEstimation().isActive())
                 .build();
     }
 
