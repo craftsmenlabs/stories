@@ -43,7 +43,6 @@ public class ConsoleReporter
                     "     /8888  888   Y888   ' 888       Y    888  888 C888  888  888   Y888   ' 888    \n" +
                     "   \\/_88P'  \"88_/  \"88_-~  888      /     888  888  \"88_-888  \"88_/  \"88_-~  888    \n" +
                     "                                  _/";
-    private static final int ROUND_TO_DECIMAL = 2;
     private static final int MAX_SCORE = 100;
 
     public void report(BacklogValidatorEntry backlogValidatorEntry, ScorerConfigCopy scorerConfigCopy) {
