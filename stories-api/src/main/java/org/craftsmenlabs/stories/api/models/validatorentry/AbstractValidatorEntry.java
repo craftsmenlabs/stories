@@ -1,8 +1,10 @@
 package org.craftsmenlabs.stories.api.models.validatorentry;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.craftsmenlabs.stories.api.models.Rating;
-import org.craftsmenlabs.stories.api.models.Violation;
+import org.craftsmenlabs.stories.api.models.violation.Violation;
 
 import java.util.List;
 

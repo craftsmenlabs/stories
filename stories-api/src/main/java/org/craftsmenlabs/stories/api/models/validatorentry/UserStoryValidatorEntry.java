@@ -1,9 +1,11 @@
 package org.craftsmenlabs.stories.api.models.validatorentry;
 
-import java.util.List;
+import lombok.Builder;
+import lombok.Data;
 import org.craftsmenlabs.stories.api.models.Rating;
-import org.craftsmenlabs.stories.api.models.Violation;
-import lombok.*;
+import org.craftsmenlabs.stories.api.models.violation.Violation;
+
+import java.util.List;
 
 @Data
 public class UserStoryValidatorEntry extends AbstractValidatorEntry{

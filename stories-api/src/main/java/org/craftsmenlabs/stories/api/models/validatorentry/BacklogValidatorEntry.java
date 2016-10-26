@@ -1,11 +1,12 @@
 package org.craftsmenlabs.stories.api.models.validatorentry;
 
-import java.util.List;
-import org.craftsmenlabs.stories.api.models.Rating;
-import org.craftsmenlabs.stories.api.models.Violation;
-import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import lombok.Builder;
 import lombok.Data;
+import org.craftsmenlabs.stories.api.models.Rating;
+import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
+import org.craftsmenlabs.stories.api.models.violation.Violation;
+
+import java.util.List;
 
 @Data
 @Builder

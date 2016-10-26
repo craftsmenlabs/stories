@@ -1,4 +1,4 @@
-package org.craftsmenlabs.stories.api.models;
+package org.craftsmenlabs.stories.api.models.violation;
 
 import lombok.Value;
 

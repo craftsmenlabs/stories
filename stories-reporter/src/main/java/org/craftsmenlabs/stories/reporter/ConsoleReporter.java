@@ -1,27 +1,61 @@
 package org.craftsmenlabs.stories.reporter;
 
+import org.craftsmenlabs.stories.api.models.Rating;
+import org.craftsmenlabs.stories.api.models.validatorentry.*;
+import org.craftsmenlabs.stories.api.models.validatorentry.validatorconfig.ScorerConfigCopy;
+import org.craftsmenlabs.stories.api.models.violation.Violation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
-import org.craftsmenlabs.stories.api.models.Rating;
-import org.craftsmenlabs.stories.api.models.Violation;
-import org.craftsmenlabs.stories.api.models.validatorentry.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class ConsoleReporter
 {
-	private final Logger logger = LoggerFactory.getLogger(ConsoleReporter.class);
+    public static final String ANSI_RESET = "\u001B[0m";     //"\\033[0m";
+    public static final String ANSI_BLACK = "\u001B[30m";    //"\\033[0m";
+    public static final String ANSI_RED = "\u001B[31m";    //"\\033[31m";
+    public static final String ANSI_GREEN = "\u001B[32m";    //"\\033[32m";
+    public static final String ANSI_YELLOW = "\u001B[33m";    //"\\033[33m";
+    public static final String ANSI_BLUE = "\u001B[34m";    //"\\033[34m";
+    public static final String ANSI_PURPLE = "\u001B[35m";    //"\\033[35m";
+    public static final String ANSI_CYAN = "\u001B[36m";    //"\\033[36m";
+    //    public static final String ANSI_WHITE =  "\\033[33m";   //"\u001B[37m";
+    public static final String[] COLORS = {
+            ANSI_BLACK,
+            ANSI_RED,
+            ANSI_GREEN,
+            ANSI_YELLOW,
+            ANSI_BLUE,
+            ANSI_PURPLE,
+            ANSI_CYAN,
+//            ANSI_WHITE
+    };
+    private final Logger logger = LoggerFactory.getLogger(ConsoleReporter.class);
     private String prefix = ANSI_PURPLE;
     private String postfix = ANSI_RESET;
+    private String storynator =
+            "   ,d88~/\\   d8                                                d8                   \n" +
+                    "   8888/   _d88__  e88~-_  888-~\\ Y88b  / 888-~88e   /~~~8e  _d88__  e88~-_  888-~\\ \n" +
+                    "   `Y88b    888   d888   i 888     Y888/  888  888       88b  888   d888   i 888    \n" +
+                    "    `Y88b,  888   8888   | 888      Y8/   888  888  e88~-888  888   8888   | 888    \n" +
+                    "     /8888  888   Y888   ' 888       Y    888  888 C888  888  888   Y888   ' 888    \n" +
+                    "   \\/_88P'  \"88_/  \"88_-~  888      /     888  888  \"88_-888  \"88_/  \"88_-~  888    \n" +
+                    "                                  _/";
 
-    public void report(BacklogValidatorEntry backlogValidatorEntry){
+    public void report(BacklogValidatorEntry backlogValidatorEntry, ScorerConfigCopy scorerConfigCopy) {
         //header
         Random r = new Random();
         String stry = storynator.chars().mapToObj(chr ->"" + COLORS[r.nextInt(COLORS.length)] + (char)chr + ANSI_RESET).collect(Collectors.joining(""));
 
         log("\n\n\n" + stry + " \n\n\n");
+        log("------------------------------------------------------------");
+        log("--           Validator configuration                      --");
+        log("------------------------------------------------------------");
+        reportOnConfig(scorerConfigCopy);
+
         log("------------------------------------------------------------");
         log("--               verbose output                           --");
         log("------------------------------------------------------------");
@@ -29,6 +63,10 @@ public class ConsoleReporter
         //verbose output
         List<IssueValidatorEntry> entries = backlogValidatorEntry.getIssueValidatorEntries();
         entries.forEach(issue -> reportOnIssue(issue));
+
+        //show backlog violations
+        log("------------------------------------------------------------");
+        backlogValidatorEntry.getViolations().forEach(violation -> log(violation.toString()));
 
         //Summary
         log("\n\n\n" + stry + " \n\n\n");
@@ -40,7 +78,6 @@ public class ConsoleReporter
         log("Backlog score of " + new DecimalFormat("#.##").format(backlogValidatorEntry.getPointsValuation()*100f) + "% ");
         log("Rated: " + backlogValidatorEntry.getRating());
     }
-
 
     public void reportOnIssue(IssueValidatorEntry issue){
         prefix = issue.getRating() == Rating.SUCCES ? ANSI_GREEN : ANSI_RED;
@@ -61,7 +98,6 @@ public class ConsoleReporter
         reportOnEstimation(issue.getEstimationValidatorEntry());
     }
 
-
     public void reportOnUserstory(UserStoryValidatorEntry entry){
         prefix = entry.getRating() == Rating.SUCCES ? ANSI_GREEN : ANSI_RED;
 
@@ -71,7 +107,6 @@ public class ConsoleReporter
 
         reportOnViolations(entry.getViolations());
     }
-
 
     public void reportOnAcceptanceCriteria(AcceptanceCriteriaValidatorEntry entry){
         prefix = entry.getRating() == Rating.SUCCES ? ANSI_GREEN : ANSI_RED;
@@ -91,44 +126,21 @@ public class ConsoleReporter
         reportOnViolations(entry.getViolations());
     }
 
-
     public void reportOnViolations(List<Violation> violations){
         violations.forEach(violation ->
                 log("\t\t Violation found: " + violation.toString()));
     }
 
-    private String storynator =
-        "   ,d88~/\\   d8                                                d8                   \n" +
-            "   8888/   _d88__  e88~-_  888-~\\ Y88b  / 888-~88e   /~~~8e  _d88__  e88~-_  888-~\\ \n" +
-            "   `Y88b    888   d888   i 888     Y888/  888  888       88b  888   d888   i 888    \n" +
-            "    `Y88b,  888   8888   | 888      Y8/   888  888  e88~-888  888   8888   | 888    \n" +
-            "     /8888  888   Y888   ' 888       Y    888  888 C888  888  888   Y888   ' 888    \n" +
-            "   \\/_88P'  \"88_/  \"88_-~  888      /     888  888  \"88_-888  \"88_/  \"88_-~  888    \n" +
-            "                                  _/";
-
+    private void reportOnConfig(ScorerConfigCopy scorerConfigCopy) {
+        log("backlog: " + scorerConfigCopy.getBacklog().toString());
+        log("issues: " + scorerConfigCopy.getIssue());
+        log("stories: " + scorerConfigCopy.getStory());
+        log("criteria: " + scorerConfigCopy.getCriteria());
+        log("estimation" + scorerConfigCopy.getEstimation());
+    }
 
     private void log(String msg){
         logger.info(prefix + msg + postfix);
     }
-
-    public static final String ANSI_RESET  = "\u001B[0m";     //"\\033[0m";
-    public static final String ANSI_BLACK  = "\u001B[30m";    //"\\033[0m";
-    public static final String ANSI_RED    = "\u001B[31m";    //"\\033[31m";
-    public static final String ANSI_GREEN  = "\u001B[32m";    //"\\033[32m";
-    public static final String ANSI_YELLOW = "\u001B[33m";    //"\\033[33m";
-    public static final String ANSI_BLUE   = "\u001B[34m";    //"\\033[34m";
-    public static final String ANSI_PURPLE = "\u001B[35m";    //"\\033[35m";
-    public static final String ANSI_CYAN   = "\u001B[36m";    //"\\033[36m";
-//    public static final String ANSI_WHITE =  "\\033[33m";   //"\u001B[37m";
-    public static final String[] COLORS = {
-            ANSI_BLACK,
-            ANSI_RED,
-            ANSI_GREEN,
-            ANSI_YELLOW,
-            ANSI_BLUE,
-            ANSI_PURPLE,
-            ANSI_CYAN,
-//            ANSI_WHITE
-    };
 
 }

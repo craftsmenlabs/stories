@@ -2,13 +2,13 @@ package org.craftsmenlabs.stories.scoring;
 
 import mockit.Expectations;
 import mockit.Injectable;
-import org.craftsmenlabs.stories.api.models.CriteriaViolation;
 import org.craftsmenlabs.stories.api.models.Rating;
-import org.craftsmenlabs.stories.api.models.Violation;
-import org.craftsmenlabs.stories.api.models.ViolationType;
 import org.craftsmenlabs.stories.api.models.validatorentry.AcceptanceCriteriaValidatorEntry;
 import org.craftsmenlabs.stories.api.models.validatorentry.IssueValidatorEntry;
 import org.craftsmenlabs.stories.api.models.validatorentry.validatorconfig.ScorerConfigCopy;
+import org.craftsmenlabs.stories.api.models.violation.CriteriaViolation;
+import org.craftsmenlabs.stories.api.models.violation.Violation;
+import org.craftsmenlabs.stories.api.models.violation.ViolationType;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.withinPercentage;
 
 public class AcceptanceCriteriaScorerTest {
 
-    String goodCriteria =
+    private String goodCriteria =
             "Given I have 100 shares of MSFT stock\n" +
                     "And I have 150 shares of APPL stock\n" +
                     "And the time is before close of trading\n" +
