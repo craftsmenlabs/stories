@@ -9,7 +9,7 @@ public class ScorerConfigCopy {
     private ValidatorEntryCopy backlog;
     private ValidatorEntryCopy issue;
     private StoryValidatorEntryCopy story;
-    private ValidatorEntryCopy criteria;
+    private CriteriaValidatorEntryCopy criteria;
     private ValidatorEntryCopy estimation;
 
     @Data
@@ -23,5 +23,12 @@ public class ScorerConfigCopy {
         private List<String> asKeywords;
         private List<String> iKeywords;
         private List<String> soKeywords;
+    }
+
+    @Data
+    public static class CriteriaValidatorEntryCopy extends ValidatorEntryCopy {
+        private List<String> givenKeywords;
+        private List<String> whenKeywords;
+        private List<String> thenKeywords;
     }
 }

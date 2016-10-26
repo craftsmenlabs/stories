@@ -32,7 +32,7 @@ public class CurvedRankingTest implements RankingTest
 	{
 		scorerConfigCopy = new ScorerConfigCopy();
         scorerConfigCopy.setStory(new ScorerConfigCopy.StoryValidatorEntryCopy());
-        scorerConfigCopy.setCriteria(new ScorerConfigCopy.ValidatorEntryCopy());
+		scorerConfigCopy.setCriteria(new ScorerConfigCopy.CriteriaValidatorEntryCopy());
 		scorerConfigCopy.setEstimation(new ScorerConfigCopy.ValidatorEntryCopy());
 		scorerConfigCopy.setIssue(new ScorerConfigCopy.ValidatorEntryCopy());
 		scorerConfigCopy.setBacklog(new ScorerConfigCopy.ValidatorEntryCopy());

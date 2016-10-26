@@ -26,6 +26,9 @@ validation:
         criteria:
             ratingtreshold: 0.7
             active: true
+            givenKeywords: ["given"]
+            whenKeywords: ["when"]
+            thenKeywords: ["then"]
         estimation:
             ratingtreshold: 0.7
             active: true

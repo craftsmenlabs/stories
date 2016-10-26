@@ -3,7 +3,6 @@ package org.craftsmenlabs.stories.scoring;
 import mockit.Expectations;
 import mockit.Injectable;
 import mockit.Mocked;
-import mockit.Tested;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
@@ -19,9 +18,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class BacklogScorerTest2 {
-    @Tested
-    BacklogScorer backlogScorer;
-
     @Mocked
     Backlog backlog;
 
@@ -29,7 +25,7 @@ public class BacklogScorerTest2 {
     ScorerConfigCopy scorerConfigCopy;
 
     @Test
-    public void testPerformScorerReturnsSuccesonOnScoreExactlyOnTreshold(@Injectable BacklogValidatorEntry backlogValidatorEntry, @Injectable Ranking ranking){
+    public void testPerformScorerReturnsSuccesonOnScoreExactlyOnTreshold(@Injectable Ranking ranking) throws Exception {
         List<Issue> issues = Arrays.asList(
                 new Issue()
         );
@@ -50,7 +46,7 @@ public class BacklogScorerTest2 {
     }
 
     @Test
-    public void testPerformScorerReturnsFailonZeroBacklogScore(@Injectable BacklogValidatorEntry backlogValidatorEntry, @Injectable Ranking ranking){
+    public void testPerformScorerReturnsFailonZeroBacklogScore(@Injectable BacklogValidatorEntry backlogValidatorEntry, @Injectable Ranking ranking) throws Exception {
         List<Issue> issues = Arrays.asList(
                 new Issue()
         );
