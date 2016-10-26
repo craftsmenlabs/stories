@@ -1,8 +1,11 @@
 package org.craftsmenlabs.stories.ranking;
 
-import java.util.List;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 import org.craftsmenlabs.stories.api.models.validatorentry.IssueValidatorEntry;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class CurvedRanking implements Ranking
 {
@@ -17,7 +20,13 @@ public class CurvedRanking implements Ranking
 		{
 			return 0.0f;
 		}
-		List<IssueValidatorEntry> entries = backlogValidatorEntry.getIssueValidatorEntries();
+		List<IssueValidatorEntry> entries =
+				backlogValidatorEntry
+						.getIssueValidatorEntries()
+						.stream()
+						.sorted(Comparator.comparing(o -> o.getIssue().getRank()))
+						.collect(Collectors.toList());
+
 		float scoredPoints = 0f;
 		float couldHaveScored = 0f;
 		for (int i = 0; i < entries.size(); i++)
