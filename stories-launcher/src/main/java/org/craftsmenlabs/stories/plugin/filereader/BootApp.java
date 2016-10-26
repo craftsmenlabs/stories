@@ -29,7 +29,7 @@ public class BootApp
 		BootApp app = context.getBean(BootApp.class);
 		int result = app.startApplication(args);
 
-		LoggerFactory.getLogger(BootApp.class).info("Finished stories plugin succes.");
+		LoggerFactory.getLogger(BootApp.class).info("Finished Storynator application with succes.");
 		if (result == 0)
 		{
 			System.exit(0);
