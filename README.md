@@ -20,17 +20,11 @@ Things we meassure:
 * Are all stories linked to an Epic?
 
 
-## Getting started
+## Getting started from binaries with your own validation
+
 ### Prerequisities
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [Jira](https://jira.atlassian.com) - Issue & Project tracking. Currently Stories has been tested on Jira version 6.4 
-
-## Build
-    mvn clean install package
-
-## Usage
-    java -jar stories-launcher/stories-launcher<version>.jar [OPTIONAL PARAMETERS]
-
+* [Java 8 ](http://www.oracle.com/technetwork/java/javase/overview/index.html) - Java 8
+* [Jira](https://jira.atlassian.com) - Issue & Project tracking. Currently Stories has been tested on Jira version 6.4
 
 ### Parameters for ranking:
 * --application.dataformat = jirajson
@@ -53,7 +47,6 @@ Things we meassure:
 * -- validation.criteria.ratingtreshold = 70
 * -- validation.estimation.ratingtreshold = 70
 
-
 ### Constraints
 At the moment there are some constraints on the data. 
 In order to function properly:
@@ -61,4 +54,15 @@ In order to function properly:
 * User stories should be in a format: As a...I...So i
 * Acceptance criteria should end with a dot (.)
 * User stories should use Gherkin language: Given..When..Then
+
+# Create your own build
+### Prerequisities
+* [Java 8 ](http://www.oracle.com/technetwork/java/javase/overview/index.html) - Java 8
+* [Maven](https://maven.apache.org/) - Dependency Management
+
+## Build
+    mvn clean install package
+
+## Usage
+    java -jar stories-launcher/target/stories-launcher<version>.jar [OPTIONAL PARAMETERS]
 
