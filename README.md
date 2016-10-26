@@ -23,6 +23,7 @@ Things we meassure:
 ## Getting started from binaries with your own validation
 
 ### Prerequisities
+* [Storynator] (https://github.com/craftsmenlabs/stories/releases) - A recent Storynator release
 * [Java 8 ](http://www.oracle.com/technetwork/java/javase/overview/index.html) - Java 8
 * [Jira](https://jira.atlassian.com) - Issue & Project tracking. Currently Stories has been tested on Jira version 6.4
 
