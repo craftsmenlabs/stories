@@ -1,16 +1,15 @@
 package org.craftsmenlabs.stories.reporter;
 
+import java.text.DecimalFormat;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.validatorentry.*;
 import org.craftsmenlabs.stories.api.models.validatorentry.validatorconfig.ScorerConfigCopy;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.text.DecimalFormat;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
 
 public class ConsoleReporter
 {
@@ -44,6 +43,8 @@ public class ConsoleReporter
                     "     /8888  888   Y888   ' 888       Y    888  888 C888  888  888   Y888   ' 888    \n" +
                     "   \\/_88P'  \"88_/  \"88_-~  888      /     888  888  \"88_-888  \"88_/  \"88_-~  888    \n" +
                     "                                  _/";
+    private static final int ROUND_TO_DECIMAL = 2;
+    private static final int MAX_SCORE = 100;
 
     public void report(BacklogValidatorEntry backlogValidatorEntry, ScorerConfigCopy scorerConfigCopy) {
         //header
@@ -75,8 +76,12 @@ public class ConsoleReporter
         log("------------------------------------------------------------");
 
         log("Processed a total of " + entries.size() + " issues.");
-        log("Backlog score of " + new DecimalFormat("#.##").format(backlogValidatorEntry.getPointsValuation()*100f) + "% ");
-        log("Rated: " + backlogValidatorEntry.getRating());
+        log("Backlog score of "
+            + new DecimalFormat("#.##").format(backlogValidatorEntry.getPointsValuation() * 100f)
+            + " / "
+            + MAX_SCORE);
+        log("Rated: " + backlogValidatorEntry.getRating() + "  (with threshold on: " + scorerConfigCopy.getBacklog()
+            .getRatingtreshold() + ")");
     }
 
     public void reportOnIssue(IssueValidatorEntry issue){
@@ -85,9 +90,21 @@ public class ConsoleReporter
         log("------------------------------------------------------------");
         log("Issue "
                         + issue.getIssue().getKey()
-                        + " Total (" + issue.getPointsValuation() + ") \t"
-                        + " US("+ issue.getUserStoryValidatorEntry().getPointsValuation() +")\t"
-                        + " AC("+ issue.getAcceptanceCriteriaValidatorEntry().getPointsValuation() +")\t"
+                + " Item total ("
+                + new DecimalFormat("#.#").format(issue.getPointsValuation() * 100)
+                + "/"
+                + MAX_SCORE
+                + ") \t"
+                + " US ("
+                + new DecimalFormat("#.#").format(issue.getUserStoryValidatorEntry().getPointsValuation() * 100)
+                + "/"
+                + MAX_SCORE
+                + ")\t"
+                + " AC ("
+                + new DecimalFormat("#.#").format(issue.getAcceptanceCriteriaValidatorEntry().getPointsValuation() * 100)
+                + "/"
+                + MAX_SCORE
+                + ")\t"
                   );
         issue.getViolations()
                 .forEach(violation ->
