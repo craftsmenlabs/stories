@@ -1,6 +1,6 @@
 application:
     dataformat: jirajson
-    inputfile:
+    inputfile: "/Users/youritjang/IdeaProjects/stories/temp/issuesfile.json"
     outputfile: "stories-output.json"
     url:
     authkey:

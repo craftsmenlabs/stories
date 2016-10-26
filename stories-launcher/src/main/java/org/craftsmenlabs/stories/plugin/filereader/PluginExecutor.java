@@ -41,7 +41,7 @@ public class PluginExecutor {
         BacklogValidatorEntry backlogValidatorEntry = BacklogScorer.performScorer(backlog, new CurvedRanking(), validationConfig);
 
         //console report
-        validationConsoleReporter.report(backlogValidatorEntry);
+        validationConsoleReporter.report(backlogValidatorEntry, validationConfig);
 
         //write file report
 //        if(isOutputFileSet(cfg)) {

@@ -1,11 +1,11 @@
 package org.craftsmenlabs.stories.scoring;
 
-import org.craftsmenlabs.stories.api.models.CriteriaViolation;
 import org.craftsmenlabs.stories.api.models.Rating;
-import org.craftsmenlabs.stories.api.models.Violation;
-import org.craftsmenlabs.stories.api.models.ViolationType;
 import org.craftsmenlabs.stories.api.models.validatorentry.AcceptanceCriteriaValidatorEntry;
 import org.craftsmenlabs.stories.api.models.validatorentry.validatorconfig.ScorerConfigCopy;
+import org.craftsmenlabs.stories.api.models.violation.CriteriaViolation;
+import org.craftsmenlabs.stories.api.models.violation.Violation;
+import org.craftsmenlabs.stories.api.models.violation.ViolationType;
 
 import java.util.ArrayList;
 import java.util.List;
