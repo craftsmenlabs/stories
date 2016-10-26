@@ -24,14 +24,15 @@ public class JiraAPIImporter implements Importer
 	private String authKey;
 	private String statusKey;
 
-    public JiraAPIImporter(String urlResource, String projectKey, String authKey, String statusKey) {
-        this.urlResource = urlResource;
-        this.projectKey = projectKey;
-        this.authKey = authKey;
-        this.statusKey = statusKey;
-    }
+	public JiraAPIImporter(String urlResource, String projectKey, String authKey, String statusKey)
+	{
+		this.urlResource = urlResource;
+		this.projectKey = projectKey;
+		this.authKey = authKey;
+		this.statusKey = statusKey;
+	}
 
-    public String getDataAsString()
+	public String getDataAsString()
 	{
 		String returnsResponse = "";
 		try
@@ -63,10 +64,7 @@ public class JiraAPIImporter implements Importer
 					+ conn
 					.getResponseMessage());
 
-				throw new RuntimeException("Failed (HTTP: "
-					+ conn.getResponseCode()
-					+ ") to retrieve the data from the URL:"
-					+ url);
+				abortOnError();
 			}
 
 			// Buffer the result into a string
@@ -85,43 +83,31 @@ public class JiraAPIImporter implements Importer
 			conn.disconnect();
 
 		}
-		catch (MalformedURLException e)
-		{
-
-			e.printStackTrace();
-
-		}
 		catch (IOException e)
 		{
-
-			e.printStackTrace();
-
+			logger.error("Failed to connect to create a proper connection URL with parameters:" + getParameters());
+			abortOnError();
 		}
-		//writeToFile("tmp.json",returnsResponse.toString());
 
 		return returnsResponse;
 	}
 
-	public void writeToFile(String filename, String data)
+	private void abortOnError()
 	{
-		File f = new File("tmp.json");
-		try (FileOutputStream out = new FileOutputStream(filename))
-		{
-			out.write(data.getBytes());
-			out.close();
-		}
-		catch (FileNotFoundException e)
-		{
-			e.printStackTrace();
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
+		throw new RuntimeException("Failed to connect to " + urlResource);
 	}
 
 	private String httpEncode(String toEncode) throws UnsupportedEncodingException
 	{
 		return URLEncoder.encode(toEncode, "UTF-8");
+	}
+
+	private String getParameters()
+	{
+		return "URL" + urlResource
+			+ " AUTH:" + authKey
+			+ " PROJECT:" + projectKey
+			+ " STATUSKEY:" + statusKey;
+
 	}
 }
