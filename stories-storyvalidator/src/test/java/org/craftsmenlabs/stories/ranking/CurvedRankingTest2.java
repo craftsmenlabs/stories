@@ -3,6 +3,7 @@ package org.craftsmenlabs.stories.ranking;
 import mockit.Expectations;
 import mockit.Injectable;
 import mockit.Tested;
+import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 import org.craftsmenlabs.stories.api.models.validatorentry.IssueValidatorEntry;
 import org.junit.Test;
@@ -46,11 +47,11 @@ public class CurvedRankingTest2 {
     @Test
     public void createRankingReturnsZeroOnZeroScoreBacklog(@Injectable BacklogValidatorEntry backlogValidatorEntry){
         List<IssueValidatorEntry> issues = Arrays.asList(
-                IssueValidatorEntry.builder().pointsValuation(0f).build(),
-                IssueValidatorEntry.builder().pointsValuation(0f).build(),
-                IssueValidatorEntry.builder().pointsValuation(0f).build(),
-                IssueValidatorEntry.builder().pointsValuation(0f).build(),
-                IssueValidatorEntry.builder().pointsValuation(0f).build()
+                IssueValidatorEntry.builder().pointsValuation(0f).issue(Issue.builder().rank("0|0001").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0f).issue(Issue.builder().rank("0|0002").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0f).issue(Issue.builder().rank("0|0003").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0f).issue(Issue.builder().rank("0|0004").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0f).issue(Issue.builder().rank("0|0005").build()).build()
         );
 
         new Expectations(){{
@@ -63,11 +64,11 @@ public class CurvedRankingTest2 {
     @Test
     public void createRankingReturnsOneOnPerfectBacklog(@Injectable BacklogValidatorEntry backlogValidatorEntry){
         List<IssueValidatorEntry> issues = Arrays.asList(
-                IssueValidatorEntry.builder().pointsValuation(1f).build(),
-                IssueValidatorEntry.builder().pointsValuation(1f).build(),
-                IssueValidatorEntry.builder().pointsValuation(1f).build(),
-                IssueValidatorEntry.builder().pointsValuation(1f).build(),
-                IssueValidatorEntry.builder().pointsValuation(1f).build()
+                IssueValidatorEntry.builder().pointsValuation(1f).issue(Issue.builder().rank("0|0001").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(1f).issue(Issue.builder().rank("0|0002").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(1f).issue(Issue.builder().rank("0|0003").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(1f).issue(Issue.builder().rank("0|0004").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(1f).issue(Issue.builder().rank("0|0005").build()).build()
         );
 
         new Expectations(){{
@@ -81,12 +82,12 @@ public class CurvedRankingTest2 {
     @Test
     public void createRankingReturnsScoreOnGoodGradientMixedBacklog(@Injectable BacklogValidatorEntry backlogValidatorEntry){
         List<IssueValidatorEntry> issues = Arrays.asList(
-                IssueValidatorEntry.builder().pointsValuation(1f).build(),
-                IssueValidatorEntry.builder().pointsValuation(0.8f).build(),
-                IssueValidatorEntry.builder().pointsValuation(0.6f).build(),
-                IssueValidatorEntry.builder().pointsValuation(0.4f).build(),
-                IssueValidatorEntry.builder().pointsValuation(0.2f).build(),
-                IssueValidatorEntry.builder().pointsValuation(0.0f).build()
+                IssueValidatorEntry.builder().pointsValuation(1.0f).issue(Issue.builder().rank("0|0000").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0.8f).issue(Issue.builder().rank("0|0001").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0.6f).issue(Issue.builder().rank("0|0002").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0.4f).issue(Issue.builder().rank("0|0003").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0.2f).issue(Issue.builder().rank("0|0004").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0.0f).issue(Issue.builder().rank("0|0005").build()).build()
         );
 
         new Expectations(){{
@@ -101,12 +102,12 @@ public class CurvedRankingTest2 {
     @Test
     public void createRankingReturnsScoreOnBadGradientMixedBacklog(@Injectable BacklogValidatorEntry backlogValidatorEntry){
         List<IssueValidatorEntry> issues = Arrays.asList(
-                IssueValidatorEntry.builder().pointsValuation(0.0f).build(),
-                IssueValidatorEntry.builder().pointsValuation(0.2f).build(),
-                IssueValidatorEntry.builder().pointsValuation(0.4f).build(),
-                IssueValidatorEntry.builder().pointsValuation(0.6f).build(),
-                IssueValidatorEntry.builder().pointsValuation(0.8f).build(),
-                IssueValidatorEntry.builder().pointsValuation(1f).build()
+                IssueValidatorEntry.builder().pointsValuation(0.0f).issue(Issue.builder().rank("0|0001").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0.2f).issue(Issue.builder().rank("0|0002").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0.4f).issue(Issue.builder().rank("0|0003").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0.6f).issue(Issue.builder().rank("0|0004").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0.8f).issue(Issue.builder().rank("0|0005").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(1.0f).issue(Issue.builder().rank("0|0006").build()).build()
                 );
 
         new Expectations(){{
@@ -120,12 +121,12 @@ public class CurvedRankingTest2 {
     @Test
     public void createRankingReturnsHighScoreOnGoodMixedBacklog(@Injectable BacklogValidatorEntry backlogValidatorEntry){
         List<IssueValidatorEntry> issues = Arrays.asList(
-                IssueValidatorEntry.builder().pointsValuation(1.0f).build(),
-                IssueValidatorEntry.builder().pointsValuation(1.0f).build(),
-                IssueValidatorEntry.builder().pointsValuation(1.0f).build(),
-                IssueValidatorEntry.builder().pointsValuation(0.0f).build(),
-                IssueValidatorEntry.builder().pointsValuation(0.0f).build(),
-                IssueValidatorEntry.builder().pointsValuation(0.0f).build()
+                IssueValidatorEntry.builder().pointsValuation(1.0f).issue(Issue.builder().rank("0|0001").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(1.0f).issue(Issue.builder().rank("0|0002").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(1.0f).issue(Issue.builder().rank("0|0003").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0.0f).issue(Issue.builder().rank("0|0004").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0.0f).issue(Issue.builder().rank("0|0005").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0.0f).issue(Issue.builder().rank("0|0006").build()).build()
                 );
 
         new Expectations(){{
@@ -139,12 +140,12 @@ public class CurvedRankingTest2 {
     @Test
     public void createRankingReturnsLowScoreOnBadMixedBacklog(@Injectable BacklogValidatorEntry backlogValidatorEntry){
         List<IssueValidatorEntry> issues = Arrays.asList(
-                IssueValidatorEntry.builder().pointsValuation(0.0f).build(),
-                IssueValidatorEntry.builder().pointsValuation(0.0f).build(),
-                IssueValidatorEntry.builder().pointsValuation(0.0f).build(),
-                IssueValidatorEntry.builder().pointsValuation(1.0f).build(),
-                IssueValidatorEntry.builder().pointsValuation(1.0f).build(),
-                IssueValidatorEntry.builder().pointsValuation(1.0f).build()
+                IssueValidatorEntry.builder().pointsValuation(1.0f).issue(Issue.builder().rank("0|0007").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(1.0f).issue(Issue.builder().rank("0|0008").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(1.0f).issue(Issue.builder().rank("0|0009").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0.0f).issue(Issue.builder().rank("0|0004").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0.0f).issue(Issue.builder().rank("0|0005").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0.0f).issue(Issue.builder().rank("0|0006").build()).build()
                 );
 
         new Expectations(){{
@@ -154,4 +155,5 @@ public class CurvedRankingTest2 {
 
         assertThat(curvedRanking.createRanking(backlogValidatorEntry)).isLessThanOrEqualTo(0.5f);
     }
+
 }

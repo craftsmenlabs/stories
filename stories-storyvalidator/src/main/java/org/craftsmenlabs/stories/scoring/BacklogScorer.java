@@ -23,13 +23,11 @@ public class BacklogScorer {
                         .build();
 
 
-        if (backlog == null
-                || backlog.getIssues() == null
-                || backlog.getIssues().size() == 0) {
+        if (backlog == null || backlog.getIssues() == null || backlog.getIssues().size() == 0) {
             backlogValidatorEntry.getViolations()
                     .add(new BacklogViolation(
                             ViolationType.BacklogEmptyViolation,
-                            "THe backlog is empty, or doesn't contain any issues."
+                            "The backlog is empty, or doesn't contain any issues."
                     ));
 
             backlogValidatorEntry.setPointsValuation(0f);
