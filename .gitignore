@@ -74,3 +74,4 @@ fabric.properties
 *.iml
 *.csv
 *.json
+*.log
