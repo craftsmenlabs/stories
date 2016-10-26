@@ -8,11 +8,10 @@ import org.junit.Test;
  */
 public class JiraAPIImporterTest
 {
-//	@Tested
-JiraAPIImporter jiraAPIImporter;
+	private JiraAPIImporter jiraAPIImporter;
 
-	@Test
-	public void testimportFrom() throws Exception
+	@Test(expected = RuntimeException.class)
+	public void testImportFailsOnImproperUrl() throws Exception
 	{
 		jiraAPIImporter = new JiraAPIImporter("http://foo.bar", "1", "2", "To Do");
 		String dataImport = jiraAPIImporter.getDataAsString();
