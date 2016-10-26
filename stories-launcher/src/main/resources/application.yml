@@ -2,9 +2,9 @@ application:
     dataformat: jirajson
     inputfile: "/Users/youritjang/IdeaProjects/stories/temp/issuesfile.json"
     outputfile: "stories-output.json"
-    url:
-    authkey:
-    projectkey:
+    url: http://jira.savannah.wcc.nl
+    authkey: c2NyaXB0OmVkI2VkI2ViZGNh
+    projectkey: IC
     status: To Do
 
 ranking:
@@ -22,7 +22,9 @@ validation:
             active: true
             asKeywords: ["As a", "as"]
             iKeywords: ["I would like", "I"]
-            soKeywords: ["So I can", "so", "because"]
+            soKeywords: ["So I can", "so", "because","in order to"]
+        bug:
+            filledWith: ["","component"]
         criteria:
             ratingtreshold: 0.7
             active: true
