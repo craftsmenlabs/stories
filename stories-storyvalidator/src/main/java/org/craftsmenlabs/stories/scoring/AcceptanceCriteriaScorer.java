@@ -1,10 +1,14 @@
 package org.craftsmenlabs.stories.scoring;
 
-import java.util.ArrayList;
-import java.util.List;
-import org.craftsmenlabs.stories.api.models.*;
+import org.craftsmenlabs.stories.api.models.CriteriaViolation;
+import org.craftsmenlabs.stories.api.models.Rating;
+import org.craftsmenlabs.stories.api.models.Violation;
+import org.craftsmenlabs.stories.api.models.ViolationType;
 import org.craftsmenlabs.stories.api.models.validatorentry.AcceptanceCriteriaValidatorEntry;
 import org.craftsmenlabs.stories.api.models.validatorentry.validatorconfig.ScorerConfigCopy;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Assigns points to acceptance criteria, based on the
@@ -20,22 +24,22 @@ public class AcceptanceCriteriaScorer {
         float points = 0f;
 
         if (criteria != null && criteria.length() >= MINIMUM_LENGTH_OF_ACC_CRITERIA) {
-            criteria = criteria.toLowerCase();
+            final String criteriaLower = criteria.toLowerCase();
 
-            if (criteria.contains("given")) {
+            if (validationConfig.getCriteria().getGivenKeywords().stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
                 points += 0.3333;
             } else {
                 violations.add(new CriteriaViolation(ViolationType.CriteriaGivenClauseViolation, ""));
             }
 
-            if (criteria.contains("when")) {
+            if (validationConfig.getCriteria().getWhenKeywords().stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
                 points += 0.3333;
             } else {
                 violations.add(new CriteriaViolation(ViolationType.CriteriaWhenClauseViolation, ""));
 
             }
 
-            if (criteria.contains("then")) {
+            if (validationConfig.getCriteria().getThenKeywords().stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
                 points += 0.3333;
             } else {
                 violations.add(new CriteriaViolation(ViolationType.CriteriaThenClauseViolation, ""));

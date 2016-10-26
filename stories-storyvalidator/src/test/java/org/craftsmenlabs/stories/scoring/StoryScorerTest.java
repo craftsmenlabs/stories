@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.withinPercentage;
 public class StoryScorerTest {
 
     @Test
-    public void testPerformScorer_ReturnsZeroOnEmpty(@Injectable IssueValidatorEntry entry, @Injectable ScorerConfigCopy validationConfig) throws Exception {
+    public void testPerformScorerReturnsZeroOnEmpty(@Injectable IssueValidatorEntry entry, @Injectable ScorerConfigCopy validationConfig) throws Exception {
         new Expectations() {{
             entry.getIssue().getUserstory();
             result = "";
@@ -30,7 +30,7 @@ public class StoryScorerTest {
     }
 
     @Test
-    public void testPerformScorer_ReturnsNullOnEmpty(@Injectable IssueValidatorEntry entry, @Injectable ScorerConfigCopy validationConfig) throws Exception {
+    public void testPerformScorerReturnsNullOnEmpty(@Injectable IssueValidatorEntry entry, @Injectable ScorerConfigCopy validationConfig) throws Exception {
         new Expectations() {{
             entry.getIssue().getUserstory();
             result = null;
@@ -44,7 +44,7 @@ public class StoryScorerTest {
     }
 
     @Test
-    public void testPerformScorer_MatchesAllKeywords(@Injectable IssueValidatorEntry entry, @Injectable ScorerConfigCopy validationConfig) {
+    public void testPerformScorerMatchesAllKeywords(@Injectable IssueValidatorEntry entry, @Injectable ScorerConfigCopy validationConfig) {
         new Expectations() {{
             validationConfig.getStory().getAsKeywords();
             result = Arrays.asList("As a ");
@@ -70,7 +70,7 @@ public class StoryScorerTest {
 
 
     @Test
-    public void testPerformScorer_DoesntMatchesAsKeyword(@Injectable IssueValidatorEntry entry, @Injectable ScorerConfigCopy validationConfig) {
+    public void testPerformScorerDoesntMatchAsKeyword(@Injectable IssueValidatorEntry entry, @Injectable ScorerConfigCopy validationConfig) {
         new Expectations() {{
             validationConfig.getStory().getAsKeywords();
             result = Arrays.asList("As a ");
@@ -94,7 +94,7 @@ public class StoryScorerTest {
     }
 
     @Test
-    public void testPerformScorer_DoesntMatchesIKeyword(@Injectable IssueValidatorEntry entry, @Injectable ScorerConfigCopy validationConfig) {
+    public void testPerformScorerDoesntMatchIKeyword(@Injectable IssueValidatorEntry entry, @Injectable ScorerConfigCopy validationConfig) {
         new Expectations() {{
             validationConfig.getStory().getAsKeywords();
             result = Arrays.asList("As a ");
@@ -118,7 +118,7 @@ public class StoryScorerTest {
     }
 
     @Test
-    public void testPerformScorer_DoesntMatcheSoKeyword(@Injectable IssueValidatorEntry entry, @Injectable ScorerConfigCopy validationConfig) {
+    public void testPerformScorerDoesntMatchSoKeyword(@Injectable IssueValidatorEntry entry, @Injectable ScorerConfigCopy validationConfig) {
         new Expectations() {{
             validationConfig.getStory().getAsKeywords();
             result = Arrays.asList("As a ");
@@ -142,7 +142,7 @@ public class StoryScorerTest {
     }
 
     @Test
-    public void testPerformScorer_StoryTooShort(@Injectable IssueValidatorEntry entry, @Injectable ScorerConfigCopy validationConfig) {
+    public void testPerformScoreStoryTooShort(@Injectable IssueValidatorEntry entry, @Injectable ScorerConfigCopy validationConfig) {
         new Expectations() {{
             validationConfig.getStory().getAsKeywords();
             result = Arrays.asList("As");
@@ -164,7 +164,7 @@ public class StoryScorerTest {
     }
 
     @Test
-    public void testPerformScorer_StoryRightLength(@Injectable IssueValidatorEntry entry, @Injectable ScorerConfigCopy validationConfig) {
+    public void testPerformScorerStoryRightLength(@Injectable IssueValidatorEntry entry, @Injectable ScorerConfigCopy validationConfig) {
         new Expectations() {{
             validationConfig.getStory().getAsKeywords();
             result = Arrays.asList("As");
@@ -186,7 +186,7 @@ public class StoryScorerTest {
     }
 
     @Test
-    public void testPerformScorer_ReturnsFailOnLowScore(@Injectable IssueValidatorEntry entry, @Injectable ScorerConfigCopy validationConfig) {
+    public void testPerformScorerReturnsFailOnLowScore(@Injectable IssueValidatorEntry entry, @Injectable ScorerConfigCopy validationConfig) {
         new Expectations() {{
             validationConfig.getStory().getAsKeywords();
             result = Arrays.asList("As a ");

@@ -14,7 +14,7 @@ public class ValidationConfig {
     private ValidatorEntry backlog;
     private ValidatorEntry issue;
     private StoryValidatorEntry story;
-    private ValidatorEntry criteria;
+    private CriteriaValidatorEntry criteria;
     private ValidatorEntry estimation;
 
     public ScorerConfigCopy clone() {
@@ -58,6 +58,25 @@ public class ValidationConfig {
             sve.setAsKeywords(getAsKeywords());
             sve.setIKeywords(getIKeywords());
             sve.setSoKeywords(getSoKeywords());
+
+            return sve;
+        }
+    }
+
+    @Data
+    public static class CriteriaValidatorEntry extends ValidatorEntry {
+        private List<String> givenKeywords;
+        private List<String> whenKeywords;
+        private List<String> thenKeywords;
+
+        public ScorerConfigCopy.CriteriaValidatorEntryCopy clone() {
+            ScorerConfigCopy.CriteriaValidatorEntryCopy sve = new ScorerConfigCopy.CriteriaValidatorEntryCopy();
+            sve.setRatingtreshold(getRatingtreshold());
+            sve.setActive(isActive());
+
+            sve.setGivenKeywords(getGivenKeywords());
+            sve.setWhenKeywords(getWhenKeywords());
+            sve.setThenKeywords(getThenKeywords());
 
             return sve;
         }

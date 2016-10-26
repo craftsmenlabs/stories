@@ -2,7 +2,6 @@ package org.craftsmenlabs.stories.scoring;
 
 import mockit.Expectations;
 import mockit.Injectable;
-import mockit.Tested;
 import org.craftsmenlabs.stories.TestDataGenerator;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
@@ -15,10 +14,6 @@ import static org.assertj.core.api.Assertions.withinPercentage;
 
 public class BacklogScorerTest
 {
-
-	@Tested
-	BacklogScorer backlogScorer;
-
 	TestDataGenerator _testDataGenerator = new TestDataGenerator();
 
 	@Test
