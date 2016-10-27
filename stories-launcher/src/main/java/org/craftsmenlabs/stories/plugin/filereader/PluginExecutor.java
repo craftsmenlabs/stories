@@ -13,6 +13,7 @@ import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
 import org.craftsmenlabs.stories.isolator.parser.Parser;
 import org.craftsmenlabs.stories.ranking.CurvedRanking;
 import org.craftsmenlabs.stories.reporter.ConsoleReporter;
+import org.craftsmenlabs.stories.reporter.SummaryConsoleReporter;
 import org.craftsmenlabs.stories.scoring.BacklogScorer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +50,7 @@ public class PluginExecutor {
 //                    .report(backlogValidatorEntry);
 //        }
 
-//        new SummaryConsoleReporter().reportJson(backlogValidatorEntry);
+        new SummaryConsoleReporter().reportJson(backlogValidatorEntry);
 
         //Multiply by 100%
         return backlogValidatorEntry.getRating();

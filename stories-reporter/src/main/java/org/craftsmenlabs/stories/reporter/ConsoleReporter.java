@@ -1,9 +1,5 @@
 package org.craftsmenlabs.stories.reporter;
 
-import java.text.DecimalFormat;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.validatorentry.*;
 import org.craftsmenlabs.stories.api.models.validatorentry.validatorconfig.ScorerConfigCopy;
@@ -11,17 +7,22 @@ import org.craftsmenlabs.stories.api.models.violation.Violation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.DecimalFormat;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
+
 public class ConsoleReporter
 {
-    public static final String ANSI_RESET = "\u001B[0m";     //"\\033[0m";
-    public static final String ANSI_BLACK = "\u001B[30m";    //"\\033[0m";
-    public static final String ANSI_RED = "\u001B[31m";    //"\\033[31m";
-    public static final String ANSI_GREEN = "\u001B[32m";    //"\\033[32m";
-    public static final String ANSI_YELLOW = "\u001B[33m";    //"\\033[33m";
-    public static final String ANSI_BLUE = "\u001B[34m";    //"\\033[34m";
-    public static final String ANSI_PURPLE = "\u001B[35m";    //"\\033[35m";
-    public static final String ANSI_CYAN = "\u001B[36m";    //"\\033[36m";
-    //    public static final String ANSI_WHITE =  "\\033[33m";   //"\u001B[37m";
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_BLACK = "\u001B[30m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_PURPLE = "\u001B[35m";
+    public static final String ANSI_CYAN = "\u001B[36m";
+
     public static final String[] COLORS = {
             ANSI_BLACK,
             ANSI_RED,
@@ -30,8 +31,8 @@ public class ConsoleReporter
             ANSI_BLUE,
             ANSI_PURPLE,
             ANSI_CYAN,
-//            ANSI_WHITE
     };
+    private static final int MAX_SCORE = 100;
     private final Logger logger = LoggerFactory.getLogger(ConsoleReporter.class);
     private String prefix = ANSI_PURPLE;
     private String postfix = ANSI_RESET;
@@ -43,7 +44,6 @@ public class ConsoleReporter
                     "     /8888  888   Y888   ' 888       Y    888  888 C888  888  888   Y888   ' 888    \n" +
                     "   \\/_88P'  \"88_/  \"88_-~  888      /     888  888  \"88_-888  \"88_/  \"88_-~  888    \n" +
                     "                                  _/";
-    private static final int MAX_SCORE = 100;
 
     public void report(BacklogValidatorEntry backlogValidatorEntry, ScorerConfigCopy scorerConfigCopy) {
         //header

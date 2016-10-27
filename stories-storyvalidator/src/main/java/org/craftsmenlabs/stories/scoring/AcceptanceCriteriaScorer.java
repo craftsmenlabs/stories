@@ -17,6 +17,10 @@ import java.util.List;
 public class AcceptanceCriteriaScorer {
 
     public static final int MINIMUM_LENGTH_OF_ACC_CRITERIA = 20;
+    private static final float GIVEN_POINTS = 0.3333f;
+    private static final float WHEN_POINTS = 0.3333f;
+    private static final float THEN_POINTS = 0.3333f;
+    private static final float TOTAL_POINTS = GIVEN_POINTS + WHEN_POINTS + THEN_POINTS;
 
     public static AcceptanceCriteriaValidatorEntry performScorer(String criteria, ScorerConfigCopy validationConfig) {
 
@@ -27,26 +31,27 @@ public class AcceptanceCriteriaScorer {
             final String criteriaLower = criteria.toLowerCase();
 
             if (validationConfig.getCriteria().getGivenKeywords().stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
-                points += 0.3333;
+                points += GIVEN_POINTS;
             } else {
                 violations.add(new CriteriaViolation(ViolationType.CriteriaGivenClauseViolation, ""));
             }
 
             if (validationConfig.getCriteria().getWhenKeywords().stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
-                points += 0.3333;
+                points += WHEN_POINTS;
             } else {
                 violations.add(new CriteriaViolation(ViolationType.CriteriaWhenClauseViolation, ""));
 
             }
 
             if (validationConfig.getCriteria().getThenKeywords().stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
-                points += 0.3333;
+                points += THEN_POINTS;
             } else {
                 violations.add(new CriteriaViolation(ViolationType.CriteriaThenClauseViolation, ""));
 
             }
         }
 
+        points /= TOTAL_POINTS;
         Rating rating = points >= validationConfig.getCriteria().getRatingtreshold()? Rating.SUCCES : Rating.FAIL;
 
         return AcceptanceCriteriaValidatorEntry

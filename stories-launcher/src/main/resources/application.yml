@@ -1,0 +1,36 @@
+application:
+    dataformat: jirajson
+    inputfile: "/Users/youritjang/IdeaProjects/stories/temp/issuesfile.json"
+    outputfile: "stories-output.json"
+    url:
+    authkey:
+    projectkey:
+    status: To Do
+
+ranking:
+    desiredMiniumStableRanking: 50
+    desiredMinimumUnstableRanking: 50
+    desiredRankingStrategy: Curved
+
+validation:
+        backlog:
+            ratingtreshold: 60.0
+        issue:
+            ratingtreshold: 0.7
+        story:
+            ratingtreshold: 0.7
+            active: true
+            asKeywords: ["As a", "as"]
+            iKeywords: ["I would like", "I"]
+            soKeywords: ["So I can", "so", "because","in order to"]
+        bug:
+            filledWith: ["","component"]
+        criteria:
+            ratingtreshold: 0.7
+            active: true
+            givenKeywords: ["given"]
+            whenKeywords: ["when"]
+            thenKeywords: ["then"]
+        estimation:
+            ratingtreshold: 0.7
+            active: false

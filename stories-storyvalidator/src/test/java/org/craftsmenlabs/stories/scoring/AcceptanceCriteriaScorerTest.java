@@ -186,7 +186,7 @@ public class AcceptanceCriteriaScorerTest {
         }};
 
         AcceptanceCriteriaValidatorEntry entry1 = AcceptanceCriteriaScorer.performScorer(entry.getIssue().getAcceptanceCriteria(), validationConfig);
-        assertThat(entry1.getPointsValuation()).isCloseTo(1f, withinPercentage(1));
+        assertThat(entry1.getPointsValuation()).isCloseTo(1f, withinPercentage(0.0001));
         assertThat(entry1.getRating()).isEqualTo(Rating.SUCCES);
     }
 

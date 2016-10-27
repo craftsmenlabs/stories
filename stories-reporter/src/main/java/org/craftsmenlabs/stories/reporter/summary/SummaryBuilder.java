@@ -4,6 +4,7 @@ import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 import org.craftsmenlabs.stories.api.models.validatorentry.IssueValidatorEntry;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -15,6 +16,8 @@ public class SummaryBuilder {
 
         return Summary.builder()
                 .dateTime(LocalDateTime.now())
+                .timestamp(Timestamp.valueOf(LocalDateTime.now()))
+
                 .pointsValuation(entry.getPointsValuation())
                 .rating(entry.getRating())
                 .issueCount(issues.size())

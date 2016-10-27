@@ -4,12 +4,15 @@ import lombok.Builder;
 import lombok.Data;
 import org.craftsmenlabs.stories.api.models.Rating;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Data
 @Builder
 public class Summary {
     private LocalDateTime dateTime;
+    private Timestamp timestamp;
+
     private float pointsValuation;
     private Rating rating;
 
