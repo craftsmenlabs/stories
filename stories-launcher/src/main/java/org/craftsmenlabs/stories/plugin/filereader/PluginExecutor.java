@@ -1,25 +1,20 @@
 package org.craftsmenlabs.stories.plugin.filereader;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 import org.craftsmenlabs.stories.api.models.validatorentry.validatorconfig.ScorerConfigCopy;
-import org.craftsmenlabs.stories.importer.FileImporter;
-import org.craftsmenlabs.stories.importer.Importer;
-import org.craftsmenlabs.stories.importer.JiraAPIImporter;
-import org.craftsmenlabs.stories.isolator.parser.JiraCSVParser;
-import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
-import org.craftsmenlabs.stories.isolator.parser.Parser;
+import org.craftsmenlabs.stories.importer.*;
+import org.craftsmenlabs.stories.isolator.parser.*;
 import org.craftsmenlabs.stories.ranking.CurvedRanking;
 import org.craftsmenlabs.stories.reporter.ConsoleReporter;
 import org.craftsmenlabs.stories.reporter.SummaryConsoleReporter;
 import org.craftsmenlabs.stories.scoring.BacklogScorer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class PluginExecutor {
 
@@ -68,14 +63,8 @@ public class PluginExecutor {
             logger.info("input file is set: " + cfg.getInputfile());
             return new FileImporter(cfg.getInputfile());
         }else{
-            logger.error("No api parameters or file is set. For the api please use:\n\n" +
-                    "-- application.url = <http://jira.demo.com host without the jira api extension>\n" +
-                    "-- application.authkey = <base64 encoded username:password for Jira>\n" +
-                    "-- application.projectkey = <projectkey used in Jira>\n" +
-                    "-- application.status = <status for backlogitems used in Jira>\n\n\n" +
-                    "or to use a file use:\n" +
-                    "-- application.inputfile = <PATH+FILENAME TO JSON FILE>");
-            throw new IllegalArgumentException();
+            logger.error(getRunParameters());
+            throw new IllegalArgumentException(getRunParameters());
         }
     }
 
@@ -114,5 +103,16 @@ public class PluginExecutor {
                 break;
         }
         return parser;
+    }
+
+    private String getRunParameters()
+    {
+        return "No api parameters or file is set. For the api please use:\n\n" +
+            "-- application.url = <http://jira.demo.com host without the jira api extension>\n" +
+            "-- application.authkey = <base64 encoded username:password for Jira>\n" +
+            "-- application.projectkey = <projectkey used in Jira>\n" +
+            "-- application.status = <status for backlogitems used in Jira>\n\n\n" +
+            "or to use a file use:\n" +
+            "-- application.inputfile = <PATH+FILENAME TO JSON FILE>";
     }
 }
