@@ -75,3 +75,4 @@ fabric.properties
 *.csv
 *.json
 *.log
+custom-application.yml
