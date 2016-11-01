@@ -3,8 +3,8 @@ package org.craftsmenlabs.stories.scoring;
 import mockit.Expectations;
 import mockit.Injectable;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
+import org.craftsmenlabs.stories.api.models.validatorconfig.ValidationConfigCopy;
 import org.craftsmenlabs.stories.api.models.validatorentry.UserStoryValidatorEntry;
-import org.craftsmenlabs.stories.api.models.validatorentry.validatorconfig.ScorerConfigCopy;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -14,13 +14,13 @@ import static org.assertj.core.api.Assertions.withinPercentage;
 public class IssueScorerTest {
 
     @Test
-    public void performScorer_ReturnsZeroOnNullIssue(@Injectable Issue issue, @Injectable ScorerConfigCopy validationConfig) {
+    public void performScorer_ReturnsZeroOnNullIssue(@Injectable Issue issue, @Injectable ValidationConfigCopy validationConfig) {
         float score = IssueScorer.performScorer(null, validationConfig).getPointsValuation();
         assertThat(score).isCloseTo(0f, withinPercentage(1));
     }
 
     @Test
-    public void performScorer_ReturnsZeroOnNullUserStory(@Injectable Issue issue, @Injectable ScorerConfigCopy validationConfig) {
+    public void performScorer_ReturnsZeroOnNullUserStory(@Injectable Issue issue, @Injectable ValidationConfigCopy validationConfig) {
         new Expectations(){{
            issue.getUserstory();
            result = null;
@@ -31,7 +31,7 @@ public class IssueScorerTest {
     }
 
     @Test
-    public void performScorer_ReturnsZeroOnNullCriteria(@Injectable Issue issue, @Injectable ScorerConfigCopy validationConfig) {
+    public void performScorer_ReturnsZeroOnNullCriteria(@Injectable Issue issue, @Injectable ValidationConfigCopy validationConfig) {
         new Expectations(){{
             issue.getUserstory();
             result = "";
@@ -45,7 +45,7 @@ public class IssueScorerTest {
     }
 
     @Test
-    public void performScorer_ReturnsZeroOnAllNotActive(@Injectable Issue issue, @Injectable ScorerConfigCopy validationConfig) {
+    public void performScorer_ReturnsZeroOnAllNotActive(@Injectable Issue issue, @Injectable ValidationConfigCopy validationConfig) {
         new Expectations(){{
             issue.getUserstory();
             result = "";
@@ -72,7 +72,7 @@ public class IssueScorerTest {
 
     @Ignore(value = "TODO fix injecting expectations")
     @Test
-    public void performScorer_ReturnsOneOnOnlyPerfectUerstoryActive(@Injectable Issue issue, @Injectable ScorerConfigCopy validationConfig) {
+    public void performScorer_ReturnsOneOnOnlyPerfectUerstoryActive(@Injectable Issue issue, @Injectable ValidationConfigCopy validationConfig) {
         UserStoryValidatorEntry entry = UserStoryValidatorEntry.builder().pointsValuation(1f).userStory("").build();
         new Expectations(){{
             StoryScorer.performScorer("", validationConfig);

@@ -6,8 +6,8 @@ import mockit.Mocked;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
+import org.craftsmenlabs.stories.api.models.validatorconfig.ValidationConfigCopy;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
-import org.craftsmenlabs.stories.api.models.validatorentry.validatorconfig.ScorerConfigCopy;
 import org.craftsmenlabs.stories.ranking.Ranking;
 import org.junit.Test;
 
@@ -22,7 +22,7 @@ public class BacklogScorerTest {
     Backlog backlog;
 
     @Mocked
-    ScorerConfigCopy scorerConfigCopy;
+    ValidationConfigCopy validationConfigCopy;
 
     @Test
     public void testPerformScorerReturnsSuccesonOnScoreExactlyOnTreshold(@Injectable Ranking ranking) throws Exception {
@@ -37,11 +37,11 @@ public class BacklogScorerTest {
             ranking.createRanking(withNotNull());
             result = 0.5f;
 
-            scorerConfigCopy.getBacklog().getRatingtreshold();
+            validationConfigCopy.getBacklog().getRatingtreshold();
             result = 50f;
         }};
 
-        BacklogValidatorEntry result = BacklogScorer.performScorer(backlog, ranking, scorerConfigCopy);
+        BacklogValidatorEntry result = BacklogScorer.performScorer(backlog, ranking, validationConfigCopy);
         assertThat(result.getRating()).isEqualTo(Rating.SUCCES);
     }
 
@@ -58,11 +58,11 @@ public class BacklogScorerTest {
             ranking.createRanking(withNotNull());
             result = 0f;
 
-            scorerConfigCopy.getBacklog().getRatingtreshold();
+            validationConfigCopy.getBacklog().getRatingtreshold();
             result = 50f;
         }};
 
-        BacklogValidatorEntry result = BacklogScorer.performScorer(backlog, ranking, scorerConfigCopy);
+        BacklogValidatorEntry result = BacklogScorer.performScorer(backlog, ranking, validationConfigCopy);
         assertThat(result.getRating()).isEqualTo(Rating.FAIL);
     }
 }

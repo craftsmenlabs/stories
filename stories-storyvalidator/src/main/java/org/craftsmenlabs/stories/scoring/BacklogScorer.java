@@ -2,9 +2,9 @@ package org.craftsmenlabs.stories.scoring;
 
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
+import org.craftsmenlabs.stories.api.models.validatorconfig.ValidationConfigCopy;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 import org.craftsmenlabs.stories.api.models.validatorentry.IssueValidatorEntry;
-import org.craftsmenlabs.stories.api.models.validatorentry.validatorconfig.ScorerConfigCopy;
 import org.craftsmenlabs.stories.api.models.violation.BacklogViolation;
 import org.craftsmenlabs.stories.api.models.violation.ViolationType;
 import org.craftsmenlabs.stories.ranking.Ranking;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class BacklogScorer {
 
-    public static BacklogValidatorEntry performScorer(Backlog backlog, Ranking ranking, ScorerConfigCopy validationConfig ) {
+    public static BacklogValidatorEntry performScorer(Backlog backlog, Ranking ranking, ValidationConfigCopy validationConfig) {
         BacklogValidatorEntry backlogValidatorEntry =
                 BacklogValidatorEntry.builder()
                         .backlog(backlog)
@@ -56,7 +56,7 @@ public class BacklogScorer {
         return backlogValidatorEntry;
     }
 
-    private static List<IssueValidatorEntry> getValidatedIssues(Backlog backlog, ScorerConfigCopy validationConfig) {
+    private static List<IssueValidatorEntry> getValidatedIssues(Backlog backlog, ValidationConfigCopy validationConfig) {
         return backlog.getIssues().stream()
                 .map(issue -> IssueScorer.performScorer(issue, validationConfig))
                 .collect(Collectors.toList());

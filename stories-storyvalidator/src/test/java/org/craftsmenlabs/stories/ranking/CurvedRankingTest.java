@@ -5,8 +5,8 @@ import mockit.Tested;
 import org.craftsmenlabs.stories.TestDataGenerator;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
+import org.craftsmenlabs.stories.api.models.validatorconfig.ValidationConfigCopy;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
-import org.craftsmenlabs.stories.api.models.validatorentry.validatorconfig.ScorerConfigCopy;
 import org.craftsmenlabs.stories.scoring.BacklogScorer;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.withinPercentage;
 @Ignore
 public class CurvedRankingTest implements RankingTest
 {
-	private ScorerConfigCopy scorerConfigCopy;
+    private ValidationConfigCopy validationConfigCopy;
 
 	@Tested
 	private CurvedRanking ranking;
@@ -30,13 +30,13 @@ public class CurvedRankingTest implements RankingTest
 	@Before
 	public void setUp() throws Exception
 	{
-		scorerConfigCopy = new ScorerConfigCopy();
-        scorerConfigCopy.setStory(new ScorerConfigCopy.StoryValidatorEntryCopy());
-		scorerConfigCopy.setCriteria(new ScorerConfigCopy.CriteriaValidatorEntryCopy());
-		scorerConfigCopy.setEstimation(new ScorerConfigCopy.ValidatorEntryCopy());
-		scorerConfigCopy.setIssue(new ScorerConfigCopy.ValidatorEntryCopy());
-		scorerConfigCopy.setBacklog(new ScorerConfigCopy.ValidatorEntryCopy());
-	}
+        validationConfigCopy = new ValidationConfigCopy();
+        validationConfigCopy.setStory(new ValidationConfigCopy.StoryValidatorEntryCopy());
+        validationConfigCopy.setCriteria(new ValidationConfigCopy.CriteriaValidatorEntryCopy());
+        validationConfigCopy.setEstimation(new ValidationConfigCopy.ValidatorEntryCopy());
+        validationConfigCopy.setIssue(new ValidationConfigCopy.ValidatorEntryCopy());
+        validationConfigCopy.setBacklog(new ValidationConfigCopy.ValidatorEntryCopy());
+    }
 
 	@Override
 	@Test
@@ -68,18 +68,18 @@ public class CurvedRankingTest implements RankingTest
 	public void testRankingIsOneWithPerfectItemsWorks() throws Exception
 	{
 		new Expectations(){{
-//			scorerConfigCopy.getBacklog().getRatingtreshold();
+//			validationConfigCopy.getBacklog().getRatingtreshold();
 //			result = 1f;
 
-//			scorerConfigCopy.getBacklog()
+//			validationConfigCopy.getBacklog()
 //			BacklogScorer.getValidatedIssues();
 
 		}};
 		List<Issue> issues = testDataGenerator.getGoodIssues(20);
 		Backlog b = new Backlog();
 		b.setIssues(issues);
-		BacklogValidatorEntry testEntries = BacklogScorer.performScorer(b, new CurvedRanking(), scorerConfigCopy);
-		assertThat(testEntries.getPointsValuation()).isCloseTo(1.0f, withinPercentage(1.0));
+        BacklogValidatorEntry testEntries = BacklogScorer.performScorer(b, new CurvedRanking(), validationConfigCopy);
+        assertThat(testEntries.getPointsValuation()).isCloseTo(1.0f, withinPercentage(1.0));
 	}
 
 	@Override
@@ -88,8 +88,8 @@ public class CurvedRankingTest implements RankingTest
 	{
 
 		Backlog b = TestDataGenerator.getBacklog(testDataGenerator.getMixedValidatorItems(20));
-		BacklogValidatorEntry testEntries = BacklogScorer.performScorer(b, new CurvedRanking(), scorerConfigCopy);
-		assertThat(testEntries.getPointsValuation()).isCloseTo(0.707f, withinPercentage(1));
+        BacklogValidatorEntry testEntries = BacklogScorer.performScorer(b, new CurvedRanking(), validationConfigCopy);
+        assertThat(testEntries.getPointsValuation()).isCloseTo(0.707f, withinPercentage(1));
 	}
 
 	@Override
@@ -98,18 +98,18 @@ public class CurvedRankingTest implements RankingTest
 	{
 
 		Backlog test1 = TestDataGenerator.getBacklog(testDataGenerator.getMixedValidatorItems(20));
-		BacklogValidatorEntry testEntries = BacklogScorer.performScorer(test1, new CurvedRanking(), scorerConfigCopy);
-		float rank1 = testEntries.getPointsValuation();
+        BacklogValidatorEntry testEntries = BacklogScorer.performScorer(test1, new CurvedRanking(), validationConfigCopy);
+        float rank1 = testEntries.getPointsValuation();
 		assertThat(rank1).isCloseTo(0.707f, withinPercentage(1));
 
 		Backlog test2 = TestDataGenerator.getBacklog(testDataGenerator.getGoodIssues(3));
-		BacklogValidatorEntry testEntries2 = BacklogScorer.performScorer(test2, new CurvedRanking(), scorerConfigCopy);
-		assertThat(testEntries2.getPointsValuation()).isCloseTo(1.0f, withinPercentage(1));
+        BacklogValidatorEntry testEntries2 = BacklogScorer.performScorer(test2, new CurvedRanking(), validationConfigCopy);
+        assertThat(testEntries2.getPointsValuation()).isCloseTo(1.0f, withinPercentage(1));
 
 		Backlog testAll = TestDataGenerator.getBacklog(testDataGenerator.getGoodIssues(3));
 		testAll.getIssues().addAll(testDataGenerator.getMixedValidatorItems(20));
 
-		BacklogValidatorEntry testEntriesAll = BacklogScorer.performScorer(testAll, new CurvedRanking(), scorerConfigCopy);
+        BacklogValidatorEntry testEntriesAll = BacklogScorer.performScorer(testAll, new CurvedRanking(), validationConfigCopy);
 
 		float rank3 = testEntriesAll.getPointsValuation();
 		assertThat(rank3).isCloseTo(0.763f, withinPercentage(1));
@@ -121,18 +121,18 @@ public class CurvedRankingTest implements RankingTest
 	public void testRankingDecreasesOnBadInputWorks() throws Exception
 	{
 		Backlog test1 = TestDataGenerator.getBacklog(testDataGenerator.getMixedValidatorItems(20));
-		BacklogValidatorEntry testEntries = BacklogScorer.performScorer(test1, new CurvedRanking(), scorerConfigCopy);
-		float rank1 = testEntries.getPointsValuation();
+        BacklogValidatorEntry testEntries = BacklogScorer.performScorer(test1, new CurvedRanking(), validationConfigCopy);
+        float rank1 = testEntries.getPointsValuation();
 		assertThat(rank1).isCloseTo(0.707f, withinPercentage(1));
 
 		Backlog test2 = TestDataGenerator.getBacklog(testDataGenerator.getBadValidatorItems(3));
-		BacklogValidatorEntry testEntries2 = BacklogScorer.performScorer(test2, new CurvedRanking(), scorerConfigCopy);
-		assertThat(testEntries2.getPointsValuation()).isCloseTo(0.0f, withinPercentage(1));
+        BacklogValidatorEntry testEntries2 = BacklogScorer.performScorer(test2, new CurvedRanking(), validationConfigCopy);
+        assertThat(testEntries2.getPointsValuation()).isCloseTo(0.0f, withinPercentage(1));
 
 		Backlog testAll = TestDataGenerator.getBacklog(testDataGenerator.getBadValidatorItems(3));
 		testAll.getIssues().addAll(testDataGenerator.getMixedValidatorItems(20));
 
-		BacklogValidatorEntry testEntriesAll = BacklogScorer.performScorer(testAll, new CurvedRanking(), scorerConfigCopy);
+        BacklogValidatorEntry testEntriesAll = BacklogScorer.performScorer(testAll, new CurvedRanking(), validationConfigCopy);
 
 		float rank3 = testEntriesAll.getPointsValuation();
 		assertThat(rank3).isCloseTo(0.57401336f, withinPercentage(1));
@@ -145,18 +145,18 @@ public class CurvedRankingTest implements RankingTest
 	public void testRankingDecreasesMinimalOnBadBottomInputWorks() throws Exception
 	{
 		Backlog test1 = TestDataGenerator.getBacklog(testDataGenerator.getMixedValidatorItems(20));
-		BacklogValidatorEntry testEntries = BacklogScorer.performScorer(test1, new CurvedRanking(), scorerConfigCopy);
-		float rank1 = testEntries.getPointsValuation();
+        BacklogValidatorEntry testEntries = BacklogScorer.performScorer(test1, new CurvedRanking(), validationConfigCopy);
+        float rank1 = testEntries.getPointsValuation();
 		assertThat(rank1).isCloseTo(0.707f, withinPercentage(1));
 
 		Backlog test2 = TestDataGenerator.getBacklog(testDataGenerator.getBadValidatorItems(3));
-		BacklogValidatorEntry testEntries2 = BacklogScorer.performScorer(test2, new CurvedRanking(), scorerConfigCopy);
-		assertThat(testEntries2.getPointsValuation()).isCloseTo(0.0f, withinPercentage(1));
+        BacklogValidatorEntry testEntries2 = BacklogScorer.performScorer(test2, new CurvedRanking(), validationConfigCopy);
+        assertThat(testEntries2.getPointsValuation()).isCloseTo(0.0f, withinPercentage(1));
 
 		Backlog testAll = TestDataGenerator.getBacklog(testDataGenerator.getMixedValidatorItems(20));
 		testAll.getIssues().addAll(testDataGenerator.getBadValidatorItems(3));
 
-		BacklogValidatorEntry testEntriesAll = BacklogScorer.performScorer(testAll, new CurvedRanking(), scorerConfigCopy);
+        BacklogValidatorEntry testEntriesAll = BacklogScorer.performScorer(testAll, new CurvedRanking(), validationConfigCopy);
 
 		float rank3 = testEntriesAll.getPointsValuation();
 		assertThat(rank3).isCloseTo(0.686f, withinPercentage(1));

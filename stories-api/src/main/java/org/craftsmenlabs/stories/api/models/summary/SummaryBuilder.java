@@ -1,11 +1,9 @@
-package org.craftsmenlabs.stories.reporter.summary;
+package org.craftsmenlabs.stories.api.models.summary;
 
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 import org.craftsmenlabs.stories.api.models.validatorentry.IssueValidatorEntry;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class SummaryBuilder {
@@ -15,9 +13,6 @@ public class SummaryBuilder {
         List<IssueValidatorEntry> issues = entry.getIssueValidatorEntries();
 
         return Summary.builder()
-                .dateTime(LocalDateTime.now())
-                .timestamp(Timestamp.valueOf(LocalDateTime.now()))
-
                 .pointsValuation(entry.getPointsValuation())
                 .rating(entry.getRating())
                 .issueCount(issues.size())

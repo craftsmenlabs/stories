@@ -1,11 +1,11 @@
-package org.craftsmenlabs.stories.api.models.validatorentry.validatorconfig;
+package org.craftsmenlabs.stories.api.models.validatorconfig;
 
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class ScorerConfigCopy {
+public class ValidationConfigCopy {
     private ValidatorEntryCopy backlog;
     private ValidatorEntryCopy issue;
     private StoryValidatorEntryCopy story;
