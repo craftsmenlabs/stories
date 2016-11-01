@@ -1,7 +1,7 @@
 package org.craftsmenlabs.stories.plugin.filereader;
 
 import lombok.Data;
-import org.craftsmenlabs.stories.api.models.validatorentry.validatorconfig.ScorerConfigCopy;
+import org.craftsmenlabs.stories.api.models.validatorconfig.ValidationConfigCopy;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -17,8 +17,8 @@ public class ValidationConfig {
     private CriteriaValidatorEntry criteria;
     private ValidatorEntry estimation;
 
-    public ScorerConfigCopy clone() {
-        ScorerConfigCopy copy = new ScorerConfigCopy();
+    public ValidationConfigCopy clone() {
+        ValidationConfigCopy copy = new ValidationConfigCopy();
 
         copy.setBacklog(this.getBacklog().clone());
         copy.setIssue(this.getIssue().clone());
@@ -34,8 +34,8 @@ public class ValidationConfig {
         private float ratingtreshold;
         private boolean active;
 
-        public ScorerConfigCopy.ValidatorEntryCopy clone(){
-            ScorerConfigCopy.ValidatorEntryCopy validatorEntryCopy = new ScorerConfigCopy.ValidatorEntryCopy();
+        public ValidationConfigCopy.ValidatorEntryCopy clone() {
+            ValidationConfigCopy.ValidatorEntryCopy validatorEntryCopy = new ValidationConfigCopy.ValidatorEntryCopy();
 
             validatorEntryCopy.setRatingtreshold(getRatingtreshold());
             validatorEntryCopy.setActive(isActive());
@@ -50,8 +50,8 @@ public class ValidationConfig {
         private List<String> iKeywords;
         private List<String> soKeywords;
 
-        public ScorerConfigCopy.StoryValidatorEntryCopy clone() {
-            ScorerConfigCopy.StoryValidatorEntryCopy sve = new ScorerConfigCopy.StoryValidatorEntryCopy();
+        public ValidationConfigCopy.StoryValidatorEntryCopy clone() {
+            ValidationConfigCopy.StoryValidatorEntryCopy sve = new ValidationConfigCopy.StoryValidatorEntryCopy();
             sve.setRatingtreshold(getRatingtreshold());
             sve.setActive(isActive());
 
@@ -69,8 +69,8 @@ public class ValidationConfig {
         private List<String> whenKeywords;
         private List<String> thenKeywords;
 
-        public ScorerConfigCopy.CriteriaValidatorEntryCopy clone() {
-            ScorerConfigCopy.CriteriaValidatorEntryCopy sve = new ScorerConfigCopy.CriteriaValidatorEntryCopy();
+        public ValidationConfigCopy.CriteriaValidatorEntryCopy clone() {
+            ValidationConfigCopy.CriteriaValidatorEntryCopy sve = new ValidationConfigCopy.CriteriaValidatorEntryCopy();
             sve.setRatingtreshold(getRatingtreshold());
             sve.setActive(isActive());
 

@@ -1,8 +1,8 @@
 package org.craftsmenlabs.stories.scoring;
 
 import org.craftsmenlabs.stories.api.models.Rating;
+import org.craftsmenlabs.stories.api.models.validatorconfig.ValidationConfigCopy;
 import org.craftsmenlabs.stories.api.models.validatorentry.UserStoryValidatorEntry;
-import org.craftsmenlabs.stories.api.models.validatorentry.validatorconfig.ScorerConfigCopy;
 import org.craftsmenlabs.stories.api.models.violation.StoryViolation;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 import org.craftsmenlabs.stories.api.models.violation.ViolationType;
@@ -13,7 +13,7 @@ import java.util.List;
 public class StoryScorer {
     public final static int USERSTORY_MINIMUM_LENGTH = 20;
 
-    public static UserStoryValidatorEntry performScorer(String userStory, ScorerConfigCopy validationConfig) {
+    public static UserStoryValidatorEntry performScorer(String userStory, ValidationConfigCopy validationConfig) {
 
         List<Violation> violations = new ArrayList<>();
 

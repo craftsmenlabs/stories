@@ -1,14 +1,16 @@
 package org.craftsmenlabs.stories.plugin.filereader;
 
-import java.util.List;
-import java.util.stream.Collectors;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
+import org.craftsmenlabs.stories.api.models.validatorconfig.ValidationConfigCopy;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
-import org.craftsmenlabs.stories.api.models.validatorentry.validatorconfig.ScorerConfigCopy;
-import org.craftsmenlabs.stories.importer.*;
-import org.craftsmenlabs.stories.isolator.parser.*;
+import org.craftsmenlabs.stories.importer.FileImporter;
+import org.craftsmenlabs.stories.importer.Importer;
+import org.craftsmenlabs.stories.importer.JiraAPIImporter;
+import org.craftsmenlabs.stories.isolator.parser.JiraCSVParser;
+import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
+import org.craftsmenlabs.stories.isolator.parser.Parser;
 import org.craftsmenlabs.stories.ranking.CurvedRanking;
 import org.craftsmenlabs.stories.reporter.ConsoleReporter;
 import org.craftsmenlabs.stories.reporter.SummaryConsoleReporter;
@@ -16,12 +18,15 @@ import org.craftsmenlabs.stories.scoring.BacklogScorer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class PluginExecutor {
 
     private final Logger logger = LoggerFactory.getLogger(PluginExecutor.class);
     private ConsoleReporter validationConsoleReporter = new ConsoleReporter();
 
-    public Rating execute(ApplicationConfig cfg, ScorerConfigCopy validationConfig) {
+    public Rating execute(ApplicationConfig cfg, ValidationConfigCopy validationConfig) {
         Importer importer = getImporter(cfg);
         String data = importer.getDataAsString();
         Parser parser = getParser(cfg.getDataformat());

@@ -1,15 +1,16 @@
 package org.craftsmenlabs.stories.scoring;
 
-import java.util.ArrayList;
 import org.craftsmenlabs.stories.api.models.Rating;
+import org.craftsmenlabs.stories.api.models.validatorconfig.ValidationConfigCopy;
 import org.craftsmenlabs.stories.api.models.validatorentry.EstimationValidatorEntry;
-import org.craftsmenlabs.stories.api.models.validatorentry.validatorconfig.ScorerConfigCopy;
+
+import java.util.ArrayList;
 
 /**
  * Assigns points if a estimation is ok
  */
 public class EstimationScorer {
-    public static EstimationValidatorEntry performScorer(Float estimation, ScorerConfigCopy validationConfig) {
+    public static EstimationValidatorEntry performScorer(Float estimation, ValidationConfigCopy validationConfig) {
 
         float points;
         if(estimation == null || estimation.compareTo(0f) == 0){

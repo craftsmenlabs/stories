@@ -2,9 +2,10 @@ package org.craftsmenlabs.stories.reporter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import org.craftsmenlabs.stories.api.models.summary.Summary;
+import org.craftsmenlabs.stories.api.models.summary.SummaryBuilder;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
-import org.craftsmenlabs.stories.reporter.summary.Summary;
-import org.craftsmenlabs.stories.reporter.summary.SummaryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +22,8 @@ public class SummaryConsoleReporter implements Reporter {
     public void reportJson(BacklogValidatorEntry backlogValidatorEntry){
         Summary summary = new SummaryBuilder().build(backlogValidatorEntry);
         ObjectMapper mapper = new ObjectMapper();
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
         try {
             String s = mapper.writeValueAsString(summary);
             logger.info(s);
