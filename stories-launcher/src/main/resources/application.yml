@@ -18,6 +18,7 @@ validation:
         issue:
             ratingtreshold: 0.7
         story:
+            fieldSource: "description#story"
             ratingtreshold: 0.7
             active: true
             asKeywords: ["As a", "as"]
@@ -26,6 +27,7 @@ validation:
         bug:
             filledWith: ["","component"]
         criteria:
+            fieldSource: "description#criteria"
             ratingtreshold: 0.7
             active: true
             givenKeywords: ["given"]
