@@ -1,7 +1,9 @@
 package org.craftsmenlabs.stories.api.models.validatorentry;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 
@@ -9,6 +11,8 @@ import java.util.List;
 
 @Data
 //@AllArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 public class AcceptanceCriteriaValidatorEntry extends AbstractValidatorEntry{
     private String acceptanceCriteria;
 

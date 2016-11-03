@@ -1,10 +1,19 @@
 package org.craftsmenlabs.stories.api.models.violation;
 
-public interface Violation
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class Violation
 {
-	ViolationType getViolationType();
+	@JsonProperty("violationType")
+	private ViolationType violationType;
 
-	String getCause();
-
-    String toString();
+	private String cause;
 }

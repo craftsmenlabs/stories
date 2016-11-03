@@ -1,15 +1,25 @@
 package org.craftsmenlabs.stories.api.models.validatorconfig;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
 public class ValidationConfigCopy {
+    @JsonProperty("backlog")
     private ValidatorEntryCopy backlog;
+
+    @JsonProperty("issue")
     private ValidatorEntryCopy issue;
+
+    @JsonProperty("story")
     private StoryValidatorEntryCopy story;
+
+    @JsonProperty("criteria")
     private CriteriaValidatorEntryCopy criteria;
+
+    @JsonProperty("estimation")
     private ValidatorEntryCopy estimation;
 
     @Data

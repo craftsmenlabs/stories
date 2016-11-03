@@ -6,7 +6,6 @@ import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.validatorconfig.ValidationConfigCopy;
 import org.craftsmenlabs.stories.api.models.validatorentry.AcceptanceCriteriaValidatorEntry;
 import org.craftsmenlabs.stories.api.models.validatorentry.IssueValidatorEntry;
-import org.craftsmenlabs.stories.api.models.violation.CriteriaViolation;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 import org.craftsmenlabs.stories.api.models.violation.ViolationType;
 import org.junit.Test;
@@ -79,7 +78,7 @@ public class AcceptanceCriteriaScorerTest {
 
         AcceptanceCriteriaValidatorEntry entry1 = AcceptanceCriteriaScorer.performScorer(entry.getIssue().getAcceptanceCriteria(), validationConfig);
         assertThat(entry1.getPointsValuation()).isCloseTo(1.0f - 0.33333f, withinPercentage(1));
-        assertThat(entry1.getViolations()).contains(new CriteriaViolation(ViolationType.CriteriaGivenClauseViolation, ""));
+        assertThat(entry1.getViolations()).contains(new Violation(ViolationType.CriteriaGivenClauseViolation, ""));
     }
 
     @Test
@@ -102,7 +101,7 @@ public class AcceptanceCriteriaScorerTest {
 
         AcceptanceCriteriaValidatorEntry entry1 = AcceptanceCriteriaScorer.performScorer(entry.getIssue().getAcceptanceCriteria(), validationConfig);
         assertThat(entry1.getPointsValuation()).isCloseTo(1.0f - 0.33333f, withinPercentage(1));
-        assertThat(entry1.getViolations()).contains(new CriteriaViolation(ViolationType.CriteriaWhenClauseViolation, ""));
+        assertThat(entry1.getViolations()).contains(new Violation(ViolationType.CriteriaWhenClauseViolation, ""));
     }
 
     @Test
@@ -125,7 +124,7 @@ public class AcceptanceCriteriaScorerTest {
 
         AcceptanceCriteriaValidatorEntry entry1 = AcceptanceCriteriaScorer.performScorer(entry.getIssue().getAcceptanceCriteria(), validationConfig);
         assertThat(entry1.getPointsValuation()).isCloseTo(1.0f - 0.33333f, withinPercentage(1));
-        assertThat(entry1.getViolations()).contains(new CriteriaViolation(ViolationType.CriteriaThenClauseViolation, ""));
+        assertThat(entry1.getViolations()).contains(new Violation(ViolationType.CriteriaThenClauseViolation, ""));
     }
 
     @Test
