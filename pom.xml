@@ -10,6 +10,7 @@
         <module>stories-importer</module>
 		<module>stories-reporter</module>
 		<module>stories-storyvalidator</module>
+		<module>stories-connectivity</module>
 		<module>stories-isolator</module>
 		<module>stories-api</module>
 	</modules>

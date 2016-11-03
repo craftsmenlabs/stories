@@ -1,30 +1,32 @@
 package org.craftsmenlabs.stories.plugin.filereader;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
 import org.craftsmenlabs.stories.api.models.validatorconfig.ValidationConfigCopy;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
-import org.craftsmenlabs.stories.importer.FileImporter;
-import org.craftsmenlabs.stories.importer.Importer;
-import org.craftsmenlabs.stories.importer.JiraAPIImporter;
-import org.craftsmenlabs.stories.isolator.parser.JiraCSVParser;
-import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
-import org.craftsmenlabs.stories.isolator.parser.Parser;
+import org.craftsmenlabs.stories.connectivity.service.ConnectivityService;
+import org.craftsmenlabs.stories.importer.*;
+import org.craftsmenlabs.stories.isolator.parser.*;
 import org.craftsmenlabs.stories.ranking.CurvedRanking;
 import org.craftsmenlabs.stories.reporter.ConsoleReporter;
 import org.craftsmenlabs.stories.reporter.SummaryConsoleReporter;
 import org.craftsmenlabs.stories.scoring.BacklogScorer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+@Component
 public class PluginExecutor {
 
     private final Logger logger = LoggerFactory.getLogger(PluginExecutor.class);
     private ConsoleReporter validationConsoleReporter = new ConsoleReporter();
+
+    @Autowired
+    private ConnectivityService dashboardConnectivity;
 
     public Rating execute(ApplicationConfig cfg, ValidationConfigCopy validationConfig) {
         Importer importer = getImporter(cfg);
@@ -43,6 +45,9 @@ public class PluginExecutor {
 
         //console report
         validationConsoleReporter.report(backlogValidatorEntry, validationConfig);
+
+        //TODO:dashboard data
+        dashboardConnectivity.sendData(null);
 
         //write file report
 //        if(isOutputFileSet(cfg)) {

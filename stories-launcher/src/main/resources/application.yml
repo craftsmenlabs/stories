@@ -36,3 +36,7 @@ validation:
         estimation:
             ratingtreshold: 0.7
             active: false
+
+dashboard:
+  serviceUrl: http://localhost
+  authKey: <AUTHKEY>

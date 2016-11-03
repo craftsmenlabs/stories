@@ -62,8 +62,11 @@ In order to function properly:
 * [Maven](https://maven.apache.org/) - Dependency Management
 
 ## Build
-    mvn clean install
+    mvn clean install package -P<community,enterprise>
 
 ## Usage
     java -jar stories-launcher/target/stories-launcher<version>.jar [OPTIONAL PARAMETERS]
 
+## Development
+	Run profiles for connectivity.
+	--spring.profiles.active=<community,enterprise>

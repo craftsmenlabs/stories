@@ -2,6 +2,7 @@ package org.craftsmenlabs.stories.plugin.filereader;
 
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.validatorconfig.ValidationConfigCopy;
+import org.craftsmenlabs.stories.connectivity.ConnectivityComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,10 @@ import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Import;
 
 @SpringBootApplication
+@Import(ConnectivityComponent.class)
 public class BootApp
 {
 
@@ -19,6 +22,8 @@ public class BootApp
 	private ApplicationConfig applicationConfig;
 	@Autowired
 	private ValidationConfig validationConfig;
+	@Autowired
+	private PluginExecutor pluginExecutor;
 
 	public static void main(String[] args)
 	{
@@ -44,7 +49,6 @@ public class BootApp
 	{
 		logger.info("Starting stories plugin.");
 
-		PluginExecutor pluginExecutor = new PluginExecutor();
         ValidationConfigCopy validationConfigCopy = validationConfig.clone();
 
         Rating rating = pluginExecutor.execute(applicationConfig, validationConfigCopy);
