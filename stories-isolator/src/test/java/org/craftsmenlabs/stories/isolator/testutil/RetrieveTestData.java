@@ -1,8 +1,11 @@
 package org.craftsmenlabs.stories.isolator.testutil;
 
-import java.util.*;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
 import org.craftsmenlabs.stories.isolator.model.JiraCSVIssueDTO;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class RetrieveTestData
 {
@@ -408,8 +411,8 @@ public class RetrieveTestData
 				"When I make a good story " +
 				"Then the team will be happy."
 			)
-			.rank("Major")
-			.key("581b199ba7dfd7e8f737262c")
+                .rank("0")
+                .key("581b199ba7dfd7e8f737262c")
 			.estimation(0f)
 			.build();
 	}
