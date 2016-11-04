@@ -39,5 +39,5 @@ validation:
             active: false
 
 dashboard:
-  serviceUrl: http://localhost:8080
+  serviceUrl:
   token:
