@@ -33,7 +33,7 @@ Things we meassure:
 * --application.outputfile = <output filepath+name storynator.json>
 * --application.url = <http://jira.demo.com host without the jira api extension>
 * --application.authkey = <base64 encoded username:password for Jira>
-* --application.token = 
+* --application.projectToken = 
 * --application.projectkey = <projectkey used in Jira>
 * --application.status = <status for backlogitems used in Jira>
 
@@ -43,7 +43,7 @@ Things we meassure:
 * --application.outputfile = <output filepath+name storynator.json>
 * --application.url = <https://api.trello.com/1 >
 * --application.authkey = <trello authentication key>
-* --application.token = <trello generated token key>
+* --application.projectToken = <trello generated projectToken key>
 * --application.projectkey = <trello board id>
 * --application.status =
 

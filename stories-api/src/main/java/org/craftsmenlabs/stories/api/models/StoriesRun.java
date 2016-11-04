@@ -19,17 +19,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StoriesRun {
-    //key to uniquely identify the customer
-    private String customerApiKey;
-
-    //key to uniquely identify the project
-    private String projectApiKey;
-
-    //short project name
-    private String projectKey;
-
-    //full project name
-    private String projectName;
+    @JsonProperty("projectToken")
+    private String projectToken;
 
     //The time the run ended
     @JsonProperty("runDateTime")
@@ -46,7 +37,4 @@ public class StoriesRun {
     //Statistics summary
     @JsonProperty("summary")
     private Summary summary;
-
-
-    private String token;
 }

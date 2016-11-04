@@ -11,11 +11,11 @@ import org.craftsmenlabs.stories.connectivity.service.ConnectivityService;
 import org.craftsmenlabs.stories.importer.FileImporter;
 import org.craftsmenlabs.stories.importer.Importer;
 import org.craftsmenlabs.stories.importer.JiraAPIImporter;
+import org.craftsmenlabs.stories.importer.TrelloAPIImporter;
 import org.craftsmenlabs.stories.isolator.parser.JiraCSVParser;
 import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
 import org.craftsmenlabs.stories.isolator.parser.Parser;
-import org.craftsmenlabs.stories.importer.*;
-import org.craftsmenlabs.stories.isolator.parser.*;
+import org.craftsmenlabs.stories.isolator.parser.TrelloJsonParser;
 import org.craftsmenlabs.stories.ranking.CurvedRanking;
 import org.craftsmenlabs.stories.reporter.ConsoleReporter;
 import org.craftsmenlabs.stories.reporter.SummaryConsoleReporter;
@@ -87,8 +87,8 @@ public class PluginExecutor {
 	{
 		if (tokenIsSet(cfg))
 		{
-			logger.info("token is set, using TrelloAPIImporter");
-			return new TrelloAPIImporter(cfg.getUrl(), cfg.getProjectkey(), cfg.getAuthkey(), cfg.getToken());
+            logger.info("projectToken is set, using TrelloAPIImporter");
+            return new TrelloAPIImporter(cfg.getUrl(), cfg.getProjectkey(), cfg.getAuthkey(), cfg.getToken());
 		}
 		else if (restApiParametersAreSet(cfg))
 		{
