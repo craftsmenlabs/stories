@@ -1,18 +1,18 @@
 package org.craftsmenlabs.stories.isolator.parser;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
-import org.craftsmenlabs.stories.isolator.SentenceSplitter;
-import org.craftsmenlabs.stories.isolator.model.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
+import org.craftsmenlabs.stories.isolator.SentenceSplitter;
+import org.craftsmenlabs.stories.isolator.model.TrelloJsonIssue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TrelloJsonParser implements Parser
 {
@@ -21,22 +21,25 @@ public class TrelloJsonParser implements Parser
 
 	public List<Issue> getIssues(String input)
 	{
-
 		List<TrelloJsonIssue> trelloJsonIssues = getTrelloJsonIssues(input);
 
 		SentenceSplitter sentenceSplitter = new SentenceSplitter();
 
-		return trelloJsonIssues.stream()
-			.map(trelloJsonIssue ->
-			{
-				Issue issue = sentenceSplitter.splitSentence(trelloJsonIssue.getDesc());
-				issue.setKey(trelloJsonIssue.getId());
-				issue.setRank("Major");
-				issue.setEstimation(0f);
+        List<Issue> result = new ArrayList<>();
+        for (int i = 0; i < trelloJsonIssues.size(); i++) {
+            TrelloJsonIssue trelloJsonIssue = trelloJsonIssues.get(i);
 
-				return issue;
-			}).collect(Collectors.toList());
-	}
+            String content = trelloJsonIssue.getDesc().length() == 0 ? trelloJsonIssue.getName() : trelloJsonIssue.getDesc();
+            Issue issue = sentenceSplitter.splitSentence(content);
+            issue.setKey(trelloJsonIssue.getId());
+            issue.setRank(String.valueOf(i));
+            issue.setEstimation(0f);
+
+            result.add(issue);
+        }
+
+        return result;
+    }
 
 	public List<TrelloJsonIssue> getTrelloJsonIssues(String input)
 	{
