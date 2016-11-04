@@ -153,7 +153,8 @@ public class StoryScorerTest {
 
 
             entry.getIssue().getUserstory();
-            result = "AsISoAsISoAsISoAsISo".substring(0, StoryScorer.USERSTORY_MINIMUM_LENGTH - 1);
+            result = "AsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISo"
+                    .substring(0, StoryScorer.USERSTORY_MINIMUM_LENGTH - 1);
 
             validationConfig.getStory().getRatingtreshold();
             result = 0.7f;
@@ -175,7 +176,8 @@ public class StoryScorerTest {
 
 
             entry.getIssue().getUserstory();
-            result = "AsISoAsISoAsISoAsISo".substring(0, StoryScorer.USERSTORY_MINIMUM_LENGTH);
+            result = "AsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISo"
+                    .substring(0, StoryScorer.USERSTORY_MINIMUM_LENGTH);
 
             validationConfig.getStory().getRatingtreshold();
             result = 0.7f;

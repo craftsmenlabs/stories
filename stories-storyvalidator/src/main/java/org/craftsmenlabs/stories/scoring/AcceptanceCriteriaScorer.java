@@ -3,7 +3,6 @@ package org.craftsmenlabs.stories.scoring;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.validatorconfig.ValidationConfigCopy;
 import org.craftsmenlabs.stories.api.models.validatorentry.AcceptanceCriteriaValidatorEntry;
-import org.craftsmenlabs.stories.api.models.violation.CriteriaViolation;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 import org.craftsmenlabs.stories.api.models.violation.ViolationType;
 
@@ -33,20 +32,20 @@ public class AcceptanceCriteriaScorer {
             if (validationConfig.getCriteria().getGivenKeywords().stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
                 points += GIVEN_POINTS;
             } else {
-                violations.add(new CriteriaViolation(ViolationType.CriteriaGivenClauseViolation, ""));
+                violations.add(new Violation(ViolationType.CriteriaGivenClauseViolation, ""));
             }
 
             if (validationConfig.getCriteria().getWhenKeywords().stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
                 points += WHEN_POINTS;
             } else {
-                violations.add(new CriteriaViolation(ViolationType.CriteriaWhenClauseViolation, ""));
+                violations.add(new Violation(ViolationType.CriteriaWhenClauseViolation, ""));
 
             }
 
             if (validationConfig.getCriteria().getThenKeywords().stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
                 points += THEN_POINTS;
             } else {
-                violations.add(new CriteriaViolation(ViolationType.CriteriaThenClauseViolation, ""));
+                violations.add(new Violation(ViolationType.CriteriaThenClauseViolation, ""));
 
             }
         }

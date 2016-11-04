@@ -1,8 +1,11 @@
 package org.craftsmenlabs.stories.isolator.testutil;
 
-import java.util.*;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
 import org.craftsmenlabs.stories.isolator.model.JiraCSVIssueDTO;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class RetrieveTestData
 {
@@ -333,7 +336,51 @@ public class RetrieveTestData
 				"}\n";
 	}
 
-	public static Issue getTestIssueFromResource(){
+	public static String getExportedTrelloJSONTestResultFromResource() {
+		return 	"[ \n" +
+				 "{ \n" +
+					"\"id\": \"581b199ba7dfd7e8f737262c\", \n" +
+					"\"checkItemStates\": null, \n" +
+					"\"closed\": false, \n" +
+					"\"dateLastActivity\": \"2016-11-03T13:47:39.437Z\", \n" +
+					"\"desc\": \"As a productowner I want to have a good story, so that my development team has a good start. Given I am productowner When I make a good story Then the team will be happy.\", \n" +
+					"\"descData\": { \n" +
+						"\"emoji\": {} \n" +
+					"}, \n" +
+					"\"idBoard\": \"541bdf323234e5fde4d4c847\", \n" +
+					"\"idList\": \"541bdf323234e5fde4d4c848\", \n" +
+					"\"idMembersVoted\": [], \n" +
+					"\"idShort\": 52, \n" +
+					"\"idAttachmentCover\": null, \n" +
+					"\"manualCoverAttachment\": false, \n" +
+					"\"idLabels\": [], \n" +
+					"\"name\": \"This should succeed\", \n" +
+					"\"pos\": 65535, \n" +
+					"\"shortLink\": \"TjrGg23O\", \n" +
+					"\"badges\": { \n" +
+						"\"votes\": 0, \n" +
+						"\"viewingMemberVoted\": false, \n" +
+						"\"subscribed\": false, \n" +
+						"\"fogbugz\": \"\", \n" +
+						"\"checkItems\": 0, \n" +
+						"\"checkItemsChecked\": 0, \n" +
+						"\"comments\": 0, \n" +
+						"\"attachments\": 0, \n" +
+						"\"description\": true, \n" +
+						"\"due\": null \n" +
+					"}, \n" +
+					"\"due\": null, \n" +
+					"\"idChecklists\": [], \n" +
+					"\"idMembers\": [], \n" +
+					"\"labels\": [], \n" +
+					"\"shortUrl\": \"https://trello.com/c/TjrGg23O\", \n" +
+					"\"subscribed\": false, \n" +
+					"\"url\": \"https://trello.com/c/TjrGg23O/52-this-should-succeed\" \n" +
+				"}" +
+			 "]";
+	}
+
+	public static Issue getJiraTestIssueFromResource(){
 		return Issue.builder()
 				.userstory(
 					"As a super office user " +
@@ -350,5 +397,23 @@ public class RetrieveTestData
 				.key("EPM-512")
 				.estimation(null)
 				.build();
+	}
+
+	public static Issue getTrelloTestIssueFromResource(){
+		return Issue.builder()
+			.userstory(
+				"As a productowner " +
+					"I want to have a good story, " +
+					"so that my development team has a good start."
+			)
+			.acceptanceCriteria(
+				"Given I am productowner " +
+				"When I make a good story " +
+				"Then the team will be happy."
+			)
+                .rank("0")
+                .key("581b199ba7dfd7e8f737262c")
+			.estimation(0f)
+			.build();
 	}
 }

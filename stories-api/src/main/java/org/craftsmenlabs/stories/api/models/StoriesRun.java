@@ -1,5 +1,6 @@
 package org.craftsmenlabs.stories.api.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,14 +32,21 @@ public class StoriesRun {
     private String projectName;
 
     //The time the run ended
+    @JsonProperty("runDateTime")
     private LocalDateTime runDateTime;
 
     //Used to store the run config of this run instance
+    @JsonProperty("runConfig")
     private ValidationConfigCopy runConfig;
 
     //the complete validated backlog
+    @JsonProperty("backlogValidatorEntry")
     private BacklogValidatorEntry backlogValidatorEntry;
 
     //Statistics summary
+    @JsonProperty("summary")
     private Summary summary;
+
+
+    private String token;
 }

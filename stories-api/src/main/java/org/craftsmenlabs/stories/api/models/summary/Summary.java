@@ -1,13 +1,20 @@
 package org.craftsmenlabs.stories.api.models.summary;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.craftsmenlabs.stories.api.models.Rating;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Summary {
     private float pointsValuation;
+
+    @JsonProperty("rating")
     private Rating rating;
 
     private long issueCount;

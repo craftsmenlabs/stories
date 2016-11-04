@@ -1,8 +1,8 @@
 package org.craftsmenlabs.stories.connectivity;
 
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
-import lombok.Data;
 
 @Data
 @Component
@@ -10,5 +10,5 @@ import lombok.Data;
 public class ConnectivityConfiguration
 {
 	private String serviceUrl;
-	private String authKey;
+    private String token;
 }

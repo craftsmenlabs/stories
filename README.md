@@ -27,14 +27,25 @@ Things we meassure:
 * [Java 8 ](http://www.oracle.com/technetwork/java/javase/overview/index.html) - Java 8
 * [Jira](https://jira.atlassian.com) - Issue & Project tracking. Currently Stories has been tested on Jira version 6.4
 
-### Parameters for ranking:
+### Parameters for ranking (JIRA):
 * --application.dataformat = jirajson
 * --application.inputfile = <PATH+FILENAME TO JSON FILE>
 * --application.outputfile = <output filepath+name storynator.json>
 * --application.url = <http://jira.demo.com host without the jira api extension>
 * --application.authkey = <base64 encoded username:password for Jira>
+* --application.token = 
 * --application.projectkey = <projectkey used in Jira>
 * --application.status = <status for backlogitems used in Jira>
+
+### Parameters for ranking (Trello):
+* --application.dataformat = trellojson
+* --application.inputfile = 
+* --application.outputfile = <output filepath+name storynator.json>
+* --application.url = <https://api.trello.com/1 >
+* --application.authkey = <trello authentication key>
+* --application.token = <trello generated token key>
+* --application.projectkey = <trello board id>
+* --application.status =
 
 ### Parameters for ranking:
 * -- ranking.desiredMiniumStableRanking = 70

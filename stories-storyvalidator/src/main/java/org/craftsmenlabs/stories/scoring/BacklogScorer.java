@@ -5,7 +5,7 @@ import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.api.models.validatorconfig.ValidationConfigCopy;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 import org.craftsmenlabs.stories.api.models.validatorentry.IssueValidatorEntry;
-import org.craftsmenlabs.stories.api.models.violation.BacklogViolation;
+import org.craftsmenlabs.stories.api.models.violation.Violation;
 import org.craftsmenlabs.stories.api.models.violation.ViolationType;
 import org.craftsmenlabs.stories.ranking.Ranking;
 
@@ -25,7 +25,7 @@ public class BacklogScorer {
 
         if (backlog == null || backlog.getIssues() == null || backlog.getIssues().size() == 0) {
             backlogValidatorEntry.getViolations()
-                    .add(new BacklogViolation(
+                    .add(new Violation(
                             ViolationType.BacklogEmptyViolation,
                             "The backlog is empty, or doesn't contain any issues."
                     ));
@@ -46,7 +46,7 @@ public class BacklogScorer {
         else {
             backlogValidatorEntry.setRating(Rating.FAIL);
             backlogValidatorEntry.getViolations()
-                    .add(new BacklogViolation(
+                    .add(new Violation(
                             ViolationType.BacklogRatingViolation,
                             "The backlog did not score a minimum of "
                                     + validationConfig.getBacklog().getRatingtreshold()

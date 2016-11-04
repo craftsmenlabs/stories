@@ -69,6 +69,7 @@ public class ConsoleReporter
         backlogValidatorEntry.getViolations().forEach(violation -> log(violation.toString()));
 
         //Summary
+        prefix = backlogValidatorEntry.getRating() == Rating.SUCCES ? ANSI_GREEN : ANSI_RED;
         log("\n\n\n" + stry + " \n\n\n");
         log("------------------------------------------------------------");
         log("--                  Storynator report                     --");
