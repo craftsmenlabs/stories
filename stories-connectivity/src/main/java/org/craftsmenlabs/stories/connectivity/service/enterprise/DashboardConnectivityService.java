@@ -1,9 +1,7 @@
 package org.craftsmenlabs.stories.connectivity.service.enterprise;
 
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.text.SimpleDateFormat;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.craftsmenlabs.stories.api.models.StoriesRun;
 import org.craftsmenlabs.stories.connectivity.ConnectivityConfiguration;
 import org.craftsmenlabs.stories.connectivity.service.ConnectivityService;
@@ -12,8 +10,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.text.SimpleDateFormat;
 
 /**
  *
@@ -35,7 +39,7 @@ public class DashboardConnectivityService implements ConnectivityService
             && connectivityConfiguration.getToken().length() != 0)
         {
 
-            storiesRun.setToken(connectivityConfiguration.getToken());
+            storiesRun.setProjectToken(connectivityConfiguration.getToken());
 
             HttpURLConnection conn;
 
