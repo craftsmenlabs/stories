@@ -39,5 +39,5 @@ validation:
             active: false
 
 dashboard:
-  serviceUrl: http://localhost
-  authKey: <AUTHKEY>
+  serviceUrl: http://localhost:8090
+  token: cc
