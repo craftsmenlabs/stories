@@ -29,7 +29,10 @@ public class DashboardConnectivityService implements ConnectivityService
 
 	public void sendData(StoriesRun storiesRun)
 	{
-        if(connectivityConfiguration.getServiceUrl()!=null && connectivityConfiguration.getToken()!=null)
+        if (connectivityConfiguration.getServiceUrl() != null
+            && connectivityConfiguration.getServiceUrl().length() != 0
+            && connectivityConfiguration.getToken() != null
+            && connectivityConfiguration.getToken().length() != 0)
         {
 
             storiesRun.setToken(connectivityConfiguration.getToken());
