@@ -15,4 +15,5 @@ public class ApplicationConfig {
     private String authkey;
     private String projectkey;
     private String status;
+    private String token;
 }

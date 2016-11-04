@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StoryScorer {
-    public final static int USERSTORY_MINIMUM_LENGTH = 20;
+    public final static int USERSTORY_MINIMUM_LENGTH = 50;
 
     public static UserStoryValidatorEntry performScorer(String userStory, ValidationConfigCopy validationConfig) {
 

@@ -1,11 +1,12 @@
 application:
-    dataformat: jirajson
+    dataformat:
     inputfile:
     outputfile: "stories-output.json"
     url:
     authkey:
     projectkey:
-    status: To Do
+    status:
+    token:
 
 ranking:
     desiredMiniumStableRanking: 50
