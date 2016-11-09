@@ -1,25 +1,24 @@
 package org.craftsmenlabs.stories.isolator.parser;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
 import org.craftsmenlabs.stories.isolator.SentenceSplitter;
 import org.craftsmenlabs.stories.isolator.model.JiraBacklog;
 import org.craftsmenlabs.stories.isolator.model.JiraJsonIssue;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class JiraJsonParser implements Parser {
 
-
-    public List<Issue> getIssues(String input){
-        List<JiraJsonIssue> jiraJsonIssues = getJiraJsonIssues(input);
-
+    public List<Issue> getIssues(List<JiraJsonIssue> jiraJsonIssues) {
         SentenceSplitter sentenceSplitter = new SentenceSplitter();
 
         return jiraJsonIssues.stream()
+                .filter(jiraJsonIssue -> jiraJsonIssue.getFields().getDescription() != null)
                 .map(jiraJsonIssue -> {
                     Issue issue = sentenceSplitter.splitSentence(jiraJsonIssue.getFields().getDescription());
                     issue.setKey(jiraJsonIssue.getKey());
@@ -27,8 +26,14 @@ public class JiraJsonParser implements Parser {
                     issue.setEstimation(jiraJsonIssue.getFields().getEstimation());
 
                     return issue;
-            }).collect(Collectors.toList());
+                }).collect(Collectors.toList());
     }
+
+
+    public List<Issue> getIssues(String input) {
+        return getIssues(getJiraJsonIssues(input));
+    }
+
 
     public List<JiraJsonIssue> getJiraJsonIssues(String input){
         List<JiraJsonIssue> jiraJsonIssues = null;

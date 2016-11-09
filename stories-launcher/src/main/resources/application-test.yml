@@ -1,0 +1,32 @@
+application:
+    dataformat: jirajson
+    inputfile:  ""
+    status: "To Do"
+
+validation:
+        backlog:
+            ratingtreshold: 60.0
+        issue:
+            ratingtreshold: 0.7
+        story:
+            fieldSource: "description#story"
+            ratingtreshold: 0.6
+            active: true
+            asKeywords: ["as a"]
+            iKeywords: ["i want to"]
+            soKeywords: ["so "]
+        bug:
+            filledWith: ["","component"]
+        criteria:
+            fieldSource: "description#criteria"
+            ratingtreshold: 0.7
+            active: false
+            givenKeywords: ["given"]
+            whenKeywords: ["when"]
+            thenKeywords: ["then"]
+        estimation:
+            ratingtreshold: 0.7
+            active: false
+
+dashboard:
+  serviceUrl: http://localhost:8090

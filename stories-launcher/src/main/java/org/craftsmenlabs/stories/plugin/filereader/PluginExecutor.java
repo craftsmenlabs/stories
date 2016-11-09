@@ -37,12 +37,21 @@ public class PluginExecutor {
 
 	@Autowired
 	private ConnectivityService dashboardConnectivity;
+	@Autowired
+	private ApplicationConfig applicationConfig;
+	@Autowired
+	private ValidationConfig validationConfig;
 
-	public Rating execute(ApplicationConfig cfg, ValidationConfigCopy validationConfig)
-	{
-		Importer importer = getImporter(cfg);
+	private ValidationConfigCopy validationConfigCopy;
+
+	public Rating startApplication() {
+		logger.info("Starting stories plugin.");
+
+		validationConfigCopy = validationConfig.clone();
+
+		Importer importer = getImporter(applicationConfig);
 		String data = importer.getDataAsString();
-		Parser parser = getParser(cfg.getDataformat());
+		Parser parser = getParser(applicationConfig.getDataformat());
 
 		List<Issue> issues = parser.getIssues(data).stream()
 			.filter(issue -> issue.getUserstory() != null)
@@ -52,23 +61,23 @@ public class PluginExecutor {
 		Backlog backlog = new Backlog();
 		backlog.setIssues(issues);
 
-		BacklogValidatorEntry backlogValidatorEntry = BacklogScorer.performScorer(backlog, new CurvedRanking(), validationConfig);
+		BacklogValidatorEntry backlogValidatorEntry = BacklogScorer.performScorer(backlog, new CurvedRanking(), validationConfigCopy);
 
 		//console report
-		validationConsoleReporter.report(backlogValidatorEntry, validationConfig);
+		validationConsoleReporter.report(backlogValidatorEntry, validationConfigCopy);
 
         StoriesRun storiesRun = StoriesRun.builder()
                 .summary(new SummaryBuilder().build(backlogValidatorEntry))
                 .backlogValidatorEntry(backlogValidatorEntry)
-                .runConfig(validationConfig)
-                .runDateTime(LocalDateTime.now())
+				.runConfig(validationConfigCopy)
+				.runDateTime(LocalDateTime.now())
                 .build();
 
         dashboardConnectivity.sendData(storiesRun);
 
         //write file report
-//        if(isOutputFileSet(cfg)) {
-//            new JsonFileReporter(new File(cfg.getOutputfile()))
+//        if(isOutputFileSet(applicationConfig)) {
+//            new JsonFileReporter(new File(applicationConfig.getOutputfile()))
 //                    .report(backlogValidatorEntry);
 //        }
 
@@ -78,27 +87,25 @@ public class PluginExecutor {
 		return backlogValidatorEntry.getRating();
 	}
 
-	private boolean isOutputFileSet(ApplicationConfig cfg)
+	private boolean isOutputFileSet(ApplicationConfig applicationConfig)
 	{
-		return cfg.getOutputfile() != null && !cfg.getOutputfile().isEmpty();
+		return applicationConfig.getOutputfile() != null && !applicationConfig.getOutputfile().isEmpty();
 	}
 
-	public Importer getImporter(ApplicationConfig cfg)
+	public Importer getImporter(ApplicationConfig applicationConfig)
 	{
-		if (tokenIsSet(cfg))
+		if (tokenIsSet(applicationConfig))
 		{
             logger.info("projectToken is set, using TrelloAPIImporter");
-            return new TrelloAPIImporter(cfg.getUrl(), cfg.getProjectkey(), cfg.getAuthkey(), cfg.getToken());
-		}
-		else if (restApiParametersAreSet(cfg))
+			return new TrelloAPIImporter(applicationConfig.getUrl(), applicationConfig.getProjectkey(), applicationConfig.getAuthkey(), applicationConfig.getToken());
+		} else if (restApiParametersAreSet(applicationConfig))
 		{
 			logger.info("rest Api parameters are set, using JiraAPIImporter");
-			return new JiraAPIImporter(cfg.getUrl(), cfg.getProjectkey(), cfg.getAuthkey(), cfg.getStatus());
-		}
-		else if (fileParametersAreSet(cfg))
+			return new JiraAPIImporter(applicationConfig.getUrl(), applicationConfig.getProjectkey(), applicationConfig.getAuthkey(), applicationConfig.getStatus());
+		} else if (fileParametersAreSet(applicationConfig))
 		{
-			logger.info("input file is set: " + cfg.getInputfile());
-			return new FileImporter(cfg.getInputfile());
+			logger.info("input file is set: " + applicationConfig.getInputfile());
+			return new FileImporter(applicationConfig.getInputfile());
 		}
 		else
 		{
@@ -107,24 +114,24 @@ public class PluginExecutor {
 		}
 	}
 
-	private boolean tokenIsSet(ApplicationConfig cfg)
+	private boolean tokenIsSet(ApplicationConfig applicationConfig)
 	{
-		return cfg.getToken() != null &&
-			!cfg.getToken().isEmpty();
+		return applicationConfig.getToken() != null &&
+				!applicationConfig.getToken().isEmpty();
 	}
 
-	private boolean restApiParametersAreSet(ApplicationConfig cfg)
+	private boolean restApiParametersAreSet(ApplicationConfig applicationConfig)
 	{
-		return cfg.getUrl() != null &&
-			!cfg.getUrl().isEmpty() &&
-			cfg.getAuthkey() != null &&
-			!cfg.getAuthkey().isEmpty();
+		return applicationConfig.getUrl() != null &&
+				!applicationConfig.getUrl().isEmpty() &&
+				applicationConfig.getAuthkey() != null &&
+				!applicationConfig.getAuthkey().isEmpty();
 	}
 
-	private boolean fileParametersAreSet(ApplicationConfig cfg)
+	private boolean fileParametersAreSet(ApplicationConfig applicationConfig)
 	{
-		return cfg.getInputfile() != null &&
-			!cfg.getInputfile().isEmpty();
+		return applicationConfig.getInputfile() != null &&
+				!applicationConfig.getInputfile().isEmpty();
 	}
 
 	/**

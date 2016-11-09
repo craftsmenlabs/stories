@@ -1,7 +1,6 @@
 package org.craftsmenlabs.stories.plugin.filereader;
 
 import org.craftsmenlabs.stories.api.models.Rating;
-import org.craftsmenlabs.stories.api.models.validatorconfig.ValidationConfigCopy;
 import org.craftsmenlabs.stories.connectivity.ConnectivityComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,10 +17,7 @@ public class BootApp
 {
 
 	private final Logger logger = LoggerFactory.getLogger(BootApp.class);
-	@Autowired
-	private ApplicationConfig applicationConfig;
-	@Autowired
-	private ValidationConfig validationConfig;
+
 	@Autowired
 	private PluginExecutor pluginExecutor;
 
@@ -32,10 +28,10 @@ public class BootApp
 		ApplicationContext context = application.run(args);
 
 		BootApp app = context.getBean(BootApp.class);
-		int result = app.startApplication(args);
+		Rating result = app.startApplication();
 
 		LoggerFactory.getLogger(BootApp.class).info("Finished Storynator application with succes.");
-		if (result == 0)
+		if (result == Rating.SUCCESS)
 		{
 			System.exit(0);
 		}
@@ -45,19 +41,8 @@ public class BootApp
 		}
 	}
 
-	public int startApplication(String[] args)
+	public Rating startApplication()
 	{
-		logger.info("Starting stories plugin.");
-
-        ValidationConfigCopy validationConfigCopy = validationConfig.clone();
-
-        Rating rating = pluginExecutor.execute(applicationConfig, validationConfigCopy);
-        if (rating == Rating.SUCCESS) {
-			return 0;
-		}
-		else
-		{
-			return -1;
-		}
+		return pluginExecutor.startApplication();
 	}
 }
