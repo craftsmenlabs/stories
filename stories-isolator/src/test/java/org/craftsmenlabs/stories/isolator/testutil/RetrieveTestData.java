@@ -382,6 +382,7 @@ public class RetrieveTestData
 
 	public static Issue getJiraTestIssueFromResource(){
 		return Issue.builder()
+				.summary("interslice")
 				.userstory(
 					"As a super office user " +
 					"I would like to be informed about the alarms in my user " +

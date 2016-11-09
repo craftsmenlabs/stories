@@ -17,6 +17,7 @@ public class Issue implements ScrumItem{
     @JsonProperty("rank")
     private String rank;
 
+    private String summary;
     private String userstory;
     private String acceptanceCriteria;
     private Float estimation;

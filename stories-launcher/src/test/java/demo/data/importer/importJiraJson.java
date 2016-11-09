@@ -1,6 +1,5 @@
 package demo.data.importer;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.util.Files;
 import org.craftsmenlabs.stories.api.models.StoriesRun;
@@ -11,7 +10,6 @@ import org.craftsmenlabs.stories.api.models.validatorconfig.ValidationConfigCopy
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 import org.craftsmenlabs.stories.connectivity.service.ConnectivityService;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
-import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
 import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
 import org.craftsmenlabs.stories.plugin.filereader.ApplicationConfig;
 import org.craftsmenlabs.stories.plugin.filereader.BootApp;
@@ -74,8 +72,6 @@ public class importJiraJson {
         validationConfigCopy = validationConfig.clone();
 
         ObjectMapper mapper = new ObjectMapper();
-        TypeReference<List<JiraJsonIssue>> mapType = new TypeReference<List<JiraJsonIssue>>() {
-        };
         JiraBacklog jiraBacklog = null;
         try {
             jiraBacklog = mapper.readValue(file, JiraBacklog.class);

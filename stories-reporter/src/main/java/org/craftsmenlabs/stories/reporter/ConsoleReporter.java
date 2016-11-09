@@ -106,6 +106,7 @@ public class ConsoleReporter
                 + MAX_SCORE
                 + ")\t"
                   );
+        log(issue.getIssue().getSummary());
         issue.getViolations()
                 .forEach(violation ->
                         log("Violation found:" + violation.toString()));

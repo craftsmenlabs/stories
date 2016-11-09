@@ -21,6 +21,7 @@ public class JiraJsonParser implements Parser {
                 .filter(jiraJsonIssue -> jiraJsonIssue.getFields().getDescription() != null)
                 .map(jiraJsonIssue -> {
                     Issue issue = sentenceSplitter.splitSentence(jiraJsonIssue.getFields().getDescription());
+                    issue.setSummary(jiraJsonIssue.getFields().getSummary());
                     issue.setKey(jiraJsonIssue.getKey());
                     issue.setRank(jiraJsonIssue.getFields().getRank());
                     issue.setEstimation(jiraJsonIssue.getFields().getEstimation());
