@@ -1,35 +1,39 @@
 
-package org.craftsmenlabs.stories.isolator.model;
+package org.craftsmenlabs.stories.isolator.model.jira;
 
+import com.fasterxml.jackson.annotation.*;
+
+import javax.annotation.Generated;
 import java.util.HashMap;
 import java.util.Map;
-import javax.annotation.Generated;
-import com.fasterxml.jackson.annotation.*;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
     "self",
+    "id",
     "description",
     "iconUrl",
     "name",
-    "id",
-    "statusCategory"
+    "subtask",
+    "avatarId"
 })
-public class Status {
+public class Issuetype {
 
     @JsonProperty("self")
     public String self;
+    @JsonProperty("id")
+    public String id;
     @JsonProperty("description")
     public String description;
     @JsonProperty("iconUrl")
     public String iconUrl;
     @JsonProperty("name")
     public String name;
-    @JsonProperty("id")
-    public String id;
-//    @JsonProperty("statusCategory")
-//    public StatusCategory statusCategory;
+    @JsonProperty("subtask")
+    public Boolean subtask;
+    @JsonProperty("avatarId")
+    public Integer avatarId;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 

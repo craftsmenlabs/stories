@@ -1,13 +1,15 @@
 package org.craftsmenlabs.stories.isolator;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import java.util.List;
+import mockit.Tested;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
-import org.craftsmenlabs.stories.isolator.model.TrelloJsonIssue;
+import org.craftsmenlabs.stories.isolator.model.trello.TrelloJsonIssue;
 import org.craftsmenlabs.stories.isolator.parser.TrelloJsonParser;
 import org.craftsmenlabs.stories.isolator.testutil.RetrieveTestData;
 import org.junit.Test;
-import mockit.*;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class TrelloJsonParserTest
 {

@@ -10,8 +10,8 @@ import org.craftsmenlabs.stories.api.models.summary.SummaryBuilder;
 import org.craftsmenlabs.stories.api.models.validatorconfig.ValidationConfigCopy;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 import org.craftsmenlabs.stories.connectivity.service.ConnectivityService;
-import org.craftsmenlabs.stories.isolator.model.JiraBacklog;
-import org.craftsmenlabs.stories.isolator.model.JiraJsonIssue;
+import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
+import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
 import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
 import org.craftsmenlabs.stories.plugin.filereader.ApplicationConfig;
 import org.craftsmenlabs.stories.plugin.filereader.BootApp;
@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.function.IntSupplier;
 
 
 //TODO don't put communityConnectivityService on the classpath
@@ -100,6 +101,12 @@ public class importJiraJson {
         System.out.println(storiesRun.getProjectToken() + " @ " + storiesRun.getRunDateTime());
 
         dashboardConnectivity.sendData(storiesRun);
+    }
+
+    public IntSupplier quiz(final int[] vals, int i) {
+        if (vals[0] < 0)
+            vals[i] = 0;
+        return () -> vals[i];
     }
 
 }

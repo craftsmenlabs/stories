@@ -1,4 +1,4 @@
-package org.craftsmenlabs.stories.isolator.model;
+package org.craftsmenlabs.stories.isolator.model.jira;
 
 import lombok.Builder;
 import lombok.Data;

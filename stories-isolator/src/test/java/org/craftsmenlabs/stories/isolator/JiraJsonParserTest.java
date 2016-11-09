@@ -1,17 +1,19 @@
 package org.craftsmenlabs.stories.isolator;
 
-import static org.junit.Assert.assertTrue;
+import org.apache.commons.io.FileUtils;
+import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
+import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
+import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
+import org.junit.Ignore;
+import org.junit.Test;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Comparator;
 import java.util.List;
-import org.apache.commons.io.FileUtils;
-import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
-import org.craftsmenlabs.stories.isolator.model.JiraJsonIssue;
-import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
-import org.junit.Ignore;
-import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 public class JiraJsonParserTest {
 

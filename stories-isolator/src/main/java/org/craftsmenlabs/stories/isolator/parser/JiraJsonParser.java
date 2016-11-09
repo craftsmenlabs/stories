@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
 import org.craftsmenlabs.stories.isolator.SentenceSplitter;
-import org.craftsmenlabs.stories.isolator.model.JiraBacklog;
-import org.craftsmenlabs.stories.isolator.model.JiraJsonIssue;
+import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
+import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
 
 import java.io.IOException;
 import java.util.List;

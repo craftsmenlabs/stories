@@ -1,10 +1,13 @@
 package org.craftsmenlabs.stories.isolator.parser;
 
-import java.util.*;
-import java.util.stream.Collectors;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
 import org.craftsmenlabs.stories.isolator.SentenceSplitter;
-import org.craftsmenlabs.stories.isolator.model.JiraCSVIssueDTO;
+import org.craftsmenlabs.stories.isolator.model.jira.JiraCSVIssueDTO;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Deprecated
 public class JiraCSVParser implements Parser {
@@ -13,22 +16,6 @@ public class JiraCSVParser implements Parser {
     private static final int KEY_INDEX = 1;
     private static final int DESCRIPTION_INDEX = 28;
     private static final int RANK_INDEX = 42;
-
-
-    public List<Issue> getIssues(String input){
-        List<String> items = Arrays.asList(input.split(";"));
-        List<JiraCSVIssueDTO> jiraCSVIssues = getJiraCSVIssues(items);
-
-
-        SentenceSplitter sentenceSplitter = new SentenceSplitter();
-
-        return jiraCSVIssues.stream().map(jiraCSVIssue -> {
-            Issue issue = sentenceSplitter.splitSentence(jiraCSVIssue.getDescription());
-            issue.setRank(jiraCSVIssue.getRank());
-
-            return issue;
-        }).collect(Collectors.toList());
-    }
 
     public static List<JiraCSVIssueDTO> getJiraCSVIssues(List<String> items){
         List<JiraCSVIssueDTO> jiraIssues = new ArrayList<>(items.size()/HEADER.length);
@@ -59,5 +46,20 @@ public class JiraCSVParser implements Parser {
         }
 
         return input;
+    }
+
+    public List<Issue> getIssues(String input) {
+        List<String> items = Arrays.asList(input.split(";"));
+        List<JiraCSVIssueDTO> jiraCSVIssues = getJiraCSVIssues(items);
+
+
+        SentenceSplitter sentenceSplitter = new SentenceSplitter();
+
+        return jiraCSVIssues.stream().map(jiraCSVIssue -> {
+            Issue issue = sentenceSplitter.splitSentence(jiraCSVIssue.getDescription());
+            issue.setRank(jiraCSVIssue.getRank());
+
+            return issue;
+        }).collect(Collectors.toList());
     }
 }

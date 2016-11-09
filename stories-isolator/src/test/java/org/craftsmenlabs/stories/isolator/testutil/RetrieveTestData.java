@@ -1,7 +1,7 @@
 package org.craftsmenlabs.stories.isolator.testutil;
 
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
-import org.craftsmenlabs.stories.isolator.model.JiraCSVIssueDTO;
+import org.craftsmenlabs.stories.isolator.model.jira.JiraCSVIssueDTO;
 
 import java.util.ArrayList;
 import java.util.Arrays;
