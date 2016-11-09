@@ -5,6 +5,6 @@ package org.craftsmenlabs.stories.api.models;
  */
 public enum Rating
 {
-	SUCCES,
-	FAIL
+    SUCCESS,
+    FAIL
 }

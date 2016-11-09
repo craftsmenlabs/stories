@@ -65,6 +65,6 @@ public class StoryValidatorTest
 //	public void testRateRanking() throws Exception
 //	{
 //		Rating rating = storyValidator.rateRanking(80);
-//		assertThat(rating).isEqualTo(Rating.SUCCES);
+//		assertThat(rating).isEqualTo(Rating.SUCCESS);
 //	}
 }

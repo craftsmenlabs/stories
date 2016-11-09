@@ -30,7 +30,7 @@ public class IssueScorer {
                             .average()
                             .orElse(0.0);
 
-            Rating rating = points >= validationConfig.getIssue().getRatingtreshold() ? Rating.SUCCES : Rating.FAIL;
+            Rating rating = points >= validationConfig.getIssue().getRatingtreshold() ? Rating.SUCCESS : Rating.FAIL;
 
             return IssueValidatorEntry
                     .builder()

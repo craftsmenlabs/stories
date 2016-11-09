@@ -47,7 +47,7 @@ public class StoryScorer {
             }
         }
 
-        Rating rating = points >= validationConfig.getStory().getRatingtreshold() ? Rating.SUCCES : Rating.FAIL;
+        Rating rating = points >= validationConfig.getStory().getRatingtreshold() ? Rating.SUCCESS : Rating.FAIL;
 
         return UserStoryValidatorEntry
                 .builder()

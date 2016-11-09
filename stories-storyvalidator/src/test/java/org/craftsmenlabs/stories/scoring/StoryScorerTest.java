@@ -65,7 +65,7 @@ public class StoryScorerTest {
 
         UserStoryValidatorEntry entry1 = StoryScorer.performScorer(entry.getIssue().getUserstory(), validationConfig);
         assertThat(entry1.getPointsValuation()).isCloseTo(1.0f, withinPercentage(0.1));
-        assertThat(entry1.getRating()).isEqualTo(Rating.SUCCES);
+        assertThat(entry1.getRating()).isEqualTo(Rating.SUCCESS);
     }
 
 

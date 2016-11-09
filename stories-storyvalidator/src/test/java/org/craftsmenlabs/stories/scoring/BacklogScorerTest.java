@@ -42,7 +42,7 @@ public class BacklogScorerTest {
         }};
 
         BacklogValidatorEntry result = BacklogScorer.performScorer(backlog, ranking, validationConfigCopy);
-        assertThat(result.getRating()).isEqualTo(Rating.SUCCES);
+        assertThat(result.getRating()).isEqualTo(Rating.SUCCESS);
     }
 
     @Test

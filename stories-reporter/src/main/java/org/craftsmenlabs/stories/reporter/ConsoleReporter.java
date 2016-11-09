@@ -69,7 +69,7 @@ public class ConsoleReporter
         backlogValidatorEntry.getViolations().forEach(violation -> log(violation.toString()));
 
         //Summary
-        prefix = backlogValidatorEntry.getRating() == Rating.SUCCES ? ANSI_GREEN : ANSI_RED;
+        prefix = backlogValidatorEntry.getRating() == Rating.SUCCESS ? ANSI_GREEN : ANSI_RED;
         log("\n\n\n" + stry + " \n\n\n");
         log("------------------------------------------------------------");
         log("--                  Storynator report                     --");
@@ -85,7 +85,7 @@ public class ConsoleReporter
     }
 
     public void reportOnIssue(IssueValidatorEntry issue){
-        prefix = issue.getRating() == Rating.SUCCES ? ANSI_GREEN : ANSI_RED;
+        prefix = issue.getRating() == Rating.SUCCESS ? ANSI_GREEN : ANSI_RED;
 
         log("------------------------------------------------------------");
         log("Issue "
@@ -116,7 +116,7 @@ public class ConsoleReporter
     }
 
     public void reportOnUserstory(UserStoryValidatorEntry entry){
-        prefix = entry.getRating() == Rating.SUCCES ? ANSI_GREEN : ANSI_RED;
+        prefix = entry.getRating() == Rating.SUCCESS ? ANSI_GREEN : ANSI_RED;
 
 
         String userstory = entry.getUserStory().replace("\n", " ").replace("\r", "");
@@ -126,7 +126,7 @@ public class ConsoleReporter
     }
 
     public void reportOnAcceptanceCriteria(AcceptanceCriteriaValidatorEntry entry){
-        prefix = entry.getRating() == Rating.SUCCES ? ANSI_GREEN : ANSI_RED;
+        prefix = entry.getRating() == Rating.SUCCESS ? ANSI_GREEN : ANSI_RED;
 
         String criteria = entry.getAcceptanceCriteria().replace("\n", " ").replace("\r", "");
         log("\t Criteria: (" + entry.getPointsValuation() + ") " + criteria );
@@ -135,7 +135,7 @@ public class ConsoleReporter
     }
 
     public void reportOnEstimation(EstimationValidatorEntry entry){
-        prefix = entry.getRating() == Rating.SUCCES ? ANSI_GREEN : ANSI_RED;
+        prefix = entry.getRating() == Rating.SUCCESS ? ANSI_GREEN : ANSI_RED;
 
         Float estimation = entry.getEstimation();
         log("\t Estimation: (" +entry.getPointsValuation() + ")" + estimation );

@@ -52,8 +52,7 @@ public class BootApp
         ValidationConfigCopy validationConfigCopy = validationConfig.clone();
 
         Rating rating = pluginExecutor.execute(applicationConfig, validationConfigCopy);
-        if (rating == Rating.SUCCES)
-		{
+        if (rating == Rating.SUCCESS) {
 			return 0;
 		}
 		else

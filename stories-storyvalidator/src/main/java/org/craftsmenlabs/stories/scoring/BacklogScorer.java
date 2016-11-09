@@ -42,7 +42,7 @@ public class BacklogScorer {
         }
 
         if (backlogValidatorEntry.getPointsValuation() * 100f >= validationConfig.getBacklog().getRatingtreshold())
-            backlogValidatorEntry.setRating(Rating.SUCCES);
+            backlogValidatorEntry.setRating(Rating.SUCCESS);
         else {
             backlogValidatorEntry.setRating(Rating.FAIL);
             backlogValidatorEntry.getViolations()
