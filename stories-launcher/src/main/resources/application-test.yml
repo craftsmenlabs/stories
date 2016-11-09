@@ -1,6 +1,11 @@
+spring:
+  profiles:
+    active: test
+    include: enterprise
+
 application:
     dataformat: jirajson
-    inputfile:  ""
+    inputfile:
     status: "To Do"
 
 validation:
