@@ -32,7 +32,7 @@ Things we meassure:
 * --application.inputfile = <PATH+FILENAME TO JSON FILE>
 * --application.outputfile = <output filepath+name storynator.json>
 * --application.url = <http://jira.demo.com host without the jira api extension>
-* --application.authkey = <base64 encoded username:password for Jira>
+* --application.authkey = <base64 encoded username:password for Jira, u can use https://www.base64encode.org/ to encode your username:password.>
 * --application.projectToken = 
 * --application.projectkey = <projectkey used in Jira>
 * --application.status = <status for backlogitems used in Jira>
