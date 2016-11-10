@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Data
@@ -24,15 +25,8 @@ import java.util.Map;
     "fixVersions",
     "aggregatetimespent",
     "resolution",
-    "customfield_10310",
-    "customfield_10302",
-    "customfield_10401",
-    "customfield_10306",
     "aggregatetimeestimate",
-    "customfield_10307",
-    "customfield_10308",
     "resolutiondate",
-    "customfield_10309",
     "workratio",
     "summary",
     "lastViewed",
@@ -41,15 +35,9 @@ import java.util.Map;
     "subtasks",
     "created",
     "reporter",
-    "customfield_10000",
     "aggregateprogress",
     "priority",
-    "customfield_10100",
-    "customfield_10200",
-    "customfield_10201",
-    "customfield_10300",
     "labels",
-    "customfield_10301",
     "environment",
     "timeestimate",
     "aggregatetimeoriginalestimate",
@@ -70,54 +58,22 @@ public class Fields {
     public Object timeoriginalestimate;
     @JsonProperty("description")
     public String description;
-
     @JsonProperty("aggregatetimespent")
     public Object aggregatetimespent;
     @JsonProperty("resolution")
     public Object resolution;
-    @JsonProperty("customfield_10310")
-    public Object customfield10310;
-    @JsonProperty("customfield_10302")
-    public String customfield10302;
-
-
-    @JsonProperty("customfield_10401")
-    public String rank;
-
-
-    @JsonProperty("customfield_10306")
-    public Object customfield10306;
     @JsonProperty("aggregatetimeestimate")
     public Object aggregatetimeestimate;
-    @JsonProperty("customfield_10307")
-    public Object customfield10307;
-
-    @JsonProperty("customfield_10308")
-    public Float estimation;
-
     @JsonProperty("resolutiondate")
     public Object resolutiondate;
-    @JsonProperty("customfield_10309")
-    public Object customfield10309;
     @JsonProperty("workratio")
     public Integer workratio;
     @JsonProperty("summary")
     public String summary;
     @JsonProperty("lastViewed")
     public String lastViewed;
-
-    @JsonProperty("customfield_10100")
-    public Object customfield10100;
-    @JsonProperty("customfield_10200")
-    public Object customfield10200;
-    @JsonProperty("customfield_10201")
-    public Object customfield10201;
-    @JsonProperty("customfield_10300")
-    public Object customfield10300;
     @JsonProperty("labels")
     public List<Object> labels = new ArrayList<Object>();
-    @JsonProperty("customfield_10301")
-    public Object customfield10301;
     @JsonProperty("environment")
     public Object environment;
     @JsonProperty("timeestimate")
@@ -128,10 +84,8 @@ public class Fields {
     public List<Object> versions = new ArrayList<Object>();
     @JsonProperty("duedate")
     public Object duedate;
-
     @JsonProperty("issuetype")
     public Issuetype issuetype;
-
     @JsonProperty("status")
     public Status status;
 
@@ -142,6 +96,15 @@ public class Fields {
     public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;
     }
+
+    @JsonIgnore
+    public Map<String, String> getAdditionalPropertiesAsString() {
+        return this.additionalProperties.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry ->
+                entry.getValue() != null ? entry.getValue().toString() : ""
+        ));
+    }
+
+
 
     @JsonAnySetter
     public void setAdditionalProperty(String name, Object value) {

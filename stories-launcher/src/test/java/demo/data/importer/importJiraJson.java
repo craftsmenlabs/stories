@@ -10,6 +10,7 @@ import org.craftsmenlabs.stories.api.models.validatorconfig.ValidationConfigCopy
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 import org.craftsmenlabs.stories.connectivity.service.ConnectivityService;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
+import org.craftsmenlabs.stories.isolator.parser.FieldMappingConfigCopy;
 import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
 import org.craftsmenlabs.stories.plugin.filereader.ApplicationConfig;
 import org.craftsmenlabs.stories.plugin.filereader.BootApp;
@@ -29,10 +30,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.function.IntSupplier;
 
 
-//TODO don't put communityConnectivityService on the classpath
 @ActiveProfiles("test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = {BootApp.class})
@@ -52,15 +51,18 @@ public class importJiraJson {
 
     @Test
     public void importData() {
-        Files.fileNamesIn(applicationConfig.getInputfile(), false)
+        Files.fileNamesIn(applicationConfig.getInputfile(), false).stream()
+                .map(File::new)
+                .filter(file -> !file.getName().startsWith("."))
                 .forEach(s -> {
-                    System.out.println(s);
-                    importFile(new File(s));
+                    importFile(s);
                 });
     }
 
 
-    //accept file in the format: projectToken_2016-02-13
+    //accept file in the format: projectToken_2016-02-13.json
+    //also the customfields should be:
+    //customfield_11400 --> rank
     public void importFile(File file) {
 
         String[] split = file.getName().split("_|\\.");
@@ -79,7 +81,16 @@ public class importJiraJson {
             e.printStackTrace();
         }
 
-        List<Issue> issues = new JiraJsonParser().getIssues(jiraBacklog.getJiraJsonIssues());
+        FieldMappingConfigCopy fieldMappingConfigCopy =
+                FieldMappingConfigCopy.builder()
+                        .backlog(FieldMappingConfigCopy.BacklogMappingCopy.builder().build())
+                        .issue(FieldMappingConfigCopy.IssueMappingCopy.builder().rank("customfield_11400").build())
+                        .story(FieldMappingConfigCopy.StoryMappingCopy.builder().build())
+                        .criteria(FieldMappingConfigCopy.CriteriaMappingCopy.builder().build())
+                        .estimation(FieldMappingConfigCopy.EstimationMappingCopy.builder().build())
+                        .build();
+
+        List<Issue> issues = new JiraJsonParser(fieldMappingConfigCopy).getIssues(jiraBacklog.getJiraJsonIssues());
 
         Backlog backlog = new Backlog();
         backlog.setIssues(issues);
@@ -94,15 +105,6 @@ public class importJiraJson {
                 .runConfig(validationConfigCopy)
                 .build();
 
-        System.out.println(storiesRun.getProjectToken() + " @ " + storiesRun.getRunDateTime());
-
         dashboardConnectivity.sendData(storiesRun);
     }
-
-    public IntSupplier quiz(final int[] vals, int i) {
-        if (vals[0] < 0)
-            vals[i] = 0;
-        return () -> vals[i];
-    }
-
 }

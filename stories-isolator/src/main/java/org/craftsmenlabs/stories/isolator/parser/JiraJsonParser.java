@@ -7,12 +7,24 @@ import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
 import org.craftsmenlabs.stories.isolator.SentenceSplitter;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 public class JiraJsonParser implements Parser {
+
+    private final Logger logger = LoggerFactory.getLogger(JiraJsonParser.class);
+    private FieldMappingConfigCopy fieldMapping;
+
+    public JiraJsonParser(FieldMappingConfigCopy fieldMapping) {
+        this.fieldMapping = fieldMapping;
+    }
 
     public List<Issue> getIssues(List<JiraJsonIssue> jiraJsonIssues) {
         SentenceSplitter sentenceSplitter = new SentenceSplitter();
@@ -23,8 +35,27 @@ public class JiraJsonParser implements Parser {
                     Issue issue = sentenceSplitter.splitSentence(jiraJsonIssue.getFields().getDescription());
                     issue.setSummary(jiraJsonIssue.getFields().getSummary());
                     issue.setKey(jiraJsonIssue.getKey());
-                    issue.setRank(jiraJsonIssue.getFields().getRank());
-                    issue.setEstimation(jiraJsonIssue.getFields().getEstimation());
+
+                    Map<String, Object> additionalProps = jiraJsonIssue.getFields().getAdditionalProperties();
+                    Map<String, String> stringProps = new HashMap<>();
+                    for (Entry<String, Object> entries : additionalProps.entrySet()) {
+                        if (entries.getValue() != null) {
+                            stringProps.put(entries.getKey(), entries.getValue().toString());
+                        } else {
+                            stringProps.put(entries.getKey(), "");
+                        }
+                    }
+                    issue.setRank(stringProps.get(fieldMapping.getIssue().getRank()));
+
+                    float estimation = 0f;
+                    try {
+                        if (stringProps.get(fieldMapping.getIssue().getEstimation()) != null) {
+                            estimation = Float.parseFloat(stringProps.get(fieldMapping.getIssue().getEstimation()));
+                        }
+                    } catch (NumberFormatException nfe) {
+                        logger.warn("Parsing of estimation to float failed. By default set to 0.0");
+                    }
+                    issue.setEstimation(estimation);
 
                     return issue;
                 }).collect(Collectors.toList());
@@ -37,6 +68,9 @@ public class JiraJsonParser implements Parser {
 
 
     public List<JiraJsonIssue> getJiraJsonIssues(String input){
+        if (input == null || input.isEmpty())
+            return null;
+
         List<JiraJsonIssue> jiraJsonIssues = null;
 
         try {

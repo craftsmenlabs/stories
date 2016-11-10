@@ -8,6 +8,13 @@ application:
     status:
     token:
 
+fieldMapping:
+    issue:
+        rank: "customfield_10401"
+        summary: "customfield_11400"
+        estimation: "customfield_10308"
+
+
 validation:
         backlog:
             ratingtreshold: 60.0

@@ -396,7 +396,7 @@ public class RetrieveTestData
 				)
 				.rank("0|zgbujw:")
 				.key("EPM-512")
-				.estimation(null)
+				.estimation(0f)
 				.build();
 	}
 

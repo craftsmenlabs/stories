@@ -12,10 +12,7 @@ import org.craftsmenlabs.stories.importer.FileImporter;
 import org.craftsmenlabs.stories.importer.Importer;
 import org.craftsmenlabs.stories.importer.JiraAPIImporter;
 import org.craftsmenlabs.stories.importer.TrelloAPIImporter;
-import org.craftsmenlabs.stories.isolator.parser.JiraCSVParser;
-import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
-import org.craftsmenlabs.stories.isolator.parser.Parser;
-import org.craftsmenlabs.stories.isolator.parser.TrelloJsonParser;
+import org.craftsmenlabs.stories.isolator.parser.*;
 import org.craftsmenlabs.stories.ranking.CurvedRanking;
 import org.craftsmenlabs.stories.reporter.ConsoleReporter;
 import org.craftsmenlabs.stories.reporter.SummaryConsoleReporter;
@@ -41,8 +38,11 @@ public class PluginExecutor {
 	private ApplicationConfig applicationConfig;
 	@Autowired
 	private ValidationConfig validationConfig;
+	@Autowired
+	private FieldMappingConfig fieldMappingConfig;
 
 	private ValidationConfigCopy validationConfigCopy;
+	private FieldMappingConfigCopy fieldMappingConfigCopy;
 
 	public Rating startApplication() {
 		logger.info("Starting stories plugin.");
@@ -149,7 +149,7 @@ public class PluginExecutor {
 			parser = new JiraCSVParser();
 			break;
 		case ("jirajson"):
-			parser = new JiraJsonParser();
+			parser = new JiraJsonParser(fieldMappingConfigCopy);
 			break;
 		case ("trellojson"):
 			parser = new TrelloJsonParser();
@@ -157,7 +157,7 @@ public class PluginExecutor {
 		default:
 			logger.warn("No dataformat specified, please use the parameter -df to enter a dataformat, " +
 				"such as {jirajson, jiracsv}. By default I will now use jirajson.");
-			parser = new JiraJsonParser();
+			parser = new JiraJsonParser(fieldMappingConfigCopy);
 			break;
 		}
 		return parser;

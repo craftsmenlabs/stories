@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 public class ValidationConfigCopy {
@@ -26,6 +27,7 @@ public class ValidationConfigCopy {
     public static class ValidatorEntryCopy {
         private float ratingtreshold;
         private boolean active;
+        private Map<String, String> jsonFieldMapping;
 
         @Override
         public String toString() {
