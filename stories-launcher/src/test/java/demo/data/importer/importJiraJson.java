@@ -12,10 +12,7 @@ import org.craftsmenlabs.stories.connectivity.service.ConnectivityService;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.craftsmenlabs.stories.isolator.parser.FieldMappingConfigCopy;
 import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
-import org.craftsmenlabs.stories.plugin.filereader.ApplicationConfig;
-import org.craftsmenlabs.stories.plugin.filereader.BootApp;
-import org.craftsmenlabs.stories.plugin.filereader.PluginExecutor;
-import org.craftsmenlabs.stories.plugin.filereader.ValidationConfig;
+import org.craftsmenlabs.stories.plugin.filereader.*;
 import org.craftsmenlabs.stories.ranking.CurvedRanking;
 import org.craftsmenlabs.stories.scoring.BacklogScorer;
 import org.junit.Test;
@@ -23,6 +20,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.File;
@@ -35,6 +33,7 @@ import java.util.List;
 @ActiveProfiles("test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = {BootApp.class})
+@TestPropertySource(locations = "classpath:application-test.yml")
 public class importJiraJson {
 
     @Autowired
@@ -45,18 +44,19 @@ public class importJiraJson {
     private ApplicationConfig applicationConfig;
     @Autowired
     private ValidationConfig validationConfig;
+    @Autowired
+    private FieldMappingConfig fieldMappingConfig;
+
 
     private ValidationConfigCopy validationConfigCopy;
-
+    private FieldMappingConfigCopy fieldMappingConfigCopy;
 
     @Test
     public void importData() {
         Files.fileNamesIn(applicationConfig.getInputfile(), false).stream()
                 .map(File::new)
                 .filter(file -> !file.getName().startsWith("."))
-                .forEach(s -> {
-                    importFile(s);
-                });
+                .forEach(this::importFile);
     }
 
 
@@ -72,6 +72,7 @@ public class importJiraJson {
         LocalDateTime dateTime = LocalDate.parse(date).atStartOfDay();
 
         validationConfigCopy = validationConfig.clone();
+        fieldMappingConfigCopy = fieldMappingConfig.clone();
 
         ObjectMapper mapper = new ObjectMapper();
         JiraBacklog jiraBacklog = null;
@@ -80,15 +81,6 @@ public class importJiraJson {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        FieldMappingConfigCopy fieldMappingConfigCopy =
-                FieldMappingConfigCopy.builder()
-                        .backlog(FieldMappingConfigCopy.BacklogMappingCopy.builder().build())
-                        .issue(FieldMappingConfigCopy.IssueMappingCopy.builder().rank("customfield_11400").build())
-                        .story(FieldMappingConfigCopy.StoryMappingCopy.builder().build())
-                        .criteria(FieldMappingConfigCopy.CriteriaMappingCopy.builder().build())
-                        .estimation(FieldMappingConfigCopy.EstimationMappingCopy.builder().build())
-                        .build();
 
         List<Issue> issues = new JiraJsonParser(fieldMappingConfigCopy).getIssues(jiraBacklog.getJiraJsonIssues());
 
