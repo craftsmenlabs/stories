@@ -16,9 +16,10 @@
 	</modules>
 	<packaging>pom</packaging>
 
-	<name>Stories components</name>
+	<name>Craftsmenlabs - Stories components</name>
 
-	<url>https://github.com/craftsmenlabs</url>
+
+	<url>https://github.com/craftsmenlabs/stories</url>
 
 	<scm>
 		<connection>scm:git:git@github.com:craftsmenlabs/stories.git</connection>
