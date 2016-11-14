@@ -44,6 +44,9 @@ public class JiraJsonParserTest {
                 results.get(0).getFields().getAdditionalPropertiesAsString().get(
                         fieldMappingConfigCopy.getIssue().getRank())
                 , "2|i02txb:");
+        assertEquals(
+                results.get(0).getFields().getIssuetype().getName()
+                , "Story");
 
     }
 

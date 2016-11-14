@@ -2,21 +2,29 @@
 package org.craftsmenlabs.stories.isolator.model.jira;
 
 import com.fasterxml.jackson.annotation.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.annotation.Generated;
 import java.util.HashMap;
 import java.util.Map;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
-    "self",
-    "id",
-    "description",
-    "iconUrl",
-    "name",
-    "subtask",
-    "avatarId"
+        "self",
+        "id",
+        "description",
+        "iconUrl",
+        "name",
+        "subtask",
+        "avatarId"
 })
 public class Issuetype {
 

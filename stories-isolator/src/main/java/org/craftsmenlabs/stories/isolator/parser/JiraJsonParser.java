@@ -35,6 +35,7 @@ public class JiraJsonParser implements Parser {
                     Issue issue = sentenceSplitter.splitSentence(jiraJsonIssue.getFields().getDescription());
                     issue.setSummary(jiraJsonIssue.getFields().getSummary());
                     issue.setKey(jiraJsonIssue.getKey());
+                    issue.setIssueType(jiraJsonIssue.getFields().getIssuetype().getName());
 
                     Map<String, Object> additionalProps = jiraJsonIssue.getFields().getAdditionalProperties();
                     Map<String, String> stringProps = new HashMap<>();

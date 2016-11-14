@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
 import org.craftsmenlabs.stories.isolator.SentenceSplitter;
 import org.craftsmenlabs.stories.isolator.model.trello.TrelloJsonIssue;
@@ -19,29 +20,41 @@ public class TrelloJsonParser implements Parser
 
 	private static final Logger _log = LoggerFactory.getLogger(TrelloJsonParser.class);
 
-	public List<Issue> getIssues(String input)
-	{
-		List<TrelloJsonIssue> trelloJsonIssues = getTrelloJsonIssues(input);
+    public List<Issue> getIssues(String input) {
+        List<TrelloJsonIssue> trelloJsonIssues = getTrelloJsonIssues(input);
+        return getIssues(trelloJsonIssues);
+    }
 
-		SentenceSplitter sentenceSplitter = new SentenceSplitter();
+
+    public List<Issue> getIssues(List<TrelloJsonIssue> trelloJsonIssues) {
+        SentenceSplitter sentenceSplitter = new SentenceSplitter();
+
+        int rankLength = String.valueOf(trelloJsonIssues.size()).length();
 
         List<Issue> result = new ArrayList<>();
         for (int i = 0; i < trelloJsonIssues.size(); i++) {
             TrelloJsonIssue trelloJsonIssue = trelloJsonIssues.get(i);
 
+
             String content = trelloJsonIssue.getDesc().length() == 0 ? trelloJsonIssue.getName() : trelloJsonIssue.getDesc();
             Issue issue = sentenceSplitter.splitSentence(content);
             issue.setKey(trelloJsonIssue.getId());
-            issue.setRank(String.valueOf(i));
+
+            String rankString = String.valueOf(i);
+
+            String format2 = StringUtils.leftPad(rankString, rankLength, '0');
+            issue.setRank(format2);
             issue.setEstimation(0f);
 
             result.add(issue);
         }
 
         return result;
+
     }
 
-	public List<TrelloJsonIssue> getTrelloJsonIssues(String input)
+
+    public List<TrelloJsonIssue> getTrelloJsonIssues(String input)
 	{
 		List<TrelloJsonIssue> trelloJsonIssues = null;
 

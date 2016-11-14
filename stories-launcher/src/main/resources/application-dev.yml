@@ -1,12 +1,14 @@
 application:
-    dataformat:
+    dataformat: trellojson
     inputfile:
     outputfile: "stories-output.json"
-    url:
-    authkey:
-    projectkey:
+    url: "https://api.trello.com/1"
+    authkey: 4f3efcc594449d12d130e5a10b81efa6
+#    projectkey: "zYT3Z1PE"
+    projectkey: "wlo3zbQV"
+#    projectkey: "nuDCmGUY"
     status:
-    token:
+    token: "99ffd954ddefe58753fa92862e5e6f6be51b42a5349e8bc65744d496919136e8"
 
 ranking:
     desiredMiniumStableRanking: 50
@@ -20,17 +22,17 @@ validation:
             ratingtreshold: 0.7
         story:
             fieldSource: "description#story"
-            ratingtreshold: 0.7
+            ratingtreshold: 0.6
             active: true
-            asKeywords: ["As a", "as"]
-            iKeywords: ["I would like", "I"]
-            soKeywords: ["So I can", "so", "because","in order to"]
+            asKeywords: ["als"]
+            iKeywords: ["wil ik"]
+            soKeywords: ["zodat"]
         bug:
             filledWith: ["","component"]
         criteria:
             fieldSource: "description#criteria"
             ratingtreshold: 0.7
-            active: true
+            active: false
             givenKeywords: ["given"]
             whenKeywords: ["when"]
             thenKeywords: ["then"]
@@ -39,5 +41,7 @@ validation:
             active: false
 
 dashboard:
-  serviceUrl:
-  token:
+  serviceUrl: http://localhost:8090
+  token: "sophia"
+#  token: "website2"
+#  token: "overlay"

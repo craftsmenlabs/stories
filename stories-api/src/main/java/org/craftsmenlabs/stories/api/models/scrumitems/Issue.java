@@ -21,4 +21,6 @@ public class Issue implements ScrumItem{
     private String userstory;
     private String acceptanceCriteria;
     private Float estimation;
+
+    private String issueType;
 }
