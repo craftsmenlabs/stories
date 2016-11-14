@@ -11,8 +11,9 @@ public enum ViolationType
 	StoryIClauseViolation,
 	StorySoClauseViolation,
 	StoryRatingViolation,
-	CriteriaLengthViolation,
-	CriteriaGivenClauseViolation,
+    CriteriaVoidViolation,
+    CriteriaLengthViolation,
+    CriteriaGivenClauseViolation,
 	CriteriaWhenClauseViolation,
 	CriteriaThenClauseViolation,
 	CriteriaRatingViolation

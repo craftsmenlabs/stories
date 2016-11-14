@@ -26,28 +26,47 @@ public class AcceptanceCriteriaScorer {
         List<Violation> violations = new ArrayList<>();
         float points = 0f;
 
-        if (criteria != null && criteria.length() >= MINIMUM_LENGTH_OF_ACC_CRITERIA) {
-            final String criteriaLower = criteria.toLowerCase();
+        if (criteria == null || criteria.isEmpty()) {
+            criteria = "";
+            violations.add(new Violation(ViolationType.CriteriaVoidViolation,
+                    "No acceptance criteria where found."));
+        }
 
-            if (validationConfig.getCriteria().getGivenKeywords().stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
-                points += GIVEN_POINTS;
-            } else {
-                violations.add(new Violation(ViolationType.CriteriaGivenClauseViolation, ""));
-            }
+        final String criteriaLower = criteria.toLowerCase();
 
-            if (validationConfig.getCriteria().getWhenKeywords().stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
-                points += WHEN_POINTS;
-            } else {
-                violations.add(new Violation(ViolationType.CriteriaWhenClauseViolation, ""));
+        if (validationConfig.getCriteria().getGivenKeywords().stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
+            points += GIVEN_POINTS;
+        } else {
+            violations.add(new Violation(ViolationType.CriteriaGivenClauseViolation,
+                    "<Given> section is not described properly. " +
+                            "The criteria should contain any of the following keywords: "
+                            + String.join(", ", validationConfig.getCriteria().getGivenKeywords())));
+        }
 
-            }
+        if (validationConfig.getCriteria().getWhenKeywords().stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
+            points += WHEN_POINTS;
+        } else {
+            violations.add(new Violation(ViolationType.CriteriaWhenClauseViolation,
+                    "<When> section is not described properly. " +
+                            "The criteria should contain any of the following keywords: "
+                            + String.join(", ", validationConfig.getCriteria().getWhenKeywords())));
 
-            if (validationConfig.getCriteria().getThenKeywords().stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
-                points += THEN_POINTS;
-            } else {
-                violations.add(new Violation(ViolationType.CriteriaThenClauseViolation, ""));
+        }
 
-            }
+        if (validationConfig.getCriteria().getThenKeywords().stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
+            points += THEN_POINTS;
+        } else {
+            violations.add(new Violation(ViolationType.CriteriaThenClauseViolation,
+                    "<Then> section is not described properly. " +
+                            "The criteria should contain any of the following keywords: "
+                            + String.join(", ", validationConfig.getCriteria().getThenKeywords())));
+        }
+
+        if (criteria.length() <= MINIMUM_LENGTH_OF_ACC_CRITERIA) {
+            violations.add(new Violation(ViolationType.CriteriaLengthViolation,
+                    "The criteria should contain a minimum length of " + MINIMUM_LENGTH_OF_ACC_CRITERIA + " characters. " +
+                            "It now contains " + criteria.length() + " characters."));
+
         }
 
         points /= TOTAL_POINTS;
