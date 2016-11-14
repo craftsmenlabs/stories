@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Data
 @Component
-@ConfigurationProperties(prefix = "fieldmapping", ignoreInvalidFields = true, ignoreUnknownFields = true)
+@ConfigurationProperties(prefix = "fieldMapping", ignoreInvalidFields = true, ignoreUnknownFields = true)
 public class FieldMappingConfig {
     private IssueMapping issue;
 
