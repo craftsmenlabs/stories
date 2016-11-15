@@ -3,6 +3,7 @@ package org.craftsmenlabs.stories.isolator.parser;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.craftsmenlabs.stories.api.models.exception.StoriesException;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
 import org.craftsmenlabs.stories.isolator.SentenceSplitter;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
@@ -52,7 +53,12 @@ public class JiraJsonParser implements Parser {
                             stringProps.put(entries.getKey(), "");
                         }
                     }
-                    issue.setRank(stringProps.get(fieldMapping.getIssue().getRank()));
+
+                    String rank = stringProps.get(fieldMapping.getIssue().getRank());
+                    if(rank == null) {
+                        throw new StoriesException("The issue rank was not defined. Is the fieldMapping configured correctly?");
+                    }
+                    issue.setRank(rank);
 
                     float estimation = 0f;
                     try {
