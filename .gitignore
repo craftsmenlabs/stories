@@ -73,7 +73,7 @@ fabric.properties
 .idea
 *.iml
 *.csv
-#*.json
+*.json
 *.log
 custom-application.yml
 executor.sh
