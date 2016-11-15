@@ -155,7 +155,7 @@ public class PluginExecutor {
 			break;
 		default:
 			logger.warn("No dataformat specified, please use the parameter -df to enter a dataformat, " +
-				"such as {jirajson, jiracsv}. By default I will now use jirajson.");
+				"such as {jirajson, trellojson}. By default I will now use jirajson.");
 			parser = new JiraJsonParser(fieldMappingConfigCopy);
 			break;
 		}
