@@ -30,9 +30,14 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
-
+/**
+ * This is a make shift jira file importer for demo purposes,
+ * not a test
+ */
 @ActiveProfiles("test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = {BootApp.class})
@@ -61,14 +66,15 @@ public class importJiraJson {
     }
 
 
-    //accept file in the format: projectToken_2016-02-13.json
+    //accept file in the format: projectToken_2016-02-13_16-00.json
     public void importFile(File file) {
 
         String[] split = file.getName().split("_|\\.");
         String projectToken = split[0];
         String date = split[1];
+        List<Integer> time = Arrays.asList(split[2].split("-")).stream().map(Integer::parseInt).collect(Collectors.toList());
 
-        LocalDateTime dateTime = LocalDate.parse(date).atStartOfDay();
+        LocalDateTime dateTime = LocalDate.parse(date).atTime(time.get(0), time.get(1));
 
         validationConfigCopy = validationConfig.clone();
         fieldMappingConfigCopy = fieldMappingConfig.clone();
