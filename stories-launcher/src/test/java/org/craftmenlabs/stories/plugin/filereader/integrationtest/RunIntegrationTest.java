@@ -12,6 +12,7 @@ import org.craftsmenlabs.stories.plugin.filereader.BootApp;
 import org.craftsmenlabs.stories.plugin.filereader.FieldMappingConfig;
 import org.craftsmenlabs.stories.plugin.filereader.ValidationConfig;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -123,6 +124,8 @@ public class RunIntegrationTest {
 
     }
 
+
+    @Ignore
     @Test
     public void jiraBacklogTest() {
         assertThat(jiraBacklog.getJiraJsonIssues().size()).isEqualTo(7);
@@ -138,6 +141,7 @@ public class RunIntegrationTest {
                         "Stories-506");
     }
 
+    @Ignore
     @Test
     public void loadConfigTest() {
         assertThat(this.buildValidatorEntryCopy()).isEqualTo(validationConfigCopy);
