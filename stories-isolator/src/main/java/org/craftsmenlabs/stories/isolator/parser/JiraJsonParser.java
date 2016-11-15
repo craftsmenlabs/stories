@@ -30,9 +30,15 @@ public class JiraJsonParser implements Parser {
         SentenceSplitter sentenceSplitter = new SentenceSplitter();
 
         return jiraJsonIssues.stream()
-                .filter(jiraJsonIssue -> jiraJsonIssue.getFields().getDescription() != null)
                 .map(jiraJsonIssue -> {
-                    Issue issue = sentenceSplitter.splitSentence(jiraJsonIssue.getFields().getDescription());
+                    Issue issue;
+
+                    if (hasNoValidDescription(jiraJsonIssue)) {
+                        issue = new Issue();
+                    } else {
+                        issue = sentenceSplitter.splitSentence(jiraJsonIssue.getFields().getDescription());
+                    }
+
                     issue.setSummary(jiraJsonIssue.getFields().getSummary());
                     issue.setKey(jiraJsonIssue.getKey());
                     issue.setIssueType(jiraJsonIssue.getFields().getIssuetype().getName());
@@ -60,6 +66,10 @@ public class JiraJsonParser implements Parser {
 
                     return issue;
                 }).collect(Collectors.toList());
+    }
+
+    public boolean hasNoValidDescription(JiraJsonIssue jiraJsonIssue) {
+        return jiraJsonIssue.getFields().getDescription() == null || jiraJsonIssue.getFields().getDescription().isEmpty();
     }
 
 

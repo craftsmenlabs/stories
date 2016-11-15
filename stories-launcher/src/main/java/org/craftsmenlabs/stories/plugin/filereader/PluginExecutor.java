@@ -30,8 +30,9 @@ import java.util.stream.Collectors;
 public class PluginExecutor {
 
 	private final Logger logger = LoggerFactory.getLogger(PluginExecutor.class);
+	public ValidationConfigCopy validationConfigCopy;
+	public FieldMappingConfigCopy fieldMappingConfigCopy;
 	private ConsoleReporter validationConsoleReporter = new ConsoleReporter();
-
 	@Autowired
 	private ConnectivityService dashboardConnectivity;
 	@Autowired
@@ -41,13 +42,11 @@ public class PluginExecutor {
 	@Autowired
 	private FieldMappingConfig fieldMappingConfig;
 
-	private ValidationConfigCopy validationConfigCopy;
-	private FieldMappingConfigCopy fieldMappingConfigCopy;
-
 	public Rating startApplication() {
 		logger.info("Starting stories plugin.");
 
 		validationConfigCopy = validationConfig.clone();
+		fieldMappingConfigCopy = fieldMappingConfig.clone();
 
 		Importer importer = getImporter(applicationConfig);
 		String data = importer.getDataAsString();

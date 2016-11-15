@@ -17,17 +17,18 @@ public class FieldMappingConfig {
                 .build();
     }
 
-
     @Data
     public static class IssueMapping {
         private String rank;
-        private String summary;
         private String estimation;
 
         public FieldMappingConfigCopy.IssueMappingCopy clone() {
+            if (rank == null || rank.isEmpty()) {
+                throw new IllegalStateException("The rank attribute has not been set correctly.");
+            }
+
             return FieldMappingConfigCopy.IssueMappingCopy.builder()
                     .rank(rank)
-                    .summary(summary)
                     .estimation(estimation)
                     .build();
         }

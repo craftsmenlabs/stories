@@ -1,4 +1,4 @@
-package integrationtest;
+package org.craftmenlabs.stories.plugin.filereader.integrationtest;
 
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
 import org.craftsmenlabs.stories.isolator.parser.FieldMappingConfigCopy;

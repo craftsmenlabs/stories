@@ -1,0 +1,41 @@
+spring:
+  profiles:
+    active: test
+    include: enterprise
+
+application:
+    dataformat: jirajson
+    inputfile:
+    status: "To Do"
+
+fieldMapping:
+    issue:
+        rank: "customfield_10401"
+        summary: "customfield_11400"
+        estimation: "customfield_10401"
+
+validation:
+        backlog:
+            ratingtreshold: 60.0
+        issue:
+            ratingtreshold: 0.7
+        story:
+            ratingtreshold: 0.3
+            active: true
+            asKeywords: ["as a"]
+            iKeywords: ["i want to"]
+            soKeywords: ["so "]
+        bug:
+            filledWith: ["","component"]
+        criteria:
+            ratingtreshold: 0.4
+            active: true
+            givenKeywords: ["given"]
+            whenKeywords: ["when"]
+            thenKeywords: ["then"]
+        estimation:
+            ratingtreshold: 0.7
+            active: false
+
+dashboard:
+  serviceUrl: http://localhost:8090

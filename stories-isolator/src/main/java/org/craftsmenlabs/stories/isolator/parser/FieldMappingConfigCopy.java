@@ -16,7 +16,6 @@ public class FieldMappingConfigCopy {
     @Builder
     public static class IssueMappingCopy {
         private String rank;
-        private String summary;
         private String estimation;
     }
 

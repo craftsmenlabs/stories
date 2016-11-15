@@ -12,7 +12,10 @@ import org.craftsmenlabs.stories.connectivity.service.ConnectivityService;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.craftsmenlabs.stories.isolator.parser.FieldMappingConfigCopy;
 import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
-import org.craftsmenlabs.stories.plugin.filereader.*;
+import org.craftsmenlabs.stories.plugin.filereader.ApplicationConfig;
+import org.craftsmenlabs.stories.plugin.filereader.BootApp;
+import org.craftsmenlabs.stories.plugin.filereader.FieldMappingConfig;
+import org.craftsmenlabs.stories.plugin.filereader.ValidationConfig;
 import org.craftsmenlabs.stories.ranking.CurvedRanking;
 import org.craftsmenlabs.stories.scoring.BacklogScorer;
 import org.junit.Test;
@@ -37,8 +40,6 @@ import java.util.List;
 public class importJiraJson {
 
     @Autowired
-    private PluginExecutor pluginExecutor;
-    @Autowired
     private ConnectivityService dashboardConnectivity;
     @Autowired
     private ApplicationConfig applicationConfig;
@@ -61,8 +62,6 @@ public class importJiraJson {
 
 
     //accept file in the format: projectToken_2016-02-13.json
-    //also the customfields should be:
-    //customfield_11400 --> rank
     public void importFile(File file) {
 
         String[] split = file.getName().split("_|\\.");
