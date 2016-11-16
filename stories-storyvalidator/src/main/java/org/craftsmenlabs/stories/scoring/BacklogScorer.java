@@ -31,6 +31,8 @@ public class BacklogScorer {
                     ));
 
             backlogValidatorEntry.setPointsValuation(0f);
+            backlogValidatorEntry.setRating(Rating.FAIL);
+            return backlogValidatorEntry;
 
         } else {
 

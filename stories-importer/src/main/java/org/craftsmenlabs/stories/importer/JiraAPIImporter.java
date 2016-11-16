@@ -1,23 +1,26 @@
 package org.craftsmenlabs.stories.importer;
 
-import java.io.*;
-import java.net.*;
+import org.craftsmenlabs.stories.api.models.exception.StoriesException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 
 /**
  * Importer
  */
 public class JiraAPIImporter implements Importer
 {
-	//private static final URL SOURCE_PATHS = JiraAPIImporter.class.getResource("logback.xml");
-
 	public static final int CONNECTION_TIMEOUT = 5000;
 	public static final int DOWNLOAD_TIMEOUT = 60000;
 
 	private final Logger logger = LoggerFactory.getLogger(JiraAPIImporter.class);
-
-	private HttpURLConnection conn;
 
 	private String urlResource;
 	private String projectKey;
@@ -45,8 +48,8 @@ public class JiraAPIImporter implements Importer
 				+ "&maxResults=100000");
 			logger.info("Retrieving data form:" + url.toString());
 
-			conn = (HttpURLConnection)url.openConnection();
-			conn.setRequestMethod("GET");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json");
 			conn.setRequestProperty("Content-Type", "application/json");
 			conn.setRequestProperty("Authorization", "Basic " + authKey);
@@ -94,8 +97,8 @@ public class JiraAPIImporter implements Importer
 
 	private void abortOnError()
 	{
-		throw new RuntimeException("Failed to connect to " + urlResource);
-	}
+        throw new StoriesException("Failed to connect to " + urlResource);
+    }
 
 	private String httpEncode(String toEncode) throws UnsupportedEncodingException
 	{

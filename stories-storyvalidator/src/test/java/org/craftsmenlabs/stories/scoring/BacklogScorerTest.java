@@ -65,4 +65,13 @@ public class BacklogScorerTest {
         BacklogValidatorEntry result = BacklogScorer.performScorer(backlog, ranking, validationConfigCopy);
         assertThat(result.getRating()).isEqualTo(Rating.FAIL);
     }
+
+    @Test
+    public void testPerformScorerFailOnEmptyBacklog(@Injectable Ranking ranking) {
+        BacklogValidatorEntry result = BacklogScorer.performScorer(null, ranking, validationConfigCopy);
+
+        assertThat(result.getPointsValuation()).isEqualTo(0f);
+        assertThat(result.getRating()).isEqualTo(Rating.FAIL);
+
+    }
 }
