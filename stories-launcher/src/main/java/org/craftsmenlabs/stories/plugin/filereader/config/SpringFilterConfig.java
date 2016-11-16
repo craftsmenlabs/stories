@@ -8,5 +8,5 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "filters")
 public class SpringFilterConfig {
-    private String status;
+    private String status = "To Do";
 }

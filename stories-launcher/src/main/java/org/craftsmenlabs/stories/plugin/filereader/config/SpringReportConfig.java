@@ -13,14 +13,14 @@ public class SpringReportConfig {
 
     @Data
     public static class DashboardConfig {
-        private boolean enabled;
+        private boolean enabled = false;
         private String url;
         private String token;
     }
 
     @Data
     public static class FileConfig {
-        private boolean enabled;
+        private boolean enabled = false;
         private String location;
     }
 }
