@@ -45,7 +45,7 @@ public class RunIntegrationTest {
                         .estimation(FieldMappingConfigCopy.EstimationMappingCopy.builder().build())
                         .build();
 
-        JiraJsonParser jiraJsonParser = new JiraJsonParser(fieldMappingConfigCopy);
+        JiraJsonParser jiraJsonParser = new JiraJsonParser(fieldMappingConfigCopy, "To Do");
         String testData = RetrieveTestData.getExportedJiraJSONTestResultFromResource();
         Issue testResult = RetrieveTestData.getJiraTestIssueFromResource();
 

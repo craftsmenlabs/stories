@@ -148,16 +148,16 @@ public class PluginExecutor {
 			parser = new JiraCSVParser();
 			break;
 		case ("jirajson"):
-			parser = new JiraJsonParser(fieldMappingConfigCopy);
-			break;
+            parser = new JiraJsonParser(fieldMappingConfigCopy, applicationConfig.getStatus());
+            break;
 		case ("trellojson"):
 			parser = new TrelloJsonParser();
 			break;
 		default:
 			logger.warn("No dataformat specified, please use the parameter -df to enter a dataformat, " +
 				"such as {jirajson, jiracsv}. By default I will now use jirajson.");
-			parser = new JiraJsonParser(fieldMappingConfigCopy);
-			break;
+            parser = new JiraJsonParser(fieldMappingConfigCopy, applicationConfig.getStatus());
+            break;
 		}
 		return parser;
 	}

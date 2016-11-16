@@ -27,7 +27,7 @@ public class JiraJsonParserTest {
                     .estimation(FieldMappingConfigCopy.EstimationMappingCopy.builder().build())
                     .build();
 
-    private JiraJsonParser jiraJsonParser = new JiraJsonParser(fieldMappingConfigCopy);
+    private JiraJsonParser jiraJsonParser = new JiraJsonParser(fieldMappingConfigCopy, "To Do");
 
 
     @Test

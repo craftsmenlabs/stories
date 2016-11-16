@@ -10,6 +10,7 @@ import org.craftsmenlabs.stories.api.models.validatorconfig.ValidationConfigCopy
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 import org.craftsmenlabs.stories.connectivity.service.ConnectivityService;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
+import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
 import org.craftsmenlabs.stories.isolator.parser.FieldMappingConfigCopy;
 import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
 import org.craftsmenlabs.stories.plugin.filereader.ApplicationConfig;
@@ -72,7 +73,8 @@ public class importJiraJson {
         String[] split = file.getName().split("_|\\.");
         String projectToken = split[0];
         String date = split[1];
-        List<Integer> time = Arrays.asList(split[2].split("-")).stream().map(Integer::parseInt).collect(Collectors.toList());
+        List<Integer> time = Arrays.stream(split[2].split("-"))
+                .map(Integer::parseInt).collect(Collectors.toList());
 
         LocalDateTime dateTime = LocalDate.parse(date).atTime(time.get(0), time.get(1));
 
@@ -87,7 +89,9 @@ public class importJiraJson {
             e.printStackTrace();
         }
 
-        List<Issue> issues = new JiraJsonParser(fieldMappingConfigCopy).getIssues(jiraBacklog.getJiraJsonIssues());
+        JiraJsonParser jiraJsonParser = new JiraJsonParser(fieldMappingConfigCopy, applicationConfig.getStatus());
+        List<JiraJsonIssue> jiraJsonIssues = jiraBacklog.getJiraJsonIssues();
+        List<Issue> issues = jiraJsonParser.getIssues(jiraJsonIssues);
 
         Backlog backlog = new Backlog();
         backlog.setIssues(issues);
