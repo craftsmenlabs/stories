@@ -1,5 +1,7 @@
 package org.craftsmenlabs.stories.ranking;
 
+import mockit.Injectable;
+import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 import org.junit.Test;
 
 /**
@@ -7,19 +9,19 @@ import org.junit.Test;
  */
 public interface RankingTest
 {
-	@Test void testRankingHandlesNullWorks() throws Exception;
+	@Test void testRankingReturnsZeroOnNull() throws Exception;
 
-	@Test void testRankingHandlesEmptyWorks() throws Exception;
+	@Test void testRankingReturnsZeroOnNullBacklog(@Injectable BacklogValidatorEntry backlogValidatorEntry) throws Exception;
 
-	@Test void testRankingIsZeroWithOnlyUnscoredItemsWorks() throws Exception;
+	@Test void testRankingReturnsZeroOnEmptyBacklog(@Injectable BacklogValidatorEntry backlogValidatorEntry) throws Exception;
 
-	@Test void testRankingIsOneWithPerfectItemsWorks() throws Exception;
+	@Test void testRankingIsZeroWithOnlyUnscoredItems(@Injectable BacklogValidatorEntry backlogValidatorEntry) throws Exception;
 
-	@Test void testRankingRankWithMixedSethWorks() throws Exception;
+	@Test void testRankingReturnsZeroOnZeroScoreBacklog(@Injectable BacklogValidatorEntry backlogValidatorEntry) throws Exception;
 
-	@Test void testRankingIncreasesOnGoodInputWorks() throws Exception;
+	@Test void testRankingReturnsOneOnPerfectBacklog(@Injectable BacklogValidatorEntry backlogValidatorEntry) throws Exception;
 
-	@Test void testRankingDecreasesOnBadInputWorks() throws Exception;
+	@Test void testRankingReturnsScoreOnGoodGradientMixedBacklog(@Injectable BacklogValidatorEntry backlogValidatorEntry) throws Exception;
 
-	@Test void testRankingDecreasesMinimalOnBadBottomInputWorks() throws Exception;
+	@Test void testRankingReturnsScoreOnBadGradientMixedBacklog(@Injectable BacklogValidatorEntry backlogValidatorEntry) throws Exception;
 }

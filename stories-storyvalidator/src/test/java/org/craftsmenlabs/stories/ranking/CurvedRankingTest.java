@@ -1,173 +1,186 @@
 package org.craftsmenlabs.stories.ranking;
 
 import mockit.Expectations;
+import mockit.Injectable;
 import mockit.Tested;
-import org.craftsmenlabs.stories.TestDataGenerator;
-import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
-import org.craftsmenlabs.stories.api.models.validatorconfig.ValidationConfigCopy;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
-import org.craftsmenlabs.stories.scoring.BacklogScorer;
-import org.junit.Before;
-import org.junit.Ignore;
+import org.craftsmenlabs.stories.api.models.validatorentry.IssueValidatorEntry;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.withinPercentage;
 
-@Ignore
-public class CurvedRankingTest implements RankingTest
-{
-    private ValidationConfigCopy validationConfigCopy;
+public class CurvedRankingTest implements RankingTest {
+    @Tested
+    private CurvedRanking curvedRanking;
 
-	@Tested
-	private CurvedRanking ranking;
-
-	private TestDataGenerator testDataGenerator = new TestDataGenerator();
-
-	@Before
-	public void setUp() throws Exception
-	{
-        validationConfigCopy = new ValidationConfigCopy();
-        validationConfigCopy.setStory(new ValidationConfigCopy.StoryValidatorEntryCopy());
-        validationConfigCopy.setCriteria(new ValidationConfigCopy.CriteriaValidatorEntryCopy());
-        validationConfigCopy.setEstimation(new ValidationConfigCopy.ValidatorEntryCopy());
-        validationConfigCopy.setIssue(new ValidationConfigCopy.ValidatorEntryCopy());
-        validationConfigCopy.setBacklog(new ValidationConfigCopy.ValidatorEntryCopy());
+    @Override
+    @Test
+    public void testRankingReturnsZeroOnNull() throws Exception {
+        assertThat(curvedRanking.createRanking(null)).isCloseTo(0f, withinPercentage(1.0));
     }
 
-	@Override
-	@Test
-	public void testRankingHandlesNullWorks() throws Exception
-	{
-		float rank = ranking.createRanking(null);
-		assertThat(rank).isEqualTo(0.0f);
-	}
+    @Override
+    @Test
+    public void testRankingReturnsZeroOnNullBacklog(@Injectable BacklogValidatorEntry backlogValidatorEntry) throws Exception {
+        new Expectations() {{
+            backlogValidatorEntry.getIssueValidatorEntries();
+            result = null;
+        }};
 
-	@Override
-	@Test
-	public void testRankingHandlesEmptyWorks() throws Exception
-	{
-		BacklogValidatorEntry backlogValidatorEntryWithEmptyList =
-			BacklogValidatorEntry.builder().issueValidatorEntries(null).build();
-		float rank = ranking.createRanking(backlogValidatorEntryWithEmptyList);
-		assertThat(rank).isEqualTo(0.0f);
-	}
+        assertThat(curvedRanking.createRanking(backlogValidatorEntry)).isCloseTo(0f, withinPercentage(1.0));
+    }
 
-	@Override @Test
-	public void testRankingIsZeroWithOnlyUnscoredItemsWorks() throws Exception
-	{
-		BacklogValidatorEntry goodBacklog = testDataGenerator.getGoodBacklog(10);
-		float rank = ranking.createRanking(goodBacklog);
-		assertThat(rank).isEqualTo(0.0f);
-	}
+    @Override
+    @Test
+    public void testRankingReturnsZeroOnEmptyBacklog(@Injectable BacklogValidatorEntry backlogValidatorEntry) throws Exception {
+        new Expectations() {{
+            backlogValidatorEntry.getIssueValidatorEntries();
+            result = new ArrayList<>();
+        }};
 
-	@Override @Test
-	public void testRankingIsOneWithPerfectItemsWorks() throws Exception
-	{
-		new Expectations(){{
-//			validationConfigCopy.getBacklog().getRatingtreshold();
-//			result = 1f;
+        assertThat(curvedRanking.createRanking(backlogValidatorEntry)).isCloseTo(0f, withinPercentage(1.0));
+    }
 
-//			validationConfigCopy.getBacklog()
-//			BacklogScorer.getValidatedIssues();
+    @Override
+    @Test
+    public void testRankingIsZeroWithOnlyUnscoredItems(@Injectable BacklogValidatorEntry backlogValidatorEntry) throws Exception {
+        List<IssueValidatorEntry> issues = Arrays.asList(
+                IssueValidatorEntry.builder().issue(Issue.builder().rank("0|0001").build()).build(),
+                IssueValidatorEntry.builder().issue(Issue.builder().rank("0|0002").build()).build(),
+                IssueValidatorEntry.builder().issue(Issue.builder().rank("0|0003").build()).build(),
+                IssueValidatorEntry.builder().issue(Issue.builder().rank("0|0004").build()).build(),
+                IssueValidatorEntry.builder().issue(Issue.builder().rank("0|0005").build()).build()
+        );
 
-		}};
-		List<Issue> issues = testDataGenerator.getGoodIssues(20);
-		Backlog b = new Backlog();
-		b.setIssues(issues);
-        BacklogValidatorEntry testEntries = BacklogScorer.performScorer(b, new CurvedRanking(), validationConfigCopy);
-        assertThat(testEntries.getPointsValuation()).isCloseTo(1.0f, withinPercentage(1.0));
-	}
+        new Expectations() {{
+            backlogValidatorEntry.getIssueValidatorEntries();
+            result = issues;
+        }};
 
-	@Override
-	@Test
-	public void testRankingRankWithMixedSethWorks() throws Exception
-	{
+        assertThat(curvedRanking.createRanking(backlogValidatorEntry)).isCloseTo(0f, withinPercentage(1.0));
+    }
 
-		Backlog b = TestDataGenerator.getBacklog(testDataGenerator.getMixedValidatorItems(20));
-        BacklogValidatorEntry testEntries = BacklogScorer.performScorer(b, new CurvedRanking(), validationConfigCopy);
-        assertThat(testEntries.getPointsValuation()).isCloseTo(0.707f, withinPercentage(1));
-	}
+    @Override
+    @Test
+    public void testRankingReturnsZeroOnZeroScoreBacklog(@Injectable BacklogValidatorEntry backlogValidatorEntry) throws Exception {
+        List<IssueValidatorEntry> issues = Arrays.asList(
+                IssueValidatorEntry.builder().pointsValuation(0f).issue(Issue.builder().rank("0|0001").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0f).issue(Issue.builder().rank("0|0002").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0f).issue(Issue.builder().rank("0|0003").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0f).issue(Issue.builder().rank("0|0004").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0f).issue(Issue.builder().rank("0|0005").build()).build()
+        );
 
-	@Override
-	@Test
-	public void testRankingIncreasesOnGoodInputWorks() throws Exception
-	{
+        new Expectations() {{
+            backlogValidatorEntry.getIssueValidatorEntries();
+            result = issues;
+        }};
 
-		Backlog test1 = TestDataGenerator.getBacklog(testDataGenerator.getMixedValidatorItems(20));
-        BacklogValidatorEntry testEntries = BacklogScorer.performScorer(test1, new CurvedRanking(), validationConfigCopy);
-        float rank1 = testEntries.getPointsValuation();
-		assertThat(rank1).isCloseTo(0.707f, withinPercentage(1));
+        assertThat(curvedRanking.createRanking(backlogValidatorEntry)).isCloseTo(0f, withinPercentage(1.0));
+    }
 
-		Backlog test2 = TestDataGenerator.getBacklog(testDataGenerator.getGoodIssues(3));
-        BacklogValidatorEntry testEntries2 = BacklogScorer.performScorer(test2, new CurvedRanking(), validationConfigCopy);
-        assertThat(testEntries2.getPointsValuation()).isCloseTo(1.0f, withinPercentage(1));
+    @Override
+    @Test
+    public void testRankingReturnsOneOnPerfectBacklog(@Injectable BacklogValidatorEntry backlogValidatorEntry) throws Exception {
+        List<IssueValidatorEntry> issues = Arrays.asList(
+                IssueValidatorEntry.builder().pointsValuation(1f).issue(Issue.builder().rank("0|0001").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(1f).issue(Issue.builder().rank("0|0002").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(1f).issue(Issue.builder().rank("0|0003").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(1f).issue(Issue.builder().rank("0|0004").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(1f).issue(Issue.builder().rank("0|0005").build()).build()
+        );
 
-		Backlog testAll = TestDataGenerator.getBacklog(testDataGenerator.getGoodIssues(3));
-		testAll.getIssues().addAll(testDataGenerator.getMixedValidatorItems(20));
+        new Expectations() {{
+            backlogValidatorEntry.getIssueValidatorEntries();
+            result = issues;
+        }};
 
-        BacklogValidatorEntry testEntriesAll = BacklogScorer.performScorer(testAll, new CurvedRanking(), validationConfigCopy);
+        assertThat(curvedRanking.createRanking(backlogValidatorEntry)).isCloseTo(1f, withinPercentage(1.0));
+    }
 
-		float rank3 = testEntriesAll.getPointsValuation();
-		assertThat(rank3).isCloseTo(0.763f, withinPercentage(1));
-		assertThat(rank1).isLessThan(rank3);
-	}
+    @Override
+    @Test
+    public void testRankingReturnsScoreOnGoodGradientMixedBacklog(@Injectable BacklogValidatorEntry backlogValidatorEntry) throws Exception {
+        List<IssueValidatorEntry> issues = Arrays.asList(
+                IssueValidatorEntry.builder().pointsValuation(1.0f).issue(Issue.builder().rank("0|0000").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0.8f).issue(Issue.builder().rank("0|0001").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0.6f).issue(Issue.builder().rank("0|0002").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0.4f).issue(Issue.builder().rank("0|0003").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0.2f).issue(Issue.builder().rank("0|0004").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0.0f).issue(Issue.builder().rank("0|0005").build()).build()
+        );
 
-	@Override
-	@Test
-	public void testRankingDecreasesOnBadInputWorks() throws Exception
-	{
-		Backlog test1 = TestDataGenerator.getBacklog(testDataGenerator.getMixedValidatorItems(20));
-        BacklogValidatorEntry testEntries = BacklogScorer.performScorer(test1, new CurvedRanking(), validationConfigCopy);
-        float rank1 = testEntries.getPointsValuation();
-		assertThat(rank1).isCloseTo(0.707f, withinPercentage(1));
+        new Expectations() {{
+            backlogValidatorEntry.getIssueValidatorEntries();
+            result = issues;
+        }};
 
-		Backlog test2 = TestDataGenerator.getBacklog(testDataGenerator.getBadValidatorItems(3));
-        BacklogValidatorEntry testEntries2 = BacklogScorer.performScorer(test2, new CurvedRanking(), validationConfigCopy);
-        assertThat(testEntries2.getPointsValuation()).isCloseTo(0.0f, withinPercentage(1));
+        assertThat(curvedRanking.createRanking(backlogValidatorEntry)).isCloseTo(0.608f, withinPercentage(1.0));
+    }
 
-		Backlog testAll = TestDataGenerator.getBacklog(testDataGenerator.getBadValidatorItems(3));
-		testAll.getIssues().addAll(testDataGenerator.getMixedValidatorItems(20));
 
-        BacklogValidatorEntry testEntriesAll = BacklogScorer.performScorer(testAll, new CurvedRanking(), validationConfigCopy);
+    @Override
+    @Test
+    public void testRankingReturnsScoreOnBadGradientMixedBacklog(@Injectable BacklogValidatorEntry backlogValidatorEntry) throws Exception {
+        List<IssueValidatorEntry> issues = Arrays.asList(
+                IssueValidatorEntry.builder().pointsValuation(0.0f).issue(Issue.builder().rank("0|0001").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0.2f).issue(Issue.builder().rank("0|0002").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0.4f).issue(Issue.builder().rank("0|0003").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0.6f).issue(Issue.builder().rank("0|0004").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0.8f).issue(Issue.builder().rank("0|0005").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(1.0f).issue(Issue.builder().rank("0|0006").build()).build()
+        );
 
-		float rank3 = testEntriesAll.getPointsValuation();
-		assertThat(rank3).isCloseTo(0.57401336f, withinPercentage(1));
-		assertThat(rank1).isGreaterThan(rank3);
+        new Expectations() {{
+            backlogValidatorEntry.getIssueValidatorEntries();
+            result = issues;
+        }};
 
-	}
+        assertThat(curvedRanking.createRanking(backlogValidatorEntry)).isCloseTo(0.391f, withinPercentage(1.0));
+    }
 
-	@Override
-	@Test
-	public void testRankingDecreasesMinimalOnBadBottomInputWorks() throws Exception
-	{
-		Backlog test1 = TestDataGenerator.getBacklog(testDataGenerator.getMixedValidatorItems(20));
-        BacklogValidatorEntry testEntries = BacklogScorer.performScorer(test1, new CurvedRanking(), validationConfigCopy);
-        float rank1 = testEntries.getPointsValuation();
-		assertThat(rank1).isCloseTo(0.707f, withinPercentage(1));
+    @Test
+    public void testRankingReturnsHighScoreOnGoodMixedBacklog(@Injectable BacklogValidatorEntry backlogValidatorEntry) throws Exception {
+        List<IssueValidatorEntry> issues = Arrays.asList(
+                IssueValidatorEntry.builder().pointsValuation(1.0f).issue(Issue.builder().rank("0|0001").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(1.0f).issue(Issue.builder().rank("0|0002").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(1.0f).issue(Issue.builder().rank("0|0003").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0.0f).issue(Issue.builder().rank("0|0004").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0.0f).issue(Issue.builder().rank("0|0005").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0.0f).issue(Issue.builder().rank("0|0006").build()).build()
+        );
 
-		Backlog test2 = TestDataGenerator.getBacklog(testDataGenerator.getBadValidatorItems(3));
-        BacklogValidatorEntry testEntries2 = BacklogScorer.performScorer(test2, new CurvedRanking(), validationConfigCopy);
-        assertThat(testEntries2.getPointsValuation()).isCloseTo(0.0f, withinPercentage(1));
+        new Expectations() {{
+            backlogValidatorEntry.getIssueValidatorEntries();
+            result = issues;
+        }};
 
-		Backlog testAll = TestDataGenerator.getBacklog(testDataGenerator.getMixedValidatorItems(20));
-		testAll.getIssues().addAll(testDataGenerator.getBadValidatorItems(3));
+        assertThat(curvedRanking.createRanking(backlogValidatorEntry)).isGreaterThanOrEqualTo(0.5f);
+    }
 
-        BacklogValidatorEntry testEntriesAll = BacklogScorer.performScorer(testAll, new CurvedRanking(), validationConfigCopy);
+    @Test
+    public void testRankingReturnsLowScoreOnBadMixedBacklog(@Injectable BacklogValidatorEntry backlogValidatorEntry) throws Exception {
+        List<IssueValidatorEntry> issues = Arrays.asList(
+                IssueValidatorEntry.builder().pointsValuation(1.0f).issue(Issue.builder().rank("0|0007").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(1.0f).issue(Issue.builder().rank("0|0008").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(1.0f).issue(Issue.builder().rank("0|0009").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0.0f).issue(Issue.builder().rank("0|0004").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0.0f).issue(Issue.builder().rank("0|0005").build()).build(),
+                IssueValidatorEntry.builder().pointsValuation(0.0f).issue(Issue.builder().rank("0|0006").build()).build()
+        );
 
-		float rank3 = testEntriesAll.getPointsValuation();
-		assertThat(rank3).isCloseTo(0.686f, withinPercentage(1));
-		assertThat(rank1).isGreaterThan(rank3);
-	}
+        new Expectations() {{
+            backlogValidatorEntry.getIssueValidatorEntries();
+            result = issues;
+        }};
 
-	@Test
-	public void testCurve() throws Exception
-	{
-		float curve = ranking.curvedQuotient(10, 20);
-		assertThat(curve).isEqualTo(0.75f);
-	}
+        assertThat(curvedRanking.createRanking(backlogValidatorEntry)).isLessThanOrEqualTo(0.5f);
+    }
+
 }
-
