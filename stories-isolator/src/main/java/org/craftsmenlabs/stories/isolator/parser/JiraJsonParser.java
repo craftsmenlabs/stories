@@ -64,7 +64,9 @@ public class JiraJsonParser implements Parser {
 
                     String rank = stringProps.get(fieldMapping.getIssue().getRank());
                     if (rank == null || StringUtils.isEmpty(rank)) {
-                        throw new StoriesException("The rank field mapping was not defined in your application yaml or parameters. Is the field mapping configured correctly?");
+                        throw new StoriesException(
+                                "The rank field mapping was not defined in your application yaml or parameters. " +
+                                "Is the field mapping configured correctly?");
                     }
                     issue.setRank(rank);
 

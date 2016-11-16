@@ -147,7 +147,7 @@ public class PluginExecutor {
 				new SummaryConsoleReporter()
 		);
 
-		// In the future, depending on configuration, we can add additional reports here.
+		//TODO In the future, depending on configuration, we can add additional reports here.
 		if(this.springReportConfig.getFile().isEnabled()) {
 			reporters.add(new JsonFileReporter(new File(this.springReportConfig.getFile().getLocation())));
 		}
