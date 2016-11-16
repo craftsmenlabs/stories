@@ -2,22 +2,25 @@ package org.craftsmenlabs.stories.plugin.filereader;
 
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.StoriesRun;
+import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
+import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
+import org.craftsmenlabs.stories.api.models.exception.StoriesException;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
 import org.craftsmenlabs.stories.api.models.summary.SummaryBuilder;
-import org.craftsmenlabs.stories.api.models.validatorconfig.ValidationConfigCopy;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 import org.craftsmenlabs.stories.connectivity.service.ConnectivityService;
 import org.craftsmenlabs.stories.importer.Importer;
 import org.craftsmenlabs.stories.importer.JiraAPIImporter;
 import org.craftsmenlabs.stories.importer.TrelloAPIImporter;
-import org.craftsmenlabs.stories.isolator.parser.FieldMappingConfigCopy;
 import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
 import org.craftsmenlabs.stories.isolator.parser.Parser;
 import org.craftsmenlabs.stories.isolator.parser.TrelloJsonParser;
+import org.craftsmenlabs.stories.plugin.filereader.config.*;
 import org.craftsmenlabs.stories.ranking.CurvedRanking;
 import org.craftsmenlabs.stories.reporter.ConsoleReporter;
 import org.craftsmenlabs.stories.reporter.JsonFileReporter;
+import org.craftsmenlabs.stories.reporter.Reporter;
 import org.craftsmenlabs.stories.reporter.SummaryConsoleReporter;
 import org.craftsmenlabs.stories.scoring.BacklogScorer;
 import org.slf4j.Logger;
@@ -27,35 +30,46 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
 public class PluginExecutor {
-
 	private final Logger logger = LoggerFactory.getLogger(PluginExecutor.class);
-	public ValidationConfigCopy validationConfigCopy;
-	public FieldMappingConfigCopy fieldMappingConfigCopy;
-	private ConsoleReporter validationConsoleReporter = new ConsoleReporter();
+	public ValidationConfig validationConfig;
+	public FieldMappingConfig fieldMappingConfig;
+
 	@Autowired
 	private ConnectivityService dashboardConnectivity;
 	@Autowired
-	private ApplicationConfig applicationConfig;
+	private SpringReportConfig springReportConfig;
 	@Autowired
-	private ValidationConfig validationConfig;
+	private SpringSourceConfig springSourceConfig;
 	@Autowired
-	private FieldMappingConfig fieldMappingConfig;
+	private SpringFilterConfig springFilterConfig;
+	@Autowired
+	private SpringValidationConfig springValidationConfig;
+	@Autowired
+	private SpringFieldMappingConfig springFieldMappingConfig;
 
 	public Rating startApplication() {
 		logger.info("Starting stories plugin.");
 
-		validationConfigCopy = validationConfig.clone();
-		fieldMappingConfigCopy = fieldMappingConfig.clone();
+		// Prepare configs
+		validationConfig = springValidationConfig.convert();
+		fieldMappingConfig = springFieldMappingConfig.convert();
+		// Validate configs
+		this.springReportConfig.validate();
+		this.springSourceConfig.validate();
 
-		Importer importer = getImporter(applicationConfig);
+		// Import the data
+		Importer importer = getImporter(springSourceConfig.getEnabled());
 		String data = importer.getDataAsString();
-		Parser parser = getParser(applicationConfig.getDataformat());
 
+
+		// Parse and filter the issues
+		Parser parser = getParser(springSourceConfig.getEnabled());
 		List<Issue> issues = parser.getIssues(data).stream()
 				.filter(issue -> issue.getUserstory() != null)
 				.filter(issue -> !issue.getUserstory().isEmpty())
@@ -64,92 +78,80 @@ public class PluginExecutor {
 		Backlog backlog = new Backlog();
 		backlog.setIssues(issues);
 
-		BacklogValidatorEntry backlogValidatorEntry = BacklogScorer.performScorer(backlog, new CurvedRanking(), validationConfigCopy);
+		// Perform the backlog validation
+		BacklogValidatorEntry backlogValidatorEntry = BacklogScorer.performScorer(backlog, new CurvedRanking(), validationConfig);
 
-		//console report
-		validationConsoleReporter.report(backlogValidatorEntry, validationConfigCopy);
+		for(Reporter reporter : this.getReporters()) {
+			reporter.report(backlogValidatorEntry);
+		}
 
+		// Dashboard report?
         StoriesRun storiesRun = StoriesRun.builder()
                 .summary(new SummaryBuilder().build(backlogValidatorEntry))
                 .backlogValidatorEntry(backlogValidatorEntry)
-				.runConfig(validationConfigCopy)
+				.runConfig(validationConfig)
 				.runDateTime(LocalDateTime.now())
 				.build();
 
         dashboardConnectivity.sendData(storiesRun);
 
-        //write file report
-		if (isOutputFileSet(applicationConfig)) {
-			new JsonFileReporter(new File(applicationConfig.getOutputfile()))
-					.report(backlogValidatorEntry);
-		}
-
-		new SummaryConsoleReporter().reportJson(backlogValidatorEntry);
-
 		//Multiply by 100%
 		return backlogValidatorEntry.getRating();
 	}
 
-	private boolean isOutputFileSet(ApplicationConfig applicationConfig) {
-		return applicationConfig.getOutputfile() != null && !applicationConfig.getOutputfile().isEmpty();
-	}
-
-	public Importer getImporter(ApplicationConfig applicationConfig) {
-		if (tokenIsSet(applicationConfig)) {
-			logger.info("projectToken is set, using TrelloAPIImporter");
-			return new TrelloAPIImporter(applicationConfig.getUrl(), applicationConfig.getProjectkey(), applicationConfig.getAuthkey(), applicationConfig.getToken());
-		} else if (restApiParametersAreSet(applicationConfig)) {
-			logger.info("rest Api parameters are set, using JiraAPIImporter");
-			return new JiraAPIImporter(applicationConfig.getUrl(), applicationConfig.getProjectkey(), applicationConfig.getAuthkey(), applicationConfig.getStatus());
-		} else {
-			logger.error(getRunParameters());
-			throw new IllegalArgumentException(getRunParameters());
+	/**
+	 * Finds and initializes the right importer for the source enabled setting.
+	 *
+	 * @param enabled source
+	 * @return Importer importer
+	 */
+	public Importer getImporter(String enabled) {
+		switch(enabled) {
+			case "jira":
+				SpringSourceConfig.JiraConfig jiraConfig = springSourceConfig.getJira();
+				logger.info("Using JiraAPIImporter for import." + jiraConfig.getUrl());
+				return new JiraAPIImporter(jiraConfig.getUrl(),jiraConfig.getProjectKey(), jiraConfig.getAuthKey(), springFilterConfig.getStatus());
+			case "trello":
+				logger.info("Using TrelloAPIImporter for import.");
+				SpringSourceConfig.TrelloConfig trelloConfig = springSourceConfig.getTrello();
+				return new TrelloAPIImporter(trelloConfig.getUrl(), trelloConfig.getProjectKey(), trelloConfig.getAuthKey(), trelloConfig.getToken());
+			default:
+				throw new StoriesException(StoriesException.ERR_SOURCE_ENABLED_MISSING);
 		}
-	}
-
-	private boolean tokenIsSet(ApplicationConfig applicationConfig) {
-		return applicationConfig.getToken() != null &&
-				!applicationConfig.getToken().isEmpty();
-	}
-
-	private boolean restApiParametersAreSet(ApplicationConfig applicationConfig) {
-		return applicationConfig.getUrl() != null &&
-				!applicationConfig.getUrl().isEmpty() &&
-				applicationConfig.getAuthkey() != null &&
-				!applicationConfig.getAuthkey().isEmpty();
 	}
 
 	/**
 	 * Set the parser based on the data format:
 	 * jirajson, trellojson, etc.
 	 *
-	 * @param dataFormat the format of the data
+	 * @param enabled enabled source
 	 */
-	private Parser getParser(String dataFormat) {
-		Parser parser;
-		switch (dataFormat) {
-			case ("jirajson"):
-				parser = new JiraJsonParser(fieldMappingConfigCopy, applicationConfig.getStatus());
-				break;
-			case ("trellojson"):
-				parser = new TrelloJsonParser();
-				break;
+	private Parser getParser(String enabled) {
+		switch (enabled) {
+			case ("jira"):
+				return new JiraJsonParser(fieldMappingConfig, springFilterConfig.getStatus());
+			case ("trello"):
+				return new TrelloJsonParser();
 			default:
-				logger.warn("No dataformat specified, please use the parameter -df to enter a dataformat, " +
-						"such as {jirajson, trellojson}. By default I will now use jirajson.");
-				parser = new JiraJsonParser(fieldMappingConfigCopy, applicationConfig.getStatus());
-				break;
+				throw new StoriesException(StoriesException.ERR_SOURCE_ENABLED_MISSING);
 		}
-		return parser;
 	}
 
-	private String getRunParameters() {
-		return "No api parameters or file is set. For the api please use:\n\n" +
-				"-- application.url = <http://jira.demo.com host without the jira api extension>\n" +
-				"-- application.authkey = <base64 encoded username:password for Jira>\n" +
-				"-- application.projectkey = <projectkey used in Jira>\n" +
-				"-- application.status = <status for backlogitems used in Jira>\n\n\n" +
-				"or to use a file use:\n" +
-				"-- application.inputfile = <PATH+FILENAME TO JSON FILE>";
+	/**
+	 * Finds out which reporters should be used for this run
+	 * @return List of reporters
+	 */
+	private List<Reporter> getReporters() {
+		List<Reporter> reporters = Arrays.asList(
+				new ConsoleReporter(this.validationConfig),
+				new SummaryConsoleReporter()
+		);
+
+		// In the future, depending on configuration, we can add additional reports here.
+		if(this.springReportConfig.getFile().isEnabled()) {
+			reporters.add(new JsonFileReporter(new File(this.springReportConfig.getFile().getLocation())));
+		}
+
+		return reporters;
 	}
 }

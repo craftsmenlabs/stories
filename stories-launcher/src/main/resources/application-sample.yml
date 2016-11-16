@@ -1,45 +1,58 @@
-application:
-    dataformat:
-    inputfile:
-    outputfile:
-    url:
-    authkey:
-    projectkey:
-    status:
-    token:
+source:
+    enabled: jira
 
-fieldMapping:
+    jira:
+        url: http://jira-url-here.net
+        authKey: jirakey
+        projectKey: GAR
+    trello:
+        url:
+        token:
+        authKey:
+        projectKey:
+
+report:
+  dashboard:
+    enabled: false
+    url: http://localhost:8090
+    token:
+  file:
+    enabled: false
+    location: /path/to/file
+
+filters:
+    status: "To Do"
+
+field_mapping:
     issue:
-        rank: "customfield_10401"
-        summary: "customfield_11400"
-        estimation: "customfield_10308"
+        rank: "customfield_11400"
+        summary: "customfield_11401"
+        estimation: "customfield_11402"
 
 
 validation:
-        backlog:
-            ratingtreshold: 60.0
-        issue:
-            ratingtreshold: 0.7
-        story:
-            fieldSource: "description#story"
-            ratingtreshold: 0.6
-            active: true
-            asKeywords: ["as a"]
-            iKeywords: ["i want"]
-            soKeywords: ["so"]
-        bug:
-            filledWith: ["","component"]
-        criteria:
-            fieldSource: "description#criteria"
-            ratingtreshold: 0.7
-            active: false
-            givenKeywords: ["given"]
-            whenKeywords: ["when"]
-            thenKeywords: ["then"]
-        estimation:
-            ratingtreshold: 0.7
-            active: false
+    backlog:
+        ratingtreshold: 60.0
+    issue:
+        ratingtreshold: 0.7
+    story:
+        fieldSource: "description#story"
+        ratingtreshold: 0.6
+        active: true
+        asKeywords: ["as a"]
+        iKeywords: ["i want"]
+        soKeywords: ["so"]
+    bug:
+        filledWith: ["","component"]
+    criteria:
+        fieldSource: "description#criteria"
+        ratingtreshold: 0.7
+        active: false
+        givenKeywords: ["given"]
+        whenKeywords: ["when"]
+        thenKeywords: ["then"]
+    estimation:
+        ratingtreshold: 0.7
+        active: false
 
-dashboard:
-  serviceUrl: http://localhost:8090
-  token:
+

@@ -1,7 +1,7 @@
 package org.craftsmenlabs.stories.scoring;
 
 import org.craftsmenlabs.stories.api.models.Rating;
-import org.craftsmenlabs.stories.api.models.validatorconfig.ValidationConfigCopy;
+import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.validatorentry.AcceptanceCriteriaValidatorEntry;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 import org.craftsmenlabs.stories.api.models.violation.ViolationType;
@@ -21,7 +21,7 @@ public class AcceptanceCriteriaScorer {
     private static final float THEN_POINTS = 0.3333f;
     private static final float TOTAL_POINTS = GIVEN_POINTS + WHEN_POINTS + THEN_POINTS;
 
-    public static AcceptanceCriteriaValidatorEntry performScorer(String criteria, ValidationConfigCopy validationConfig) {
+    public static AcceptanceCriteriaValidatorEntry performScorer(String criteria, ValidationConfig validationConfig) {
 
         List<Violation> violations = new ArrayList<>();
         float points = 0f;

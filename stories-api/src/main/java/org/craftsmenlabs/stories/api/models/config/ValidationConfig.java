@@ -1,4 +1,4 @@
-package org.craftsmenlabs.stories.api.models.validatorconfig;
+package org.craftsmenlabs.stories.api.models.config;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -12,24 +12,24 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ValidationConfigCopy {
+public class ValidationConfig {
     @JsonProperty("backlog")
-    private ValidatorEntryCopy backlog;
+    private ValidatorEntry backlog;
 
     @JsonProperty("issue")
-    private ValidatorEntryCopy issue;
+    private ValidatorEntry issue;
 
     @JsonProperty("story")
-    private StoryValidatorEntryCopy story;
+    private StoryValidatorEntry story;
 
     @JsonProperty("criteria")
-    private CriteriaValidatorEntryCopy criteria;
+    private CriteriaValidatorEntry criteria;
 
     @JsonProperty("estimation")
-    private ValidatorEntryCopy estimation;
+    private ValidatorEntry estimation;
 
     @Data
-    public static class ValidatorEntryCopy {
+    public static class ValidatorEntry {
         private float ratingtreshold;
         private boolean active;
 
@@ -43,7 +43,7 @@ public class ValidationConfigCopy {
     }
 
     @Data
-    public static class StoryValidatorEntryCopy extends ValidatorEntryCopy {
+    public static class StoryValidatorEntry extends ValidatorEntry {
         private List<String> asKeywords;
         private List<String> iKeywords;
         private List<String> soKeywords;
@@ -60,7 +60,7 @@ public class ValidationConfigCopy {
     }
 
     @Data
-    public static class CriteriaValidatorEntryCopy extends ValidatorEntryCopy {
+    public static class CriteriaValidatorEntry extends ValidatorEntry {
         private List<String> givenKeywords;
         private List<String> whenKeywords;
         private List<String> thenKeywords;

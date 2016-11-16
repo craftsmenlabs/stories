@@ -27,25 +27,33 @@ Things we meassure:
 * [Java 8 ](http://www.oracle.com/technetwork/java/javase/overview/index.html) - Java 8
 * [Jira](https://jira.atlassian.com) - Issue & Project tracking. Currently Stories has been tested on Jira version 6.4
 
-### Parameters for ranking (JIRA):
-* --application.dataformat = jirajson
-* --application.inputfile = <PATH+FILENAME TO JSON FILE>
-* --application.outputfile = <output filepath+name storynator.json>
-* --application.url = <http://jira.demo.com host without the jira api extension>
-* --application.authkey = <base64 encoded username:password for Jira, u can use https://www.base64encode.org/ to encode your username:password.>
-* --application.projectToken = 
-* --application.projectkey = <projectkey used in Jira>
-* --application.status = <status for backlogitems used in Jira>
+### Source Parameters:
+Defines your input, either Jira or Trello.
 
-### Parameters for ranking (Trello):
-* --application.dataformat = trellojson
-* --application.inputfile = 
-* --application.outputfile = <output filepath+name storynator.json>
-* --application.url = <https://api.trello.com/1 >
-* --application.authkey = <trello authentication key>
-* --application.projectToken = <trello generated projectToken key>
-* --application.projectkey = <trello board id>
-* --application.status =
+* --source.enabled = <jira|trello>
+##### Using Jira:
+* --source.jira.url = <JIRA url>
+* --source.jira.projectKey = <JIRA project Key>
+* --source.jira.authKey = <JIRA auth key>
+##### Using Trello:
+* --source.trello.url = <Trello url>
+* --source.trello.token = <Trello token>
+* --source.trello.projectKey = <Trello project key>
+* --source.trello.authKey = <Trello auth key>
+
+### Reporting Parameters:
+Defines how the application reports the result. By default the console output is enabled.
+
+* --report.dashboard.enabled = <Enable dashboard reporting? true|false>
+* --report.dashboard.url = <dashboard url>
+* --report.dashboard.token = <dashboard auth token>
+* --report.file.enabled = <Enable JSON file output? true|false>
+* --report.file.location = <System file location>
+
+### Filter Parameters:
+Defines what fields the application should filter the Issues on.
+
+* --filters.status = <Status to filter on>
 
 ### Parameters for ranking:
 * -- ranking.desiredMiniumStableRanking = 70

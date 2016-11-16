@@ -5,8 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.summary.Summary;
-import org.craftsmenlabs.stories.api.models.validatorconfig.ValidationConfigCopy;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 
 import java.time.LocalDateTime;
@@ -28,7 +28,7 @@ public class StoriesRun {
 
     //Used to store the run config of this run instance
     @JsonProperty("runConfig")
-    private ValidationConfigCopy runConfig;
+    private ValidationConfig runConfig;
 
     //the complete validated backlog
     @JsonProperty("backlogValidatorEntry")

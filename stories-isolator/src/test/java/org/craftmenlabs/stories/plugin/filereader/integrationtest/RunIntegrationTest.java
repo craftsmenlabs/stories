@@ -1,7 +1,7 @@
 package org.craftmenlabs.stories.plugin.filereader.integrationtest;
 
+import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
-import org.craftsmenlabs.stories.isolator.parser.FieldMappingConfigCopy;
 import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
 import org.craftsmenlabs.stories.isolator.parser.TrelloJsonParser;
 import org.craftsmenlabs.stories.isolator.testutil.RetrieveTestData;
@@ -14,19 +14,19 @@ import static org.junit.Assert.assertEquals;
 public class RunIntegrationTest {
     @Test
     public void runIntegrationTestOnJiraJson() {
-        FieldMappingConfigCopy fieldMappingConfigCopy =
-                FieldMappingConfigCopy.builder()
-                        .backlog(FieldMappingConfigCopy.BacklogMappingCopy.builder().build())
-                        .issue(FieldMappingConfigCopy.IssueMappingCopy.builder()
+        FieldMappingConfig fieldMappingConfig =
+                FieldMappingConfig.builder()
+                        .backlog(FieldMappingConfig.BacklogMapping.builder().build())
+                        .issue(FieldMappingConfig.IssueMapping.builder()
                                 .rank("customfield_10401")
                                 .estimation("customfield_10308")
                                 .build())
-                        .story(FieldMappingConfigCopy.StoryMappingCopy.builder().build())
-                        .criteria(FieldMappingConfigCopy.CriteriaMappingCopy.builder().build())
-                        .estimation(FieldMappingConfigCopy.EstimationMappingCopy.builder().build())
+                        .story(FieldMappingConfig.StoryMapping.builder().build())
+                        .criteria(FieldMappingConfig.CriteriaMapping.builder().build())
+                        .estimation(FieldMappingConfig.EstimationMapping.builder().build())
                         .build();
 
-        JiraJsonParser jiraJsonParser = new JiraJsonParser(fieldMappingConfigCopy, "To Do");
+        JiraJsonParser jiraJsonParser = new JiraJsonParser(fieldMappingConfig, "To Do");
         String testData = RetrieveTestData.getExportedJiraJSONTestResultFromResource();
         Issue testResult = RetrieveTestData.getJiraTestIssueFromResource();
 

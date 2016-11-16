@@ -2,7 +2,7 @@ package org.craftsmenlabs.stories.scoring;
 
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
-import org.craftsmenlabs.stories.api.models.validatorconfig.ValidationConfigCopy;
+import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.validatorentry.*;
 
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import java.util.stream.Stream;
  */
 public class IssueScorer {
 
-    public static IssueValidatorEntry performScorer(Issue issue, ValidationConfigCopy validationConfig) {
+    public static IssueValidatorEntry performScorer(Issue issue, ValidationConfig validationConfig) {
         if (issue == null) {
             issue = Issue.builder().rank("0").summary("").userstory("").acceptanceCriteria("").key("0").build();
         }

@@ -3,7 +3,7 @@ package org.craftsmenlabs.stories.scoring;
 import mockit.Expectations;
 import mockit.Injectable;
 import org.craftsmenlabs.stories.api.models.Rating;
-import org.craftsmenlabs.stories.api.models.validatorconfig.ValidationConfigCopy;
+import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.validatorentry.AcceptanceCriteriaValidatorEntry;
 import org.craftsmenlabs.stories.api.models.validatorentry.IssueValidatorEntry;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
@@ -28,7 +28,7 @@ public class AcceptanceCriteriaScorerTest {
 
 
     @Test
-    public void testPerformScorer_ReturnsZeroOnEmpty(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfigCopy validationConfig) throws Exception {
+    public void testPerformScorer_ReturnsZeroOnEmpty(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfig validationConfig) throws Exception {
         List<Violation> v = new ArrayList<>();
         new Expectations() {{
             entry.getIssue().getAcceptanceCriteria();
@@ -44,7 +44,7 @@ public class AcceptanceCriteriaScorerTest {
     }
 
     @Test
-    public void testPerformScorerReturnsNullOnEmpty(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfigCopy validationConfig) throws Exception {
+    public void testPerformScorerReturnsNullOnEmpty(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfig validationConfig) throws Exception {
         new Expectations() {{
             entry.getIssue().getAcceptanceCriteria();
             result = null;
@@ -59,7 +59,7 @@ public class AcceptanceCriteriaScorerTest {
     }
 
     @Test
-    public void testPerformScorerAddsGivenClauseViolationOnNoGiven(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfigCopy validationConfig) {
+    public void testPerformScorerAddsGivenClauseViolationOnNoGiven(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfig validationConfig) {
         new Expectations() {{
             validationConfig.getCriteria().getGivenKeywords();
             result = Arrays.asList("gooooven ");
@@ -82,7 +82,7 @@ public class AcceptanceCriteriaScorerTest {
     }
 
     @Test
-    public void testPerformScorerAddsWhenClauseViolationOnNoGiven(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfigCopy validationConfig) {
+    public void testPerformScorerAddsWhenClauseViolationOnNoGiven(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfig validationConfig) {
         new Expectations() {{
             validationConfig.getCriteria().getGivenKeywords();
             result = Arrays.asList("given ");
@@ -105,7 +105,7 @@ public class AcceptanceCriteriaScorerTest {
     }
 
     @Test
-    public void testPerformScorerAddsThenClauseViolationOnNoGiven(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfigCopy validationConfig) {
+    public void testPerformScorerAddsThenClauseViolationOnNoGiven(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfig validationConfig) {
         new Expectations() {{
             validationConfig.getCriteria().getGivenKeywords();
             result = Arrays.asList("given ");
@@ -128,7 +128,7 @@ public class AcceptanceCriteriaScorerTest {
     }
 
     @Test
-    public void testPerformScorerAndRatesFail(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfigCopy validationConfig)
+    public void testPerformScorerAndRatesFail(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfig validationConfig)
     {
         new Expectations()
         {{
@@ -147,7 +147,7 @@ public class AcceptanceCriteriaScorerTest {
     }
 
     @Test
-    public void testPerformScorerAndRatesSuccess(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfigCopy validationConfig)
+    public void testPerformScorerAndRatesSuccess(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfig validationConfig)
     {
         new Expectations()
         {{
@@ -167,7 +167,7 @@ public class AcceptanceCriteriaScorerTest {
     }
 
     @Test
-    public void testPerformScorerMatchesAllKeywords(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfigCopy validationConfig) {
+    public void testPerformScorerMatchesAllKeywords(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfig validationConfig) {
         new Expectations() {{
             validationConfig.getCriteria().getGivenKeywords();
             result = Arrays.asList("given ");
@@ -191,7 +191,7 @@ public class AcceptanceCriteriaScorerTest {
 
 
     @Test
-    public void testPerformScorerDoesntMatchGivenKeyword(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfigCopy validationConfig) {
+    public void testPerformScorerDoesntMatchGivenKeyword(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfig validationConfig) {
         new Expectations() {{
             validationConfig.getCriteria().getGivenKeywords();
             result = Arrays.asList("goooven ");
@@ -213,7 +213,7 @@ public class AcceptanceCriteriaScorerTest {
     }
 
     @Test
-    public void testPerformScorerDoesntMatchWhenKeyword(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfigCopy validationConfig) {
+    public void testPerformScorerDoesntMatchWhenKeyword(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfig validationConfig) {
         new Expectations() {{
             validationConfig.getCriteria().getGivenKeywords();
             result = Arrays.asList("given ");
@@ -235,7 +235,7 @@ public class AcceptanceCriteriaScorerTest {
     }
 
     @Test
-    public void testPerformScorerDoesntMatchThenKeyword(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfigCopy validationConfig) {
+    public void testPerformScorerDoesntMatchThenKeyword(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfig validationConfig) {
         new Expectations() {{
             validationConfig.getCriteria().getGivenKeywords();
             result = Arrays.asList("given ");
@@ -257,7 +257,7 @@ public class AcceptanceCriteriaScorerTest {
     }
 
     @Test
-    public void testPerformScoreCriteriaTooShort(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfigCopy validationConfig) {
+    public void testPerformScoreCriteriaTooShort(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfig validationConfig) {
         new Expectations() {{
             entry.getIssue().getAcceptanceCriteria();
             result = "given when then given when then given when then ".substring(0, AcceptanceCriteriaScorer.MINIMUM_LENGTH_OF_ACC_CRITERIA - 1);
@@ -271,7 +271,7 @@ public class AcceptanceCriteriaScorerTest {
     }
 
     @Test
-    public void testPerformScorerCriteriaRightLength(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfigCopy validationConfig) {
+    public void testPerformScorerCriteriaRightLength(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfig validationConfig) {
         new Expectations() {{
             validationConfig.getCriteria().getGivenKeywords();
             result = Arrays.asList("given ");
@@ -292,7 +292,7 @@ public class AcceptanceCriteriaScorerTest {
     }
 
     @Test
-    public void testPerformScorerReturnsFailOnLowScore(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfigCopy validationConfig) {
+    public void testPerformScorerReturnsFailOnLowScore(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfig validationConfig) {
         new Expectations() {{
             validationConfig.getCriteria().getGivenKeywords();
             result = Arrays.asList("given ");

@@ -1,7 +1,7 @@
 package org.craftsmenlabs.stories.scoring;
 
 import org.craftsmenlabs.stories.api.models.Rating;
-import org.craftsmenlabs.stories.api.models.validatorconfig.ValidationConfigCopy;
+import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.validatorentry.EstimationValidatorEntry;
 
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * Assigns points if a estimation is ok
  */
 public class EstimationScorer {
-    public static EstimationValidatorEntry performScorer(Float estimation, ValidationConfigCopy validationConfig) {
+    public static EstimationValidatorEntry performScorer(Float estimation, ValidationConfig validationConfig) {
 
         float points;
         if(estimation == null || estimation.compareTo(0f) == 0){
