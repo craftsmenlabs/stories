@@ -15,6 +15,7 @@ import org.craftsmenlabs.stories.importer.TrelloAPIImporter;
 import org.craftsmenlabs.stories.isolator.parser.*;
 import org.craftsmenlabs.stories.ranking.CurvedRanking;
 import org.craftsmenlabs.stories.reporter.ConsoleReporter;
+import org.craftsmenlabs.stories.reporter.JsonFileReporter;
 import org.craftsmenlabs.stories.reporter.SummaryConsoleReporter;
 import org.craftsmenlabs.stories.scoring.BacklogScorer;
 import org.slf4j.Logger;
@@ -22,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -75,10 +77,10 @@ public class PluginExecutor {
         dashboardConnectivity.sendData(storiesRun);
 
         //write file report
-//        if(isOutputFileSet(applicationConfig)) {
-//            new JsonFileReporter(new File(applicationConfig.getOutputfile()))
-//                    .report(backlogValidatorEntry);
-//        }
+        if(isOutputFileSet(applicationConfig)) {
+            new JsonFileReporter(new File(applicationConfig.getOutputfile()))
+                    .report(backlogValidatorEntry);
+        }
 
 		new SummaryConsoleReporter().reportJson(backlogValidatorEntry);
 
