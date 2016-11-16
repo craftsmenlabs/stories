@@ -3,6 +3,7 @@ package org.craftsmenlabs.stories.isolator.parser;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
 import org.craftsmenlabs.stories.isolator.SentenceSplitter;
@@ -55,8 +56,8 @@ public class JiraJsonParser implements Parser {
                     }
 
                     String rank = stringProps.get(fieldMapping.getIssue().getRank());
-                    if(rank == null) {
-                        throw new StoriesException("The issue rank was not defined. Is the fieldMapping configured correctly?");
+                    if(rank == null || StringUtils.isEmpty(rank)) {
+                        throw new StoriesException("The rank field mapping was not defined in your application yaml or parameters. Is the field mapping configured correctly?");
                     }
                     issue.setRank(rank);
 
