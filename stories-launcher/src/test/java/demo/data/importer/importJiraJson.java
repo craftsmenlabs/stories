@@ -10,6 +10,7 @@ import org.craftsmenlabs.stories.api.models.validatorconfig.ValidationConfigCopy
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 import org.craftsmenlabs.stories.connectivity.service.ConnectivityService;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
+import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
 import org.craftsmenlabs.stories.isolator.parser.FieldMappingConfigCopy;
 import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
 import org.craftsmenlabs.stories.plugin.filereader.ApplicationConfig;
@@ -30,9 +31,14 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
-
+/**
+ * This is a make shift jira file importer for demo purposes,
+ * not a test
+ */
 @ActiveProfiles("test")
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = {BootApp.class})
@@ -61,14 +67,25 @@ public class importJiraJson {
     }
 
 
-    //accept file in the format: projectToken_2016-02-13.json
+    //accept file in the format:
+    // <projectToken>_YYYY-MM-DD_HH-MM.json
+    // projectToken_2016-02-13_16-00.json
     public void importFile(File file) {
 
         String[] split = file.getName().split("_|\\.");
+        if (split.length != 4) {
+            throw new IllegalArgumentException(
+                    file.getName() + " - invalid format! \n" +
+                            " Format should be: <projectToken>_YYYY-MM-DD_HH-MM.json\n" +
+                            "Example:  projectToken_2016-02-13_16-00.json\n");
+        }
+
         String projectToken = split[0];
         String date = split[1];
+        List<Integer> time = Arrays.stream(split[2].split("-"))
+                .map(Integer::parseInt).collect(Collectors.toList());
 
-        LocalDateTime dateTime = LocalDate.parse(date).atStartOfDay();
+        LocalDateTime dateTime = LocalDate.parse(date).atTime(time.get(0), time.get(1));
 
         validationConfigCopy = validationConfig.clone();
         fieldMappingConfigCopy = fieldMappingConfig.clone();
@@ -81,7 +98,9 @@ public class importJiraJson {
             e.printStackTrace();
         }
 
-        List<Issue> issues = new JiraJsonParser(fieldMappingConfigCopy).getIssues(jiraBacklog.getJiraJsonIssues());
+        JiraJsonParser jiraJsonParser = new JiraJsonParser(fieldMappingConfigCopy, applicationConfig.getStatus());
+        List<JiraJsonIssue> jiraJsonIssues = jiraBacklog.getJiraJsonIssues();
+        List<Issue> issues = jiraJsonParser.getIssues(jiraJsonIssues);
 
         Backlog backlog = new Backlog();
         backlog.setIssues(issues);

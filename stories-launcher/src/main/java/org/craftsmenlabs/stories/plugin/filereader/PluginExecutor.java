@@ -33,123 +33,123 @@ import java.util.stream.Collectors;
 @Component
 public class PluginExecutor {
 
-    private final Logger logger = LoggerFactory.getLogger(PluginExecutor.class);
-    public ValidationConfigCopy validationConfigCopy;
-    public FieldMappingConfigCopy fieldMappingConfigCopy;
-    private ConsoleReporter validationConsoleReporter = new ConsoleReporter();
-    @Autowired
-    private ConnectivityService dashboardConnectivity;
-    @Autowired
-    private ApplicationConfig applicationConfig;
-    @Autowired
-    private ValidationConfig validationConfig;
-    @Autowired
-    private FieldMappingConfig fieldMappingConfig;
+	private final Logger logger = LoggerFactory.getLogger(PluginExecutor.class);
+	public ValidationConfigCopy validationConfigCopy;
+	public FieldMappingConfigCopy fieldMappingConfigCopy;
+	private ConsoleReporter validationConsoleReporter = new ConsoleReporter();
+	@Autowired
+	private ConnectivityService dashboardConnectivity;
+	@Autowired
+	private ApplicationConfig applicationConfig;
+	@Autowired
+	private ValidationConfig validationConfig;
+	@Autowired
+	private FieldMappingConfig fieldMappingConfig;
 
-    public Rating startApplication() {
-        logger.info("Starting stories plugin.");
+	public Rating startApplication() {
+		logger.info("Starting stories plugin.");
 
-        validationConfigCopy = validationConfig.clone();
-        fieldMappingConfigCopy = fieldMappingConfig.clone();
+		validationConfigCopy = validationConfig.clone();
+		fieldMappingConfigCopy = fieldMappingConfig.clone();
 
-        Importer importer = getImporter(applicationConfig);
-        String data = importer.getDataAsString();
-        Parser parser = getParser(applicationConfig.getDataformat());
+		Importer importer = getImporter(applicationConfig);
+		String data = importer.getDataAsString();
+		Parser parser = getParser(applicationConfig.getDataformat());
 
-        List<Issue> issues = parser.getIssues(data).stream()
-                .filter(issue -> issue.getUserstory() != null)
-                .filter(issue -> !issue.getUserstory().isEmpty())
-                .collect(Collectors.toList());
+		List<Issue> issues = parser.getIssues(data).stream()
+				.filter(issue -> issue.getUserstory() != null)
+				.filter(issue -> !issue.getUserstory().isEmpty())
+				.collect(Collectors.toList());
 
-        Backlog backlog = new Backlog();
-        backlog.setIssues(issues);
+		Backlog backlog = new Backlog();
+		backlog.setIssues(issues);
 
-        BacklogValidatorEntry backlogValidatorEntry = BacklogScorer.performScorer(backlog, new CurvedRanking(), validationConfigCopy);
+		BacklogValidatorEntry backlogValidatorEntry = BacklogScorer.performScorer(backlog, new CurvedRanking(), validationConfigCopy);
 
-        //console report
-        validationConsoleReporter.report(backlogValidatorEntry, validationConfigCopy);
+		//console report
+		validationConsoleReporter.report(backlogValidatorEntry, validationConfigCopy);
 
         StoriesRun storiesRun = StoriesRun.builder()
                 .summary(new SummaryBuilder().build(backlogValidatorEntry))
                 .backlogValidatorEntry(backlogValidatorEntry)
-                .runConfig(validationConfigCopy)
-                .runDateTime(LocalDateTime.now())
-                .build();
+				.runConfig(validationConfigCopy)
+				.runDateTime(LocalDateTime.now())
+				.build();
 
         dashboardConnectivity.sendData(storiesRun);
 
         //write file report
-        if (isOutputFileSet(applicationConfig)) {
-            new JsonFileReporter(new File(applicationConfig.getOutputfile()))
-                    .report(backlogValidatorEntry);
-        }
+		if (isOutputFileSet(applicationConfig)) {
+			new JsonFileReporter(new File(applicationConfig.getOutputfile()))
+					.report(backlogValidatorEntry);
+		}
 
-        new SummaryConsoleReporter().reportJson(backlogValidatorEntry);
+		new SummaryConsoleReporter().reportJson(backlogValidatorEntry);
 
-        //Multiply by 100%
-        return backlogValidatorEntry.getRating();
-    }
+		//Multiply by 100%
+		return backlogValidatorEntry.getRating();
+	}
 
-    private boolean isOutputFileSet(ApplicationConfig applicationConfig) {
-        return applicationConfig.getOutputfile() != null && !applicationConfig.getOutputfile().isEmpty();
-    }
+	private boolean isOutputFileSet(ApplicationConfig applicationConfig) {
+		return applicationConfig.getOutputfile() != null && !applicationConfig.getOutputfile().isEmpty();
+	}
 
-    public Importer getImporter(ApplicationConfig applicationConfig) {
-        if (tokenIsSet(applicationConfig)) {
-            logger.info("projectToken is set, using TrelloAPIImporter");
-            return new TrelloAPIImporter(applicationConfig.getUrl(), applicationConfig.getProjectkey(), applicationConfig.getAuthkey(), applicationConfig.getToken());
-        } else if (restApiParametersAreSet(applicationConfig)) {
-            logger.info("rest Api parameters are set, using JiraAPIImporter");
-            return new JiraAPIImporter(applicationConfig.getUrl(), applicationConfig.getProjectkey(), applicationConfig.getAuthkey(), applicationConfig.getStatus());
-        } else {
-            logger.error(getRunParameters());
-            throw new IllegalArgumentException(getRunParameters());
-        }
-    }
+	public Importer getImporter(ApplicationConfig applicationConfig) {
+		if (tokenIsSet(applicationConfig)) {
+			logger.info("projectToken is set, using TrelloAPIImporter");
+			return new TrelloAPIImporter(applicationConfig.getUrl(), applicationConfig.getProjectkey(), applicationConfig.getAuthkey(), applicationConfig.getToken());
+		} else if (restApiParametersAreSet(applicationConfig)) {
+			logger.info("rest Api parameters are set, using JiraAPIImporter");
+			return new JiraAPIImporter(applicationConfig.getUrl(), applicationConfig.getProjectkey(), applicationConfig.getAuthkey(), applicationConfig.getStatus());
+		} else {
+			logger.error(getRunParameters());
+			throw new IllegalArgumentException(getRunParameters());
+		}
+	}
 
-    private boolean tokenIsSet(ApplicationConfig applicationConfig) {
-        return applicationConfig.getToken() != null &&
-                !applicationConfig.getToken().isEmpty();
-    }
+	private boolean tokenIsSet(ApplicationConfig applicationConfig) {
+		return applicationConfig.getToken() != null &&
+				!applicationConfig.getToken().isEmpty();
+	}
 
-    private boolean restApiParametersAreSet(ApplicationConfig applicationConfig) {
-        return applicationConfig.getUrl() != null &&
-                !applicationConfig.getUrl().isEmpty() &&
-                applicationConfig.getAuthkey() != null &&
-                !applicationConfig.getAuthkey().isEmpty();
-    }
+	private boolean restApiParametersAreSet(ApplicationConfig applicationConfig) {
+		return applicationConfig.getUrl() != null &&
+				!applicationConfig.getUrl().isEmpty() &&
+				applicationConfig.getAuthkey() != null &&
+				!applicationConfig.getAuthkey().isEmpty();
+	}
 
-    /**
-     * Set the parser based on the data format:
-     * jirajson, trellojson, etc.
-     *
-     * @param dataFormat the format of the data
-     */
-    private Parser getParser(String dataFormat) {
-        Parser parser;
-        switch (dataFormat) {
-            case ("jirajson"):
-                parser = new JiraJsonParser(fieldMappingConfigCopy);
-                break;
-            case ("trellojson"):
-                parser = new TrelloJsonParser();
-                break;
-            default:
-                logger.warn("No dataformat specified, please use the parameter -df to enter a dataformat, " +
-                        "such as {jirajson, trellojson}. By default I will now use jirajson.");
-                parser = new JiraJsonParser(fieldMappingConfigCopy);
-                break;
-        }
-        return parser;
-    }
+	/**
+	 * Set the parser based on the data format:
+	 * jirajson, trellojson, etc.
+	 *
+	 * @param dataFormat the format of the data
+	 */
+	private Parser getParser(String dataFormat) {
+		Parser parser;
+		switch (dataFormat) {
+			case ("jirajson"):
+				parser = new JiraJsonParser(fieldMappingConfigCopy, applicationConfig.getStatus());
+				break;
+			case ("trellojson"):
+				parser = new TrelloJsonParser();
+				break;
+			default:
+				logger.warn("No dataformat specified, please use the parameter -df to enter a dataformat, " +
+						"such as {jirajson, trellojson}. By default I will now use jirajson.");
+				parser = new JiraJsonParser(fieldMappingConfigCopy, applicationConfig.getStatus());
+				break;
+		}
+		return parser;
+	}
 
-    private String getRunParameters() {
-        return "No api parameters or file is set. For the api please use:\n\n" +
-                "-- application.url = <http://jira.demo.com host without the jira api extension>\n" +
-                "-- application.authkey = <base64 encoded username:password for Jira>\n" +
-                "-- application.projectkey = <projectkey used in Jira>\n" +
-                "-- application.status = <status for backlogitems used in Jira>\n\n\n" +
-                "or to use a file use:\n" +
-                "-- application.inputfile = <PATH+FILENAME TO JSON FILE>";
-    }
+	private String getRunParameters() {
+		return "No api parameters or file is set. For the api please use:\n\n" +
+				"-- application.url = <http://jira.demo.com host without the jira api extension>\n" +
+				"-- application.authkey = <base64 encoded username:password for Jira>\n" +
+				"-- application.projectkey = <projectkey used in Jira>\n" +
+				"-- application.status = <status for backlogitems used in Jira>\n\n\n" +
+				"or to use a file use:\n" +
+				"-- application.inputfile = <PATH+FILENAME TO JSON FILE>";
+	}
 }

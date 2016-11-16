@@ -23,15 +23,21 @@ public class JiraJsonParser implements Parser {
 
     private final Logger logger = LoggerFactory.getLogger(JiraJsonParser.class);
     private FieldMappingConfigCopy fieldMapping;
+    private String todo;
 
-    public JiraJsonParser(FieldMappingConfigCopy fieldMapping) {
+    public JiraJsonParser(FieldMappingConfigCopy fieldMapping, String todo) {
         this.fieldMapping = fieldMapping;
+        this.todo = todo;
     }
 
     public List<Issue> getIssues(List<JiraJsonIssue> jiraJsonIssues) {
         SentenceSplitter sentenceSplitter = new SentenceSplitter();
 
-        return jiraJsonIssues.stream()
+        List<JiraJsonIssue> issues = jiraJsonIssues.stream()
+                .filter(jiraJsonIssue -> jiraJsonIssue.getFields().getStatus().getStatusCategory().getName().equals(todo))
+                .collect(Collectors.toList());
+
+        return issues.stream()
                 .map(jiraJsonIssue -> {
                     Issue issue;
 
@@ -56,7 +62,7 @@ public class JiraJsonParser implements Parser {
                     }
 
                     String rank = stringProps.get(fieldMapping.getIssue().getRank());
-                    if(rank == null || StringUtils.isEmpty(rank)) {
+                    if (rank == null || StringUtils.isEmpty(rank)) {
                         throw new StoriesException("The rank field mapping was not defined in your application yaml or parameters. Is the field mapping configured correctly?");
                     }
                     issue.setRank(rank);

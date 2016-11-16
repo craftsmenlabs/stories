@@ -15,41 +15,39 @@ import java.util.stream.Stream;
 public class IssueScorer {
 
     public static IssueValidatorEntry performScorer(Issue issue, ValidationConfigCopy validationConfig) {
-        if(  issue != null
-          && issue.getUserstory() != null
-                && issue.getAcceptanceCriteria() != null) {
-
-            UserStoryValidatorEntry userStoryValidatorEntry = StoryScorer.performScorer(issue.getUserstory(), validationConfig);
-            AcceptanceCriteriaValidatorEntry acceptanceCriteriaValidatorEntry = AcceptanceCriteriaScorer.performScorer(issue.getAcceptanceCriteria(), validationConfig);
-            EstimationValidatorEntry estimationValidatorEntry = EstimationScorer.performScorer(issue.getEstimation(), validationConfig);
-
-            float points = (float)
-                    Stream.of(userStoryValidatorEntry, acceptanceCriteriaValidatorEntry, estimationValidatorEntry)
-                            .filter(entry -> entry.isActive())
-                            .mapToDouble(AbstractValidatorEntry::getPointsValuation)
-                            .average()
-                            .orElse(0.0);
-
-            Rating rating = points >= validationConfig.getIssue().getRatingtreshold() ? Rating.SUCCESS : Rating.FAIL;
-
-            return IssueValidatorEntry
-                    .builder()
-                    .issue(issue)
-                    .violations(new ArrayList<>())
-                    .pointsValuation(points)
-                    .rating(rating)
-                    .userStoryValidatorEntry(userStoryValidatorEntry)
-                    .acceptanceCriteriaValidatorEntry(acceptanceCriteriaValidatorEntry)
-                    .estimationValidatorEntry(estimationValidatorEntry)
-                    .build();
-        }else{
-            return IssueValidatorEntry
-                    .builder()
-                    .issue(issue)
-                    .violations(new ArrayList<>())
-                    .pointsValuation(0f)
-                    .rating(Rating.FAIL)
-                    .build();
+        if (issue == null) {
+            issue = Issue.builder().rank("0").summary("").userstory("").acceptanceCriteria("").key("0").build();
         }
+        if (issue.getUserstory() == null) {
+            issue.setUserstory("");
+        }
+        if (issue.getAcceptanceCriteria() == null) {
+            issue.setAcceptanceCriteria("");
+        }
+
+        UserStoryValidatorEntry userStoryValidatorEntry = StoryScorer.performScorer(issue.getUserstory(), validationConfig);
+        AcceptanceCriteriaValidatorEntry acceptanceCriteriaValidatorEntry = AcceptanceCriteriaScorer.performScorer(issue.getAcceptanceCriteria(), validationConfig);
+        EstimationValidatorEntry estimationValidatorEntry = EstimationScorer.performScorer(issue.getEstimation(), validationConfig);
+
+        float points = (float)
+                Stream.of(userStoryValidatorEntry, acceptanceCriteriaValidatorEntry, estimationValidatorEntry)
+                        .filter(AbstractValidatorEntry::isActive)
+                        .mapToDouble(AbstractValidatorEntry::getPointsValuation)
+                        .average()
+                        .orElse(0.0);
+
+        Rating rating = points >= validationConfig.getIssue().getRatingtreshold() ? Rating.SUCCESS : Rating.FAIL;
+
+        return IssueValidatorEntry
+                .builder()
+                .issue(issue)
+                .violations(new ArrayList<>())
+                .pointsValuation(points)
+                .rating(rating)
+                .userStoryValidatorEntry(userStoryValidatorEntry)
+                .acceptanceCriteriaValidatorEntry(acceptanceCriteriaValidatorEntry)
+                .estimationValidatorEntry(estimationValidatorEntry)
+                .build();
     }
+
 }
