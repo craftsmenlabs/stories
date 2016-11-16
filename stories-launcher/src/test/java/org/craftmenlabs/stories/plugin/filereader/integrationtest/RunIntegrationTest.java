@@ -7,7 +7,6 @@ import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.connectivity.service.ConnectivityService;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
-import org.craftsmenlabs.stories.isolator.parser.FieldMappingConfigCopy;
 import org.craftsmenlabs.stories.plugin.filereader.config.SpringSourceConfig;
 import org.craftsmenlabs.stories.plugin.filereader.BootApp;
 import org.craftsmenlabs.stories.plugin.filereader.config.SpringFieldMappingConfig;
@@ -83,9 +82,9 @@ public class RunIntegrationTest {
                 .build();
     }
 
-    private FieldMappingConfigCopy buildFieldMappingConfigCopy() {
-        return FieldMappingConfigCopy.builder()
-                .issue(FieldMappingConfigCopy.IssueMappingCopy.builder()
+    private FieldMappingConfig buildFieldMappingConfigCopy() {
+        return FieldMappingConfig.builder()
+                .issue(FieldMappingConfig.IssueMapping.builder()
                         .rank("customfield_11400")
                         .estimation("customfield_10401")
                         .build())

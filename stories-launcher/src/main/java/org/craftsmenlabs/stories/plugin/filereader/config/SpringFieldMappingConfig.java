@@ -2,7 +2,6 @@ package org.craftsmenlabs.stories.plugin.filereader.config;
 
 import lombok.Data;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
-import org.craftsmenlabs.stories.isolator.parser.FieldMappingConfigCopy;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
