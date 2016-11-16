@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
+import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
 import org.craftsmenlabs.stories.isolator.SentenceSplitter;
@@ -22,10 +23,10 @@ import java.util.stream.Collectors;
 public class JiraJsonParser implements Parser {
 
     private final Logger logger = LoggerFactory.getLogger(JiraJsonParser.class);
-    private FieldMappingConfigCopy fieldMapping;
+    private FieldMappingConfig fieldMapping;
     private String todo;
 
-    public JiraJsonParser(FieldMappingConfigCopy fieldMapping, String todo) {
+    public JiraJsonParser(FieldMappingConfig fieldMapping, String todo) {
         this.fieldMapping = fieldMapping;
         this.todo = todo;
     }

@@ -3,20 +3,21 @@ package demo.data.importer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.util.Files;
 import org.craftsmenlabs.stories.api.models.StoriesRun;
+import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
+import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
 import org.craftsmenlabs.stories.api.models.summary.SummaryBuilder;
-import org.craftsmenlabs.stories.api.models.validatorconfig.ValidationConfigCopy;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 import org.craftsmenlabs.stories.connectivity.service.ConnectivityService;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
 import org.craftsmenlabs.stories.isolator.parser.FieldMappingConfigCopy;
 import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
-import org.craftsmenlabs.stories.plugin.filereader.ApplicationConfig;
+import org.craftsmenlabs.stories.plugin.filereader.config.ApplicationConfig;
 import org.craftsmenlabs.stories.plugin.filereader.BootApp;
-import org.craftsmenlabs.stories.plugin.filereader.FieldMappingConfig;
-import org.craftsmenlabs.stories.plugin.filereader.ValidationConfig;
+import org.craftsmenlabs.stories.plugin.filereader.config.SpringFieldMappingConfig;
+import org.craftsmenlabs.stories.plugin.filereader.config.SpringValidationConfig;
 import org.craftsmenlabs.stories.ranking.CurvedRanking;
 import org.craftsmenlabs.stories.scoring.BacklogScorer;
 import org.junit.Test;
@@ -50,13 +51,13 @@ public class importJiraJson {
     @Autowired
     private ApplicationConfig applicationConfig;
     @Autowired
-    private ValidationConfig validationConfig;
+    private SpringValidationConfig springValidationConfig;
     @Autowired
-    private FieldMappingConfig fieldMappingConfig;
+    private SpringFieldMappingConfig springFieldMappingConfig;
 
 
-    private ValidationConfigCopy validationConfigCopy;
-    private FieldMappingConfigCopy fieldMappingConfigCopy;
+    private ValidationConfig validationConfig;
+    private FieldMappingConfig fieldMappingConfigCopy;
 
     @Test
     public void importData() {
@@ -87,8 +88,8 @@ public class importJiraJson {
 
         LocalDateTime dateTime = LocalDate.parse(date).atTime(time.get(0), time.get(1));
 
-        validationConfigCopy = validationConfig.clone();
-        fieldMappingConfigCopy = fieldMappingConfig.clone();
+        validationConfig = springValidationConfig.convert();
+        fieldMappingConfigCopy = springFieldMappingConfig.convert();
 
         ObjectMapper mapper = new ObjectMapper();
         JiraBacklog jiraBacklog = null;
@@ -105,14 +106,14 @@ public class importJiraJson {
         Backlog backlog = new Backlog();
         backlog.setIssues(issues);
 
-        BacklogValidatorEntry backlogValidatorEntry = BacklogScorer.performScorer(backlog, new CurvedRanking(), validationConfigCopy);
+        BacklogValidatorEntry backlogValidatorEntry = BacklogScorer.performScorer(backlog, new CurvedRanking(), validationConfig);
 
         StoriesRun storiesRun = StoriesRun.builder()
                 .projectToken(projectToken)
                 .runDateTime(dateTime)
                 .backlogValidatorEntry(backlogValidatorEntry)
                 .summary(new SummaryBuilder().build(backlogValidatorEntry))
-                .runConfig(validationConfigCopy)
+                .runConfig(validationConfig)
                 .build();
 
         dashboardConnectivity.sendData(storiesRun);

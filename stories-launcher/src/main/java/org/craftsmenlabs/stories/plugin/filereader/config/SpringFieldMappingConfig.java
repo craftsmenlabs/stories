@@ -1,19 +1,20 @@
-package org.craftsmenlabs.stories.plugin.filereader;
+package org.craftsmenlabs.stories.plugin.filereader.config;
 
 import lombok.Data;
+import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.isolator.parser.FieldMappingConfigCopy;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Data
 @Component
-@ConfigurationProperties(prefix = "fieldMapping", ignoreInvalidFields = true, ignoreUnknownFields = true)
-public class FieldMappingConfig {
+@ConfigurationProperties(prefix = "field_mapping", ignoreInvalidFields = true)
+public class SpringFieldMappingConfig {
     private IssueMapping issue;
 
-    public FieldMappingConfigCopy clone() {
-        return FieldMappingConfigCopy.builder()
-                .issue(this.getIssue().clone())
+    public FieldMappingConfig convert() {
+        return FieldMappingConfig.builder()
+                .issue(this.getIssue().convert())
                 .build();
     }
 
@@ -22,12 +23,12 @@ public class FieldMappingConfig {
         private String rank;
         private String estimation;
 
-        public FieldMappingConfigCopy.IssueMappingCopy clone() {
+        public FieldMappingConfig.IssueMapping convert() {
             if (rank == null || rank.isEmpty()) {
                 throw new IllegalStateException("The rank attribute has not been set correctly.");
             }
 
-            return FieldMappingConfigCopy.IssueMappingCopy.builder()
+            return FieldMappingConfig.IssueMapping.builder()
                     .rank(rank)
                     .estimation(estimation)
                     .build();

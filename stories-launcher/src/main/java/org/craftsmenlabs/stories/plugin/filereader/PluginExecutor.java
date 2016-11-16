@@ -2,19 +2,22 @@ package org.craftsmenlabs.stories.plugin.filereader;
 
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.StoriesRun;
+import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
+import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
 import org.craftsmenlabs.stories.api.models.summary.SummaryBuilder;
-import org.craftsmenlabs.stories.api.models.validatorconfig.ValidationConfigCopy;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 import org.craftsmenlabs.stories.connectivity.service.ConnectivityService;
 import org.craftsmenlabs.stories.importer.Importer;
 import org.craftsmenlabs.stories.importer.JiraAPIImporter;
 import org.craftsmenlabs.stories.importer.TrelloAPIImporter;
-import org.craftsmenlabs.stories.isolator.parser.FieldMappingConfigCopy;
 import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
 import org.craftsmenlabs.stories.isolator.parser.Parser;
 import org.craftsmenlabs.stories.isolator.parser.TrelloJsonParser;
+import org.craftsmenlabs.stories.plugin.filereader.config.SpringFieldMappingConfig;
+import org.craftsmenlabs.stories.plugin.filereader.config.ApplicationConfig;
+import org.craftsmenlabs.stories.plugin.filereader.config.SpringValidationConfig;
 import org.craftsmenlabs.stories.ranking.CurvedRanking;
 import org.craftsmenlabs.stories.reporter.ConsoleReporter;
 import org.craftsmenlabs.stories.reporter.JsonFileReporter;
@@ -34,23 +37,24 @@ import java.util.stream.Collectors;
 public class PluginExecutor {
 
 	private final Logger logger = LoggerFactory.getLogger(PluginExecutor.class);
-	public ValidationConfigCopy validationConfigCopy;
-	public FieldMappingConfigCopy fieldMappingConfigCopy;
+	public ValidationConfig springValidationConfigCopy;
+	public FieldMappingConfig fieldMappingConfigCopy;
+
 	private ConsoleReporter validationConsoleReporter = new ConsoleReporter();
 	@Autowired
 	private ConnectivityService dashboardConnectivity;
 	@Autowired
 	private ApplicationConfig applicationConfig;
 	@Autowired
-	private ValidationConfig validationConfig;
+	private SpringValidationConfig springValidationConfig;
 	@Autowired
-	private FieldMappingConfig fieldMappingConfig;
+	private SpringFieldMappingConfig springFieldMappingConfig;
 
 	public Rating startApplication() {
 		logger.info("Starting stories plugin.");
 
-		validationConfigCopy = validationConfig.clone();
-		fieldMappingConfigCopy = fieldMappingConfig.clone();
+		springValidationConfigCopy = springValidationConfig.convert();
+		fieldMappingConfigCopy = springFieldMappingConfig.convert();
 
 		Importer importer = getImporter(applicationConfig);
 		String data = importer.getDataAsString();
@@ -64,15 +68,15 @@ public class PluginExecutor {
 		Backlog backlog = new Backlog();
 		backlog.setIssues(issues);
 
-		BacklogValidatorEntry backlogValidatorEntry = BacklogScorer.performScorer(backlog, new CurvedRanking(), validationConfigCopy);
+		BacklogValidatorEntry backlogValidatorEntry = BacklogScorer.performScorer(backlog, new CurvedRanking(), springValidationConfigCopy);
 
 		//console report
-		validationConsoleReporter.report(backlogValidatorEntry, validationConfigCopy);
+		validationConsoleReporter.report(backlogValidatorEntry, springValidationConfigCopy);
 
         StoriesRun storiesRun = StoriesRun.builder()
                 .summary(new SummaryBuilder().build(backlogValidatorEntry))
                 .backlogValidatorEntry(backlogValidatorEntry)
-				.runConfig(validationConfigCopy)
+				.runConfig(springValidationConfigCopy)
 				.runDateTime(LocalDateTime.now())
 				.build();
 

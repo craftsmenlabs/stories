@@ -3,7 +3,7 @@ package org.craftsmenlabs.stories.scoring;
 import mockit.Expectations;
 import mockit.Injectable;
 import org.craftsmenlabs.stories.api.models.Rating;
-import org.craftsmenlabs.stories.api.models.validatorconfig.ValidationConfigCopy;
+import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.validatorentry.IssueValidatorEntry;
 import org.craftsmenlabs.stories.api.models.validatorentry.UserStoryValidatorEntry;
 import org.junit.Test;
@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.withinPercentage;
 public class StoryScorerTest {
 
     @Test
-    public void testPerformScorerReturnsZeroOnEmpty(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfigCopy validationConfig) throws Exception {
+    public void testPerformScorerReturnsZeroOnEmpty(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfig validationConfig) throws Exception {
         new Expectations() {{
             entry.getIssue().getUserstory();
             result = "";
@@ -30,7 +30,7 @@ public class StoryScorerTest {
     }
 
     @Test
-    public void testPerformScorerReturnsNullOnEmpty(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfigCopy validationConfig) throws Exception {
+    public void testPerformScorerReturnsNullOnEmpty(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfig validationConfig) throws Exception {
         new Expectations() {{
             entry.getIssue().getUserstory();
             result = null;
@@ -44,7 +44,7 @@ public class StoryScorerTest {
     }
 
     @Test
-    public void testPerformScorerMatchesAllKeywords(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfigCopy validationConfig) {
+    public void testPerformScorerMatchesAllKeywords(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfig validationConfig) {
         new Expectations() {{
             validationConfig.getStory().getAsKeywords();
             result = Arrays.asList("As a ");
@@ -70,7 +70,7 @@ public class StoryScorerTest {
 
 
     @Test
-    public void testPerformScorerDoesntMatchAsKeyword(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfigCopy validationConfig) {
+    public void testPerformScorerDoesntMatchAsKeyword(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfig validationConfig) {
         new Expectations() {{
             validationConfig.getStory().getAsKeywords();
             result = Arrays.asList("As a ");
@@ -94,7 +94,7 @@ public class StoryScorerTest {
     }
 
     @Test
-    public void testPerformScorerDoesntMatchIKeyword(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfigCopy validationConfig) {
+    public void testPerformScorerDoesntMatchIKeyword(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfig validationConfig) {
         new Expectations() {{
             validationConfig.getStory().getAsKeywords();
             result = Arrays.asList("As a ");
@@ -118,7 +118,7 @@ public class StoryScorerTest {
     }
 
     @Test
-    public void testPerformScorerDoesntMatchSoKeyword(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfigCopy validationConfig) {
+    public void testPerformScorerDoesntMatchSoKeyword(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfig validationConfig) {
         new Expectations() {{
             validationConfig.getStory().getAsKeywords();
             result = Arrays.asList("As a ");
@@ -142,7 +142,7 @@ public class StoryScorerTest {
     }
 
     @Test
-    public void testPerformScoreStoryTooShort(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfigCopy validationConfig) {
+    public void testPerformScoreStoryTooShort(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfig validationConfig) {
         new Expectations() {{
             validationConfig.getStory().getAsKeywords();
             result = Arrays.asList("As");
@@ -165,7 +165,7 @@ public class StoryScorerTest {
     }
 
     @Test
-    public void testPerformScorerStoryRightLength(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfigCopy validationConfig) {
+    public void testPerformScorerStoryRightLength(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfig validationConfig) {
         new Expectations() {{
             validationConfig.getStory().getAsKeywords();
             result = Arrays.asList("As");
@@ -188,7 +188,7 @@ public class StoryScorerTest {
     }
 
     @Test
-    public void testPerformScorerReturnsFailOnLowScore(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfigCopy validationConfig) {
+    public void testPerformScorerReturnsFailOnLowScore(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfig validationConfig) {
         new Expectations() {{
             validationConfig.getStory().getAsKeywords();
             result = Arrays.asList("As a ");

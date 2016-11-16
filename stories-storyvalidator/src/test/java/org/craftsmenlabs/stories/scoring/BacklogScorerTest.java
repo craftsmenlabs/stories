@@ -4,9 +4,9 @@ import mockit.Expectations;
 import mockit.Injectable;
 import mockit.Mocked;
 import org.craftsmenlabs.stories.api.models.Rating;
+import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
-import org.craftsmenlabs.stories.api.models.validatorconfig.ValidationConfigCopy;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 import org.craftsmenlabs.stories.ranking.Ranking;
 import org.junit.Test;
@@ -22,7 +22,7 @@ public class BacklogScorerTest {
     Backlog backlog;
 
     @Mocked
-    ValidationConfigCopy validationConfigCopy;
+    ValidationConfig validationConfig;
 
     @Test
     public void testPerformScorerReturnsSuccesonOnScoreExactlyOnTreshold(@Injectable Ranking ranking) throws Exception {
@@ -37,11 +37,11 @@ public class BacklogScorerTest {
             ranking.createRanking(withNotNull());
             result = 0.5f;
 
-            validationConfigCopy.getBacklog().getRatingtreshold();
+            validationConfig.getBacklog().getRatingtreshold();
             result = 50f;
         }};
 
-        BacklogValidatorEntry result = BacklogScorer.performScorer(backlog, ranking, validationConfigCopy);
+        BacklogValidatorEntry result = BacklogScorer.performScorer(backlog, ranking, validationConfig);
         assertThat(result.getRating()).isEqualTo(Rating.SUCCESS);
     }
 
@@ -58,17 +58,17 @@ public class BacklogScorerTest {
             ranking.createRanking(withNotNull());
             result = 0f;
 
-            validationConfigCopy.getBacklog().getRatingtreshold();
+            validationConfig.getBacklog().getRatingtreshold();
             result = 50f;
         }};
 
-        BacklogValidatorEntry result = BacklogScorer.performScorer(backlog, ranking, validationConfigCopy);
+        BacklogValidatorEntry result = BacklogScorer.performScorer(backlog, ranking, validationConfig);
         assertThat(result.getRating()).isEqualTo(Rating.FAIL);
     }
 
     @Test
     public void testPerformScorerFailOnEmptyBacklog(@Injectable Ranking ranking) {
-        BacklogValidatorEntry result = BacklogScorer.performScorer(null, ranking, validationConfigCopy);
+        BacklogValidatorEntry result = BacklogScorer.performScorer(null, ranking, validationConfig);
 
         assertThat(result.getPointsValuation()).isEqualTo(0f);
         assertThat(result.getRating()).isEqualTo(Rating.FAIL);

@@ -1,7 +1,7 @@
 package org.craftsmenlabs.stories.reporter;
 
 import org.craftsmenlabs.stories.api.models.Rating;
-import org.craftsmenlabs.stories.api.models.validatorconfig.ValidationConfigCopy;
+import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.validatorentry.*;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 import org.slf4j.Logger;
@@ -45,7 +45,7 @@ public class ConsoleReporter
                     "   \\/_88P'  \"88_/  \"88_-~  888      /     888  888  \"88_-888  \"88_/  \"88_-~  888    \n" +
                     "                                  _/";
 
-    public void report(BacklogValidatorEntry backlogValidatorEntry, ValidationConfigCopy validationConfigCopy) {
+    public void report(BacklogValidatorEntry backlogValidatorEntry, ValidationConfig validationConfig) {
         //header
         Random r = new Random();
         String stry = storynator.chars().mapToObj(chr ->"" + COLORS[r.nextInt(COLORS.length)] + (char)chr + ANSI_RESET).collect(Collectors.joining(""));
@@ -54,7 +54,7 @@ public class ConsoleReporter
         log("------------------------------------------------------------");
         log("--           Validator configuration                      --");
         log("------------------------------------------------------------");
-        reportOnConfig(validationConfigCopy);
+        reportOnConfig(validationConfig);
 
         log("------------------------------------------------------------");
         log("--               verbose output                           --");
@@ -80,7 +80,7 @@ public class ConsoleReporter
             + new DecimalFormat("#.##").format(backlogValidatorEntry.getPointsValuation() * 100f)
             + " / "
             + MAX_SCORE);
-        log("Rated: " + backlogValidatorEntry.getRating() + "  (with threshold on: " + validationConfigCopy.getBacklog()
+        log("Rated: " + backlogValidatorEntry.getRating() + "  (with threshold on: " + validationConfig.getBacklog()
             .getRatingtreshold() + ")");
     }
 
@@ -149,12 +149,12 @@ public class ConsoleReporter
                 log("\t\t Violation found: " + violation.toString()));
     }
 
-    private void reportOnConfig(ValidationConfigCopy validationConfigCopy) {
-        log("backlog: " + validationConfigCopy.getBacklog().toString());
-        log("issues: " + validationConfigCopy.getIssue());
-        log("stories: " + validationConfigCopy.getStory());
-        log("criteria: " + validationConfigCopy.getCriteria());
-        log("estimation" + validationConfigCopy.getEstimation());
+    private void reportOnConfig(ValidationConfig validationConfig) {
+        log("backlog: " + validationConfig.getBacklog().toString());
+        log("issues: " + validationConfig.getIssue());
+        log("stories: " + validationConfig.getStory());
+        log("criteria: " + validationConfig.getCriteria());
+        log("estimation" + validationConfig.getEstimation());
     }
 
     private void log(String msg){
