@@ -60,6 +60,9 @@ public class PluginExecutor {
 		// Prepare configs
 		validationConfig = springValidationConfig.convert();
 		fieldMappingConfig = springFieldMappingConfig.convert();
+		// Validate configs
+		this.springReportConfig.validate();
+		this.springSourceConfig.validate();
 
 		// Import the data
 		Importer importer = getImporter(springSourceConfig.getEnabled());
