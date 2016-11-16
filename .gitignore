@@ -80,5 +80,5 @@ executor.sh
 pit.sh
 application-dev.yml
 application.yml
-/stories-launcher/src/main/resources/application-dev-wcc.yml
 /stories-launcher/src/main/resources/application-dev.yml
+application-test.yml
