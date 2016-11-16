@@ -18,7 +18,7 @@ import static org.craftsmenlabs.stories.isolator.TestData.BACKLOG_WITH_ONE_ISSUE
 import static org.junit.Assert.*;
 
 public class JiraJsonParserTest {
-    FieldMappingConfigCopy fieldMappingConfigCopy =
+    private FieldMappingConfigCopy fieldMappingConfigCopy =
             FieldMappingConfigCopy.builder()
                     .backlog(FieldMappingConfigCopy.BacklogMappingCopy.builder().build())
                     .issue(FieldMappingConfigCopy.IssueMappingCopy.builder().rank("customfield_11400").build())
