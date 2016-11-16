@@ -67,10 +67,19 @@ public class importJiraJson {
     }
 
 
-    //accept file in the format: projectToken_2016-02-13_16-00.json
+    //accept file in the format:
+    // <projectToken>_YYYY-MM-DD_HH-MM.json
+    // projectToken_2016-02-13_16-00.json
     public void importFile(File file) {
 
         String[] split = file.getName().split("_|\\.");
+        if (split.length != 4) {
+            throw new IllegalArgumentException(
+                    file.getName() + " - invalid format! \n" +
+                            " Format should be: <projectToken>_YYYY-MM-DD_HH-MM.json\n" +
+                            "Example:  projectToken_2016-02-13_16-00.json\n");
+        }
+
         String projectToken = split[0];
         String date = split[1];
         List<Integer> time = Arrays.stream(split[2].split("-"))
