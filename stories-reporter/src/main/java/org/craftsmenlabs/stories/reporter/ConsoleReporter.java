@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-public class ConsoleReporter
+public class ConsoleReporter implements Reporter
 {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
@@ -35,6 +35,7 @@ public class ConsoleReporter
     private static final int MAX_SCORE = 100;
     private final Logger logger = LoggerFactory.getLogger(ConsoleReporter.class);
     private String prefix = ANSI_PURPLE;
+    private ValidationConfig validationConfig;
     private String postfix = ANSI_RESET;
     private String storynator =
             "   ,d88~/\\   d8                                                d8                   \n" +
@@ -45,7 +46,11 @@ public class ConsoleReporter
                     "   \\/_88P'  \"88_/  \"88_-~  888      /     888  888  \"88_-888  \"88_/  \"88_-~  888    \n" +
                     "                                  _/";
 
-    public void report(BacklogValidatorEntry backlogValidatorEntry, ValidationConfig validationConfig) {
+    public ConsoleReporter(ValidationConfig validationConfig) {
+        this.validationConfig = validationConfig;
+    }
+
+    public void report(BacklogValidatorEntry backlogValidatorEntry) {
         //header
         Random r = new Random();
         String stry = storynator.chars().mapToObj(chr ->"" + COLORS[r.nextInt(COLORS.length)] + (char)chr + ANSI_RESET).collect(Collectors.joining(""));

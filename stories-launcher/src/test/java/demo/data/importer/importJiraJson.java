@@ -12,9 +12,9 @@ import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry
 import org.craftsmenlabs.stories.connectivity.service.ConnectivityService;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
-import org.craftsmenlabs.stories.isolator.parser.FieldMappingConfigCopy;
 import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
-import org.craftsmenlabs.stories.plugin.filereader.config.ApplicationConfig;
+import org.craftsmenlabs.stories.plugin.filereader.config.SpringFilterConfig;
+import org.craftsmenlabs.stories.plugin.filereader.config.SpringSourceConfig;
 import org.craftsmenlabs.stories.plugin.filereader.BootApp;
 import org.craftsmenlabs.stories.plugin.filereader.config.SpringFieldMappingConfig;
 import org.craftsmenlabs.stories.plugin.filereader.config.SpringValidationConfig;
@@ -49,11 +49,13 @@ public class importJiraJson {
     @Autowired
     private ConnectivityService dashboardConnectivity;
     @Autowired
-    private ApplicationConfig applicationConfig;
+    private SpringSourceConfig springSourceConfig;
     @Autowired
     private SpringValidationConfig springValidationConfig;
     @Autowired
     private SpringFieldMappingConfig springFieldMappingConfig;
+    @Autowired
+    private SpringFilterConfig springFilterConfig;
 
 
     private ValidationConfig validationConfig;
@@ -61,7 +63,7 @@ public class importJiraJson {
 
     @Test
     public void importData() {
-        Files.fileNamesIn(applicationConfig.getInputfile(), false).stream()
+        Files.fileNamesIn(springSourceConfig.getFile().getLocation(), false).stream()
                 .map(File::new)
                 .filter(file -> !file.getName().startsWith("."))
                 .forEach(this::importFile);
@@ -99,7 +101,7 @@ public class importJiraJson {
             e.printStackTrace();
         }
 
-        JiraJsonParser jiraJsonParser = new JiraJsonParser(fieldMappingConfigCopy, applicationConfig.getStatus());
+        JiraJsonParser jiraJsonParser = new JiraJsonParser(fieldMappingConfigCopy, springFilterConfig.getStatus());
         List<JiraJsonIssue> jiraJsonIssues = jiraBacklog.getJiraJsonIssues();
         List<Issue> issues = jiraJsonParser.getIssues(jiraJsonIssues);
 

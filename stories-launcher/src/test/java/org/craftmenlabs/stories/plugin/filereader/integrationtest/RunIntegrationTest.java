@@ -8,7 +8,7 @@ import org.craftsmenlabs.stories.connectivity.service.ConnectivityService;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
 import org.craftsmenlabs.stories.isolator.parser.FieldMappingConfigCopy;
-import org.craftsmenlabs.stories.plugin.filereader.config.ApplicationConfig;
+import org.craftsmenlabs.stories.plugin.filereader.config.SpringSourceConfig;
 import org.craftsmenlabs.stories.plugin.filereader.BootApp;
 import org.craftsmenlabs.stories.plugin.filereader.config.SpringFieldMappingConfig;
 import org.craftsmenlabs.stories.plugin.filereader.config.SpringValidationConfig;
@@ -38,7 +38,7 @@ public class RunIntegrationTest {
     @Autowired
     private ConnectivityService dashboardConnectivity;
     @Autowired
-    private ApplicationConfig applicationConfig;
+    private SpringSourceConfig springSourceConfig;
     @Autowired
     private SpringValidationConfig springValidationConfig;
     @Autowired
@@ -110,7 +110,7 @@ public class RunIntegrationTest {
         }
 
 
-//        List<Issue> issues = new JiraJsonParser(fieldMappingConfigCopy).getIssues(jiraBacklog.getJiraJsonIssues());
+//        List<Issue> issues = new JiraJsonParser(fieldMappingConfig).getIssues(jiraBacklog.getJiraJsonIssues());
 
 //        Backlog backlog = new Backlog();
 //        backlog.setIssues(issues);
