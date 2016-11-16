@@ -1,7 +1,7 @@
-package org.craftsmenlabs.stories.plugin.filereader;
+package org.craftsmenlabs.stories.plugin.filereader.config;
 
 import lombok.Data;
-import org.craftsmenlabs.stories.api.models.validatorconfig.ValidationConfigCopy;
+import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -10,23 +10,23 @@ import java.util.List;
 @Data
 @Component
 @ConfigurationProperties(prefix="validation")
-public class ValidationConfig {
+public class SpringValidationConfig {
     private ValidatorEntry backlog;
     private ValidatorEntry issue;
     private StoryValidatorEntry story;
     private CriteriaValidatorEntry criteria;
     private ValidatorEntry estimation;
 
-    public ValidationConfigCopy clone() {
-        ValidationConfigCopy copy = new ValidationConfigCopy();
+    public ValidationConfig convert() {
+        ValidationConfig validationConfig = new ValidationConfig();
 
-        copy.setBacklog(this.getBacklog().clone());
-        copy.setIssue(this.getIssue().clone());
-        copy.setStory(this.getStory().clone());
-        copy.setCriteria(this.getCriteria().clone());
-        copy.setEstimation(this.getEstimation().clone());
+        validationConfig.setBacklog(this.getBacklog().convert());
+        validationConfig.setIssue(this.getIssue().convert());
+        validationConfig.setStory(this.getStory().convert());
+        validationConfig.setCriteria(this.getCriteria().convert());
+        validationConfig.setEstimation(this.getEstimation().convert());
 
-        return copy;
+        return validationConfig;
     }
 
     @Data
@@ -34,13 +34,13 @@ public class ValidationConfig {
         private float ratingtreshold;
         private boolean active;
 
-        public ValidationConfigCopy.ValidatorEntryCopy clone() {
-            ValidationConfigCopy.ValidatorEntryCopy validatorEntryCopy = new ValidationConfigCopy.ValidatorEntryCopy();
+        public ValidationConfig.ValidatorEntry convert() {
+            ValidationConfig.ValidatorEntry validatorEntry = new ValidationConfig.ValidatorEntry();
 
-            validatorEntryCopy.setRatingtreshold(getRatingtreshold());
-            validatorEntryCopy.setActive(isActive());
+            validatorEntry.setRatingtreshold(getRatingtreshold());
+            validatorEntry.setActive(isActive());
 
-            return validatorEntryCopy;
+            return validatorEntry;
         }
     }
 
@@ -50,8 +50,8 @@ public class ValidationConfig {
         private List<String> iKeywords;
         private List<String> soKeywords;
 
-        public ValidationConfigCopy.StoryValidatorEntryCopy clone() {
-            ValidationConfigCopy.StoryValidatorEntryCopy sve = new ValidationConfigCopy.StoryValidatorEntryCopy();
+        public ValidationConfig.StoryValidatorEntry convert() {
+            ValidationConfig.StoryValidatorEntry sve = new ValidationConfig.StoryValidatorEntry();
             sve.setRatingtreshold(getRatingtreshold());
             sve.setActive(isActive());
 
@@ -69,8 +69,8 @@ public class ValidationConfig {
         private List<String> whenKeywords;
         private List<String> thenKeywords;
 
-        public ValidationConfigCopy.CriteriaValidatorEntryCopy clone() {
-            ValidationConfigCopy.CriteriaValidatorEntryCopy sve = new ValidationConfigCopy.CriteriaValidatorEntryCopy();
+        public ValidationConfig.CriteriaValidatorEntry convert() {
+            ValidationConfig.CriteriaValidatorEntry sve = new ValidationConfig.CriteriaValidatorEntry();
             sve.setRatingtreshold(getRatingtreshold());
             sve.setActive(isActive());
 

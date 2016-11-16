@@ -2,15 +2,15 @@ package org.craftmenlabs.stories.plugin.filereader.integrationtest;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.craftsmenlabs.stories.api.models.validatorconfig.ValidationConfigCopy;
+import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
+import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.connectivity.service.ConnectivityService;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
-import org.craftsmenlabs.stories.isolator.parser.FieldMappingConfigCopy;
-import org.craftsmenlabs.stories.plugin.filereader.ApplicationConfig;
+import org.craftsmenlabs.stories.plugin.filereader.config.SpringSourceConfig;
 import org.craftsmenlabs.stories.plugin.filereader.BootApp;
-import org.craftsmenlabs.stories.plugin.filereader.FieldMappingConfig;
-import org.craftsmenlabs.stories.plugin.filereader.ValidationConfig;
+import org.craftsmenlabs.stories.plugin.filereader.config.SpringFieldMappingConfig;
+import org.craftsmenlabs.stories.plugin.filereader.config.SpringValidationConfig;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -37,43 +37,43 @@ public class RunIntegrationTest {
     @Autowired
     private ConnectivityService dashboardConnectivity;
     @Autowired
-    private ApplicationConfig applicationConfig;
+    private SpringSourceConfig springSourceConfig;
     @Autowired
-    private ValidationConfig validationConfig;
+    private SpringValidationConfig springValidationConfig;
     @Autowired
-    private FieldMappingConfig fieldMappingConfig;
+    private SpringFieldMappingConfig springFieldMappingConfig;
 
-    private ValidationConfigCopy validationConfigCopy;
-    private FieldMappingConfigCopy fieldMappingConfigCopy;
+    private ValidationConfig validationConfig;
+    private FieldMappingConfig fieldMappingConfigCopy;
 
     private JiraBacklog jiraBacklog;
 
-    private ValidationConfigCopy buildValidatorEntryCopy() {
-        ValidationConfigCopy.ValidatorEntryCopy backlog = new ValidationConfigCopy.ValidatorEntryCopy();
+    private ValidationConfig buildValidatorEntryCopy() {
+        ValidationConfig.ValidatorEntry backlog = new ValidationConfig.ValidatorEntry();
         backlog.setRatingtreshold(60f);
 
-        ValidationConfigCopy.ValidatorEntryCopy issue = new ValidationConfigCopy.ValidatorEntryCopy();
+        ValidationConfig.ValidatorEntry issue = new ValidationConfig.ValidatorEntry();
         issue.setRatingtreshold(0.7f);
 
-        ValidationConfigCopy.StoryValidatorEntryCopy story = new ValidationConfigCopy.StoryValidatorEntryCopy();
+        ValidationConfig.StoryValidatorEntry story = new ValidationConfig.StoryValidatorEntry();
         story.setRatingtreshold(0.3f);
         story.setActive(true);
         story.setAsKeywords(Arrays.asList("as a"));
         story.setIKeywords(Arrays.asList("i want to"));
         story.setSoKeywords(Arrays.asList("so "));
 
-        ValidationConfigCopy.CriteriaValidatorEntryCopy criteria = new ValidationConfigCopy.CriteriaValidatorEntryCopy();
+        ValidationConfig.CriteriaValidatorEntry criteria = new ValidationConfig.CriteriaValidatorEntry();
         criteria.setRatingtreshold(0.4f);
         criteria.setActive(true);
         criteria.setGivenKeywords(Arrays.asList("given"));
         criteria.setWhenKeywords(Arrays.asList("when"));
         criteria.setThenKeywords(Arrays.asList("then"));
 
-        ValidationConfigCopy.ValidatorEntryCopy estimation = new ValidationConfigCopy.ValidatorEntryCopy();
+        ValidationConfig.ValidatorEntry estimation = new ValidationConfig.ValidatorEntry();
         estimation.setActive(false);
         estimation.setRatingtreshold(0.7f);
 
-        return ValidationConfigCopy.builder()
+        return ValidationConfig.builder()
                 .backlog(backlog)
                 .issue(issue)
                 .story(story)
@@ -82,9 +82,9 @@ public class RunIntegrationTest {
                 .build();
     }
 
-    private FieldMappingConfigCopy buildFieldMappingConfigCopy() {
-        return FieldMappingConfigCopy.builder()
-                .issue(FieldMappingConfigCopy.IssueMappingCopy.builder()
+    private FieldMappingConfig buildFieldMappingConfigCopy() {
+        return FieldMappingConfig.builder()
+                .issue(FieldMappingConfig.IssueMapping.builder()
                         .rank("customfield_11400")
                         .estimation("customfield_10401")
                         .build())
@@ -97,8 +97,8 @@ public class RunIntegrationTest {
 
     @Before
     public void importFileTest() {
-        validationConfigCopy = validationConfig.clone();
-        fieldMappingConfigCopy = fieldMappingConfig.clone();
+        validationConfig = springValidationConfig.convert();
+        fieldMappingConfigCopy = springFieldMappingConfig.convert();
 
         File file = new File(getClass().getClassLoader().getResource("issuesfile.json").getFile());
         ObjectMapper mapper = new ObjectMapper();
@@ -109,17 +109,17 @@ public class RunIntegrationTest {
         }
 
 
-//        List<Issue> issues = new JiraJsonParser(fieldMappingConfigCopy).getIssues(jiraBacklog.getJiraJsonIssues());
+//        List<Issue> issues = new JiraJsonParser(fieldMappingConfig).getIssues(jiraBacklog.getJiraJsonIssues());
 
 //        Backlog backlog = new Backlog();
 //        backlog.setIssues(issues);
 //
-//        BacklogValidatorEntry backlogValidatorEntry = BacklogScorer.performScorer(backlog, new CurvedRanking(), validationConfigCopy);
+//        BacklogValidatorEntry backlogValidatorEntry = BacklogScorer.performScorer(backlog, new CurvedRanking(), validationConfig);
 //
 //        StoriesRun storiesRun = StoriesRun.builder()
 //                .backlogValidatorEntry(backlogValidatorEntry)
 //                .summary(new SummaryBuilder().build(backlogValidatorEntry))
-//                .runConfig(validationConfigCopy)
+//                .runConfig(validationConfig)
 //                .build();
 
     }
@@ -144,7 +144,7 @@ public class RunIntegrationTest {
     @Ignore
     @Test
     public void loadConfigTest() {
-        assertThat(this.buildValidatorEntryCopy()).isEqualTo(validationConfigCopy);
+        assertThat(this.buildValidatorEntryCopy()).isEqualTo(validationConfig);
         assertThat(this.buildFieldMappingConfigCopy()).isEqualTo(fieldMappingConfigCopy);
     }
 }

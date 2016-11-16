@@ -1,9 +1,9 @@
 package org.craftsmenlabs.stories.isolator;
 
 import org.apache.commons.io.FileUtils;
+import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
-import org.craftsmenlabs.stories.isolator.parser.FieldMappingConfigCopy;
 import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -18,13 +18,13 @@ import static org.craftsmenlabs.stories.isolator.testutil.RetrieveTestData.BACKL
 import static org.junit.Assert.*;
 
 public class JiraJsonParserTest {
-    private FieldMappingConfigCopy fieldMappingConfigCopy =
-            FieldMappingConfigCopy.builder()
-                    .backlog(FieldMappingConfigCopy.BacklogMappingCopy.builder().build())
-                    .issue(FieldMappingConfigCopy.IssueMappingCopy.builder().rank("customfield_11400").build())
-                    .story(FieldMappingConfigCopy.StoryMappingCopy.builder().build())
-                    .criteria(FieldMappingConfigCopy.CriteriaMappingCopy.builder().build())
-                    .estimation(FieldMappingConfigCopy.EstimationMappingCopy.builder().build())
+    private FieldMappingConfig fieldMappingConfigCopy =
+            FieldMappingConfig.builder()
+                    .backlog(FieldMappingConfig.BacklogMapping.builder().build())
+                    .issue(FieldMappingConfig.IssueMapping.builder().rank("customfield_11400").build())
+                    .story(FieldMappingConfig.StoryMapping.builder().build())
+                    .criteria(FieldMappingConfig.CriteriaMapping.builder().build())
+                    .estimation(FieldMappingConfig.EstimationMapping.builder().build())
                     .build();
 
     private JiraJsonParser jiraJsonParser = new JiraJsonParser(fieldMappingConfigCopy, "To Do");

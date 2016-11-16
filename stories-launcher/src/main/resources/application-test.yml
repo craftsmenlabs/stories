@@ -3,14 +3,18 @@ spring:
     active: test
     include: enterprise
 
-application:
-    dataformat: jirajson
-    inputfile: /Users/youritjang/Downloads/storynator
+source:
+    enabled: file
+
+    file:
+        location: /home/morlack/jiradata
+
+filters:
     status: "To Do"
 
-fieldMapping:
+field_mapping:
     issue:
-        rank: "customfield_10401"
+        rank: "customfield_11400"
         summary: "customfield_11400"
         estimation: "customfield_11400"
 

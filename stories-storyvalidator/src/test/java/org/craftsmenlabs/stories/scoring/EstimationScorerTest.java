@@ -3,7 +3,7 @@ package org.craftsmenlabs.stories.scoring;
 import mockit.Expectations;
 import mockit.Injectable;
 import org.craftsmenlabs.stories.api.models.Rating;
-import org.craftsmenlabs.stories.api.models.validatorconfig.ValidationConfigCopy;
+import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.validatorentry.EstimationValidatorEntry;
 import org.craftsmenlabs.stories.api.models.validatorentry.IssueValidatorEntry;
 import org.junit.Test;
@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.withinPercentage;
 
 public class EstimationScorerTest {
     @Test
-    public void performScorerReturnsZeroOnNull(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfigCopy validationConfig) throws Exception {
+    public void performScorerReturnsZeroOnNull(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfig validationConfig) throws Exception {
         new Expectations() {{
             entry.getIssue().getEstimation();
             result = null;
@@ -27,7 +27,7 @@ public class EstimationScorerTest {
     }
 
     @Test
-    public void testPerformScorerReturnsZeroOnZero(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfigCopy validationConfig) throws Exception {
+    public void testPerformScorerReturnsZeroOnZero(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfig validationConfig) throws Exception {
         new Expectations() {{
             entry.getIssue().getEstimation();
             result = 0f;
@@ -43,7 +43,7 @@ public class EstimationScorerTest {
     }
 
     @Test
-    public void testPerformScorerReturnsOneOnValidEstimation(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfigCopy validationConfig) throws Exception {
+    public void testPerformScorerReturnsOneOnValidEstimation(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfig validationConfig) throws Exception {
         new Expectations() {{
             entry.getIssue().getEstimation();
             result = 1f;
@@ -58,7 +58,7 @@ public class EstimationScorerTest {
     }
 
     @Test
-    public void testPerformScorerReturnsSuccesOnHighScore(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfigCopy validationConfig) throws Exception {
+    public void testPerformScorerReturnsSuccesOnHighScore(@Injectable IssueValidatorEntry entry, @Injectable ValidationConfig validationConfig) throws Exception {
         new Expectations() {{
             entry.getIssue().getEstimation();
             result = 1f;
