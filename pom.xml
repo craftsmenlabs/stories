@@ -79,8 +79,6 @@
 				<version>${lombok.version}</version>
 			</dependency>
 
-
-
 			<dependency>
 				<groupId>org.apache.opennlp</groupId>
 				<artifactId>opennlp-tools</artifactId>
