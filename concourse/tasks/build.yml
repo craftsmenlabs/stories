@@ -10,4 +10,4 @@ inputs:
 - name: stories
 
 run:
-  path: dashboard/concourse/tasks/build.sh
+  path: stories/concourse/tasks/build.sh
