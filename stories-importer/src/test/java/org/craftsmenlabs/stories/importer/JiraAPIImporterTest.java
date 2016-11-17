@@ -3,7 +3,6 @@ package org.craftsmenlabs.stories.importer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import mockit.Expectations;
 import mockit.Injectable;
-import mockit.Mock;
 import mockit.Mocked;
 import org.apache.commons.io.FileUtils;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
@@ -11,17 +10,12 @@ import org.craftsmenlabs.stories.api.models.config.FilterConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
-import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 

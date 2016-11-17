@@ -1,12 +1,10 @@
 package org.craftsmenlabs.stories.importer;
 
 import mockit.Expectations;
-import mockit.Injectable;
 import mockit.Mocked;
 import org.apache.commons.io.FileUtils;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
-import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.junit.Test;
 import org.springframework.web.client.RestTemplate;
 

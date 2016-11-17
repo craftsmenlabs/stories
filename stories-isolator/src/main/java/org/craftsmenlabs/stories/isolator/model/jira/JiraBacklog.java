@@ -2,7 +2,6 @@
 package org.craftsmenlabs.stories.isolator.model.jira;
 
 import com.fasterxml.jackson.annotation.*;
-import lombok.Builder;
 import lombok.Data;
 
 import javax.annotation.Generated;

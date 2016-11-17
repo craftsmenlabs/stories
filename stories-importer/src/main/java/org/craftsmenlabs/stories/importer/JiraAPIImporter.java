@@ -12,8 +12,6 @@ import org.springframework.http.client.support.BasicAuthorizationInterceptor;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.List;
 

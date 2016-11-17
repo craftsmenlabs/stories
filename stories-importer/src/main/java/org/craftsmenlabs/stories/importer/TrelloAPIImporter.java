@@ -7,19 +7,12 @@ import org.craftsmenlabs.stories.isolator.model.trello.TrelloJsonIssue;
 import org.craftsmenlabs.stories.isolator.parser.TrelloJsonParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import javax.ws.rs.GET;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
 import java.net.URLEncoder;
-import java.util.Arrays;
 import java.util.List;
 
 /**
