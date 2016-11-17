@@ -1,6 +1,7 @@
 package org.craftmenlabs.stories.plugin.filereader.integrationtest;
 
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
+import org.craftsmenlabs.stories.api.models.config.FilterConfig;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
 import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
 import org.craftsmenlabs.stories.isolator.parser.TrelloJsonParser;
@@ -26,7 +27,7 @@ public class RunIntegrationTest {
                         .estimation(FieldMappingConfig.EstimationMapping.builder().build())
                         .build();
 
-        JiraJsonParser jiraJsonParser = new JiraJsonParser(fieldMappingConfig, "To Do");
+        JiraJsonParser jiraJsonParser = new JiraJsonParser(fieldMappingConfig, FilterConfig.builder().status("To Do").build());
         String testData = RetrieveTestData.getExportedJiraJSONTestResultFromResource();
         Issue testResult = RetrieveTestData.getJiraTestIssueFromResource();
 

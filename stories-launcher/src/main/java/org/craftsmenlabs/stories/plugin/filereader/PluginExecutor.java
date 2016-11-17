@@ -135,7 +135,7 @@ public class PluginExecutor {
 	private Parser getParser(String enabled) {
 		switch (enabled) {
 			case ("jira"):
-				return new JiraJsonParser(fieldMappingConfig, springFilterConfig.getStatus());
+				return new JiraJsonParser(fieldMappingConfig, filterConfig);
 			case ("trello"):
 				return new TrelloJsonParser();
 			default:

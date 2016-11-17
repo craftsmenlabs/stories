@@ -2,9 +2,11 @@ package org.craftsmenlabs.stories.isolator;
 
 import org.apache.commons.io.FileUtils;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
+import org.craftsmenlabs.stories.api.models.config.FilterConfig;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
 import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
+import org.craftsmenlabs.stories.isolator.testutil.RetrieveTestData;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -21,18 +23,33 @@ public class JiraJsonParserTest {
     private FieldMappingConfig fieldMappingConfigCopy =
             FieldMappingConfig.builder()
                     .backlog(FieldMappingConfig.BacklogMapping.builder().build())
-                    .issue(FieldMappingConfig.IssueMapping.builder().rank("customfield_11400").build())
+                    .issue(FieldMappingConfig.IssueMapping.builder().rank("customfield_11400").acceptenceCriteria("customfield_10502").build())
                     .story(FieldMappingConfig.StoryMapping.builder().build())
                     .criteria(FieldMappingConfig.CriteriaMapping.builder().build())
                     .estimation(FieldMappingConfig.EstimationMapping.builder().build())
                     .build();
 
-    private JiraJsonParser jiraJsonParser = new JiraJsonParser(fieldMappingConfigCopy, "To Do");
+    private FilterConfig filterConfig = FilterConfig.builder()
+            .status("To Do")
+            .build();
+
+    private JiraJsonParser jiraJsonParser = new JiraJsonParser(fieldMappingConfigCopy, filterConfig);
 
 
     @Test
     public void testGetJiraJsonIssuesReturnsNullOnNull() {
         assertNull(jiraJsonParser.getJiraJsonIssues(null));
+    }
+
+    @Test
+    public void testGetJiraJSonIssuesExtractsAcceptanceCriteriaCorrectly() {
+        String json = RetrieveTestData.BACKLOG_WITH_ONE_ISSUE_WITH_ACCEPTANCE_CRITERIA_FIELD;
+        List<Issue> issues = jiraJsonParser.getIssues(json);
+        assertEquals(issues.size(), 1);
+        assertNotNull(issues.get(0).getAcceptanceCriteria());
+        assertEquals("Given I want to configure a profiling rule involving systems\r\n" +
+                "When I start typing and stop for 100 ms\r\n" +
+                "Then the system provides me with results that match my search string", issues.get(0).getAcceptanceCriteria());
     }
 
     @Test

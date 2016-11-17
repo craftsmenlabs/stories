@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
+import org.craftsmenlabs.stories.api.models.config.FilterConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
 import org.craftsmenlabs.stories.isolator.SentenceSplitter;
@@ -24,18 +25,18 @@ public class JiraJsonParser implements Parser {
 
     private final Logger logger = LoggerFactory.getLogger(JiraJsonParser.class);
     private FieldMappingConfig fieldMapping;
-    private String todo;
+    private FilterConfig filterConfig;
 
-    public JiraJsonParser(FieldMappingConfig fieldMapping, String todo) {
+    public JiraJsonParser(FieldMappingConfig fieldMapping, FilterConfig filterConfig) {
         this.fieldMapping = fieldMapping;
-        this.todo = todo;
+        this.filterConfig = filterConfig;
     }
 
     public List<Issue> getIssues(List<JiraJsonIssue> jiraJsonIssues) {
         SentenceSplitter sentenceSplitter = new SentenceSplitter();
 
         List<JiraJsonIssue> issues = jiraJsonIssues.stream()
-                .filter(jiraJsonIssue -> jiraJsonIssue.getFields().getStatus().getStatusCategory().getName().equals(todo))
+                .filter(jiraJsonIssue -> jiraJsonIssue.getFields().getStatus().getStatusCategory().getName().equals(filterConfig.getStatus()))
                 .collect(Collectors.toList());
 
         return issues.stream()
@@ -51,6 +52,12 @@ public class JiraJsonParser implements Parser {
                     issue.setSummary(jiraJsonIssue.getFields().getSummary());
                     issue.setKey(jiraJsonIssue.getKey());
                     issue.setIssueType(jiraJsonIssue.getFields().getIssuetype().getName());
+
+                    String criteriaKey = fieldMapping.getIssue().getAcceptenceCriteria();
+                    if(StringUtils.isNotEmpty(criteriaKey) && jiraJsonIssue.getFields().getAdditionalProperties().containsKey(criteriaKey)) {
+                        // We should get the acceptence Criteria from this field
+                        issue.setAcceptanceCriteria((String) jiraJsonIssue.getFields().getAdditionalProperties().get(criteriaKey));
+                    }
 
                     Map<String, Object> additionalProps = jiraJsonIssue.getFields().getAdditionalProperties();
                     Map<String, String> stringProps = new HashMap<>();

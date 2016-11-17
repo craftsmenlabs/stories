@@ -171,6 +171,164 @@ public class RetrieveTestData {
             "      }\n" +
             "    }]}";
 
+    public static final String BACKLOG_WITH_ONE_ISSUE_WITH_ACCEPTANCE_CRITERIA_FIELD  = "{\n" +
+            "  \"expand\": \"schema,names\",\n" +
+            "  \"startAt\": 0,\n" +
+            "  \"maxResults\": 1000,\n" +
+            "  \"total\": 154,\n" +
+            "  \"issues\": [\n" +
+            "    {\n" +
+            "      \"expand\": \"operations,editmeta,changelog,transitions,renderedFields\",\n" +
+            "      \"id\": \"18511\",\n" +
+            "      \"self\": \"http://jira.x.nl/rest/api/2/issue/18511\",\n" +
+            "      \"key\": \"DIU-726\",\n" +
+            "      \"fields\": {\n" +
+            "        \"issuetype\": {\n" +
+            "          \"self\": \"http://jira.foo.bar/rest/api/2/issuetype/6\",\n" +
+            "          \"id\": \"6\",\n" +
+            "          \"description\": \"Created by JIRA Agile - do not edit or delete. Issue type for a user story.\",\n" +
+            "          \"iconUrl\": \"http://jira.foo.bar/secure/viewavatar?size=xsmall&avatarId=10915&avatarType=issuetype\",\n" +
+            "          \"name\": \"Story\",\n" +
+            "          \"subtask\": false,\n" +
+            "          \"avatarId\": 10915\n" +
+            "        },\n" +
+            "        \"components\": [\n" +
+            "          {\n" +
+            "            \"self\": \"http://jira.foo.bar/rest/api/2/component/11200\",\n" +
+            "            \"id\": \"11200\",\n" +
+            "            \"name\": \"Profiling\"\n" +
+            "          }\n" +
+            "        ],\n" +
+            "        \"timespent\": null,\n" +
+            "        \"timeoriginalestimate\": null,\n" +
+            "        \"description\": \"As a system administrator I want an auto-complete function that provide me with matching system results so that I can handle large datacenters\\n\\n*scope*\\n* A reusable UI component that can be used in all locations where we want a system administrator to manage datacenters\\n* The component should have an input box, and dropdown box that shows when you type at least 2 characters\\n* The dropdown box shows all the systems for which the description starts with the entered characters (case insensitive)\\n\",\n" +
+            "        \"project\": {\n" +
+            "          \"self\": \"http://jira.foo.bar/rest/api/2/project/11106\",\n" +
+            "          \"id\": \"11106\",\n" +
+            "          \"key\": \"EPM\",\n" +
+            "          \"name\": \"epic interslicer\",\n" +
+            "          \"avatarUrls\": {\n" +
+            "            \"48x48\": \"http://jira.foo.bar/secure/projectavatar?pid=11106&avatarId=11829\",\n" +
+            "            \"24x24\": \"http://jira.foo.bar/secure/projectavatar?size=small&pid=11106&avatarId=11829\",\n" +
+            "            \"16x16\": \"http://jira.foo.bar/secure/projectavatar?size=xsmall&pid=11106&avatarId=11829\",\n" +
+            "            \"32x32\": \"http://jira.foo.bar/secure/projectavatar?size=medium&pid=11106&avatarId=11829\"\n" +
+            "          }\n" +
+            "        },\n" +
+            "        \"fixVersions\": [\n" +
+            "          \n" +
+            "        ],\n" +
+            "        \"aggregatetimespent\": null,\n" +
+            "        \"resolution\": null,\n" +
+            "        \"customfield_10310\": null,\n" +
+            "        \"customfield_10302\": \"9223372036854775807\",\n" +
+            "        \"customfield_11400\": \"0|zgby24:\",\n" +
+            "        \"customfield_10501\": null,\n" +
+            "        \"customfield_10502\": \"Given I want to configure a profiling rule involving systems\\r\\nWhen I start typing and stop for 100 ms\\r\\nThen the system provides me with results that match my search string\",\n" +
+            "        \"customfield_10306\": null,\n" +
+            "        \"aggregatetimeestimate\": null,\n" +
+            "        \"customfield_10307\": null,\n" +
+            "        \"customfield_10308\": 5.0,\n" +
+            "        \"resolutiondate\": null,\n" +
+            "        \"customfield_10309\": null,\n" +
+            "        \"workratio\": -1,\n" +
+            "        \"summary\": \"Search component for systems\",\n" +
+            "        \"lastViewed\": null,\n" +
+            "        \"watches\": {\n" +
+            "          \"self\": \"http://jira.foo.bar/rest/api/2/issue/EPM-632/watchers\",\n" +
+            "          \"watchCount\": 1,\n" +
+            "          \"isWatching\": false\n" +
+            "        },\n" +
+            "        \"creator\": {\n" +
+            "          \"self\": \"http://jira.foo.bar/rest/api/2/user?username=self\",\n" +
+            "          \"name\": \"self\",\n" +
+            "          \"key\": \"self\",\n" +
+            "          \"emailAddress\": \"self@wcc-group.com\",\n" +
+            "          \"avatarUrls\": {\n" +
+            "            \"48x48\": \"http://jira.foo.bar/secure/useravatar?ownerId=self&avatarId=11826\",\n" +
+            "            \"24x24\": \"http://jira.foo.bar/secure/useravatar?size=small&ownerId=self&avatarId=11826\",\n" +
+            "            \"16x16\": \"http://jira.foo.bar/secure/useravatar?size=xsmall&ownerId=self&avatarId=11826\",\n" +
+            "            \"32x32\": \"http://jira.foo.bar/secure/useravatar?size=medium&ownerId=self&avatarId=11826\"\n" +
+            "          },\n" +
+            "          \"displayName\": \"Foo Bar\",\n" +
+            "          \"active\": true,\n" +
+            "          \"timeZone\": \"Europe/Amsterdam\"\n" +
+            "        },\n" +
+            "        \"subtasks\": [\n" +
+            "          \n" +
+            "        ],\n" +
+            "        \"created\": \"2016-11-16T11:53:28.000+0100\",\n" +
+            "        \"reporter\": {\n" +
+            "          \"self\": \"http://jira.foo.bar/rest/api/2/user?username=self\",\n" +
+            "          \"name\": \"self\",\n" +
+            "          \"key\": \"self\",\n" +
+            "          \"emailAddress\": \"self@wcc-group.com\",\n" +
+            "          \"avatarUrls\": {\n" +
+            "            \"48x48\": \"http://jira.foo.bar/secure/useravatar?ownerId=self&avatarId=11826\",\n" +
+            "            \"24x24\": \"http://jira.foo.bar/secure/useravatar?size=small&ownerId=self&avatarId=11826\",\n" +
+            "            \"16x16\": \"http://jira.foo.bar/secure/useravatar?size=xsmall&ownerId=self&avatarId=11826\",\n" +
+            "            \"32x32\": \"http://jira.foo.bar/secure/useravatar?size=medium&ownerId=self&avatarId=11826\"\n" +
+            "          },\n" +
+            "          \"displayName\": \"Foo Bar\",\n" +
+            "          \"active\": true,\n" +
+            "          \"timeZone\": \"Europe/Amsterdam\"\n" +
+            "        },\n" +
+            "        \"customfield_10000\": null,\n" +
+            "        \"aggregateprogress\": {\n" +
+            "          \"progress\": 0,\n" +
+            "          \"total\": 0\n" +
+            "        },\n" +
+            "        \"priority\": {\n" +
+            "          \"self\": \"http://jira.foo.bar/rest/api/2/priority/3\",\n" +
+            "          \"iconUrl\": \"http://jira.foo.bar/images/icons/priorities/major.png\",\n" +
+            "          \"name\": \"High\",\n" +
+            "          \"id\": \"3\"\n" +
+            "        },\n" +
+            "        \"customfield_10100\": null,\n" +
+            "        \"customfield_10200\": null,\n" +
+            "        \"customfield_10201\": null,\n" +
+            "        \"customfield_10300\": null,\n" +
+            "        \"labels\": [\n" +
+            "          \n" +
+            "        ],\n" +
+            "        \"customfield_10301\": \"EPM-626\",\n" +
+            "        \"environment\": null,\n" +
+            "        \"timeestimate\": null,\n" +
+            "        \"aggregatetimeoriginalestimate\": null,\n" +
+            "        \"versions\": [\n" +
+            "          \n" +
+            "        ],\n" +
+            "        \"duedate\": null,\n" +
+            "        \"progress\": {\n" +
+            "          \"progress\": 0,\n" +
+            "          \"total\": 0\n" +
+            "        },\n" +
+            "        \"issuelinks\": [\n" +
+            "          \n" +
+            "        ],\n" +
+            "        \"votes\": {\n" +
+            "          \"self\": \"http://jira.foo.bar/rest/api/2/issue/EPM-632/votes\",\n" +
+            "          \"votes\": 0,\n" +
+            "          \"hasVoted\": false\n" +
+            "        },\n" +
+            "        \"assignee\": null,\n" +
+            "        \"updated\": \"2016-11-16T17:14:07.000+0100\",\n" +
+            "        \"status\": {\n" +
+            "          \"self\": \"http://jira.foo.bar/rest/api/2/status/10002\",\n" +
+            "          \"description\": \"\",\n" +
+            "          \"iconUrl\": \"http://jira.foo.bar/images/icons/statuses/open.png\",\n" +
+            "          \"name\": \"To Do\",\n" +
+            "          \"id\": \"10002\",\n" +
+            "          \"statusCategory\": {\n" +
+            "            \"self\": \"http://jira.foo.bar/rest/api/2/statuscategory/2\",\n" +
+            "            \"id\": 2,\n" +
+            "            \"key\": \"new\",\n" +
+            "            \"colorName\": \"blue-gray\",\n" +
+            "            \"name\": \"To Do\"\n" +
+            "          }\n" +
+            "        }\n" +
+            "      }\n" +
+            "    }]}";
+
     public static String getExportedJiraJSONTestResultFromResource() {
         return "{\n" +
                 "  \"expand\": \"schema,names\",\n" +

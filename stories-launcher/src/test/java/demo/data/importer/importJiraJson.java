@@ -101,7 +101,7 @@ public class importJiraJson {
             e.printStackTrace();
         }
 
-        JiraJsonParser jiraJsonParser = new JiraJsonParser(fieldMappingConfigCopy, springFilterConfig.getStatus());
+        JiraJsonParser jiraJsonParser = new JiraJsonParser(fieldMappingConfigCopy, springFilterConfig.convert());
         List<JiraJsonIssue> jiraJsonIssues = jiraBacklog.getJiraJsonIssues();
         List<Issue> issues = jiraJsonParser.getIssues(jiraJsonIssues);
 
