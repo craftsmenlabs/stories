@@ -77,12 +77,8 @@ public class PluginExecutor {
 
 		// Import the data
 		Importer importer = getImporter(springSourceConfig.getEnabled());
-		String data = importer.getDataAsString();
 
-
-		// Parse and filter the issues
-		Parser parser = getParser(springSourceConfig.getEnabled());
-		List<Issue> issues = parser.getIssues(data).stream()
+		List<Issue> issues = importer.getIssues().stream()
 				.filter(issue -> issue.getUserstory() != null)
 				.filter(issue -> !issue.getUserstory().isEmpty())
 				.collect(Collectors.toList());
@@ -122,28 +118,11 @@ public class PluginExecutor {
 			case "jira":
 				SpringSourceConfig.JiraConfig jiraConfig = springSourceConfig.getJira();
 				logger.info("Using JiraAPIImporter for import." + jiraConfig.getUrl());
-				return new JiraAPIImporter(jiraConfig.getUrl(),jiraConfig.getProjectKey(), jiraConfig.getAuthKey(), filterConfig);
+				return new JiraAPIImporter(jiraConfig.getUrl(),jiraConfig.getProjectKey(), jiraConfig.getUsername(), jiraConfig.getPassword(), fieldMappingConfig, filterConfig);
 			case "trello":
 				logger.info("Using TrelloAPIImporter for import.");
 				SpringSourceConfig.TrelloConfig trelloConfig = springSourceConfig.getTrello();
 				return new TrelloAPIImporter(trelloConfig.getUrl(), trelloConfig.getProjectKey(), trelloConfig.getAuthKey(), trelloConfig.getToken());
-			default:
-				throw new StoriesException(StoriesException.ERR_SOURCE_ENABLED_MISSING);
-		}
-	}
-
-	/**
-	 * Set the parser based on the data format:
-	 * jirajson, trellojson, etc.
-	 *
-	 * @param enabled enabled source
-	 */
-	private Parser getParser(String enabled) {
-		switch (enabled) {
-			case ("jira"):
-				return new JiraJsonParser(fieldMappingConfig, filterConfig);
-			case ("trello"):
-				return new TrelloJsonParser();
 			default:
 				throw new StoriesException(StoriesException.ERR_SOURCE_ENABLED_MISSING);
 		}

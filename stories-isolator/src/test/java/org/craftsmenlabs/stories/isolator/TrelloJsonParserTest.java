@@ -1,5 +1,6 @@
 package org.craftsmenlabs.stories.isolator;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import mockit.Tested;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
@@ -9,30 +10,24 @@ import org.craftsmenlabs.stories.isolator.testutil.RetrieveTestData;
 import org.junit.Test;
 
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TrelloJsonParserTest
 {
+
+	private ObjectMapper mapper = new ObjectMapper();
 	@Tested
 	private TrelloJsonParser _trelloJsonParser;
 
 	@Test
-	public void getIssuesTest()
+	public void getIssuesTest() throws Exception
 	{
-		List<Issue> issues = _trelloJsonParser.getIssues(RetrieveTestData.getExportedTrelloJSONTestResultFromResource());
+		List<Issue> issues = _trelloJsonParser.parse(mapper.readValue(RetrieveTestData.getExportedTrelloJSONTestResultFromResource(), mapper.getTypeFactory().constructCollectionType(LinkedList.class, TrelloJsonIssue.class)));
 
 		assertThat(issues).extracting(issue -> issue.getKey()).containsOnly("581b199ba7dfd7e8f737262c");
-	}
-
-	@Test
-	public void getTrelloJsonIssuesTest()
-	{
-		List<TrelloJsonIssue> issues =
-			_trelloJsonParser.getTrelloJsonIssues(RetrieveTestData.getExportedTrelloJSONTestResultFromResource());
-
-		assertThat(issues).extracting(issue -> issue.getId()).containsOnly("581b199ba7dfd7e8f737262c");
 	}
 
 	@Test
@@ -54,7 +49,7 @@ public class TrelloJsonParserTest
 
 		);
 
-		List<Issue> result = _trelloJsonParser.getIssues(trelloJsonIssues);
+		List<Issue> result = _trelloJsonParser.parse(trelloJsonIssues);
 		result.sort(Comparator.comparing(Issue::getRank));
 
 		assertThat(result).containsExactly(

@@ -97,8 +97,7 @@ public class importJiraJson {
         }
 
         JiraJsonParser jiraJsonParser = new JiraJsonParser(fieldMappingConfigCopy, springFilterConfig.convert());
-        List<JiraJsonIssue> jiraJsonIssues = jiraBacklog.getJiraJsonIssues();
-        List<Issue> issues = jiraJsonParser.getIssues(jiraJsonIssues);
+        List<Issue> issues = jiraJsonParser.parse(jiraBacklog);
 
         Backlog backlog = new Backlog();
         backlog.setIssues(issues);

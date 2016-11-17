@@ -1,26 +1,42 @@
 package org.craftsmenlabs.stories.importer;
 
-import java.io.*;
-import java.net.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.craftsmenlabs.stories.api.models.exception.StoriesException;
+import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
+import org.craftsmenlabs.stories.isolator.model.trello.TrelloJsonIssue;
+import org.craftsmenlabs.stories.isolator.parser.TrelloJsonParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
+
+import javax.ws.rs.GET;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URLEncoder;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Importer
  */
 public class TrelloAPIImporter implements Importer
 {
-	public static final int CONNECTION_TIMEOUT = 5000;
-	public static final int DOWNLOAD_TIMEOUT = 60000;
-
 	private final Logger logger = LoggerFactory.getLogger(TrelloAPIImporter.class);
 
-	private HttpURLConnection conn;
+	private ObjectMapper objectMapper = new ObjectMapper();
 
 	private String urlResource;
 	private String projectKey;
 	private String authKey;
 	private String token;
+
+	private TrelloJsonParser parser;
 
 	public TrelloAPIImporter(String urlResource, String projectKey, String authKey, String token)
 	{
@@ -28,82 +44,35 @@ public class TrelloAPIImporter implements Importer
 		this.projectKey = projectKey;
 		this.authKey = authKey;
 		this.token = token;
+
+		this.parser = new TrelloJsonParser();
 	}
 
-	public String getDataAsString()
+	public List<Issue> getIssues()
 	{
-		String returnsResponse = "";
-
 		try
 		{
-			URL url = new URL(urlResource
-				+ "/boards/" + httpEncode(projectKey) + "/cards?"
-				+ "key=" + httpEncode(authKey) + "&"
-				+ "token=" + httpEncode(token));
+			String url = urlResource + "/boards/" + httpEncode(projectKey) + "/cards?" + "key=" + httpEncode(authKey) + "&" + "token=" + httpEncode(token);
+			logger.info("Retrieving data from:" + url);
 
-			logger.info("Retrieving data from:" + url.toString());
-
-			conn = (HttpURLConnection)url.openConnection();
-			conn.setRequestMethod("GET");
-			conn.setRequestProperty("Accept", "application/json");
-			conn.setRequestProperty("Content-Type", "application/json");
-			conn.setConnectTimeout(CONNECTION_TIMEOUT);
-			conn.setReadTimeout(DOWNLOAD_TIMEOUT);
-
-			//execute call
-			if (conn.getResponseCode() != 200)
-			{
-				logger.error("Failed to connect to "
-					+ url
-					+ ". Connection returned HTTP code: "
-					+ conn.getResponseCode()
-					+ "\n"
-					+ conn
-					.getResponseMessage());
-
-				abortOnError();
+			try {
+				RestTemplate restTemplate = new RestTemplate();
+				String responseEntity = restTemplate.getForObject(url, String.class);
+				List<TrelloJsonIssue> issues = objectMapper.readValue(responseEntity, objectMapper.getTypeFactory().constructCollectionType(List.class, TrelloJsonIssue.class));
+				return parser.parse(issues);
+			} catch (HttpClientErrorException e) {
+				throw new StoriesException("Failed to connect to " + url);
 			}
-
-			// Buffer the result into a string
-			BufferedReader rd = new BufferedReader(
-				new InputStreamReader(conn.getInputStream()));
-			StringBuilder sb = new StringBuilder();
-			String line;
-			while ((line = rd.readLine()) != null)
-			{
-				sb.append(line);
-			}
-			rd.close();
-
-			returnsResponse = sb.toString();
-
-			conn.disconnect();
-
 		}
 		catch (IOException e)
 		{
-			logger.error("Failed to connect to create a proper connection URL with parameters:" + getParameters());
-			abortOnError();
+			e.printStackTrace();
+			throw new StoriesException("Failed to import Trello issues: " + e.getMessage());
 		}
-
-		return returnsResponse;
-	}
-
-	private void abortOnError()
-	{
-		throw new RuntimeException("Failed to connect to " + urlResource);
 	}
 
 	private String httpEncode(String toEncode) throws UnsupportedEncodingException
 	{
 		return URLEncoder.encode(toEncode, "UTF-8");
-	}
-
-	private String getParameters()
-	{
-		return "URL" + urlResource
-			+ " AUTH:" + authKey
-			+ " PROJECT:" + projectKey
-			+ " TOKEN:" + token;
 	}
 }
