@@ -74,6 +74,7 @@ fabric.properties
 *.iml
 *.csv
 *.json
+!*-test.json
 *.log
 custom-application.yml
 executor.sh

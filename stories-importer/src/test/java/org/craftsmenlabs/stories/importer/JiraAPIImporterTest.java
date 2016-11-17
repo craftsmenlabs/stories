@@ -49,7 +49,7 @@ public class JiraAPIImporterTest {
     public void testSuccessResponse(@Injectable JiraRequest jiraRequest) throws Exception {
         new Expectations(){{
             restTemplate.postForObject(withAny(""), withAny(jiraRequest), withAny(JiraBacklog.class));
-            result = objectMapper.readValue(readFile("jira.json"), JiraBacklog.class);
+            result = objectMapper.readValue(readFile("jira-test.json"), JiraBacklog.class);
 
         }};
 

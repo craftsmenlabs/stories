@@ -28,7 +28,7 @@ public class TrelloAPIImporterTest
 	public void testSuccessResponse() throws Exception {
 		new Expectations(){{
 			restTemplate.getForObject(withAny(""), withAny(String.class));
-			result = readFile("trello.json");
+			result = readFile("trello-test.json");
 
 		}};
 
