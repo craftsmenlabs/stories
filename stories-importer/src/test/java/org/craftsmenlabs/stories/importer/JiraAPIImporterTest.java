@@ -2,6 +2,7 @@ package org.craftsmenlabs.stories.importer;
 
 import mockit.Expectations;
 import mockit.Mocked;
+import org.craftsmenlabs.stories.api.models.config.FilterConfig;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -16,13 +17,16 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class JiraAPIImporterTest {
     private JiraAPIImporter jiraAPIImporter;
+    private FilterConfig filterConfig = FilterConfig.builder().status("To Do").build();
 
     @Mocked
     private HttpURLConnection connection;
 
+
+
     @Test(expected = RuntimeException.class)
     public void testImportFailsOnImproperUrl() throws Exception {
-        jiraAPIImporter = new JiraAPIImporter("http://foo.bar", "1", "2", "To Do");
+        jiraAPIImporter = new JiraAPIImporter("http://foo.bar", "1", "2", filterConfig);
         String dataImport = jiraAPIImporter.getDataAsString();
         assertThat(dataImport).contains("");
     }
@@ -38,7 +42,7 @@ public class JiraAPIImporterTest {
             result = "Bad Request";
         }};
 
-        jiraAPIImporter = new JiraAPIImporter("http://foo.bar", "1", "2", "To Do");
+        jiraAPIImporter = new JiraAPIImporter("http://foo.bar", "1", "2", filterConfig);
         jiraAPIImporter.getDataAsString();
     }
 
@@ -56,7 +60,7 @@ public class JiraAPIImporterTest {
             result = new ByteArrayInputStream("{}".getBytes());
         }};
 
-        jiraAPIImporter = new JiraAPIImporter("http://foo.bar", "1", "2", "To Do");
+        jiraAPIImporter = new JiraAPIImporter("http://foo.bar", "1", "2", filterConfig);
         String result = jiraAPIImporter.getDataAsString();
         assertThat(result).isEqualTo("{}");
     }

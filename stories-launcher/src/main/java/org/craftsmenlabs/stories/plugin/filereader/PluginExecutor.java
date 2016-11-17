@@ -3,6 +3,7 @@ package org.craftsmenlabs.stories.plugin.filereader;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.StoriesRun;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
+import org.craftsmenlabs.stories.api.models.config.FilterConfig;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
@@ -39,6 +40,7 @@ public class PluginExecutor {
 	private final Logger logger = LoggerFactory.getLogger(PluginExecutor.class);
 	public ValidationConfig validationConfig;
 	public FieldMappingConfig fieldMappingConfig;
+	public FilterConfig filterConfig;
 
 	@Autowired
 	private ConnectivityService dashboardConnectivity;
@@ -56,12 +58,16 @@ public class PluginExecutor {
 	public Rating startApplication() {
 		logger.info("Starting stories plugin.");
 
-		// Prepare configs
-		validationConfig = springValidationConfig.convert();
-		fieldMappingConfig = springFieldMappingConfig.convert();
+
 		// Validate configs
 		this.springReportConfig.validate();
 		this.springSourceConfig.validate();
+		this.springFieldMappingConfig.validate();
+
+		// Convert configs
+		validationConfig = springValidationConfig.convert();
+		fieldMappingConfig = springFieldMappingConfig.convert();
+		filterConfig = springFilterConfig.convert();
 
 		// Import the data
 		Importer importer = getImporter(springSourceConfig.getEnabled());
@@ -110,7 +116,7 @@ public class PluginExecutor {
 			case "jira":
 				SpringSourceConfig.JiraConfig jiraConfig = springSourceConfig.getJira();
 				logger.info("Using JiraAPIImporter for import." + jiraConfig.getUrl());
-				return new JiraAPIImporter(jiraConfig.getUrl(),jiraConfig.getProjectKey(), jiraConfig.getAuthKey(), springFilterConfig.getStatus());
+				return new JiraAPIImporter(jiraConfig.getUrl(),jiraConfig.getProjectKey(), jiraConfig.getAuthKey(), filterConfig);
 			case "trello":
 				logger.info("Using TrelloAPIImporter for import.");
 				SpringSourceConfig.TrelloConfig trelloConfig = springSourceConfig.getTrello();

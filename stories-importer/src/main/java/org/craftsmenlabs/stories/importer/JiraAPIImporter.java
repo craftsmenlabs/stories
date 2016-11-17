@@ -1,5 +1,6 @@
 package org.craftsmenlabs.stories.importer;
 
+import org.craftsmenlabs.stories.api.models.config.FilterConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,14 +26,15 @@ public class JiraAPIImporter implements Importer
 	private String urlResource;
 	private String projectKey;
 	private String authKey;
-	private String statusKey;
 
-	public JiraAPIImporter(String urlResource, String projectKey, String authKey, String statusKey)
+	private FilterConfig filterConfig;
+
+	public JiraAPIImporter(String urlResource, String projectKey, String authKey, FilterConfig filterConfig)
 	{
 		this.urlResource = urlResource;
 		this.projectKey = projectKey;
 		this.authKey = authKey;
-		this.statusKey = statusKey;
+		this.filterConfig = filterConfig;
 	}
 
 	public String getDataAsString()
@@ -44,7 +46,7 @@ public class JiraAPIImporter implements Importer
 				+ "/rest/api/2/search?jql="
 				+ "project%3D" + httpEncode(projectKey) + "+AND+"
 				+ "type%3DStory+AND+"
-				+ "status%3D\"" + httpEncode(statusKey) + "\""
+				+ "status%3D\"" + httpEncode(filterConfig.getStatus()) + "\""
 				+ "&maxResults=100000");
 			logger.info("Retrieving data form:" + url.toString());
 
@@ -110,7 +112,7 @@ public class JiraAPIImporter implements Importer
 		return "URL" + urlResource
 			+ " AUTH:" + authKey
 			+ " PROJECT:" + projectKey
-			+ " STATUSKEY:" + statusKey;
+			+ " STATUSKEY:" + filterConfig.getStatus();
 
 	}
 }

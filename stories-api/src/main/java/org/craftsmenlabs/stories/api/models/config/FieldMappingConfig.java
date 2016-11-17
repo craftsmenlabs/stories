@@ -17,6 +17,7 @@ public class FieldMappingConfig {
     public static class IssueMapping {
         private String rank;
         private String estimation;
+        private String acceptenceCriteria;
     }
 
     @Data
