@@ -22,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.net.URL;
+import java.nio.charset.Charset;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -59,6 +60,6 @@ public class RunJiraIntegrationTest {
 
     private String readFile(String resource) throws Exception {
         URL url = this.getClass().getClassLoader().getResource(resource);
-        return FileUtils.readFileToString(new File(url.toURI()));
+        return FileUtils.readFileToString(new File(url.toURI()), Charset.defaultCharset());
     }
 }
