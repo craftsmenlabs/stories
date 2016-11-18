@@ -12,7 +12,7 @@
     <groupId>org.craftsmenlabs.stories</groupId>
     <artifactId>stories-launcher</artifactId>
     <packaging>jar</packaging>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.2</version>
 
     <name>Craftsmenlabs - Stories backlog validator client</name>
     <url>https://github.com/craftsmenlabs/stories</url>
@@ -62,7 +62,7 @@
         <dependency>
             <groupId>org.craftsmenlabs.stories</groupId>
             <artifactId>stories-connectivity</artifactId>
-            <version>1.2-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
 
 
