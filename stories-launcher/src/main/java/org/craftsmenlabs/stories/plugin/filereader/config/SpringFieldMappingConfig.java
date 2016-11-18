@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Data
 @Component
-@ConfigurationProperties(prefix = "field_mapping", ignoreInvalidFields = true)
+@ConfigurationProperties(prefix = "fieldMapping", ignoreInvalidFields = true)
 public class SpringFieldMappingConfig implements ValidatableConfig {
     private FeatureMapping feature;
     private BugMapping bug;

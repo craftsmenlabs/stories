@@ -3,15 +3,13 @@ source:
 
     jira:
         url: http://jira-url-here.net
-        username: Jirausername
-        password: jirapassword
-        projectKey: GAR
+        project-key: GAR
+        auth-key: KEY
     trello:
         url:
         token:
         authKey:
-        projectKey:
-    file:
+        project-key:
 
 
 report:
@@ -26,20 +24,18 @@ report:
 filters:
     status: "To Do"
 
-field_mapping:
+field-mapping:
     feature:
         rank: "customfield_11400"
-        summary: "customfield_11401"
         estimation: "customfield_11402"
-        acceptanceCriteria: "customfield_11403"
+        acceptance-criteria: "customfield_11403"
     bug:
-        reproductionPath: "customfield_13001"
+        reproduction-path: "customfield_13001"
         software: "customfield_13002"
-        expectedBehavior: "customfield_13003"
-        acceptationCriteria: "customfield_13004"
-
+        expected-behavior: "customfield_13003"
+        acceptation-criteria: "customfield_13004"
     epic:
-        goal: "customfield_12001"
+      goal:
 
 
 validation:
@@ -48,7 +44,6 @@ validation:
     issue:
         ratingtreshold: 0.7
     story:
-        fieldSource: "description#story"
         ratingtreshold: 0.6
         active: true
         asKeywords: ["as a"]
@@ -57,7 +52,6 @@ validation:
     bug:
         filledWith: ["","component"]
     criteria:
-        fieldSource: "description#criteria"
         ratingtreshold: 0.7
         active: false
         givenKeywords: ["given"]

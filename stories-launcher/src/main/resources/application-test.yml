@@ -12,12 +12,20 @@ source:
 filters:
     status: "To Do"
 
-field_mapping:
-    issue:
+field-mapping:
+    feature:
         rank: "customfield_11400"
-        summary: "customfield_11400"
         estimation: "customfield_11400"
         acceptanceCriteria: "customfield_10502"
+    bug:
+        reproductionPath: "customfield_13001"
+        software: "customfield_13002"
+        expectedBehavior: "customfield_13003"
+        acceptationCriteria: "customfield_13004"
+
+    epic:
+        goal: "customfield_12001"
+
 
 validation:
         backlog:
@@ -33,7 +41,6 @@ validation:
         bug:
             filledWith: ["","component"]
         criteria:
-            fieldSource: "description#criteria"
             ratingtreshold: 0.7
             active: false
             givenKeywords: ["given"]
@@ -42,6 +49,3 @@ validation:
         estimation:
             ratingtreshold: 0.7
             active: false
-
-dashboard:
-  serviceUrl: http://localhost:8090
