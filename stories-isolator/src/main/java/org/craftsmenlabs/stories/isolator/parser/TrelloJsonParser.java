@@ -23,7 +23,7 @@ public class TrelloJsonParser {
 
 
             String content = trelloJsonIssue.getDesc().length() == 0 ? trelloJsonIssue.getName() : trelloJsonIssue.getDesc();
-            Feature feature = sentenceSplitter.splitSentence(content);
+            Feature feature = sentenceSplitter.splitSentence(new Feature(), content);
             feature.setKey(trelloJsonIssue.getId());
 
             String rankString = String.valueOf(i);

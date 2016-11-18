@@ -22,6 +22,7 @@ public class FieldMappingConfig {
     @Data
     @Builder
     public static class BugMapping {
+        private String priority;
         private String reproductionPath;
         private String software;
         private String expectedBehavior;

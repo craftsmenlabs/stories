@@ -1,12 +1,13 @@
 package org.craftsmenlabs.stories.isolator;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
+import mockit.Expectations;
+import mockit.Mocked;
+import mockit.Tested;
+import opennlp.tools.sentdetect.SentenceDetectorME;
 import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
 import org.junit.Test;
-import mockit.*;
-import opennlp.tools.sentdetect.SentenceDetectorME;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SentenceSplitterTest{
 
@@ -26,7 +27,7 @@ public class SentenceSplitterTest{
 			result = new String[] { "As a", "Given that" };
 		}};
 
-		Feature feature = sentenceSplitter.splitSentence(input);
+		Feature feature = sentenceSplitter.splitSentence(new Feature(), input);
 		assertThat(feature.getUserstory()).isEqualTo("As a");
 		assertThat(feature.getAcceptanceCriteria()).isEqualTo("Given that");
 	}

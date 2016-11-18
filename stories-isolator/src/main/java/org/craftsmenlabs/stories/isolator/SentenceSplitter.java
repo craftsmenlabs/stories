@@ -1,12 +1,11 @@
 package org.craftsmenlabs.stories.isolator;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
-import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
 import opennlp.tools.sentdetect.SentenceDetectorME;
 import opennlp.tools.sentdetect.SentenceModel;
+import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * The Isolator can map a string to a card
@@ -52,10 +51,8 @@ public class SentenceSplitter
 		}
 	}
 
-	public Feature splitSentence(String input)
+	public Feature splitSentence(Feature feature, String input)
 	{
-        Feature feature = new Feature();
-
 	    if(input == null || input.length() == 0){
 	        return feature;
         }else {

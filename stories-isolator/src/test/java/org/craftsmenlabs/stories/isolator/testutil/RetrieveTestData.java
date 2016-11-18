@@ -534,7 +534,6 @@ public class RetrieveTestData {
                 .rank("0|zgbujw:")
                 .key("EPM-512")
                 .estimation(0f)
-                .issueType("Story")
                 .build();
     }
 

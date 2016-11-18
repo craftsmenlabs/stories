@@ -6,7 +6,9 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class Backlog implements ScrumItem{
+public class Backlog implements ScrumItem {
     @JsonProperty("issues")
     private List<Feature> features;
+    @JsonProperty("bugs")
+    private List<Bug> bugs;
 }

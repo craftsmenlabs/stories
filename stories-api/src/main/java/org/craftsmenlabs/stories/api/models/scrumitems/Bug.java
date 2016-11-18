@@ -10,15 +10,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Feature implements ScrumItem{
+public class Bug implements ScrumItem {
     @JsonProperty("key")
     private String key;
 
-    @JsonProperty("rank")
-    private String rank;
-
-    private String summary;
-    private String userstory;
-    private String acceptanceCriteria;
-    private Float estimation;
+    private String reproductionPath;
+    private String software;
+    private String expectedBehavior;
+    private String acceptationCriteria;
+    private String priority;
 }
