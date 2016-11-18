@@ -1,6 +1,7 @@
 package org.craftsmenlabs.stories.isolator.testutil;
 
-import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
+import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
+import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
 
 public class RetrieveTestData {
     public static final String BACKLOG_WITH_ONE_ISSUE = "{\n" +
@@ -517,8 +518,8 @@ public class RetrieveTestData {
                 "]";
     }
 
-    public static Issue getJiraTestIssueFromResource() {
-        return Issue.builder()
+    public static Feature getJiraTestIssueFromResource() {
+        return Feature.builder()
                 .summary("interslice")
                 .userstory(
                         "As a super office user " +
@@ -538,8 +539,8 @@ public class RetrieveTestData {
                 .build();
     }
 
-    public static Issue getTrelloTestIssueFromResource() {
-        return Issue.builder()
+    public static Feature getTrelloTestIssueFromResource() {
+        return Feature.builder()
                 .userstory(
                         "As a productowner " +
                                 "I want to have a good story, " +

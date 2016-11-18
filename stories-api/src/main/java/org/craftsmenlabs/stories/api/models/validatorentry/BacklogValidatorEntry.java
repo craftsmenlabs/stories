@@ -21,9 +21,9 @@ public class BacklogValidatorEntry {
     @JsonIgnore
     private Backlog backlog;
 
-    @JsonProperty("issueValidatorEntries")
+    @JsonProperty("featureValidatorEntries")
     @JsonIgnore
-    private List<IssueValidatorEntry> issueValidatorEntries;
+    private List<FeatureValidatorEntry> featureValidatorEntries;
     @JsonIgnore
     @JsonProperty("pointsValuation")
     private float pointsValuation = 0.0f;

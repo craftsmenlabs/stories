@@ -7,7 +7,7 @@ import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.ReportConfig;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
-import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
+import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
 import org.craftsmenlabs.stories.api.models.summary.SummaryBuilder;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 import org.craftsmenlabs.stories.connectivity.service.enterprise.EnterpriseDashboardReporter;
@@ -96,10 +96,8 @@ public class importJiraJson {
         }
 
         JiraJsonParser jiraJsonParser = new JiraJsonParser(fieldMappingConfigCopy, springFilterConfig.convert());
-        List<Issue> issues = jiraJsonParser.parse(jiraBacklog);
 
-        Backlog backlog = new Backlog();
-        backlog.setIssues(issues);
+        Backlog backlog = jiraJsonParser.parse(jiraBacklog);
 
         BacklogValidatorEntry backlogValidatorEntry = BacklogScorer.performScorer(backlog, new CurvedRanking(), validationConfig);
 

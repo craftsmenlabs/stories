@@ -3,7 +3,9 @@ package org.craftmenlabs.stories.plugin.filereader.integrationtest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.FilterConfig;
-import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
+import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
+import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
+import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.craftsmenlabs.stories.isolator.model.trello.TrelloJsonIssue;
 import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
@@ -33,22 +35,22 @@ public class RunIntegrationTest {
 
         JiraJsonParser jiraJsonParser = new JiraJsonParser(fieldMappingConfig, FilterConfig.builder().status("To Do").build());
         String testData = RetrieveTestData.getExportedJiraJSONTestResultFromResource();
-        Issue testResult = RetrieveTestData.getJiraTestIssueFromResource();
+        Feature testResult = RetrieveTestData.getJiraTestIssueFromResource();
 
-        List<Issue> issues = jiraJsonParser.parse(mapper.readValue(testData, JiraBacklog.class));
+        Backlog backlog = jiraJsonParser.parse(mapper.readValue(testData, JiraBacklog.class));
 
-        assertEquals(testResult, issues.get(0));
+        assertEquals(testResult, backlog.getFeatures().get(0));
     }
 
     @Test
     public void runIntegrationTestOnTrelloJson() throws Exception {
         TrelloJsonParser trelloJsonParser = new TrelloJsonParser();
         String testData = RetrieveTestData.getExportedTrelloJSONTestResultFromResource();
-        Issue testResult = RetrieveTestData.getTrelloTestIssueFromResource();
+        Feature testResult = RetrieveTestData.getTrelloTestIssueFromResource();
 
-        List<Issue> issues = trelloJsonParser.parse(mapper.readValue(testData, mapper.getTypeFactory().constructCollectionType(List.class, TrelloJsonIssue.class)));
+        Backlog backlog = trelloJsonParser.parse(mapper.readValue(testData, mapper.getTypeFactory().constructCollectionType(List.class, TrelloJsonIssue.class)));
 
-        assertEquals(testResult, issues.get(0));
+        assertEquals(testResult, backlog.getFeatures().get(0));
     }
 
 }

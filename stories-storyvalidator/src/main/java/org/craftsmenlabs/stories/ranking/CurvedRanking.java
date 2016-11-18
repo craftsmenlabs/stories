@@ -1,7 +1,7 @@
 package org.craftsmenlabs.stories.ranking;
 
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
-import org.craftsmenlabs.stories.api.models.validatorentry.IssueValidatorEntry;
+import org.craftsmenlabs.stories.api.models.validatorentry.FeatureValidatorEntry;
 
 import java.util.Comparator;
 import java.util.List;
@@ -15,16 +15,16 @@ public class CurvedRanking implements Ranking
 	public float createRanking(BacklogValidatorEntry backlogValidatorEntry)
 	{
 		if (backlogValidatorEntry == null ||
-            backlogValidatorEntry.getIssueValidatorEntries() == null ||
-            backlogValidatorEntry.getIssueValidatorEntries().size() == 0 )
+            backlogValidatorEntry.getFeatureValidatorEntries() == null ||
+            backlogValidatorEntry.getFeatureValidatorEntries().size() == 0 )
 		{
 			return 0.0f;
 		}
-		List<IssueValidatorEntry> entries =
+		List<FeatureValidatorEntry> entries =
 				backlogValidatorEntry
-						.getIssueValidatorEntries()
+						.getFeatureValidatorEntries()
 						.stream()
-						.sorted(Comparator.comparing(o -> o.getIssue().getRank()))
+						.sorted(Comparator.comparing(o -> o.getFeature().getRank()))
 						.collect(Collectors.toList());
 
 		float scoredPoints = 0f;

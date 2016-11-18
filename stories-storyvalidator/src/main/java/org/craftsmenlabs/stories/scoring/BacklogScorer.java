@@ -4,7 +4,7 @@ import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
-import org.craftsmenlabs.stories.api.models.validatorentry.IssueValidatorEntry;
+import org.craftsmenlabs.stories.api.models.validatorentry.FeatureValidatorEntry;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 import org.craftsmenlabs.stories.api.models.violation.ViolationType;
 import org.craftsmenlabs.stories.ranking.Ranking;
@@ -23,11 +23,11 @@ public class BacklogScorer {
                         .build();
 
 
-        if (backlog == null || backlog.getIssues() == null || backlog.getIssues().size() == 0) {
+        if (backlog == null || backlog.getFeatures() == null || backlog.getFeatures().size() == 0) {
             backlogValidatorEntry.getViolations()
                     .add(new Violation(
                             ViolationType.BacklogEmptyViolation,
-                            "The backlog is empty, or doesn't contain any issues."
+                            "The backlog is empty, or doesn't contain any features."
                     ));
 
             backlogValidatorEntry.setPointsValuation(0f);
@@ -36,7 +36,7 @@ public class BacklogScorer {
 
         } else {
 
-            backlogValidatorEntry.setIssueValidatorEntries(getValidatedIssues(backlog, validationConfig));
+            backlogValidatorEntry.setFeatureValidatorEntries(getValidatedFeatures(backlog, validationConfig));
 
 
             Float points = ranking.createRanking(backlogValidatorEntry);
@@ -58,9 +58,9 @@ public class BacklogScorer {
         return backlogValidatorEntry;
     }
 
-    private static List<IssueValidatorEntry> getValidatedIssues(Backlog backlog, ValidationConfig validationConfig) {
-        return backlog.getIssues().stream()
-                .map(issue -> IssueScorer.performScorer(issue, validationConfig))
+    private static List<FeatureValidatorEntry> getValidatedFeatures(Backlog backlog, ValidationConfig validationConfig) {
+        return backlog.getFeatures().stream()
+                .map(feature -> IssueScorer.performScorer(feature, validationConfig))
                 .collect(Collectors.toList());
     }
 }

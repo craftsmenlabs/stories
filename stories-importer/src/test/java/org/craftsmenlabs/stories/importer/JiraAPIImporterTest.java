@@ -8,7 +8,9 @@ import org.apache.commons.io.FileUtils;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.FilterConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
-import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
+import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
+import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
+import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
@@ -53,8 +55,8 @@ public class JiraAPIImporterTest {
 
         }};
 
-        List<Issue> issues = jiraAPIImporter.getIssues();
-        assertThat(issues).hasSize(6);
+        Backlog backlog = jiraAPIImporter.getBacklog();
+        assertThat(backlog.getFeatures()).hasSize(1);
     }
 
     @Test(expected = StoriesException.class)
@@ -65,7 +67,7 @@ public class JiraAPIImporterTest {
         }};
 
 
-        jiraAPIImporter.getIssues();
+        jiraAPIImporter.getBacklog();
     }
 
 

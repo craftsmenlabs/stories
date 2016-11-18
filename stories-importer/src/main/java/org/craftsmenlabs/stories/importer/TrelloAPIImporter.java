@@ -2,7 +2,7 @@ package org.craftsmenlabs.stories.importer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
-import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
+import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.isolator.model.trello.TrelloJsonIssue;
 import org.craftsmenlabs.stories.isolator.parser.TrelloJsonParser;
 import org.slf4j.Logger;
@@ -41,7 +41,8 @@ public class TrelloAPIImporter implements Importer
 		this.parser = new TrelloJsonParser();
 	}
 
-	public List<Issue> getIssues()
+	@Override
+	public Backlog getBacklog()
 	{
 		try
 		{

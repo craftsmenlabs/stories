@@ -3,7 +3,9 @@ package org.craftsmenlabs.stories.importer;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.FilterConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
-import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
+import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
+import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
+import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
 import org.slf4j.Logger;
@@ -39,7 +41,7 @@ public class JiraAPIImporter implements Importer
 	}
 
 	@Override
-	public List<Issue> getIssues()
+	public Backlog getBacklog()
 	{
 
 		// build URL params
@@ -56,7 +58,7 @@ public class JiraAPIImporter implements Importer
 			}));
 
 			JiraRequest request = JiraRequest.builder()
-					.jql("project=" + projectKey + " AND type=story AND status=\"" + filterConfig.getStatus() + "\"")
+					.jql("project=" + projectKey + " AND status=\"" + filterConfig.getStatus() + "\"")
 					.maxResults(10000)
 					.build();
 

@@ -8,7 +8,7 @@ import org.craftsmenlabs.stories.api.models.*;
 import org.craftsmenlabs.stories.api.models.config.*;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
-import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
+import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
 import org.craftsmenlabs.stories.api.models.summary.SummaryBuilder;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 import org.craftsmenlabs.stories.connectivity.service.community.CommunityDashboardReporter;
@@ -62,14 +62,7 @@ public class PluginExecutor {
 
 		// Import the data
 		Importer importer = getImporter(springSourceConfig.getEnabled());
-
-		List<Issue> issues = importer.getIssues().stream()
-				.filter(issue -> issue.getUserstory() != null)
-				.filter(issue -> !issue.getUserstory().isEmpty())
-				.collect(Collectors.toList());
-
-		Backlog backlog = new Backlog();
-		backlog.setIssues(issues);
+		Backlog backlog = importer.getBacklog();
 
 		// Perform the backlog validation
 		BacklogValidatorEntry backlogValidatorEntry = BacklogScorer.performScorer(backlog, new CurvedRanking(), validationConfig);

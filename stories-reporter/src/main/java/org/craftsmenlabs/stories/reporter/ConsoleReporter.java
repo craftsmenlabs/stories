@@ -69,7 +69,7 @@ public class ConsoleReporter implements Reporter
         log("------------------------------------------------------------");
 
         //verbose output
-        List<IssueValidatorEntry> entries = backlogValidatorEntry.getIssueValidatorEntries();
+        List<FeatureValidatorEntry> entries = backlogValidatorEntry.getFeatureValidatorEntries();
         entries.forEach(issue -> reportOnIssue(issue));
 
         //show backlog violations
@@ -92,12 +92,12 @@ public class ConsoleReporter implements Reporter
             .getRatingtreshold() + ")");
     }
 
-    public void reportOnIssue(IssueValidatorEntry issue){
+    public void reportOnIssue(FeatureValidatorEntry issue){
         prefix = issue.getRating() == Rating.SUCCESS ? ANSI_GREEN : ANSI_RED;
 
         log("------------------------------------------------------------");
         log("Issue "
-                        + issue.getIssue().getKey()
+                        + issue.getFeature().getKey()
                 + " Item total ("
                 + new DecimalFormat("#.#").format(issue.getPointsValuation() * 100)
                 + "/"
@@ -114,7 +114,7 @@ public class ConsoleReporter implements Reporter
                 + MAX_SCORE
                 + ")\t"
                   );
-        log(issue.getIssue().getSummary());
+        log(issue.getFeature().getSummary());
         issue.getViolations()
                 .forEach(violation ->
                         log("Violation found:" + violation.toString()));

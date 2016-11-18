@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.craftsmenlabs.stories.api.models.Rating;
-import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
+import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 
 import java.util.List;
@@ -15,9 +15,9 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class IssueValidatorEntry {
+public class FeatureValidatorEntry {
     @JsonProperty("issue")
-    private Issue issue;
+    private Feature feature;
 
     private float pointsValuation = 0.0f;
 

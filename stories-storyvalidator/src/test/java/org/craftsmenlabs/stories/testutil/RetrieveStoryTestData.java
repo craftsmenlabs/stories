@@ -3,11 +3,11 @@ package org.craftsmenlabs.stories.testutil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
+import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
 
 public class RetrieveStoryTestData
 {
-	public List<Issue> getTestDataFromResource()
+	public List<Feature> getTestDataFromResource()
 	{
 
 		List<String> testItems = new ArrayList<>();
@@ -80,6 +80,6 @@ public class RetrieveStoryTestData
 			+ "Insert namesst preferred alarm on top. \n"
 		));
 
-		return testItems.stream().map(s -> Issue.builder().userstory(s).build()).collect(Collectors.toList());
+		return testItems.stream().map(s -> Feature.builder().userstory(s).build()).collect(Collectors.toList());
 	}
 }

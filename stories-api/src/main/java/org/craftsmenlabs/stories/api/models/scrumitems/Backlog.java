@@ -8,5 +8,5 @@ import java.util.List;
 @Data
 public class Backlog implements ScrumItem{
     @JsonProperty("issues")
-    private List<Issue> issues;
+    private List<Feature> features;
 }

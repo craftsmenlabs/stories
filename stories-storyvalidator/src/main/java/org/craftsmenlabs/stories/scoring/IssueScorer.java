@@ -1,7 +1,7 @@
 package org.craftsmenlabs.stories.scoring;
 
 import org.craftsmenlabs.stories.api.models.Rating;
-import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
+import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.validatorentry.*;
 
@@ -14,20 +14,20 @@ import java.util.stream.Stream;
  */
 public class IssueScorer {
 
-    public static IssueValidatorEntry performScorer(Issue issue, ValidationConfig validationConfig) {
-        if (issue == null) {
-            issue = Issue.builder().rank("0").summary("").userstory("").acceptanceCriteria("").key("0").build();
+    public static FeatureValidatorEntry performScorer(Feature feature, ValidationConfig validationConfig) {
+        if (feature == null) {
+            feature = Feature.builder().rank("0").summary("").userstory("").acceptanceCriteria("").key("0").build();
         }
-        if (issue.getUserstory() == null) {
-            issue.setUserstory("");
+        if (feature.getUserstory() == null) {
+            feature.setUserstory("");
         }
-        if (issue.getAcceptanceCriteria() == null) {
-            issue.setAcceptanceCriteria("");
+        if (feature.getAcceptanceCriteria() == null) {
+            feature.setAcceptanceCriteria("");
         }
 
-        UserStoryValidatorEntry userStoryValidatorEntry = StoryScorer.performScorer(issue.getUserstory(), validationConfig);
-        AcceptanceCriteriaValidatorEntry acceptanceCriteriaValidatorEntry = AcceptanceCriteriaScorer.performScorer(issue.getAcceptanceCriteria(), validationConfig);
-        EstimationValidatorEntry estimationValidatorEntry = EstimationScorer.performScorer(issue.getEstimation(), validationConfig);
+        UserStoryValidatorEntry userStoryValidatorEntry = StoryScorer.performScorer(feature.getUserstory(), validationConfig);
+        AcceptanceCriteriaValidatorEntry acceptanceCriteriaValidatorEntry = AcceptanceCriteriaScorer.performScorer(feature.getAcceptanceCriteria(), validationConfig);
+        EstimationValidatorEntry estimationValidatorEntry = EstimationScorer.performScorer(feature.getEstimation(), validationConfig);
 
         float points = (float)
                 Stream.of(userStoryValidatorEntry, acceptanceCriteriaValidatorEntry, estimationValidatorEntry)
@@ -38,9 +38,9 @@ public class IssueScorer {
 
         Rating rating = points >= validationConfig.getIssue().getRatingtreshold() ? Rating.SUCCESS : Rating.FAIL;
 
-        return IssueValidatorEntry
+        return FeatureValidatorEntry
                 .builder()
-                .issue(issue)
+                .feature(feature)
                 .violations(new ArrayList<>())
                 .pointsValuation(points)
                 .rating(rating)
