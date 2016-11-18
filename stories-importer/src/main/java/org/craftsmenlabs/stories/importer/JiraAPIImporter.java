@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -52,7 +51,7 @@ public class JiraAPIImporter implements Importer
 
 			// Add auth token
 			restTemplate.setInterceptors(Collections.singletonList((request, body, execution) -> {
-				request.getHeaders().add("Authorization", authKey);
+				request.getHeaders().add("Authorization", "Basic " + authKey);
 				return execution.execute(request, body);
 			}));
 
