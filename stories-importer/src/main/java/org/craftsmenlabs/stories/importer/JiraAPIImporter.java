@@ -1,7 +1,5 @@
 package org.craftsmenlabs.stories.importer;
 
-import java.util.Collections;
-import java.util.List;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.FilterConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
@@ -12,6 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Importer
@@ -45,23 +46,23 @@ public class JiraAPIImporter implements Importer
 		String url = urlResource + "/rest/api/2/search";
 		logger.info("Retrieving data from: " + url);
 
-		RestTemplate restTemplate = new RestTemplate();
-
-		JiraRequest jiraRequest = JiraRequest.builder()
-			.jql("project=" + projectKey + " AND type=Story AND status=\"" + filterConfig.getStatus() + "\"")
-			.maxResults(10000)
-			.build();
 		try {
+			RestTemplate restTemplate = new RestTemplate();
+
 			// Add auth token
 			restTemplate.setInterceptors(Collections.singletonList((request, body, execution) -> {
 				request.getHeaders().add("Authorization", "Basic " + authKey);
 				return execution.execute(request, body);
 			}));
 
-			JiraBacklog backlog = restTemplate.postForObject(url, jiraRequest, JiraBacklog.class);
+			JiraRequest request = JiraRequest.builder()
+					.jql("project=" + projectKey + " AND type=story AND status=\"" + filterConfig.getStatus() + "\"")
+					.maxResults(10000)
+					.build();
+
+			JiraBacklog backlog = restTemplate.postForObject(url, request, JiraBacklog.class);
 			return parser.parse(backlog);
 		} catch (HttpClientErrorException e) {
-			logger.error("Jira call went wrong with url: " + urlResource + " and body: " + jiraRequest);
 			throw new StoriesException("Failed to connect to " + url + " Error message was: " + e.getMessage() + "body: \r\n" + e.getResponseBodyAsString());
 		}
 	}
