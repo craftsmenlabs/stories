@@ -1,12 +1,11 @@
 package org.craftsmenlabs.stories.plugin.filereader;
 
-import org.craftsmenlabs.stories.api.models.Rating;
-import org.craftsmenlabs.stories.api.models.Reporter;
-import org.craftsmenlabs.stories.api.models.StoriesRun;
-import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
-import org.craftsmenlabs.stories.api.models.config.FilterConfig;
-import org.craftsmenlabs.stories.api.models.config.ReportConfig;
-import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
+import java.io.File;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
+import org.craftsmenlabs.stories.api.models.*;
+import org.craftsmenlabs.stories.api.models.config.*;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
@@ -14,27 +13,16 @@ import org.craftsmenlabs.stories.api.models.summary.SummaryBuilder;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 import org.craftsmenlabs.stories.connectivity.service.community.CommunityDashboardReporter;
 import org.craftsmenlabs.stories.connectivity.service.enterprise.EnterpriseDashboardReporter;
-import org.craftsmenlabs.stories.importer.Importer;
-import org.craftsmenlabs.stories.importer.JiraAPIImporter;
-import org.craftsmenlabs.stories.importer.TrelloAPIImporter;
+import org.craftsmenlabs.stories.importer.*;
 import org.craftsmenlabs.stories.plugin.filereader.config.*;
 import org.craftsmenlabs.stories.ranking.CurvedRanking;
-import org.craftsmenlabs.stories.reporter.ConsoleReporter;
-import org.craftsmenlabs.stories.reporter.JsonFileReporter;
-import org.craftsmenlabs.stories.reporter.SummaryConsoleReporter;
+import org.craftsmenlabs.stories.reporter.*;
 import org.craftsmenlabs.stories.scoring.BacklogScorer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-
-import java.io.File;
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class PluginExecutor {
@@ -141,8 +129,10 @@ public class PluginExecutor {
 		if (this.springReportConfig.getDashboard().isEnabled()) {
 			List<String> profiles = Arrays.asList(env.getActiveProfiles());
 			if (profiles.contains("enterprise") && !profiles.contains("community")) {
+				logger.debug("Started enterprise version of reporter.");
 				reporters.add(new EnterpriseDashboardReporter(reportConfig));
 			} else {
+				logger.debug("Started community version of reporter.");
 				reporters.add(new CommunityDashboardReporter());
 			}
 		}
