@@ -1,7 +1,6 @@
 package org.craftmenlabs.stories.plugin.filereader.integrationtest;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import mockit.Expectations;
 import mockit.Injectable;
 import mockit.Mocked;
@@ -9,7 +8,6 @@ import mockit.integration.junit4.JMockit;
 import org.apache.commons.io.FileUtils;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.importer.JiraRequest;
-import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.craftsmenlabs.stories.plugin.filereader.BootApp;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,14 +18,11 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.net.URL;
-import java.nio.charset.Charset;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(JMockit.class)
-public class RunJiraIntegrationTest {
-
-    private ObjectMapper objectMapper = new ObjectMapper();
+public class RunTrelloIntegrationTest {
     @Mocked
     private RestTemplate restTemplate;
     @Injectable
@@ -36,13 +31,13 @@ public class RunJiraIntegrationTest {
     @Test
     public void jiraTest() throws Exception {
         new Expectations() {{
-            restTemplate.postForObject(withAny(""), withAny(jiraRequest), withAny(JiraBacklog.class));
-            result = objectMapper.readValue(readFile("jira-test.json"), JiraBacklog.class);
+            restTemplate.getForObject(withAny(""), withAny(String.class));
+            result = readFile("trello-test.json");
 
         }};
         SpringApplication application = new SpringApplication(BootApp.class);
         application.setBannerMode(Banner.Mode.OFF);
-        ApplicationContext context = application.run("--spring.profiles.active=jira-integrationtest");
+        ApplicationContext context = application.run("--spring.profiles.active=trello-integrationtest");
 
         BootApp app = context.getBean(BootApp.class);
 
@@ -54,6 +49,6 @@ public class RunJiraIntegrationTest {
 
     private String readFile(String resource) throws Exception {
         URL url = this.getClass().getClassLoader().getResource(resource);
-        return FileUtils.readFileToString(new File(url.toURI()), Charset.defaultCharset());
+        return FileUtils.readFileToString(new File(url.toURI()));
     }
 }
