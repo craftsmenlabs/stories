@@ -48,7 +48,7 @@ public class JiraAPIImporter implements Importer
 		RestTemplate restTemplate = new RestTemplate();
 
 		JiraRequest jiraRequest = JiraRequest.builder()
-			.jql("project=" + projectKey + " AND type=story AND status=\"" + filterConfig.getStatus() + "\"")
+			.jql("project=" + projectKey + " AND type=Story AND status=\"" + filterConfig.getStatus() + "\"")
 			.maxResults(10000)
 			.build();
 		try {
@@ -61,7 +61,7 @@ public class JiraAPIImporter implements Importer
 			JiraBacklog backlog = restTemplate.postForObject(url, jiraRequest, JiraBacklog.class);
 			return parser.parse(backlog);
 		} catch (HttpClientErrorException e) {
-			logger.error("Jira call went wrong with url: " + urlResource + " and bodyy: " + jiraRequest);
+			logger.error("Jira call went wrong with url: " + urlResource + " and body: " + jiraRequest);
 			throw new StoriesException("Failed to connect to " + url + " Error message was: " + e.getMessage() + "body: \r\n" + e.getResponseBodyAsString());
 		}
 	}
