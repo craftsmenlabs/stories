@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FeatureValidatorEntry {
-    @JsonProperty("issue")
+    @JsonProperty("feature")
     private Feature feature;
 
     private float pointsValuation = 0.0f;

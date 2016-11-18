@@ -10,31 +10,35 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "field_mapping", ignoreInvalidFields = true)
 public class SpringFieldMappingConfig implements ValidatableConfig {
-    private IssueMapping issue;
+    private FeatureMapping feature;
+    private BugMapping bug;
+    private EpicMapping epic;
 
     public FieldMappingConfig convert() {
         return FieldMappingConfig.builder()
-                .issue(this.getIssue().convert())
+                .feature(this.getFeature().convert())
+                .bug(this.getBug() != null ? this.getBug().convert() : null)
+                .epic(this.getEpic() != null ? this.epic.convert() : null)
                 .build();
     }
 
     @Override
     public void validate() throws StoriesException {
         // Cascade to children
-        this.issue.validate();
+        this.feature.validate();
     }
 
     @Data
-    public static class IssueMapping implements ValidatableConfig {
+    public static class FeatureMapping implements ValidatableConfig {
         private String rank;
         private String estimation;
         private String acceptanceCriteria;
 
-        public FieldMappingConfig.IssueMapping convert() {
-            return FieldMappingConfig.IssueMapping.builder()
+        public FieldMappingConfig.FeatureMapping convert() {
+            return FieldMappingConfig.FeatureMapping.builder()
                     .rank(rank)
                     .estimation(estimation)
-                    .acceptenceCriteria(acceptanceCriteria)
+                    .acceptanceCriteria(acceptanceCriteria)
                     .build();
         }
 
@@ -43,6 +47,34 @@ public class SpringFieldMappingConfig implements ValidatableConfig {
             if (rank == null || rank.isEmpty()) {
                 throw new IllegalStateException("The rank attribute has not been set correctly.");
             }
+        }
+    }
+
+    @Data
+    public static class BugMapping {
+        private String reproductionPath;
+        private String software;
+        private String expectedBehavior;
+        private String acceptationCriteria;
+
+        public FieldMappingConfig.BugMapping convert() {
+            return FieldMappingConfig.BugMapping.builder()
+                    .reproductionPath(reproductionPath)
+                    .software(software)
+                    .expectedBehavior(expectedBehavior)
+                    .acceptationCriteria(acceptationCriteria)
+                    .build();
+        }
+    }
+
+    @Data
+    public static class EpicMapping {
+        private String goal;
+
+        public FieldMappingConfig.EpicMapping convert() {
+            return FieldMappingConfig.EpicMapping.builder()
+                    .goal(goal)
+                    .build();
         }
     }
 

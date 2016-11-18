@@ -16,7 +16,7 @@ public class ValidationConfig {
     @JsonProperty("backlog")
     private ValidatorEntry backlog;
 
-    @JsonProperty("issue")
+    @JsonProperty("feature")
     private ValidatorEntry issue;
 
     @JsonProperty("story")

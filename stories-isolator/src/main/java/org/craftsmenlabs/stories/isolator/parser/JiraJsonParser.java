@@ -70,7 +70,7 @@ public class JiraJsonParser {
         feature.setKey(jiraJsonIssue.getKey());
         feature.setIssueType(jiraJsonIssue.getFields().getIssuetype().getName());
 
-        String criteriaKey = fieldMapping.getIssue().getAcceptenceCriteria();
+        String criteriaKey = fieldMapping.getFeature().getAcceptanceCriteria();
         if (StringUtils.isNotEmpty(criteriaKey) && jiraJsonIssue.getFields().getAdditionalProperties().containsKey(criteriaKey)) {
             // We should get the acceptence Criteria from this field
             feature.setAcceptanceCriteria((String) jiraJsonIssue.getFields().getAdditionalProperties().get(criteriaKey));
@@ -86,7 +86,7 @@ public class JiraJsonParser {
             }
         }
 
-        String rank = stringProps.get(fieldMapping.getIssue().getRank());
+        String rank = stringProps.get(fieldMapping.getFeature().getRank());
         if (rank == null || StringUtils.isEmpty(rank)) {
             throw new StoriesException(
                     "The rank field mapping was not defined in your application yaml or parameters. " +
@@ -96,8 +96,8 @@ public class JiraJsonParser {
 
         float estimation = 0f;
         try {
-            if (stringProps.get(fieldMapping.getIssue().getEstimation()) != null) {
-                estimation = Float.parseFloat(stringProps.get(fieldMapping.getIssue().getEstimation()));
+            if (stringProps.get(fieldMapping.getFeature().getEstimation()) != null) {
+                estimation = Float.parseFloat(stringProps.get(fieldMapping.getFeature().getEstimation()));
             }
         } catch (NumberFormatException nfe) {
             logger.warn("Parsing of estimation to float failed. By default set to 0.0");

@@ -21,7 +21,7 @@ filters:
     status: "To Do"
 
 field_mapping:
-    issue:
+    feature:
         rank: "customfield_10401"
         summary: "customfield_11400"
         estimation: "S"

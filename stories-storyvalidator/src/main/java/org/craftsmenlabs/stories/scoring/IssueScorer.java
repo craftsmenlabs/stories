@@ -1,15 +1,15 @@
 package org.craftsmenlabs.stories.scoring;
 
 import org.craftsmenlabs.stories.api.models.Rating;
-import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
+import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
 import org.craftsmenlabs.stories.api.models.validatorentry.*;
 
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
 /**
- * Assigns points to an issue, based on all
+ * Assigns points to an feature, based on all
  * underlying fields, such as user story, acceptance criteria, estimated points
  */
 public class IssueScorer {

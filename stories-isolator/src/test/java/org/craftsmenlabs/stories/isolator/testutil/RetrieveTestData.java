@@ -1,7 +1,6 @@
 package org.craftsmenlabs.stories.isolator.testutil;
 
 import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
-import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
 
 public class RetrieveTestData {
     public static final String BACKLOG_WITH_ONE_ISSUE = "{\n" +
@@ -13,7 +12,7 @@ public class RetrieveTestData {
             "    {\n" +
             "      \"expand\": \"operations,versionedRepresentations,editmeta,changelog,transitions,renderedFields\",\n" +
             "      \"id\": \"80972\",\n" +
-            "      \"self\": \"https://jira.codecentric.de/rest/api/2/issue/80972\",\n" +
+            "      \"self\": \"https://jira.codecentric.de/rest/api/2/feature/80972\",\n" +
             "      \"key\": \"GAR-154\",\n" +
             "      \"fields\": {\n" +
             "        \"issuetype\": {\n" +
@@ -47,7 +46,7 @@ public class RetrieveTestData {
             "        \"workratio\": -1,\n" +
             "        \"lastViewed\": \"2016-11-08T11:53:06.960+0100\",\n" +
             "        \"watches\": {\n" +
-            "          \"self\": \"https://jira.codecentric.de/rest/api/2/issue/GAR-154/watchers\",\n" +
+            "          \"self\": \"https://jira.codecentric.de/rest/api/2/feature/GAR-154/watchers\",\n" +
             "          \"watchCount\": 1,\n" +
             "          \"isWatching\": true\n" +
             "        },\n" +
@@ -165,7 +164,7 @@ public class RetrieveTestData {
             "          \"total\": 0\n" +
             "        },\n" +
             "        \"votes\": {\n" +
-            "          \"self\": \"https://jira.codecentric.de/rest/api/2/issue/GAR-154/votes\",\n" +
+            "          \"self\": \"https://jira.codecentric.de/rest/api/2/feature/GAR-154/votes\",\n" +
             "          \"votes\": 0,\n" +
             "          \"hasVoted\": false\n" +
             "        }\n" +
@@ -181,7 +180,7 @@ public class RetrieveTestData {
             "    {\n" +
             "      \"expand\": \"operations,editmeta,changelog,transitions,renderedFields\",\n" +
             "      \"id\": \"18511\",\n" +
-            "      \"self\": \"http://jira.x.nl/rest/api/2/issue/18511\",\n" +
+            "      \"self\": \"http://jira.x.nl/rest/api/2/feature/18511\",\n" +
             "      \"key\": \"DIU-726\",\n" +
             "      \"fields\": {\n" +
             "        \"issuetype\": {\n" +
@@ -235,7 +234,7 @@ public class RetrieveTestData {
             "        \"summary\": \"Search component for systems\",\n" +
             "        \"lastViewed\": null,\n" +
             "        \"watches\": {\n" +
-            "          \"self\": \"http://jira.foo.bar/rest/api/2/issue/EPM-632/watchers\",\n" +
+            "          \"self\": \"http://jira.foo.bar/rest/api/2/feature/EPM-632/watchers\",\n" +
             "          \"watchCount\": 1,\n" +
             "          \"isWatching\": false\n" +
             "        },\n" +
@@ -307,7 +306,7 @@ public class RetrieveTestData {
             "          \n" +
             "        ],\n" +
             "        \"votes\": {\n" +
-            "          \"self\": \"http://jira.foo.bar/rest/api/2/issue/EPM-632/votes\",\n" +
+            "          \"self\": \"http://jira.foo.bar/rest/api/2/feature/EPM-632/votes\",\n" +
             "          \"votes\": 0,\n" +
             "          \"hasVoted\": false\n" +
             "        },\n" +
@@ -340,7 +339,7 @@ public class RetrieveTestData {
                 "    {\n" +
                 "      \"expand\": \"operations,editmeta,changelog,transitions,renderedFields\",\n" +
                 "      \"id\": \"1721342\",\n" +
-                "      \"self\": \"http://jira.foo.bar/rest/api/2/issue/17982\",\n" +
+                "      \"self\": \"http://jira.foo.bar/rest/api/2/feature/17982\",\n" +
                 "      \"key\": \"EPM-512\",\n" +
                 "      \"fields\": {\n" +
                 "        \"issuetype\": {\n" +
@@ -384,7 +383,7 @@ public class RetrieveTestData {
                 "        \"summary\": \"interslice\",\n" +
                 "        \"lastViewed\": \"2013-1-1T15:47:39.369+0200\",\n" +
                 "        \"watches\": {\n" +
-                "          \"self\": \"http://jira.foo.bar/rest/api/2/issue/EPM-512/watchers\",\n" +
+                "          \"self\": \"http://jira.foo.bar/rest/api/2/feature/EPM-512/watchers\",\n" +
                 "          \"watchCount\": 1,\n" +
                 "          \"isWatching\": false\n" +
                 "        },\n" +
@@ -448,7 +447,7 @@ public class RetrieveTestData {
                 "        },\n" +
                 "        \"issuelinks\": [],\n" +
                 "        \"votes\": {\n" +
-                "          \"self\": \"http://jira.foo.bar/rest/api/2/issue/EPM-512/votes\",\n" +
+                "          \"self\": \"http://jira.foo.bar/rest/api/2/feature/EPM-512/votes\",\n" +
                 "          \"votes\": 0,\n" +
                 "          \"hasVoted\": false\n" +
                 "        },\n" +

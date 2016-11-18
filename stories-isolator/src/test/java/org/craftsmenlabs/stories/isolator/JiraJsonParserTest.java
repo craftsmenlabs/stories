@@ -4,13 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.FilterConfig;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
-import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
 import org.craftsmenlabs.stories.isolator.testutil.RetrieveTestData;
 import org.junit.Test;
-
-import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -19,10 +16,9 @@ public class JiraJsonParserTest {
     private FieldMappingConfig fieldMappingConfigCopy =
             FieldMappingConfig.builder()
                     .backlog(FieldMappingConfig.BacklogMapping.builder().build())
-                    .issue(FieldMappingConfig.IssueMapping.builder().rank("customfield_11400").acceptenceCriteria("customfield_10502").build())
-                    .story(FieldMappingConfig.StoryMapping.builder().build())
-                    .criteria(FieldMappingConfig.CriteriaMapping.builder().build())
-                    .estimation(FieldMappingConfig.EstimationMapping.builder().build())
+                    .feature(FieldMappingConfig.FeatureMapping.builder().rank("customfield_11400").acceptanceCriteria("customfield_10502").build())
+                    .bug(FieldMappingConfig.BugMapping.builder().acceptationCriteria("customfield_11404").expectedBehavior("customfield_114005").reproductionPath("customfield_114004").software("customfield_11401").build())
+                    .epic(FieldMappingConfig.EpicMapping.builder().goal("customfield_114007").build())
                     .build();
 
     private FilterConfig filterConfig = FilterConfig.builder()
