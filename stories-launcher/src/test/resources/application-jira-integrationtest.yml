@@ -1,0 +1,56 @@
+spring:
+  profiles:
+    active: test
+    include: enterprise
+
+source:
+    enabled: jira
+
+    jira:
+        url:  https://jira.com
+        authKey: authKey
+        projectKey: GAR
+
+report:
+  dashboard:
+    enabled: false
+    url:
+    token:
+
+filters:
+    status: "To Do"
+
+field_mapping:
+    issue:
+        rank: "customfield_10401"
+        summary: "customfield_11400"
+        estimation: "S"
+        acceptanceCriteria: "dadada"
+
+
+validation:
+    backlog:
+        ratingtreshold: 60.0
+    issue:
+        ratingtreshold: 0.7
+    story:
+        fieldSource: "description#story"
+        ratingtreshold: 0.6
+        active: true
+        asKeywords: ["as a"]
+        iKeywords: ["i want"]
+        soKeywords: ["so"]
+    bug:
+        filledWith: ["","component"]
+    criteria:
+        fieldSource: "description#criteria"
+        ratingtreshold: 0.7
+        active: false
+        givenKeywords: ["given"]
+        whenKeywords: ["when"]
+        thenKeywords: ["then"]
+    estimation:
+        ratingtreshold: 0.7
+        active: false
+
+
