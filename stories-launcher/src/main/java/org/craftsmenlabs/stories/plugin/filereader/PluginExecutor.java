@@ -134,11 +134,11 @@ public class PluginExecutor {
 		reporters.add(new ConsoleReporter(this.validationConfig));
 		reporters.add(new SummaryConsoleReporter());
 
-		if(this.springReportConfig.getFile().isEnabled()) {
+		if(this.springReportConfig.getFile() != null && this.springReportConfig.getFile().isEnabled()) {
 			reporters.add(new JsonFileReporter(new File(this.springReportConfig.getFile().getLocation())));
 		}
 
-		if (this.springReportConfig.getDashboard().isEnabled()) {
+		if (this.springReportConfig.getDashboard() != null && this.springReportConfig.getDashboard().isEnabled()) {
 			List<String> profiles = Arrays.asList(env.getActiveProfiles());
 			if (profiles.contains("enterprise") && !profiles.contains("community")) {
 				reporters.add(new EnterpriseDashboardReporter(reportConfig));

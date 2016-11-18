@@ -17,8 +17,12 @@ public class SpringReportConfig implements ValidatableConfig {
     @Override
     public void validate() throws StoriesException {
         // Cascade
-        this.file.validate();
-        this.dashboard.validate();
+        if(file != null) {
+            this.file.validate();
+        }
+        if(dashboard != null) {
+            this.dashboard.validate();
+        }
     }
 
     public ReportConfig convert() {
