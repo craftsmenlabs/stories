@@ -22,16 +22,28 @@ public class SpringReportConfig implements ValidatableConfig {
     }
 
     public ReportConfig convert() {
+        final ReportConfig.FileConfig fileConfig =
+                (file != null) ?
+                        ReportConfig.FileConfig.builder()
+                            .enabled(file.enabled)
+                            .location(file.location)
+                            .build() :
+                        null;
+
+
+
+        final ReportConfig.DashboardConfig dashboardConfig =
+                dashboard != null ?
+                        ReportConfig.DashboardConfig.builder()
+                            .enabled(dashboard.enabled)
+                            .token(dashboard.token)
+                            .url(dashboard.url)
+                            .build() :
+                null;
+
         return ReportConfig.builder()
-                .dashboard(ReportConfig.DashboardConfig.builder()
-                        .enabled(dashboard.enabled)
-                        .token(dashboard.token)
-                        .url(dashboard.url)
-                        .build())
-                .file(ReportConfig.FileConfig.builder()
-                        .enabled(file.enabled)
-                        .location(file.location)
-                        .build())
+                .dashboard(dashboardConfig)
+                .file(fileConfig)
                 .build();
     }
 
