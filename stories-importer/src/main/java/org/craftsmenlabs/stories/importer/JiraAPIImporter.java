@@ -8,11 +8,11 @@ import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.client.support.BasicAuthorizationInterceptor;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -24,18 +24,16 @@ public class JiraAPIImporter implements Importer
 
 	private String urlResource;
 	private String projectKey;
-	private String username;
-	private String password;
+	private String authKey;
 
 	private FilterConfig filterConfig;
 	private JiraJsonParser parser;
 
-	public JiraAPIImporter(String urlResource, String projectKey, String username, String password, FieldMappingConfig fieldMappingConfig, FilterConfig filterConfig)
+	public JiraAPIImporter(String urlResource, String projectKey, String authKey, FieldMappingConfig fieldMappingConfig, FilterConfig filterConfig)
 	{
 		this.urlResource = urlResource;
 		this.projectKey = projectKey;
-		this.username = username;
-		this.password = password;
+		this.authKey = authKey;
 		this.filterConfig = filterConfig;
 
 		this.parser = new JiraJsonParser(fieldMappingConfig, filterConfig);
@@ -53,7 +51,10 @@ public class JiraAPIImporter implements Importer
 			RestTemplate restTemplate = new RestTemplate();
 
 			// Add auth token
-			restTemplate.setInterceptors(Arrays.asList(new BasicAuthorizationInterceptor(username, password)));
+			restTemplate.setInterceptors(Collections.singletonList((request, body, execution) -> {
+				request.getHeaders().add("Authorization", authKey);
+				return execution.execute(request, body);
+			}));
 
 			JiraRequest request = JiraRequest.builder()
 					.jql("project=" + projectKey + " AND type=story AND status=\"" + filterConfig.getStatus() + "\"")

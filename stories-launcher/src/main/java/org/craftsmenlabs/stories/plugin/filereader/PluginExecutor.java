@@ -115,7 +115,7 @@ public class PluginExecutor {
 			case "jira":
 				SpringSourceConfig.JiraConfig jiraConfig = springSourceConfig.getJira();
 				logger.info("Using JiraAPIImporter for import." + jiraConfig.getUrl());
-				return new JiraAPIImporter(jiraConfig.getUrl(),jiraConfig.getProjectKey(), jiraConfig.getUsername(), jiraConfig.getPassword(), fieldMappingConfig, filterConfig);
+				return new JiraAPIImporter(jiraConfig.getUrl(),jiraConfig.getProjectKey(), jiraConfig.getAuthKey(), fieldMappingConfig, filterConfig);
 			case "trello":
 				logger.info("Using TrelloAPIImporter for import.");
 				SpringSourceConfig.TrelloConfig trelloConfig = springSourceConfig.getTrello();

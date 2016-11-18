@@ -40,7 +40,7 @@ public class JiraAPIImporterTest {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    private JiraAPIImporter jiraAPIImporter = new JiraAPIImporter("http://foo.bar", "1", "username", "password", fieldMappingConfigCopy, filterConfig);
+    private JiraAPIImporter jiraAPIImporter = new JiraAPIImporter("http://foo.bar", "1", "key", fieldMappingConfigCopy, filterConfig);
 
     @Mocked
     private RestTemplate restTemplate;
