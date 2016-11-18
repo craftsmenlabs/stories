@@ -1,36 +1,38 @@
 package org.craftsmenlabs.stories.plugin.filereader;
 
 import org.craftsmenlabs.stories.api.models.Rating;
+import org.craftsmenlabs.stories.api.models.Reporter;
 import org.craftsmenlabs.stories.api.models.StoriesRun;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
+import org.craftsmenlabs.stories.api.models.config.FilterConfig;
+import org.craftsmenlabs.stories.api.models.config.ReportConfig;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
 import org.craftsmenlabs.stories.api.models.summary.SummaryBuilder;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
-import org.craftsmenlabs.stories.connectivity.service.ConnectivityService;
+import org.craftsmenlabs.stories.connectivity.service.community.CommunityDashboardReporter;
+import org.craftsmenlabs.stories.connectivity.service.enterprise.EnterpriseDashboardReporter;
 import org.craftsmenlabs.stories.importer.Importer;
 import org.craftsmenlabs.stories.importer.JiraAPIImporter;
 import org.craftsmenlabs.stories.importer.TrelloAPIImporter;
-import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
-import org.craftsmenlabs.stories.isolator.parser.Parser;
-import org.craftsmenlabs.stories.isolator.parser.TrelloJsonParser;
 import org.craftsmenlabs.stories.plugin.filereader.config.*;
 import org.craftsmenlabs.stories.ranking.CurvedRanking;
 import org.craftsmenlabs.stories.reporter.ConsoleReporter;
 import org.craftsmenlabs.stories.reporter.JsonFileReporter;
-import org.craftsmenlabs.stories.reporter.Reporter;
 import org.craftsmenlabs.stories.reporter.SummaryConsoleReporter;
 import org.craftsmenlabs.stories.scoring.BacklogScorer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,9 +41,11 @@ public class PluginExecutor {
 	private final Logger logger = LoggerFactory.getLogger(PluginExecutor.class);
 	public ValidationConfig validationConfig;
 	public FieldMappingConfig fieldMappingConfig;
+	public FilterConfig filterConfig;
+	public ReportConfig reportConfig;
 
 	@Autowired
-	private ConnectivityService dashboardConnectivity;
+	private Environment env;
 	@Autowired
 	private SpringReportConfig springReportConfig;
 	@Autowired
@@ -56,21 +60,22 @@ public class PluginExecutor {
 	public Rating startApplication() {
 		logger.info("Starting stories plugin.");
 
-		// Prepare configs
-		validationConfig = springValidationConfig.convert();
-		fieldMappingConfig = springFieldMappingConfig.convert();
+
 		// Validate configs
 		this.springReportConfig.validate();
 		this.springSourceConfig.validate();
+		this.springFieldMappingConfig.validate();
+
+		// Convert configs
+		validationConfig = springValidationConfig.convert();
+		fieldMappingConfig = springFieldMappingConfig.convert();
+		filterConfig = springFilterConfig.convert();
+		reportConfig = springReportConfig.convert();
 
 		// Import the data
 		Importer importer = getImporter(springSourceConfig.getEnabled());
-		String data = importer.getDataAsString();
 
-
-		// Parse and filter the issues
-		Parser parser = getParser(springSourceConfig.getEnabled());
-		List<Issue> issues = parser.getIssues(data).stream()
+		List<Issue> issues = importer.getIssues().stream()
 				.filter(issue -> issue.getUserstory() != null)
 				.filter(issue -> !issue.getUserstory().isEmpty())
 				.collect(Collectors.toList());
@@ -81,9 +86,6 @@ public class PluginExecutor {
 		// Perform the backlog validation
 		BacklogValidatorEntry backlogValidatorEntry = BacklogScorer.performScorer(backlog, new CurvedRanking(), validationConfig);
 
-		for(Reporter reporter : this.getReporters()) {
-			reporter.report(backlogValidatorEntry);
-		}
 
 		// Dashboard report?
         StoriesRun storiesRun = StoriesRun.builder()
@@ -93,7 +95,10 @@ public class PluginExecutor {
 				.runDateTime(LocalDateTime.now())
 				.build();
 
-        dashboardConnectivity.sendData(storiesRun);
+
+		for (Reporter reporter : this.getReporters()) {
+			reporter.report(storiesRun);
+		}
 
 		//Multiply by 100%
 		return backlogValidatorEntry.getRating();
@@ -110,7 +115,7 @@ public class PluginExecutor {
 			case "jira":
 				SpringSourceConfig.JiraConfig jiraConfig = springSourceConfig.getJira();
 				logger.info("Using JiraAPIImporter for import." + jiraConfig.getUrl());
-				return new JiraAPIImporter(jiraConfig.getUrl(),jiraConfig.getProjectKey(), jiraConfig.getAuthKey(), springFilterConfig.getStatus());
+				return new JiraAPIImporter(jiraConfig.getUrl(),jiraConfig.getProjectKey(), jiraConfig.getUsername(), jiraConfig.getPassword(), fieldMappingConfig, filterConfig);
 			case "trello":
 				logger.info("Using TrelloAPIImporter for import.");
 				SpringSourceConfig.TrelloConfig trelloConfig = springSourceConfig.getTrello();
@@ -121,35 +126,25 @@ public class PluginExecutor {
 	}
 
 	/**
-	 * Set the parser based on the data format:
-	 * jirajson, trellojson, etc.
-	 *
-	 * @param enabled enabled source
-	 */
-	private Parser getParser(String enabled) {
-		switch (enabled) {
-			case ("jira"):
-				return new JiraJsonParser(fieldMappingConfig, springFilterConfig.getStatus());
-			case ("trello"):
-				return new TrelloJsonParser();
-			default:
-				throw new StoriesException(StoriesException.ERR_SOURCE_ENABLED_MISSING);
-		}
-	}
-
-	/**
 	 * Finds out which reporters should be used for this run
 	 * @return List of reporters
 	 */
 	private List<Reporter> getReporters() {
-		List<Reporter> reporters = Arrays.asList(
-				new ConsoleReporter(this.validationConfig),
-				new SummaryConsoleReporter()
-		);
+		List<Reporter> reporters = new LinkedList<>();
+		reporters.add(new ConsoleReporter(this.validationConfig));
+		reporters.add(new SummaryConsoleReporter());
 
-		//TODO In the future, depending on configuration, we can add additional reports here.
 		if(this.springReportConfig.getFile().isEnabled()) {
 			reporters.add(new JsonFileReporter(new File(this.springReportConfig.getFile().getLocation())));
+		}
+
+		if (this.springReportConfig.getDashboard().isEnabled()) {
+			List<String> profiles = Arrays.asList(env.getActiveProfiles());
+			if (profiles.contains("enterprise") && !profiles.contains("community")) {
+				reporters.add(new EnterpriseDashboardReporter(reportConfig));
+			} else {
+				reporters.add(new CommunityDashboardReporter());
+			}
 		}
 
 		return reporters;

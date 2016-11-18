@@ -1,44 +1,42 @@
 package org.craftsmenlabs.stories.isolator.parser;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
+import org.craftsmenlabs.stories.api.models.config.FilterConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
-import org.craftsmenlabs.stories.isolator.SentenceSplitter;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
+import org.craftsmenlabs.stories.isolator.SentenceSplitter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-public class JiraJsonParser implements Parser {
+public class JiraJsonParser {
 
     private final Logger logger = LoggerFactory.getLogger(JiraJsonParser.class);
     private FieldMappingConfig fieldMapping;
-    private String todo;
+    private FilterConfig filterConfig;
 
-    public JiraJsonParser(FieldMappingConfig fieldMapping, String todo) {
+    public JiraJsonParser(FieldMappingConfig fieldMapping, FilterConfig filterConfig) {
         this.fieldMapping = fieldMapping;
-        this.todo = todo;
+        this.filterConfig = filterConfig;
     }
 
-    public List<Issue> getIssues(List<JiraJsonIssue> jiraJsonIssues) {
+    public List<Issue> parse(JiraBacklog backlog) {
         SentenceSplitter sentenceSplitter = new SentenceSplitter();
 
-        List<JiraJsonIssue> issues = jiraJsonIssues.stream()
-                .filter(jiraJsonIssue -> jiraJsonIssue.getFields().getStatus().getStatusCategory().getName().equals(todo))
-                .collect(Collectors.toList());
+        if(backlog == null) {
+            return null;
+        }
 
-        return issues.stream()
+        return backlog.getJiraJsonIssues().stream()
+                .filter(jiraJsonIssue -> jiraJsonIssue.getFields().getStatus().getStatusCategory().getName().equals(filterConfig.getStatus()))
                 .map(jiraJsonIssue -> {
                     Issue issue;
 
@@ -51,6 +49,12 @@ public class JiraJsonParser implements Parser {
                     issue.setSummary(jiraJsonIssue.getFields().getSummary());
                     issue.setKey(jiraJsonIssue.getKey());
                     issue.setIssueType(jiraJsonIssue.getFields().getIssuetype().getName());
+
+                    String criteriaKey = fieldMapping.getIssue().getAcceptenceCriteria();
+                    if(StringUtils.isNotEmpty(criteriaKey) && jiraJsonIssue.getFields().getAdditionalProperties().containsKey(criteriaKey)) {
+                        // We should get the acceptence Criteria from this field
+                        issue.setAcceptanceCriteria((String) jiraJsonIssue.getFields().getAdditionalProperties().get(criteriaKey));
+                    }
 
                     Map<String, Object> additionalProps = jiraJsonIssue.getFields().getAdditionalProperties();
                     Map<String, String> stringProps = new HashMap<>();
@@ -86,30 +90,5 @@ public class JiraJsonParser implements Parser {
 
     public boolean hasNoValidDescription(JiraJsonIssue jiraJsonIssue) {
         return jiraJsonIssue.getFields().getDescription() == null || jiraJsonIssue.getFields().getDescription().isEmpty();
-    }
-
-
-    public List<Issue> getIssues(String input) {
-        return getIssues(getJiraJsonIssues(input));
-    }
-
-
-    public List<JiraJsonIssue> getJiraJsonIssues(String input){
-        if (input == null || input.isEmpty())
-            return null;
-
-        List<JiraJsonIssue> jiraJsonIssues = null;
-
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            JiraBacklog jiraBacklog = mapper.readValue(input, JiraBacklog.class);
-            jiraJsonIssues = jiraBacklog.getJiraJsonIssues();
-        } catch(JsonParseException | JsonMappingException e){
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return jiraJsonIssues;
     }
 }

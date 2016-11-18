@@ -3,6 +3,8 @@ package org.craftsmenlabs.stories.reporter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.craftsmenlabs.stories.api.models.Reporter;
+import org.craftsmenlabs.stories.api.models.StoriesRun;
 import org.craftsmenlabs.stories.api.models.summary.Summary;
 import org.craftsmenlabs.stories.api.models.summary.SummaryBuilder;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
@@ -13,7 +15,8 @@ public class SummaryConsoleReporter implements Reporter {
     private final Logger logger = LoggerFactory.getLogger(SummaryConsoleReporter.class);
 
     @Override
-    public void report(BacklogValidatorEntry backlogValidatorEntry) {
+    public void report(StoriesRun storiesRun) {
+        BacklogValidatorEntry backlogValidatorEntry = storiesRun.getBacklogValidatorEntry();
         Summary summary = new SummaryBuilder().build(backlogValidatorEntry);
 
         logger.info(summary.toString());

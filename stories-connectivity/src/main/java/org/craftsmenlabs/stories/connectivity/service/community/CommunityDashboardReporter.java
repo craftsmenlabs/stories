@@ -1,23 +1,19 @@
 package org.craftsmenlabs.stories.connectivity.service.community;
 
+import org.craftsmenlabs.stories.api.models.Reporter;
 import org.craftsmenlabs.stories.api.models.StoriesRun;
-import org.craftsmenlabs.stories.connectivity.service.ConnectivityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Component;
 
 /**
  *
  */
-@Profile("!enterprise")
-@Component
-public class CommunityConnectivityService implements ConnectivityService {
+public class CommunityDashboardReporter implements Reporter {
 
-    private final Logger logger = LoggerFactory.getLogger(CommunityConnectivityService.class);
+    private final Logger logger = LoggerFactory.getLogger(CommunityDashboardReporter.class);
 
     @Override
-    public void sendData(StoriesRun storiesRun) {
+    public void report(StoriesRun storiesRun) {
         logger.info("\n"
                 + "***\n"
                 + "Thank you for using the community version.");

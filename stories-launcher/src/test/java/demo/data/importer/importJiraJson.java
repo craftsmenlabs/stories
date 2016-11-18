@@ -4,20 +4,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.util.Files;
 import org.craftsmenlabs.stories.api.models.StoriesRun;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
+import org.craftsmenlabs.stories.api.models.config.ReportConfig;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
 import org.craftsmenlabs.stories.api.models.summary.SummaryBuilder;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
-import org.craftsmenlabs.stories.connectivity.service.ConnectivityService;
+import org.craftsmenlabs.stories.connectivity.service.enterprise.EnterpriseDashboardReporter;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
-import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
 import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
-import org.craftsmenlabs.stories.plugin.filereader.config.SpringFilterConfig;
-import org.craftsmenlabs.stories.plugin.filereader.config.SpringSourceConfig;
+import org.craftsmenlabs.stories.plugin.filereader.config.*;
 import org.craftsmenlabs.stories.plugin.filereader.BootApp;
-import org.craftsmenlabs.stories.plugin.filereader.config.SpringFieldMappingConfig;
-import org.craftsmenlabs.stories.plugin.filereader.config.SpringValidationConfig;
 import org.craftsmenlabs.stories.ranking.CurvedRanking;
 import org.craftsmenlabs.stories.scoring.BacklogScorer;
 import org.junit.Test;
@@ -45,9 +42,6 @@ import java.util.stream.Collectors;
 @SpringBootTest(classes = {BootApp.class})
 @TestPropertySource(locations = "classpath:application-test.yml")
 public class importJiraJson {
-
-    @Autowired
-    private ConnectivityService dashboardConnectivity;
     @Autowired
     private SpringSourceConfig springSourceConfig;
     @Autowired
@@ -56,10 +50,9 @@ public class importJiraJson {
     private SpringFieldMappingConfig springFieldMappingConfig;
     @Autowired
     private SpringFilterConfig springFilterConfig;
+    @Autowired
+    private SpringReportConfig springReportConfig;
 
-
-    private ValidationConfig validationConfig;
-    private FieldMappingConfig fieldMappingConfigCopy;
 
     @Test
     public void importData() {
@@ -90,8 +83,9 @@ public class importJiraJson {
 
         LocalDateTime dateTime = LocalDate.parse(date).atTime(time.get(0), time.get(1));
 
-        validationConfig = springValidationConfig.convert();
-        fieldMappingConfigCopy = springFieldMappingConfig.convert();
+        ValidationConfig validationConfig = springValidationConfig.convert();
+        FieldMappingConfig fieldMappingConfigCopy = springFieldMappingConfig.convert();
+        ReportConfig reportConfig = springReportConfig.convert();
 
         ObjectMapper mapper = new ObjectMapper();
         JiraBacklog jiraBacklog = null;
@@ -101,9 +95,8 @@ public class importJiraJson {
             e.printStackTrace();
         }
 
-        JiraJsonParser jiraJsonParser = new JiraJsonParser(fieldMappingConfigCopy, springFilterConfig.getStatus());
-        List<JiraJsonIssue> jiraJsonIssues = jiraBacklog.getJiraJsonIssues();
-        List<Issue> issues = jiraJsonParser.getIssues(jiraJsonIssues);
+        JiraJsonParser jiraJsonParser = new JiraJsonParser(fieldMappingConfigCopy, springFilterConfig.convert());
+        List<Issue> issues = jiraJsonParser.parse(jiraBacklog);
 
         Backlog backlog = new Backlog();
         backlog.setIssues(issues);
@@ -118,6 +111,7 @@ public class importJiraJson {
                 .runConfig(validationConfig)
                 .build();
 
-        dashboardConnectivity.sendData(storiesRun);
+        EnterpriseDashboardReporter enterpriseDashboardReporter = new EnterpriseDashboardReporter(reportConfig);
+        enterpriseDashboardReporter.report(storiesRun);
     }
 }

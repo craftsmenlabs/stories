@@ -4,7 +4,6 @@ package org.craftmenlabs.stories.plugin.filereader.integrationtest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
-import org.craftsmenlabs.stories.connectivity.service.ConnectivityService;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
 import org.craftsmenlabs.stories.plugin.filereader.config.SpringSourceConfig;
@@ -33,9 +32,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(classes = {BootApp.class})
 @TestPropertySource(locations = "classpath:application-integrationtest.yml")
 public class RunIntegrationTest {
-
-    @Autowired
-    private ConnectivityService dashboardConnectivity;
     @Autowired
     private SpringSourceConfig springSourceConfig;
     @Autowired

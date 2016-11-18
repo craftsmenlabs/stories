@@ -2,6 +2,7 @@ package org.craftsmenlabs.stories.plugin.filereader.config;
 
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
+import org.craftsmenlabs.stories.api.models.config.ReportConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,20 @@ public class SpringReportConfig implements ValidatableConfig {
         // Cascade
         this.file.validate();
         this.dashboard.validate();
+    }
+
+    public ReportConfig convert() {
+        return ReportConfig.builder()
+                .dashboard(ReportConfig.DashboardConfig.builder()
+                        .enabled(dashboard.enabled)
+                        .token(dashboard.token)
+                        .url(dashboard.url)
+                        .build())
+                .file(ReportConfig.FileConfig.builder()
+                        .enabled(file.enabled)
+                        .location(file.location)
+                        .build())
+                .build();
     }
 
     @Data

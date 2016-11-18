@@ -1,13 +1,23 @@
 package org.craftsmenlabs.stories.importer;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import mockit.Expectations;
+import mockit.Injectable;
 import mockit.Mocked;
-import org.junit.Ignore;
+import org.apache.commons.io.FileUtils;
+import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
+import org.craftsmenlabs.stories.api.models.config.FilterConfig;
+import org.craftsmenlabs.stories.api.models.exception.StoriesException;
+import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
+import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.junit.Test;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.net.HttpURLConnection;
+import java.io.File;
+import java.net.URL;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -15,49 +25,52 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  */
 public class JiraAPIImporterTest {
-    private JiraAPIImporter jiraAPIImporter;
+    private FieldMappingConfig fieldMappingConfigCopy =
+            FieldMappingConfig.builder()
+                    .backlog(FieldMappingConfig.BacklogMapping.builder().build())
+                    .issue(FieldMappingConfig.IssueMapping.builder().rank("customfield_10401").acceptenceCriteria("customfield_10502").build())
+                    .story(FieldMappingConfig.StoryMapping.builder().build())
+                    .criteria(FieldMappingConfig.CriteriaMapping.builder().build())
+                    .estimation(FieldMappingConfig.EstimationMapping.builder().build())
+                    .build();
+
+    private FilterConfig filterConfig = FilterConfig.builder()
+            .status("To Do")
+            .build();
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
+    private JiraAPIImporter jiraAPIImporter = new JiraAPIImporter("http://foo.bar", "1", "username", "password", fieldMappingConfigCopy, filterConfig);
 
     @Mocked
-    private HttpURLConnection connection;
+    private RestTemplate restTemplate;
 
-    @Test(expected = RuntimeException.class)
-    public void testImportFailsOnImproperUrl() throws Exception {
-        jiraAPIImporter = new JiraAPIImporter("http://foo.bar", "1", "2", "To Do");
-        String dataImport = jiraAPIImporter.getDataAsString();
-        assertThat(dataImport).contains("");
-    }
-
-
-    @Test(expected = RuntimeException.class)
-    public void testImportFailsOnWrongStatusCode() throws IOException {
-        new Expectations() {{
-            connection.getResponseCode();
-            result = 400;
-
-            connection.getResponseMessage();
-            result = "Bad Request";
-        }};
-
-        jiraAPIImporter = new JiraAPIImporter("http://foo.bar", "1", "2", "To Do");
-        jiraAPIImporter.getDataAsString();
-    }
-
-    @Ignore("Can not get mocking of response to work")
     @Test
-    public void testImportSucceedsOn200StatusCode() throws IOException {
-        new Expectations() {{
-            connection.getResponseCode();
-            result = 200;
+    public void testSuccessResponse(@Injectable JiraRequest jiraRequest) throws Exception {
+        new Expectations(){{
+            restTemplate.postForObject(withAny(""), withAny(jiraRequest), withAny(JiraBacklog.class));
+            result = objectMapper.readValue(readFile("jira-test.json"), JiraBacklog.class);
 
-            connection.getDoInput();
-            result = true;
-
-            connection.getInputStream();
-            result = new ByteArrayInputStream("{}".getBytes());
         }};
 
-        jiraAPIImporter = new JiraAPIImporter("http://foo.bar", "1", "2", "To Do");
-        String result = jiraAPIImporter.getDataAsString();
-        assertThat(result).isEqualTo("{}");
+        List<Issue> issues = jiraAPIImporter.getIssues();
+        assertThat(issues).hasSize(6);
+    }
+
+    @Test(expected = StoriesException.class)
+    public void testErrorResponse(@Injectable JiraRequest jiraRequest) throws Exception {
+        new Expectations(){{
+            restTemplate.postForObject(withAny(""), withAny(jiraRequest), withAny(JiraBacklog.class));
+            result = new HttpClientErrorException(HttpStatus.BAD_REQUEST);
+        }};
+
+
+        jiraAPIImporter.getIssues();
+    }
+
+
+    private String readFile(String resource) throws Exception {
+        URL url = this.getClass().getClassLoader().getResource(resource);
+        return FileUtils.readFileToString(new File(url.toURI()));
     }
 }

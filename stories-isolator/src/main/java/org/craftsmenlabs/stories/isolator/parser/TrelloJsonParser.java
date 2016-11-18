@@ -1,32 +1,16 @@
 package org.craftsmenlabs.stories.isolator.parser;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
 import org.craftsmenlabs.stories.isolator.SentenceSplitter;
 import org.craftsmenlabs.stories.isolator.model.trello.TrelloJsonIssue;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TrelloJsonParser implements Parser
-{
+public class TrelloJsonParser {
 
-	private static final Logger _log = LoggerFactory.getLogger(TrelloJsonParser.class);
-
-    public List<Issue> getIssues(String input) {
-        List<TrelloJsonIssue> trelloJsonIssues = getTrelloJsonIssues(input);
-        return getIssues(trelloJsonIssues);
-    }
-
-
-    public List<Issue> getIssues(List<TrelloJsonIssue> trelloJsonIssues) {
+    public List<Issue> parse(List<TrelloJsonIssue> trelloJsonIssues) {
         SentenceSplitter sentenceSplitter = new SentenceSplitter();
 
         int rankLength = String.valueOf(trelloJsonIssues.size()).length();
@@ -52,27 +36,4 @@ public class TrelloJsonParser implements Parser
         return result;
 
     }
-
-
-    public List<TrelloJsonIssue> getTrelloJsonIssues(String input)
-	{
-		List<TrelloJsonIssue> trelloJsonIssues = null;
-
-		try
-		{
-			ObjectMapper mapper = new ObjectMapper();
-			TypeReference<List<TrelloJsonIssue>> mapType = new TypeReference<List<TrelloJsonIssue>>() {};
-			trelloJsonIssues = mapper.readValue(input, mapType);
-		}
-		catch (JsonParseException | JsonMappingException e)
-		{
-			_log.info("Error getting Trello JSON issues", e);
-		}
-		catch (IOException e)
-		{
-			_log.info("Error getting Trello JSON issues", e);
-		}
-
-		return trelloJsonIssues;
-	}
 }

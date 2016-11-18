@@ -585,6 +585,9 @@ public class TrelloJsonIssue
 
     @JsonAnySetter
     public void setAdditionalProperty(String name, Object value) {
+        if(this.additionalProperties == null) {
+            this.additionalProperties = new HashMap<>();
+        }
         this.additionalProperties.put(name, value);
     }
 

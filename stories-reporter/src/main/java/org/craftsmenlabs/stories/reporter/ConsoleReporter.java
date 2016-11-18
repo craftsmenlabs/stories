@@ -1,6 +1,8 @@
 package org.craftsmenlabs.stories.reporter;
 
 import org.craftsmenlabs.stories.api.models.Rating;
+import org.craftsmenlabs.stories.api.models.Reporter;
+import org.craftsmenlabs.stories.api.models.StoriesRun;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.validatorentry.*;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
@@ -50,7 +52,8 @@ public class ConsoleReporter implements Reporter
         this.validationConfig = validationConfig;
     }
 
-    public void report(BacklogValidatorEntry backlogValidatorEntry) {
+    public void report(StoriesRun storiesRun) {
+        BacklogValidatorEntry backlogValidatorEntry = storiesRun.getBacklogValidatorEntry();
         //header
         Random r = new Random();
         String stry = storynator.chars().mapToObj(chr ->"" + COLORS[r.nextInt(COLORS.length)] + (char)chr + ANSI_RESET).collect(Collectors.joining(""));

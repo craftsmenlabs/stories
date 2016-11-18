@@ -17,6 +17,7 @@ field_mapping:
         rank: "customfield_11400"
         summary: "customfield_11400"
         estimation: "customfield_11400"
+        acceptanceCriteria: "customfield_10502"
 
 validation:
         backlog:

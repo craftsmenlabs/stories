@@ -3,7 +3,8 @@ source:
 
     jira:
         url: http://jira-url-here.net
-        authKey: jirakey
+        username: Jirausername
+        password: jirapassword
         projectKey: GAR
     trello:
         url:
