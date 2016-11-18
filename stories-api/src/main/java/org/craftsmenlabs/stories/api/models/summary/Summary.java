@@ -32,12 +32,4 @@ public class Summary {
     private long passedCriteriaCount;
     private long totalCriteriaViolationsCount;
 
-    @Override
-    public String toString() {
-        return "Summary{" +
-                "issueCount=" + issueCount +
-                ", failedIssueCount=" + failedIssueCount +
-                ", passedIssueCount=" + passedIssueCount +
-                '}';
-    }
 }

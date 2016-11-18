@@ -103,7 +103,7 @@ public class PluginExecutor {
 			case "jira":
 				SpringSourceConfig.JiraConfig jiraConfig = springSourceConfig.getJira();
 				logger.info("Using JiraAPIImporter for import." + jiraConfig.getUrl());
-				return new JiraAPIImporter(jiraConfig.getUrl(),jiraConfig.getProjectKey(), jiraConfig.getUsername(), jiraConfig.getPassword(), fieldMappingConfig, filterConfig);
+				return new JiraAPIImporter(jiraConfig.getUrl(),jiraConfig.getProjectKey(), jiraConfig.getAuthKey(), fieldMappingConfig, filterConfig);
 			case "trello":
 				logger.info("Using TrelloAPIImporter for import.");
 				SpringSourceConfig.TrelloConfig trelloConfig = springSourceConfig.getTrello();
@@ -122,11 +122,11 @@ public class PluginExecutor {
 		reporters.add(new ConsoleReporter(this.validationConfig));
 		reporters.add(new SummaryConsoleReporter());
 
-		if(this.springReportConfig.getFile().isEnabled()) {
+		if(this.springReportConfig.getFile() != null && this.springReportConfig.getFile().isEnabled()) {
 			reporters.add(new JsonFileReporter(new File(this.springReportConfig.getFile().getLocation())));
 		}
 
-		if (this.springReportConfig.getDashboard().isEnabled()) {
+		if (this.springReportConfig.getDashboard() != null && this.springReportConfig.getDashboard().isEnabled()) {
 			List<String> profiles = Arrays.asList(env.getActiveProfiles());
 			if (profiles.contains("enterprise") && !profiles.contains("community")) {
 				logger.debug("Started enterprise version of reporter.");

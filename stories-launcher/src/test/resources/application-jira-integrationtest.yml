@@ -1,36 +1,31 @@
+spring:
+  profiles:
+    active: test
+    include: enterprise
+
 source:
     enabled: jira
 
     jira:
-        url: http://jira-url-here.net
-        username: Jirausername
-        password: jirapassword
+        url:  https://jira.com
+        authKey: authKey
         projectKey: GAR
-    trello:
-        url:
-        token:
-        authKey:
-        projectKey:
-    file:
-
 
 report:
   dashboard:
     enabled: false
-    url: http://localhost:8090
+    url:
     token:
-  file:
-    enabled: false
-    location: /path/to/file
 
 filters:
     status: "To Do"
 
 field_mapping:
     issue:
-        rank: "customfield_11400"
-        summary: "customfield_11401"
-        estimation: "customfield_11402"
+        rank: "customfield_10401"
+        summary: "customfield_11400"
+        estimation: "S"
+        acceptanceCriteria: "dadada"
 
 
 validation:

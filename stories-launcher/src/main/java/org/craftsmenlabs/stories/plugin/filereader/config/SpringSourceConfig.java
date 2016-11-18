@@ -28,14 +28,13 @@ public class SpringSourceConfig implements ValidatableConfig {
     @Data
     public static class JiraConfig implements ValidatableConfig {
         private String url;
-        private String username;
-        private String password;
+        private String authKey;
         private String projectKey;
 
         @Override
         public void validate() throws StoriesException {
-            if(StringUtils.isEmpty(url) || StringUtils.isEmpty(username) || StringUtils.isEmpty(password) || StringUtils.isEmpty(projectKey)) {
-                throw new StoriesException("Your JIRA configuration is invalid. It should have the url, username, password and projectKey defined. Please refer to the documentation");
+            if(StringUtils.isEmpty(url) || StringUtils.isEmpty(authKey) || StringUtils.isEmpty(projectKey)) {
+                throw new StoriesException("Your JIRA configuration is invalid. It should have the url, authKey and projectKey defined. Please refer to the documentation");
             }
         }
     }
