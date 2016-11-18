@@ -72,14 +72,15 @@ fabric.properties
 
 .idea
 *.iml
+
+# DATA
+*.yml
+!*-sample.yml
 *.csv
 *.json
 !*-test.json
 *.log
-custom-application.yml
+
+# SCRIPTS
 executor.sh
 pit.sh
-application-dev.yml
-application.yml
-/stories-launcher/src/main/resources/application-dev.yml
-application-test.yml
