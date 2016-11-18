@@ -76,6 +76,7 @@ fabric.properties
 # DATA
 *.yml
 !*-sample.yml
+!build.yml
 *.csv
 *.json
 !*-test.json
