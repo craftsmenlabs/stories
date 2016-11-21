@@ -16,6 +16,7 @@ public class SpringValidationConfig {
     private StoryValidatorEntry story;
     private CriteriaValidatorEntry criteria;
     private ValidatorEntry estimation;
+    private BugValidatorEntry bug;
 
     public ValidationConfig convert() {
         ValidationConfig validationConfig = new ValidationConfig();
@@ -25,6 +26,7 @@ public class SpringValidationConfig {
         validationConfig.setStory(this.getStory().convert());
         validationConfig.setCriteria(this.getCriteria().convert());
         validationConfig.setEstimation(this.getEstimation().convert());
+        validationConfig.setBug(this.getBug().convert());
 
         return validationConfig;
     }
@@ -79,6 +81,19 @@ public class SpringValidationConfig {
             sve.setThenKeywords(getThenKeywords());
 
             return sve;
+        }
+    }
+
+    @Data
+    public static class BugValidatorEntry extends ValidatorEntry {
+        private List<String> enabledFields;
+
+        public ValidationConfig.BugValidatorEntry convert() {
+            ValidationConfig.BugValidatorEntry bug = new ValidationConfig.BugValidatorEntry();
+            bug.setActive(isActive());
+            bug.setRatingtreshold(getRatingtreshold());
+            bug.setEnabledFields(enabledFields);
+            return bug;
         }
     }
 }

@@ -50,7 +50,9 @@ validation:
         iKeywords: ["i want"]
         soKeywords: ["so"]
     bug:
-        filledWith: ["","component"]
+        active: true
+        enabled-fields: ["priority", "reproduction", "software", "expected", "acceptation"]
+        ratingtreshold: 0.7
     criteria:
         ratingtreshold: 0.7
         active: false

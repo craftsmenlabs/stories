@@ -24,6 +24,11 @@ public class BacklogValidatorEntry {
     @JsonProperty("featureValidatorEntries")
     @JsonIgnore
     private List<FeatureValidatorEntry> featureValidatorEntries;
+
+    @JsonProperty("bugValidatorEntries")
+    @JsonIgnore
+    private List<BugValidatorEntry> bugValidatorEntries;
+
     @JsonIgnore
     @JsonProperty("pointsValuation")
     private float pointsValuation = 0.0f;

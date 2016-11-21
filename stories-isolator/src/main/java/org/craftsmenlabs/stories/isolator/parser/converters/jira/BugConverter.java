@@ -20,7 +20,7 @@ public class BugConverter {
 
         Map<String, Object> props = jiraJsonIssue.getFields().getAdditionalProperties();
 
-        bug.setPriority((String) props.get(config.getBug().getPriority()));
+        bug.setPriority(jiraJsonIssue.getFields().getPriority().getName());
         bug.setAcceptationCriteria((String) props.get(config.getBug().getAcceptationCriteria()));
         bug.setExpectedBehavior((String) props.get(config.getBug().getExpectedBehavior()));
         bug.setSoftware((String) props.get(config.getBug().getSoftware()));

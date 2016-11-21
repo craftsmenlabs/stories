@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -27,6 +28,9 @@ public class ValidationConfig {
 
     @JsonProperty("estimation")
     private ValidatorEntry estimation;
+
+    @JsonProperty("bug")
+    private BugValidatorEntry bug;
 
     @Data
     public static class ValidatorEntry {
@@ -73,6 +77,17 @@ public class ValidationConfig {
                     ", whenKeywords=" + whenKeywords +
                     ", thenKeywords=" + thenKeywords +
                     '}';
+        }
+    }
+
+    @Data
+    public static class BugValidatorEntry extends ValidatorEntry {
+        private List<String> enabledFields;
+
+        @Override
+        public String toString() {
+            return super.toString() +
+                    " EnabledFields{" + StringUtils.join(enabledFields, ", ") + "}";
         }
     }
 }
