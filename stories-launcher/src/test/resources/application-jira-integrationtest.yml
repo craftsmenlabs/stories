@@ -43,6 +43,10 @@ validation:
         asKeywords: ["as a"]
         iKeywords: ["i want"]
         soKeywords: ["so"]
+    epic:
+        active: true
+        enabled-fields: ["goal"]
+        ratingtreshold: 0.7
     bug:
         filledWith: ["","component"]
         active: false
