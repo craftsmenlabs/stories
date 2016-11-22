@@ -12,7 +12,7 @@ import java.util.List;
 @ConfigurationProperties(prefix="validation")
 public class SpringValidationConfig {
     private ValidatorEntry backlog;
-    private ValidatorEntry issue;
+    private ValidatorEntry feature;
     private StoryValidatorEntry story;
     private CriteriaValidatorEntry criteria;
     private ValidatorEntry estimation;
@@ -22,7 +22,7 @@ public class SpringValidationConfig {
         ValidationConfig validationConfig = new ValidationConfig();
 
         validationConfig.setBacklog(this.getBacklog().convert());
-        validationConfig.setIssue(this.getIssue().convert());
+        validationConfig.setFeature(this.getFeature().convert());
         validationConfig.setStory(this.getStory().convert());
         validationConfig.setCriteria(this.getCriteria().convert());
         validationConfig.setEstimation(this.getEstimation().convert());

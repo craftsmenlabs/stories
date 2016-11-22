@@ -32,8 +32,9 @@ field_mapping:
 validation:
     backlog:
         ratingtreshold: 60.0
-    issue:
+    feature:
         ratingtreshold: 0.7
+        active: true
     story:
         fieldSource: "description#story"
         ratingtreshold: 0.6
@@ -43,6 +44,7 @@ validation:
         soKeywords: ["zodat"]
     bug:
         filledWith: ["","component"]
+        active: false
     criteria:
         fieldSource: "description#criteria"
         ratingtreshold: 0.7

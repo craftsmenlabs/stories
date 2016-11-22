@@ -24,4 +24,6 @@ public abstract class AbstractValidatorEntry implements ValidatorEntry{
     private Rating rating;
 
     private boolean isActive;
+
+    public abstract String getRank();
 }

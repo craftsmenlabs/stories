@@ -12,7 +12,7 @@ import java.util.stream.Stream;
  * Assigns points to an feature, based on all
  * underlying fields, such as user story, acceptance criteria, estimated points
  */
-public class IssueScorer {
+public class FeatureScorer {
 
     public static FeatureValidatorEntry performScorer(Feature feature, ValidationConfig validationConfig) {
         if (feature == null) {
@@ -36,7 +36,7 @@ public class IssueScorer {
                         .average()
                         .orElse(0.0);
 
-        Rating rating = points >= validationConfig.getIssue().getRatingtreshold() ? Rating.SUCCESS : Rating.FAIL;
+        Rating rating = points >= validationConfig.getFeature().getRatingtreshold() ? Rating.SUCCESS : Rating.FAIL;
 
         return FeatureValidatorEntry
                 .builder()

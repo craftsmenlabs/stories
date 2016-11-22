@@ -69,6 +69,6 @@ public class JiraAPIImporterTest {
 
     private String readFile(String resource) throws Exception {
         URL url = this.getClass().getClassLoader().getResource(resource);
-        return FileUtils.readFileToString(new File(url.toURI()));
+        return FileUtils.readFileToString(new File(url.toURI()), "UTF-8");
     }
 }

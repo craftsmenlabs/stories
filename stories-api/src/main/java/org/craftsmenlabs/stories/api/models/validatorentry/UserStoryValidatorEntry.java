@@ -23,4 +23,9 @@ public class UserStoryValidatorEntry extends AbstractValidatorEntry{
         super.setRating(rating);
         super.setActive(isActive);
     }
+
+    @Override
+    public String getRank() {
+        return null;
+    }
 }

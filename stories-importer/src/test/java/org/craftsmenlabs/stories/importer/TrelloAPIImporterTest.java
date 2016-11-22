@@ -5,13 +5,11 @@ import mockit.Mocked;
 import org.apache.commons.io.FileUtils;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
-import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
 import org.junit.Test;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.net.URL;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -50,6 +48,6 @@ public class TrelloAPIImporterTest
 
 	private String readFile(String resource) throws Exception {
 		URL url = this.getClass().getClassLoader().getResource(resource);
-		return FileUtils.readFileToString(new File(url.toURI()));
-	}
+        return FileUtils.readFileToString(new File(url.toURI()), "UTF-8");
+    }
 }

@@ -18,7 +18,7 @@ public class ValidationConfig {
     private ValidatorEntry backlog;
 
     @JsonProperty("feature")
-    private ValidatorEntry issue;
+    private ValidatorEntry feature;
 
     @JsonProperty("story")
     private StoryValidatorEntry story;
@@ -87,7 +87,7 @@ public class ValidationConfig {
         @Override
         public String toString() {
             return super.toString() +
-                    " EnabledFields{" + StringUtils.join(enabledFields, ", ") + "}";
+                    " EnabledFields: {" + StringUtils.join(enabledFields, ", ") + "}";
         }
     }
 }

@@ -1,6 +1,7 @@
 package org.craftmenlabs.stories.plugin.filereader.integrationtest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.io.FileUtils;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.FilterConfig;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
@@ -12,6 +13,8 @@ import org.craftsmenlabs.stories.isolator.parser.TrelloJsonParser;
 import org.craftsmenlabs.stories.isolator.testutil.RetrieveTestData;
 import org.junit.Test;
 
+import java.io.File;
+import java.net.URL;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -29,7 +32,7 @@ public class RunIntegrationTest {
                         .build();
 
         JiraJsonParser jiraJsonParser = new JiraJsonParser(fieldMappingConfig, FilterConfig.builder().status("To Do").build());
-        String testData = RetrieveTestData.getExportedJiraJSONTestResultFromResource();
+        String testData = readFile("jira-integration-test.json");
         Feature testResult = RetrieveTestData.getJiraTestIssueFromResource();
 
         Backlog backlog = jiraJsonParser.parse(mapper.readValue(testData, JiraBacklog.class));
@@ -40,7 +43,7 @@ public class RunIntegrationTest {
     @Test
     public void runIntegrationTestOnTrelloJson() throws Exception {
         TrelloJsonParser trelloJsonParser = new TrelloJsonParser();
-        String testData = RetrieveTestData.getExportedTrelloJSONTestResultFromResource();
+        String testData = readFile("trello-integration-test.json");
         Feature testResult = RetrieveTestData.getTrelloTestIssueFromResource();
 
         Backlog backlog = trelloJsonParser.parse(mapper.readValue(testData, mapper.getTypeFactory().constructCollectionType(List.class, TrelloJsonIssue.class)));
@@ -48,4 +51,8 @@ public class RunIntegrationTest {
         assertEquals(testResult, backlog.getFeatures().get(0));
     }
 
+    private String readFile(String resource) throws Exception {
+        URL url = this.getClass().getClassLoader().getResource(resource);
+        return FileUtils.readFileToString(new File(url.toURI()), "UTF-8");
+    }
 }

@@ -15,7 +15,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FeatureValidatorEntry {
+public class FeatureValidatorEntry extends AbstractValidatorEntry {
     @JsonProperty("feature")
     private Feature feature;
 
@@ -37,4 +37,9 @@ public class FeatureValidatorEntry {
 
     @JsonProperty("estimationValidatorEntry")
     private EstimationValidatorEntry estimationValidatorEntry;
+
+    @Override
+    public String getRank() {
+        return feature.getRank();
+    }
 }

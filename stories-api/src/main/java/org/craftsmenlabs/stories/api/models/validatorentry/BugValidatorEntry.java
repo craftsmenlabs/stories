@@ -15,7 +15,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BugValidatorEntry {
+public class BugValidatorEntry extends AbstractValidatorEntry {
     @JsonProperty("bug")
     private Bug bug;
 
@@ -26,8 +26,13 @@ public class BugValidatorEntry {
     private Rating rating;
 
 
-    @JsonProperty("pointsValuation")
+    @JsonProperty("averageScore")
     private float pointsValuation = 0.0f;
 
     private boolean isActive;
+
+    @Override
+    public String getRank() {
+        return bug.getRank();
+    }
 }

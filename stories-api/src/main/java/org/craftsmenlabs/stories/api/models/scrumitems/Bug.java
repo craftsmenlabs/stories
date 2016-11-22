@@ -13,7 +13,9 @@ import lombok.NoArgsConstructor;
 public class Bug implements ScrumItem {
     @JsonProperty("key")
     private String key;
+    private String rank;
 
+    private String title;
     private String reproductionPath;
     private String software;
     private String expectedBehavior;

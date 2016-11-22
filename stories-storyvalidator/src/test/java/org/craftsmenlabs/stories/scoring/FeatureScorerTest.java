@@ -4,7 +4,6 @@ import mockit.Expectations;
 import mockit.Injectable;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
-import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
 import org.craftsmenlabs.stories.api.models.validatorentry.UserStoryValidatorEntry;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -16,7 +15,7 @@ public class FeatureScorerTest {
 
     @Test
     public void performScorer_ReturnsZeroOnNullIssue(@Injectable Feature feature, @Injectable ValidationConfig validationConfig) {
-        float score = IssueScorer.performScorer(null, validationConfig).getPointsValuation();
+        float score = FeatureScorer.performScorer(null, validationConfig).getPointsValuation();
         assertThat(score).isCloseTo(0f, withinPercentage(1));
     }
 
@@ -27,7 +26,7 @@ public class FeatureScorerTest {
            result = null;
 
         }};
-        float score = IssueScorer.performScorer(feature, validationConfig).getPointsValuation();
+        float score = FeatureScorer.performScorer(feature, validationConfig).getPointsValuation();
         assertThat(score).isCloseTo(0f, withinPercentage(1));
     }
 
@@ -41,7 +40,7 @@ public class FeatureScorerTest {
            result = null;
 
         }};
-        float score = IssueScorer.performScorer(feature, validationConfig).getPointsValuation();
+        float score = FeatureScorer.performScorer(feature, validationConfig).getPointsValuation();
         assertThat(score).isCloseTo(0f, withinPercentage(1));
     }
 
@@ -67,7 +66,7 @@ public class FeatureScorerTest {
             result = false;
 
         }};
-        float score = IssueScorer.performScorer(feature, validationConfig).getPointsValuation();
+        float score = FeatureScorer.performScorer(feature, validationConfig).getPointsValuation();
         assertThat(score).isCloseTo(0f, withinPercentage(1));
     }
 
@@ -95,7 +94,7 @@ public class FeatureScorerTest {
             result = false;
 
         }};
-        float score = IssueScorer.performScorer(feature, validationConfig).getPointsValuation();
+        float score = FeatureScorer.performScorer(feature, validationConfig).getPointsValuation();
         assertThat(score).isCloseTo(1f, withinPercentage(1));
     }
 

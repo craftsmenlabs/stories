@@ -3,6 +3,7 @@ package org.craftsmenlabs.stories.scoring;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
+import org.craftsmenlabs.stories.api.models.validatorentry.AbstractValidatorEntry;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 import org.craftsmenlabs.stories.api.models.validatorentry.BugValidatorEntry;
 import org.craftsmenlabs.stories.api.models.validatorentry.FeatureValidatorEntry;
@@ -11,6 +12,7 @@ import org.craftsmenlabs.stories.api.models.violation.ViolationType;
 import org.craftsmenlabs.stories.ranking.Ranking;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,32 +30,58 @@ public class BacklogScorer {
     public static BacklogValidatorEntry performScorer(Backlog backlog, Ranking ranking, ValidationConfig validationConfig) {
         BacklogValidatorEntry backlogValidatorEntry = BacklogValidatorEntry.builder()
                 .backlog(backlog)
+                .bugValidatorEntries(new LinkedList<>())
+                .featureValidatorEntries(new LinkedList<>())
                 .violations(new ArrayList<>())
                 .build();
 
 
-        if (backlog == null || backlog.getFeatures() == null || backlog.getFeatures().size() == 0) {
+        if (backlog == null
+                || (validationConfig.getFeature().isActive() && (backlog.getFeatures() == null || backlog.getFeatures().size() == 0))
+                || (validationConfig.getBug().isActive() && (backlog.getBugs() == null || backlog.getBugs().size() == 0))
+
+                ) {
             backlogValidatorEntry.getViolations().add(new Violation(
                     ViolationType.BacklogEmptyViolation,
-                    "The backlog is empty, or doesn't contain any features."
+                    "The backlog is empty, or doesn't contain any issues."
             ));
 
-            backlogValidatorEntry.setPointsValuation(0f);
+            backlogValidatorEntry.setAverageScore(0f);
             backlogValidatorEntry.setRating(Rating.FAIL);
             return backlogValidatorEntry;
         }
 
+        List<AbstractValidatorEntry> scoredEntries = new LinkedList<>();
 
-        // Execute validation
-        backlogValidatorEntry.setFeatureValidatorEntries(getValidatedFeatures(backlog, validationConfig));
-        backlogValidatorEntry.setBugValidatorEntries(getValidatedBugs(backlog, validationConfig));
+        // Feature scores
+        if (validationConfig.getFeature().isActive()) {
+            List<FeatureValidatorEntry> features = getValidatedFeatures(backlog, validationConfig);
+            backlogValidatorEntry.setFeatureValidatorEntries(features);
+            scoredEntries.addAll(features);
+
+            // Determine feature points
+            Float featurePoints = ranking.createRanking(features.stream().map(feature -> (AbstractValidatorEntry) feature).collect(Collectors.toList()));
+            backlogValidatorEntry.setFeatureScore(featurePoints);
+
+        }
+
+        // Bug scores
+        if (validationConfig.getBug().isActive()) {
+            List<BugValidatorEntry> bugs = getValidatedBugs(backlog, validationConfig);
+            backlogValidatorEntry.setBugValidatorEntries(bugs);
+            scoredEntries.addAll(bugs);
+
+            // Determine bug points
+            Float bugPoints = ranking.createRanking(bugs.stream().map(bug -> (AbstractValidatorEntry) bug).collect(Collectors.toList()));
+            backlogValidatorEntry.setBugScore(bugPoints);
+        }
 
 
-        Float points = ranking.createRanking(backlogValidatorEntry);
-        backlogValidatorEntry.setPointsValuation(points);
+        // Backlog scores
+        float backlogPoints = ranking.createRanking(scoredEntries);
+        backlogValidatorEntry.setAverageScore(backlogPoints);
 
-
-        if (backlogValidatorEntry.getPointsValuation() * 100f >= validationConfig.getBacklog().getRatingtreshold()) {
+        if (backlogValidatorEntry.getAverageScore() * 100f >= validationConfig.getBacklog().getRatingtreshold()) {
             backlogValidatorEntry.setRating(Rating.SUCCESS);
         } else {
             // Failed, add violation
@@ -68,7 +96,7 @@ public class BacklogScorer {
 
     private static List<FeatureValidatorEntry> getValidatedFeatures(Backlog backlog, ValidationConfig validationConfig) {
         return backlog.getFeatures().stream()
-                .map(feature -> IssueScorer.performScorer(feature, validationConfig))
+                .map(feature -> FeatureScorer.performScorer(feature, validationConfig))
                 .collect(Collectors.toList());
     }
 

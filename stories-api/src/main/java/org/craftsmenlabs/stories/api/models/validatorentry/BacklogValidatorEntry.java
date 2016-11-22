@@ -30,8 +30,12 @@ public class BacklogValidatorEntry {
     private List<BugValidatorEntry> bugValidatorEntries;
 
     @JsonIgnore
-    @JsonProperty("pointsValuation")
-    private float pointsValuation = 0.0f;
+    @JsonProperty("averageScore")
+    private float averageScore = 0.0f;
+    private float featureScore = 0.0f;
+    private float bugScore = 0.0f;
+    private float epicScore = 0.0f;
+
     @JsonIgnore
     @JsonProperty("violations")
     private List<Violation> violations;

@@ -1,0 +1,41 @@
+[
+  {
+    "id": "581b199ba7dfd7e8f737262c",
+    "checkItemStates": null,
+    "closed": false,
+    "dateLastActivity": "2016-11-03T13:47:39.437Z",
+    "desc": "As a productowner I want to have a good story, so that my development team has a good start. Given I am productowner When I make a good story Then the team will be happy.",
+    "descData": {
+      "emoji": {}
+    },
+    "idBoard": "541bdf323234e5fde4d4c847",
+    "idList": "541bdf323234e5fde4d4c848",
+    "idMembersVoted": [],
+    "idShort": 52,
+    "idAttachmentCover": null,
+    "manualCoverAttachment": false,
+    "idLabels": [],
+    "name": "This should succeed",
+    "pos": 65535,
+    "shortLink": "TjrGg23O",
+    "badges": {
+      "votes": 0,
+      "viewingMemberVoted": false,
+      "subscribed": false,
+      "fogbugz": "",
+      "checkItems": 0,
+      "checkItemsChecked": 0,
+      "comments": 0,
+      "attachments": 0,
+      "description": true,
+      "due": null
+    },
+    "due": null,
+    "idChecklists": [],
+    "idMembers": [],
+    "labels": [],
+    "shortUrl": "https://trello.com/c/TjrGg23O",
+    "subscribed": false,
+    "url": "https://trello.com/c/TjrGg23O/52-this-should-succeed"
+  }
+]

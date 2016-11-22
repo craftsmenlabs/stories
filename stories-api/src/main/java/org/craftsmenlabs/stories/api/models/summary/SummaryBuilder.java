@@ -15,7 +15,7 @@ public class SummaryBuilder {
         List<BugValidatorEntry> bugs = entry.getBugValidatorEntries();
 
         return Summary.builder()
-                .pointsValuation(entry.getPointsValuation())
+                .pointsValuation(entry.getAverageScore())
                 .rating(entry.getRating())
                 .issueCount(issues.size())
                 .failedIssueCount(issues.stream().filter(issueValidatorEntry -> issueValidatorEntry.getRating() == Rating.FAIL).count())
