@@ -43,6 +43,8 @@ validation:
     bug:
         filledWith: ["","component"]
         active: false
+    epic:
+        active: false
     criteria:
         ratingtreshold: 0.7
         active: false
