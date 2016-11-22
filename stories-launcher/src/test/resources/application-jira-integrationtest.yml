@@ -23,7 +23,6 @@ filters:
 field_mapping:
     feature:
         rank: "customfield_10401"
-        summary: "customfield_11400"
         estimation: "S"
         acceptanceCriteria: "dadada"
 
@@ -31,10 +30,10 @@ field_mapping:
 validation:
     backlog:
         ratingtreshold: 60.0
-    issue:
+    feature:
         ratingtreshold: 0.7
+        active: true
     story:
-        fieldSource: "description#story"
         ratingtreshold: 0.6
         active: true
         asKeywords: ["as a"]
@@ -42,8 +41,8 @@ validation:
         soKeywords: ["so"]
     bug:
         filledWith: ["","component"]
+        active: false
     criteria:
-        fieldSource: "description#criteria"
         ratingtreshold: 0.7
         active: false
         givenKeywords: ["given"]
