@@ -71,7 +71,7 @@ public class BugScorerTest {
                 .expectedBehavior("The box should ignore input when disabled")
                 .priority("Blocking")
                 .reproductionPath("I have no idea what I did, but I filled this in anyway")
-                .title("Input still caught when box is disabled")
+                .summary("Input still caught when box is disabled")
                 .software("Windows ME with Internet Explorer 5")
                 .build();
     }

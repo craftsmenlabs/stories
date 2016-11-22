@@ -11,4 +11,6 @@ public class Backlog implements ScrumItem {
     private List<Feature> features;
     @JsonProperty("bugs")
     private List<Bug> bugs;
+    @JsonProperty("epics")
+    private List<Epic> epics;
 }

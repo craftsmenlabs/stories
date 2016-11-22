@@ -21,15 +21,15 @@ filters:
     status: "To Do"
 
 field_mapping:
+    rank: "customfield_10401"
     feature:
-        rank: "customfield_10401"
         estimation: "S"
         acceptanceCriteria: "dadada"
     bug:
-      acceptation-criteria: "customfield_10402"
-      reproduction-path: "customfield_10403"
-      software: "customfield_10404"
-      expected-behavior: "customfield_10405"
+        acceptation-criteria: "customfield_10402"
+        reproduction-path: "customfield_10403"
+        software: "customfield_10404"
+        expected-behavior: "customfield_10405"
 
 validation:
     backlog:

@@ -7,6 +7,7 @@ import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
 import org.craftsmenlabs.stories.isolator.parser.converters.jira.BugConverter;
+import org.craftsmenlabs.stories.isolator.parser.converters.jira.EpicConverter;
 import org.craftsmenlabs.stories.isolator.parser.converters.jira.FeatureConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,12 +21,14 @@ public class JiraJsonParser {
 
     private FeatureConverter featureConverter;
     private BugConverter bugConverter;
+    private EpicConverter epicConverter;
 
     public JiraJsonParser(FieldMappingConfig fieldMapping, FilterConfig filterConfig) {
         this.filterConfig = filterConfig;
 
         this.featureConverter = new FeatureConverter(fieldMapping);
         this.bugConverter = new BugConverter(fieldMapping);
+        this.epicConverter = new EpicConverter(fieldMapping);
     }
 
     public Backlog parse(JiraBacklog jiraBacklog) {
@@ -42,7 +45,7 @@ public class JiraJsonParser {
 
         // Filter and convert features
         backlog.setFeatures(jiraJsonIssues.stream()
-                .filter(jiraJsonIssue -> jiraJsonIssue.getType().equals("story"))
+                .filter(featureConverter::supportsIssue)
                 .map(featureConverter::convert)
                 .filter(issue -> StringUtils.isNotEmpty(issue.getUserstory()))
                 .collect(Collectors.toList())
@@ -50,8 +53,13 @@ public class JiraJsonParser {
 
         // Filter and convert bugs
         backlog.setBugs(jiraJsonIssues.stream()
-                .filter(jiraJsonIssue -> jiraJsonIssue.getType().equals("bug"))
+                .filter(bugConverter::supportsIssue)
                 .map(bugConverter::convert)
+                .collect(Collectors.toList()));
+
+        backlog.setEpics(jiraJsonIssues.stream()
+                .filter(epicConverter::supportsIssue)
+                .map(epicConverter::convert)
                 .collect(Collectors.toList()));
 
         return backlog;

@@ -22,8 +22,8 @@ filters:
     status: "To Do"
 
 field_mapping:
+    rank: "customfield_10401"
     feature:
-        rank: "customfield_10401"
         estimation: "S"
         acceptanceCriteria: "dadada"
 

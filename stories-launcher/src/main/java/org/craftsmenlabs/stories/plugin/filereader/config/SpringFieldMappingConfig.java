@@ -13,40 +13,34 @@ public class SpringFieldMappingConfig implements ValidatableConfig {
     private FeatureMapping feature;
     private BugMapping bug;
     private EpicMapping epic;
+    private String rank;
 
     public FieldMappingConfig convert() {
         return FieldMappingConfig.builder()
                 .feature(this.getFeature().convert())
                 .bug(this.getBug() != null ? this.getBug().convert() : null)
                 .epic(this.getEpic() != null ? this.epic.convert() : null)
+                .rank(rank)
                 .build();
     }
 
     @Override
     public void validate() throws StoriesException {
-        // Cascade to children
-        this.feature.validate();
+        if (rank == null || rank.isEmpty()) {
+            throw new IllegalStateException("The rank attribute has not been set correctly.");
+        }
     }
 
     @Data
-    public static class FeatureMapping implements ValidatableConfig {
-        private String rank;
+    public static class FeatureMapping {
         private String estimation;
         private String acceptanceCriteria;
 
         public FieldMappingConfig.FeatureMapping convert() {
             return FieldMappingConfig.FeatureMapping.builder()
-                    .rank(rank)
                     .estimation(estimation)
                     .acceptanceCriteria(acceptanceCriteria)
                     .build();
-        }
-
-        @Override
-        public void validate() throws StoriesException {
-            if (rank == null || rank.isEmpty()) {
-                throw new IllegalStateException("The rank attribute has not been set correctly.");
-            }
         }
     }
 

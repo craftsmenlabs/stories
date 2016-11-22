@@ -150,7 +150,7 @@ public class ConsoleReporter implements Reporter
                 + MAX_SCORE
                 + ") \t"
         );
-        log(bug.getBug().getTitle());
+        log(bug.getBug().getSummary());
         reportOnViolations(bug.getViolations());
     }
 

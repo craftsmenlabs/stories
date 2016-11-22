@@ -11,14 +11,13 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
-public class FeatureConverter {
+public class FeatureConverter extends AbstractJiraConverter<Feature> {
     private final Logger logger = LoggerFactory.getLogger(FeatureConverter.class);
 
     private final SentenceSplitter sentenceSplitter = new SentenceSplitter();
-    private FieldMappingConfig config;
 
     public FeatureConverter(FieldMappingConfig config) {
-        this.config = config;
+        super(config);
     }
 
     public Feature convert(JiraJsonIssue jiraJsonIssue) {
@@ -35,7 +34,7 @@ public class FeatureConverter {
 
         Map<String, Object> additionalProps = jiraJsonIssue.getFields().getAdditionalProperties();
 
-        String rank = (String) additionalProps.get(config.getFeature().getRank());
+        String rank = (String) additionalProps.get(config.getRank());
         if (StringUtils.isEmpty(rank)) {
             throw new StoriesException(
                     "The rank field mapping was not defined in your application yaml or parameters. " +
@@ -46,6 +45,11 @@ public class FeatureConverter {
         feature.setEstimation(this.parseEstimation((String) additionalProps.get(config.getFeature().getEstimation())));
 
         return feature;
+    }
+
+    @Override
+    public String[] getSupportedTypes() {
+        return new String[]{"story"};
     }
 
     private boolean hasValidDescription(JiraJsonIssue jiraJsonIssue) {

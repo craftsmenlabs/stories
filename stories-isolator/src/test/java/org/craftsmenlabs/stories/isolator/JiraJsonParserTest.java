@@ -7,6 +7,7 @@ import org.craftsmenlabs.stories.api.models.config.FilterConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.api.models.scrumitems.Bug;
+import org.craftsmenlabs.stories.api.models.scrumitems.Epic;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
 import org.junit.Test;
@@ -22,10 +23,11 @@ public class JiraJsonParserTest {
     private ObjectMapper mapper = new ObjectMapper();
     private FieldMappingConfig fieldMappingConfigCopy =
             FieldMappingConfig.builder()
+                    .rank("customfield_11400")
                     .backlog(FieldMappingConfig.BacklogMapping.builder().build())
-                    .feature(FieldMappingConfig.FeatureMapping.builder().rank("customfield_11400").estimation("customfield_11401").acceptanceCriteria("customfield_10502").build())
+                    .feature(FieldMappingConfig.FeatureMapping.builder().estimation("customfield_11401").acceptanceCriteria("customfield_10502").build())
                     .bug(FieldMappingConfig.BugMapping.builder().acceptationCriteria("customfield_11404").expectedBehavior("customfield_11405").reproductionPath("customfield_11406").software("customfield_11407").build())
-                    .epic(FieldMappingConfig.EpicMapping.builder().goal("customfield_114007").build())
+                    .epic(FieldMappingConfig.EpicMapping.builder().goal("customfield_11404").build())
                     .build();
 
     private FilterConfig filterConfig = FilterConfig.builder()
@@ -45,6 +47,7 @@ public class JiraJsonParserTest {
         String json = readFile("jira-one-story-without-rank-test.json");
         jiraJsonParser.parse(mapper.readValue(json, JiraBacklog.class));
     }
+
     @Test
     public void testGetJiraJSonIssuesExtractsAcceptanceCriteriaCorrectly() throws Exception {
         String json = readFile("jira-one-story-with-acceptance-criteria-test.json");
@@ -73,6 +76,20 @@ public class JiraJsonParserTest {
         Backlog backlog = jiraJsonParser.parse(mapper.readValue(json, JiraBacklog.class));
         assertEquals(backlog.getFeatures().size(), 1);
         assertThat(backlog.getFeatures().get(0).getEstimation()).isEqualTo(0.0f);
+    }
+
+    @Test
+    public void testGetJiraJsonIssuesExtractsEpicsCorrectly() throws Exception {
+
+        String json = readFile("jira-one-epic-test.json");
+        Backlog backlog = jiraJsonParser.parse(mapper.readValue(json, JiraBacklog.class));
+
+        assertEquals(backlog.getEpics().size(), 1);
+        Epic epic = backlog.getEpics().get(0);
+        assertThat(epic.getRank()).isNotNull().isEqualToIgnoringCase("0|zgby24:");
+        assertThat(epic.getGoal()).isNotNull().isEqualToIgnoringCase("goal");
+        assertThat(epic.getSummary()).isNotNull().isEqualToIgnoringCase("Search component for systems");
+        assertThat(epic.getKey()).isNotNull().isEqualToIgnoringCase("EPIC-1");
     }
 
     @Test

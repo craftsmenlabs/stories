@@ -10,11 +10,11 @@ public class FieldMappingConfig {
     private FeatureMapping feature;
     private BugMapping bug;
     private EpicMapping epic;
+    private String rank;
 
     @Data
     @Builder
     public static class FeatureMapping {
-        private String rank;
         private String estimation;
         private String acceptanceCriteria;
     }

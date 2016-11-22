@@ -25,8 +25,9 @@ public class RunIntegrationTest {
     public void runIntegrationTestOnJiraJson() throws Exception {
         FieldMappingConfig fieldMappingConfig =
                 FieldMappingConfig.builder()
+                        .rank("customfield_10401")
                         .backlog(FieldMappingConfig.BacklogMapping.builder().build())
-                        .feature(FieldMappingConfig.FeatureMapping.builder().rank("customfield_10401").acceptanceCriteria("customfield_10502").build())
+                        .feature(FieldMappingConfig.FeatureMapping.builder().acceptanceCriteria("customfield_10502").build())
                         .bug(FieldMappingConfig.BugMapping.builder().acceptationCriteria("customfield_11404").expectedBehavior("customfield_114005").reproductionPath("customfield_114004").software("customfield_11401").build())
                         .epic(FieldMappingConfig.EpicMapping.builder().goal("customfield_114007").build())
                         .build();
