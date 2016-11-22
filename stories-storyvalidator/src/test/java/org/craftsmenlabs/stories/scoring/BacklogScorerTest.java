@@ -7,6 +7,7 @@ import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.api.models.scrumitems.Bug;
+import org.craftsmenlabs.stories.api.models.scrumitems.Epic;
 import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 import org.craftsmenlabs.stories.ranking.Ranking;
@@ -35,7 +36,7 @@ public class BacklogScorerTest {
                 new Feature()
         );
 
-        new Expectations(){{
+        new Expectations() {{
             backlog.getFeatures();
             result = features;
 
@@ -62,7 +63,7 @@ public class BacklogScorerTest {
                 new Feature()
         );
 
-        new Expectations(){{
+        new Expectations() {{
             backlog.getFeatures();
             result = features;
 
@@ -123,6 +124,33 @@ public class BacklogScorerTest {
             result = true;
             validationConfig.getFeature().isActive();
             result = false;
+        }};
+
+
+        BacklogValidatorEntry result = BacklogScorer.performScorer(backlog, ranking, validationConfig);
+        assertThat(result.getRating()).isEqualTo(Rating.FAIL);
+    }
+
+    @Test
+    public void testBacklogAndEpicRatingIsSameWhenOnlyEpicsAreEnabled() {
+        List<Epic> epics = Collections.singletonList(new Epic());
+
+        new Expectations() {{
+            backlog.getEpics();
+            result = epics;
+
+            ranking.createRanking(withNotNull());
+            result = 0.4f;
+            maxTimes = 2;
+
+            validationConfig.getBacklog().getRatingtreshold();
+            result = 50f;
+            validationConfig.getBug().isActive();
+            result = false;
+            validationConfig.getFeature().isActive();
+            result = false;
+            validationConfig.getEpic().isActive();
+            result = true;
         }};
 
 

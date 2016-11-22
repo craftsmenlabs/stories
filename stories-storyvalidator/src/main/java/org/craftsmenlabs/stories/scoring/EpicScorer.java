@@ -47,7 +47,7 @@ public class EpicScorer {
         }
 
         entry.setPointsValuation(totalPoints);
-        entry.setRating(totalPoints >= validationConfig.getBug().getRatingtreshold() ? Rating.SUCCESS : Rating.FAIL);
+        entry.setRating(totalPoints >= validationConfig.getEpic().getRatingtreshold() ? Rating.SUCCESS : Rating.FAIL);
         return entry;
     }
 
