@@ -29,6 +29,7 @@ public class BacklogScorer {
                 .backlog(backlog)
                 .bugValidatorEntries(new LinkedList<>())
                 .featureValidatorEntries(new LinkedList<>())
+                .epicValidatorEntries(new LinkedList<>())
                 .violations(new ArrayList<>())
                 .build();
 
