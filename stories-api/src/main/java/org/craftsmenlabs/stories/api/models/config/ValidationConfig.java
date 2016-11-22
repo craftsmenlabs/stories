@@ -32,6 +32,9 @@ public class ValidationConfig {
     @JsonProperty("bug")
     private BugValidatorEntry bug;
 
+    @JsonProperty("epic")
+    private EpicValidatorEntry epic;
+
     @Data
     public static class ValidatorEntry {
         private float ratingtreshold;
@@ -82,6 +85,17 @@ public class ValidationConfig {
 
     @Data
     public static class BugValidatorEntry extends ValidatorEntry {
+        private List<String> enabledFields;
+
+        @Override
+        public String toString() {
+            return super.toString() +
+                    " EnabledFields: {" + StringUtils.join(enabledFields, ", ") + "}";
+        }
+    }
+
+    @Data
+    public static class EpicValidatorEntry extends ValidatorEntry {
         private List<String> enabledFields;
 
         @Override

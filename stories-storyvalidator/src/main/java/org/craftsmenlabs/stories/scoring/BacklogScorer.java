@@ -3,10 +3,7 @@ package org.craftsmenlabs.stories.scoring;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
-import org.craftsmenlabs.stories.api.models.validatorentry.AbstractValidatorEntry;
-import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
-import org.craftsmenlabs.stories.api.models.validatorentry.BugValidatorEntry;
-import org.craftsmenlabs.stories.api.models.validatorentry.FeatureValidatorEntry;
+import org.craftsmenlabs.stories.api.models.validatorentry.*;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 import org.craftsmenlabs.stories.api.models.violation.ViolationType;
 import org.craftsmenlabs.stories.ranking.Ranking;
@@ -76,6 +73,15 @@ public class BacklogScorer {
             backlogValidatorEntry.setBugScore(bugPoints);
         }
 
+        if (validationConfig.getEpic().isActive()) {
+            List<EpicValidatorEntry> epics = getValidatedEpics(backlog, validationConfig);
+            backlogValidatorEntry.setEpicValidatorEntries(epics);
+            scoredEntries.addAll(epics);
+
+            Float epicPoints = ranking.createRanking(epics.stream().map(epic -> (AbstractValidatorEntry) epic).collect(Collectors.toList()));
+            backlogValidatorEntry.setEpicScore(epicPoints);
+        }
+
 
         // Backlog scores
         float backlogPoints = ranking.createRanking(scoredEntries);
@@ -103,6 +109,12 @@ public class BacklogScorer {
     private static List<BugValidatorEntry> getValidatedBugs(Backlog backlog, ValidationConfig validationConfig) {
         return backlog.getBugs().stream()
                 .map(bug -> BugScorer.performScorer(bug, validationConfig))
+                .collect(Collectors.toList());
+    }
+
+    private static List<EpicValidatorEntry> getValidatedEpics(Backlog backlog, ValidationConfig validationConfig) {
+        return backlog.getEpics().stream()
+                .map(epic -> EpicScorer.performScorer(epic, validationConfig))
                 .collect(Collectors.toList());
     }
 }

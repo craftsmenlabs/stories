@@ -29,6 +29,11 @@ public class BacklogValidatorEntry {
     @JsonIgnore
     private List<BugValidatorEntry> bugValidatorEntries;
 
+
+    @JsonProperty("epicValidatorEntries")
+    @JsonIgnore
+    private List<EpicValidatorEntry> epicValidatorEntries;
+
     @JsonIgnore
     @JsonProperty("averageScore")
     private float averageScore = 0.0f;

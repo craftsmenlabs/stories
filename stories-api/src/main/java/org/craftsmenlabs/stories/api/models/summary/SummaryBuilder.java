@@ -3,6 +3,7 @@ package org.craftsmenlabs.stories.api.models.summary;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 import org.craftsmenlabs.stories.api.models.validatorentry.BugValidatorEntry;
+import org.craftsmenlabs.stories.api.models.validatorentry.EpicValidatorEntry;
 import org.craftsmenlabs.stories.api.models.validatorentry.FeatureValidatorEntry;
 
 import java.util.List;
@@ -13,6 +14,7 @@ public class SummaryBuilder {
 
         List<FeatureValidatorEntry> issues = entry.getFeatureValidatorEntries();
         List<BugValidatorEntry> bugs = entry.getBugValidatorEntries();
+        List<EpicValidatorEntry> epics = entry.getEpicValidatorEntries();
 
         return Summary.builder()
                 .pointsValuation(entry.getAverageScore())
@@ -38,6 +40,11 @@ public class SummaryBuilder {
                 .bugCount(bugs.size())
                 .failedBugCount(bugs.stream().filter(bugValidatorEntry -> bugValidatorEntry.getRating() == Rating.FAIL).count())
                 .passedBugCount(bugs.stream().filter(bugValidatorEntry -> bugValidatorEntry.getRating() == Rating.SUCCESS).count())
+
+                .epicCount(epics.size())
+                .failedEpicCount(epics.stream().filter(epicValidatorEntry -> epicValidatorEntry.getRating() == Rating.FAIL).count())
+                .passedEpicCount(epics.stream().filter(epicValidatorEntry -> epicValidatorEntry.getRating() == Rating.SUCCESS).count())
+
                 .build();
     }
 }

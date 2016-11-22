@@ -80,6 +80,10 @@ public class ConsoleReporter implements Reporter
         List<BugValidatorEntry> bugs = backlogValidatorEntry.getBugValidatorEntries();
         bugs.forEach(this::reportOnBug);
 
+        // Log epics
+        List<EpicValidatorEntry> epics = backlogValidatorEntry.getEpicValidatorEntries();
+        epics.forEach(this::reportOnEpic);
+
         //show backlog violations
         log("------------------------------------------------------------");
         backlogValidatorEntry.getViolations().forEach(violation -> log(violation.toString()));
@@ -91,18 +95,24 @@ public class ConsoleReporter implements Reporter
         log("--                  Storynator report                     --");
         log("------------------------------------------------------------");
 
-        log("Processed a total of " + features.size() + " features, " + bugs.size() + " bugs and 0 epics");
-        log("Backlog score of "
-                + doubleDecimalFormat.format(backlogValidatorEntry.getAverageScore() * 100f)
-            + " / "
-            + MAX_SCORE);
+        log("Processed a total of " + features.size() + " user stories, " + bugs.size() + " bugs and " + epics.size() + " epics\r\n");
 
         if (features.size() > 0) {
-            log("User Story score of " + doubleDecimalFormat.format(backlogValidatorEntry.getFeatureScore() * 100f) + " / " + MAX_SCORE);
+            log("User Story score:    " + doubleDecimalFormat.format(backlogValidatorEntry.getFeatureScore() * 100f) + " / " + MAX_SCORE);
         }
         if (bugs.size() > 0) {
-            log("Bug score of " + doubleDecimalFormat.format(backlogValidatorEntry.getBugScore() * 100f) + " / " + MAX_SCORE);
+            log("Bug score:           " + doubleDecimalFormat.format(backlogValidatorEntry.getBugScore() * 100f) + " / " + MAX_SCORE);
         }
+        if (epics.size() > 0) {
+            log("Epic score:          " + doubleDecimalFormat.format(backlogValidatorEntry.getEpicScore() * 100f) + " / " + MAX_SCORE);
+        }
+
+
+        log("\r\n");
+        log("Those three combined result in a score of "
+                + doubleDecimalFormat.format(backlogValidatorEntry.getAverageScore() * 100f)
+                + " / "
+                + MAX_SCORE);
         log("Rated: " + backlogValidatorEntry.getRating() + "  (with threshold on: " + validationConfig.getBacklog()
             .getRatingtreshold() + ")");
     }
@@ -154,6 +164,21 @@ public class ConsoleReporter implements Reporter
         reportOnViolations(bug.getViolations());
     }
 
+    public void reportOnEpic(EpicValidatorEntry epic) {
+        prefix = epic.getRating() == Rating.SUCCESS ? ANSI_GREEN : ANSI_RED;
+        log("------------------------------------------------------------");
+        log("Epic "
+                + epic.getEpic().getKey()
+                + " Item total ("
+                + decimalFormat.format(epic.getPointsValuation() * 100)
+                + "/"
+                + MAX_SCORE
+                + ") \t"
+        );
+        log(epic.getEpic().getSummary());
+        reportOnViolations(epic.getViolations());
+    }
+
     public void reportOnUserstory(UserStoryValidatorEntry entry){
         prefix = entry.getRating() == Rating.SUCCESS ? ANSI_GREEN : ANSI_RED;
 
@@ -194,6 +219,7 @@ public class ConsoleReporter implements Reporter
         log("criteria: " + validationConfig.getCriteria());
         log("estimation: " + validationConfig.getEstimation());
         log("bugs: " + validationConfig.getBug());
+        log("epics: " + validationConfig.getEpic());
     }
 
     private void log(String msg){

@@ -17,6 +17,7 @@ public class SpringValidationConfig {
     private CriteriaValidatorEntry criteria;
     private ValidatorEntry estimation;
     private BugValidatorEntry bug;
+    private EpicValidatorEntry epic;
 
     public ValidationConfig convert() {
         ValidationConfig validationConfig = new ValidationConfig();
@@ -27,6 +28,7 @@ public class SpringValidationConfig {
         validationConfig.setCriteria(this.getCriteria().convert());
         validationConfig.setEstimation(this.getEstimation().convert());
         validationConfig.setBug(this.getBug().convert());
+        validationConfig.setEpic(this.getEpic().convert());
 
         return validationConfig;
     }
@@ -94,6 +96,20 @@ public class SpringValidationConfig {
             bug.setRatingtreshold(getRatingtreshold());
             bug.setEnabledFields(enabledFields);
             return bug;
+        }
+    }
+
+    @Data
+    public static class EpicValidatorEntry extends ValidatorEntry {
+        private List<String> enabledFields;
+
+        public ValidationConfig.EpicValidatorEntry convert() {
+            ValidationConfig.EpicValidatorEntry epic = new ValidationConfig.EpicValidatorEntry();
+            epic.setActive(isActive());
+            epic.setRatingtreshold(getRatingtreshold());
+            epic.setEnabledFields(getEnabledFields());
+
+            return epic;
         }
     }
 }
