@@ -49,7 +49,7 @@ public class BacklogScorerTest {
             validationConfig.getBug().isActive();
             result = false;
 
-            validationConfig.getBacklog().getRatingtreshold();
+            validationConfig.getBacklog().getRatingThreshold();
             result = 50f;
         }};
 
@@ -73,7 +73,7 @@ public class BacklogScorerTest {
             validationConfig.getFeature().isActive();
             result = true;
 
-            validationConfig.getBacklog().getRatingtreshold();
+            validationConfig.getBacklog().getRatingThreshold();
             result = 50f;
         }};
 
@@ -93,7 +93,7 @@ public class BacklogScorerTest {
             result = 0.4f;
             maxTimes = 2;
 
-            validationConfig.getBacklog().getRatingtreshold();
+            validationConfig.getBacklog().getRatingThreshold();
             result = 50f;
             validationConfig.getBug().isActive();
             result = false;
@@ -118,7 +118,7 @@ public class BacklogScorerTest {
             result = 0.4f;
             maxTimes = 2;
 
-            validationConfig.getBacklog().getRatingtreshold();
+            validationConfig.getBacklog().getRatingThreshold();
             result = 50f;
             validationConfig.getBug().isActive();
             result = true;
@@ -143,7 +143,7 @@ public class BacklogScorerTest {
             result = 0.4f;
             maxTimes = 2;
 
-            validationConfig.getBacklog().getRatingtreshold();
+            validationConfig.getBacklog().getRatingThreshold();
             result = 50f;
             validationConfig.getBug().isActive();
             result = false;

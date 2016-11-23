@@ -10,6 +10,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 
+import java.io.IOException;
+import java.util.Properties;
+
 @SpringBootApplication
 public class BootApp {
 
@@ -18,9 +21,15 @@ public class BootApp {
     @Autowired
     private PluginExecutor pluginExecutor;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         SpringApplication application = new SpringApplication(BootApp.class);
         application.setBannerMode(Banner.Mode.OFF);
+
+        // Load in default properties
+        Properties defaults = new Properties();
+        defaults.load(BootApp.class.getClassLoader().getResourceAsStream("application-sample.properties"));
+        application.setDefaultProperties(defaults);
+
         ApplicationContext context = application.run(args);
 
         BootApp app = context.getBean(BootApp.class);

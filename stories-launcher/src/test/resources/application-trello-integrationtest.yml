@@ -4,7 +4,7 @@ spring:
     include: enterprise
 
 source:
-    enabled: trello
+    type: trello
 
     trello:
         url:  https://trello.com

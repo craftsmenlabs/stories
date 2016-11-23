@@ -1,31 +1,37 @@
+
+## Source is the section where you declare your input API.
 source:
-    enabled: jira
+    type: jira                                             # The type source of your application. Currently jira or trello
 
     jira:
-        url: http://jira-url-here.net
-        project-key: GAR
-        auth-key: KEY
+        url: http://jira-url-here.net                         # URL to your JIRA environment
+        project-key: GAR                                      # Your project key
+        auth-key: KEY                                         # Basic auth key. Base64 encoded string of {username}:{password}
     trello:
-        url:
+        url:                                                  # URL to your Trello environment
         token:
         authKey:
         project-key:
 
-
+## The ouput data needs to be sent somewhere. There are multiple options available.
 report:
   dashboard:
-    enabled: false
+    type: false
     url: http://localhost:8090
     token:
   file:
-    enabled: false
+    type: false
     location: /path/to/file
 
+## Filters define what information we should use to filter the issues.
 filters:
     status: "To Do"
 
+## JIRA Agile uses custom fields to store some information it needs.
+## To use the Storynator to it's full potential, you should create additional fields that represent the different data of the issue.
 field-mapping:
     rank: "customfield_11400"
+                                  # The rank field present in all issue types. Used for the curved ranking
     feature:
         estimation: "customfield_11402"
         acceptance-criteria: "customfield_11403"
@@ -35,32 +41,44 @@ field-mapping:
         expected-behavior: "customfield_13003"
         acceptation-criteria: "customfield_13004"
     epic:
-      goal:
+        goal: "customfield_13005"
 
-
+## Defines what parts of the validation are active. General ones are:
+##
+## rating-threshold: The amount of points needed for a SUCCESS rating. 0-100 for backlog and 0-1 for everything else
+## fill-fields: Determine score based on those fields filled.
+## active: Whether you want to enable this or not
+##
+##
 validation:
     backlog:
-        ratingtreshold: 60.0
-    issue:
-        ratingtreshold: 0.7
-    story:
-        ratingtreshold: 0.6
+        rating-threshold: 60.0
+    feature:
         active: true
-        asKeywords: ["as a"]
-        iKeywords: ["i want"]
-        soKeywords: ["so"]
+        rating-threshold: 0.7
+    story:
+        rating-threshold: 0.6
+        active: true
+
+        # Keywords in your user story. Normal format is: As a.... I want... So that..
+        as-keywords: ["as a"]
+        i-keywords: ["i want"]
+        so-keywords: ["so"]
     bug:
         active: true
-        enabled-fields: ["priority", "reproduction", "software", "expected", "acceptation"]
-        ratingtreshold: 0.7
+        fill-fields: ["priority", "reproduction", "software", "expected", "acceptation"]
+        rating-threshold: 0.7
+    epic:
+        active: true
+        fill-fields: ["goal"]
     criteria:
-        ratingtreshold: 0.7
+        rating-threshold: 0.7
         active: false
-        givenKeywords: ["given"]
-        whenKeywords: ["when"]
-        thenKeywords: ["then"]
+
+        # Keywords in your criteria. Normal format is: Given.. When... Then
+        given-keywords: ["given"]
+        when-keywords: ["when"]
+        then-keywords: ["then"]
     estimation:
-        ratingtreshold: 0.7
+        rating-threshold: 0.7
         active: false
-
-

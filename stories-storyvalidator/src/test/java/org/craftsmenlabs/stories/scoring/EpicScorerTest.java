@@ -57,7 +57,7 @@ public class EpicScorerTest {
 
     private ValidationConfig getDefaultConfig() {
         ValidationConfig.EpicValidatorEntry config = new ValidationConfig.EpicValidatorEntry();
-        config.setRatingtreshold(0.5f);
+        config.setRatingThreshold(0.5f);
         config.setActive(true);
         config.setEnabledFields(Arrays.asList("goal"));
         return ValidationConfig.builder()

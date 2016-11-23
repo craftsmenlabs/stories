@@ -21,7 +21,7 @@ public class StoryScorerTest {
             entry.getFeature().getUserstory();
             result = "";
 
-            validationConfig.getStory().getRatingtreshold();
+            validationConfig.getStory().getRatingThreshold();
             result = 0.7f;
         }};
 
@@ -35,7 +35,7 @@ public class StoryScorerTest {
             entry.getFeature().getUserstory();
             result = null;
 
-            validationConfig.getStory().getRatingtreshold();
+            validationConfig.getStory().getRatingThreshold();
             result = 0.7f;
         }};
 
@@ -59,7 +59,7 @@ public class StoryScorerTest {
                     + "I would like to be informed about the alarms in my user \\n\"\n"
                     + "so I can have the most preferred alarm on top.";
 
-            validationConfig.getStory().getRatingtreshold();
+            validationConfig.getStory().getRatingThreshold();
             result = 1f;
         }};
 
@@ -85,7 +85,7 @@ public class StoryScorerTest {
                     + "I would like to be informed about the alarms in my user \\n\"\n"
                     + "so I can have the most preferred alarm on top.";
 
-            validationConfig.getStory().getRatingtreshold();
+            validationConfig.getStory().getRatingThreshold();
             result = 0.7f;
         }};
 
@@ -109,7 +109,7 @@ public class StoryScorerTest {
                     + "I want to be informed about the alarms in my user \\n\"\n"
                     + "so I can have the most preferred alarm on top.";
 
-            validationConfig.getStory().getRatingtreshold();
+            validationConfig.getStory().getRatingThreshold();
             result = 0.7f;
         }};
 
@@ -133,7 +133,7 @@ public class StoryScorerTest {
                     + "I would like to be informed about the alarms in my user \\n\"\n"
                     + "so I have the most preferred alarm on top.";
 
-            validationConfig.getStory().getRatingtreshold();
+            validationConfig.getStory().getRatingThreshold();
             result = 0.7f;
         }};
 
@@ -156,7 +156,7 @@ public class StoryScorerTest {
             result = "AsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISo"
                     .substring(0, StoryScorer.USERSTORY_MINIMUM_LENGTH - 1);
 
-            validationConfig.getStory().getRatingtreshold();
+            validationConfig.getStory().getRatingThreshold();
             result = 0.7f;
         }};
 
@@ -179,7 +179,7 @@ public class StoryScorerTest {
             result = "AsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISoAsISo"
                     .substring(0, StoryScorer.USERSTORY_MINIMUM_LENGTH);
 
-            validationConfig.getStory().getRatingtreshold();
+            validationConfig.getStory().getRatingThreshold();
             result = 0.7f;
         }};
 
@@ -203,7 +203,7 @@ public class StoryScorerTest {
                     + "I would like to be informed about the alarms in my user \\n\"\n"
                     + "so I can have the most preferred alarm on top.";
 
-            validationConfig.getStory().getRatingtreshold();
+            validationConfig.getStory().getRatingThreshold();
             result = 1.1f;
         }};
 

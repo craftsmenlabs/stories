@@ -57,7 +57,7 @@ public class BugScorerTest {
 
     private ValidationConfig getDefaultConfig() {
         ValidationConfig.BugValidatorEntry config = new ValidationConfig.BugValidatorEntry();
-        config.setRatingtreshold(0.5f);
+        config.setRatingThreshold(0.5f);
         config.setActive(true);
         config.setEnabledFields(Arrays.asList("expected", "priority", "software", "reproduction", "acceptation"));
         return ValidationConfig.builder()

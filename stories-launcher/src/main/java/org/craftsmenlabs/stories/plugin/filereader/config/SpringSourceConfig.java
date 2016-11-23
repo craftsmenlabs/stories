@@ -10,17 +10,17 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix =  "source", ignoreInvalidFields = true)
 public class SpringSourceConfig implements ValidatableConfig {
-    private String enabled = "jira";
+    private String type;
     private JiraConfig jira;
     private TrelloConfig trello;
     private FileConfig file;
 
     @Override
     public void validate() throws StoriesException {
-        if(StringUtils.equals(this.enabled, "jira")) {
+        if (StringUtils.equals(this.type, "jira")) {
             this.jira.validate();
         }
-        if(StringUtils.equals(this.enabled, "trello")) {
+        if (StringUtils.equals(this.type, "trello")) {
             this.trello.validate();
         }
     }

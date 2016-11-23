@@ -18,7 +18,7 @@ public class EstimationScorerTest {
             entry.getFeature().getEstimation();
             result = null;
 
-            validationConfig.getEstimation().getRatingtreshold();
+            validationConfig.getEstimation().getRatingThreshold();
             result = 0.7f;
         }};
 
@@ -33,7 +33,7 @@ public class EstimationScorerTest {
             result = 0f;
 
 
-            validationConfig.getEstimation().getRatingtreshold();
+            validationConfig.getEstimation().getRatingThreshold();
             result = 0.1f;
         }};
 
@@ -49,7 +49,7 @@ public class EstimationScorerTest {
             result = 1f;
 
 
-            validationConfig.getEstimation().getRatingtreshold();
+            validationConfig.getEstimation().getRatingThreshold();
             result = 1f;
         }};
 
@@ -63,7 +63,7 @@ public class EstimationScorerTest {
             entry.getFeature().getEstimation();
             result = 1f;
 
-            validationConfig.getEstimation().getRatingtreshold();
+            validationConfig.getEstimation().getRatingThreshold();
             result = 1f;
         }};
 

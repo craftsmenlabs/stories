@@ -18,7 +18,7 @@ public class EstimationScorer {
         }else{
             points = 1f;
         }
-        Rating rating = points >= validationConfig.getEstimation().getRatingtreshold() ? Rating.SUCCESS : Rating.FAIL;
+        Rating rating = points >= validationConfig.getEstimation().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL;
 
         return EstimationValidatorEntry
                 .builder()

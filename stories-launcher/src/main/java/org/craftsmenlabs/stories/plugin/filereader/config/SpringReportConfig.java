@@ -60,7 +60,7 @@ public class SpringReportConfig implements ValidatableConfig {
         @Override
         public void validate() throws StoriesException {
             if(this.enabled && (StringUtils.isEmpty(url) || StringUtils.isEmpty(token)) ) {
-                throw new StoriesException("When dashboard reporting is enabled, please provide a dashboard url and token.");
+                throw new StoriesException("When dashboard reporting is type, please provide a dashboard url and token.");
             }
         }
     }
@@ -73,7 +73,7 @@ public class SpringReportConfig implements ValidatableConfig {
         @Override
         public void validate() throws StoriesException {
             if(this.enabled && (StringUtils.isEmpty(location))) {
-                throw new StoriesException("When JSON output file reporting is enabled the output location should be provided!");
+                throw new StoriesException("When JSON output file reporting is type the output location should be provided!");
             }
         }
     }

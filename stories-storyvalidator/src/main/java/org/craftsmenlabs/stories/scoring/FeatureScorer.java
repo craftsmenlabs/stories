@@ -36,7 +36,7 @@ public class FeatureScorer {
                         .average()
                         .orElse(0.0);
 
-        Rating rating = points >= validationConfig.getFeature().getRatingtreshold() ? Rating.SUCCESS : Rating.FAIL;
+        Rating rating = points >= validationConfig.getFeature().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL;
 
         return FeatureValidatorEntry
                 .builder()

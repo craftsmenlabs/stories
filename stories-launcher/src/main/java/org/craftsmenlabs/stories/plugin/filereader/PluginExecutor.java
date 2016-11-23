@@ -71,7 +71,7 @@ public class PluginExecutor {
         reportConfig = springReportConfig.convert();
 
         // Import the data
-        Importer importer = getImporter(springSourceConfig.getEnabled());
+        Importer importer = getImporter(springSourceConfig.getType());
         Backlog backlog = importer.getBacklog();
 
         // Perform the backlog validation
@@ -100,7 +100,7 @@ public class PluginExecutor {
     }
 
     /**
-     * Finds and initializes the right importer for the source enabled setting.
+     * Finds and initializes the right importer for the source type setting.
      *
      * @param enabled source
      * @return Importer importer

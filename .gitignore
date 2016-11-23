@@ -73,11 +73,6 @@ fabric.properties
 .idea
 *.iml
 
-# DATA
-*.yml
-!*-sample.yml
-!*test.yml
-!build.yml
 *.csv
 *.json
 !*-test.json

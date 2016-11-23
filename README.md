@@ -27,45 +27,11 @@ Things we meassure:
 * [Java 8 ](http://www.oracle.com/technetwork/java/javase/overview/index.html) - Java 8
 * [Jira](https://jira.atlassian.com) - Issue & Project tracking. Currently Stories has been tested on Jira version 6.4
 
-### Source Parameters:
-Defines your input, either Jira or Trello.
+### Configuration:
+Because of the nature of the application, and since no backlog is the same, there is a hefty amount of configuration you can edit. 
+The application is provided by sane defaults, except for the API config of your chosen source. 
 
-* --source.enabled = <jira|trello>
-##### Using Jira:
-* --source.jira.url = <JIRA url>
-* --source.jira.projectKey = <JIRA project Key>
-* --source.jira.authKey = <JIRA auth key>
-##### Using Trello:
-* --source.trello.url = <Trello url>
-* --source.trello.token = <Trello token>
-* --source.trello.projectKey = <Trello project key>
-* --source.trello.authKey = <Trello auth key>
-
-### Reporting Parameters:
-Defines how the application reports the result. By default the console output is enabled.
-
-* --report.dashboard.enabled = <Enable dashboard reporting? true|false>
-* --report.dashboard.url = <dashboard url>
-* --report.dashboard.token = <dashboard auth token>
-* --report.file.enabled = <Enable JSON file output? true|false>
-* --report.file.location = <System file location>
-
-### Filter Parameters:
-Defines what fields the application should filter the Issues on.
-
-* --filters.status = <Status to filter on>
-
-### Parameters for ranking:
-* -- ranking.desiredMiniumStableRanking = 70
-* -- ranking.desiredMinimumUnstableRanking = 60
-* -- ranking.desiredRankingStrategy = Curved
-
-### Parameters for rating
-* -- validation.backlog.ratingtreshold = 70
-* -- validation.issue.ratingtreshold = 70
-* -- validation.story.ratingtreshold = 70
-* -- validation.criteria.ratingtreshold = 70
-* -- validation.estimation.ratingtreshold = 70
+More about the configuration can be found in the docs section
 
 ### Constraints
 At the moment there are some constraints on the data. 

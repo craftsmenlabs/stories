@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "filters")
 public class SpringFilterConfig {
-    private String status = "To Do";
+    private String status;
 
     public FilterConfig convert() {
         return FilterConfig.builder()

@@ -70,7 +70,7 @@ public class AcceptanceCriteriaScorer {
         }
 
         points /= TOTAL_POINTS;
-        Rating rating = points >= validationConfig.getCriteria().getRatingtreshold() ? Rating.SUCCESS : Rating.FAIL;
+        Rating rating = points >= validationConfig.getCriteria().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL;
 
         return AcceptanceCriteriaValidatorEntry
                 .builder()

@@ -114,7 +114,7 @@ public class ConsoleReporter implements Reporter
                 + " / "
                 + MAX_SCORE);
         log("Rated: " + backlogValidatorEntry.getRating() + "  (with threshold on: " + validationConfig.getBacklog()
-            .getRatingtreshold() + ")");
+                .getRatingThreshold() + ")");
     }
 
     public void reportOnIssue(FeatureValidatorEntry issue){

@@ -4,7 +4,7 @@ spring:
     include: enterprise
 
 source:
-    enabled: jira
+    type: jira
 
     jira:
         url:  https://jira.com
@@ -24,7 +24,6 @@ field_mapping:
     rank: "customfield_10401"
     feature:
         estimation: "S"
-        acceptanceCriteria: "dadada"
     bug:
         acceptation-criteria: "customfield_10402"
         reproduction-path: "customfield_10403"
@@ -48,7 +47,7 @@ validation:
         enabled-fields: ["goal"]
         ratingtreshold: 0.7
     bug:
-        filledWith: ["","component"]
+        fill-fields: ["priority"]
         active: false
     criteria:
         ratingtreshold: 0.7

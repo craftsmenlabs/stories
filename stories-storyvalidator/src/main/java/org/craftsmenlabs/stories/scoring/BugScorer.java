@@ -47,7 +47,7 @@ public class BugScorer {
         }
 
         entry.setPointsValuation(totalPoints);
-        entry.setRating(totalPoints >= validationConfig.getBug().getRatingtreshold() ? Rating.SUCCESS : Rating.FAIL);
+        entry.setRating(totalPoints >= validationConfig.getBug().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL);
         return entry;
     }
 

@@ -37,15 +37,26 @@ public class ValidationConfig {
 
     @Data
     public static class ValidatorEntry {
-        private float ratingtreshold;
+        private float ratingThreshold;
         private boolean active;
 
         @Override
         public String toString() {
             return "config: {" +
-                    "ratingtreshold=" + ratingtreshold +
+                    "ratingThreshold=" + ratingThreshold +
                     ", active=" + active +
                     '}';
+        }
+    }
+
+    @Data
+    public static class FillableValidatorEntry extends ValidatorEntry {
+        private List<String> enabledFields;
+
+        @Override
+        public String toString() {
+            return super.toString() +
+                    " EnabledFields: {" + StringUtils.join(enabledFields, ", ") + "}";
         }
     }
 
@@ -84,24 +95,10 @@ public class ValidationConfig {
     }
 
     @Data
-    public static class BugValidatorEntry extends ValidatorEntry {
-        private List<String> enabledFields;
-
-        @Override
-        public String toString() {
-            return super.toString() +
-                    " EnabledFields: {" + StringUtils.join(enabledFields, ", ") + "}";
-        }
+    public static class BugValidatorEntry extends FillableValidatorEntry {
     }
 
     @Data
-    public static class EpicValidatorEntry extends ValidatorEntry {
-        private List<String> enabledFields;
-
-        @Override
-        public String toString() {
-            return super.toString() +
-                    " EnabledFields: {" + StringUtils.join(enabledFields, ", ") + "}";
-        }
+    public static class EpicValidatorEntry extends FillableValidatorEntry {
     }
 }
