@@ -42,4 +42,9 @@ public class FeatureValidatorEntry extends AbstractValidatorEntry {
     public String getRank() {
         return feature.getRank();
     }
+
+    @Override
+    public String getType() {
+        return "feature";
+    }
 }

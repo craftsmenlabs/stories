@@ -25,4 +25,9 @@ public class EstimationValidatorEntry extends AbstractValidatorEntry {
     public String getRank() {
         return null;
     }
+
+    @Override
+    public String getType() {
+        return "estimation";
+    }
 }

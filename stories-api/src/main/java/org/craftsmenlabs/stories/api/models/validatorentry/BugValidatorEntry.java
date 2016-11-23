@@ -28,4 +28,9 @@ public class BugValidatorEntry extends AbstractValidatorEntry {
     public String getRank() {
         return bug.getRank();
     }
+
+    @Override
+    public String getType() {
+        return "bug";
+    }
 }
