@@ -49,7 +49,7 @@ public class FeatureConverter extends AbstractJiraConverter<Feature> {
 
     @Override
     public String[] getSupportedTypes() {
-        return new String[]{"story"};
+        return new String[]{"story", "User Story"};
     }
 
     private boolean hasValidDescription(JiraJsonIssue jiraJsonIssue) {

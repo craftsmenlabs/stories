@@ -1,5 +1,6 @@
 package demo.data.importer;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.util.Files;
 import org.craftsmenlabs.stories.api.models.StoriesRun;
@@ -7,14 +8,13 @@ import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.ReportConfig;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
-import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
 import org.craftsmenlabs.stories.api.models.summary.SummaryBuilder;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 import org.craftsmenlabs.stories.connectivity.service.enterprise.EnterpriseDashboardReporter;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
-import org.craftsmenlabs.stories.plugin.filereader.config.*;
 import org.craftsmenlabs.stories.plugin.filereader.BootApp;
+import org.craftsmenlabs.stories.plugin.filereader.config.*;
 import org.craftsmenlabs.stories.ranking.CurvedRanking;
 import org.craftsmenlabs.stories.scoring.BacklogScorer;
 import org.junit.Test;
@@ -109,6 +109,11 @@ public class importJiraJson {
                 .runConfig(validationConfig)
                 .build();
 
+        try {
+            System.out.println(mapper.writeValueAsString(storiesRun));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         EnterpriseDashboardReporter enterpriseDashboardReporter = new EnterpriseDashboardReporter(reportConfig);
         enterpriseDashboardReporter.report(storiesRun);
     }

@@ -1,6 +1,5 @@
 package org.craftsmenlabs.stories.api.models.validatorentry;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
@@ -16,19 +15,17 @@ import java.util.List;
 public class BacklogValidatorEntry extends AbstractValidatorEntry {
 
     @JsonProperty("backlog")
-    @JsonIgnore
     private Backlog backlog;
+
     @JsonProperty("featureValidatorEntries")
-    @JsonIgnore
     private List<FeatureValidatorEntry> featureValidatorEntries;
+
     @JsonProperty("bugValidatorEntries")
-    @JsonIgnore
     private List<BugValidatorEntry> bugValidatorEntries;
+
     @JsonProperty("epicValidatorEntries")
-    @JsonIgnore
     private List<EpicValidatorEntry> epicValidatorEntries;
-    @JsonIgnore
-    @JsonProperty("averageScore")
+
     private float averageScore = 0.0f;
     private float featureScore = 0.0f;
     private float bugScore = 0.0f;

@@ -7,7 +7,15 @@ source:
     enabled: file
 
     file:
-        location: /home/morlack/jiradata
+        location: /Users/youritjang/Downloads/demo-project2
+report:
+  dashboard:
+    enabled: false
+    url: http://localhost:8090
+    token:
+  file:
+    enabled: true
+    location: /Users/youritjang/Downloads/demo-project2/dump.json
 
 filters:
     status: "To Do"
@@ -30,16 +38,16 @@ field-mapping:
 validation:
         backlog:
             ratingtreshold: 60.0
-        issue:
+            active: true
+        feature:
             ratingtreshold: 0.7
+            active: true
         story:
             ratingtreshold: 0.6
             active: true
             asKeywords: ["as a"]
             iKeywords: ["i want to"]
             soKeywords: ["so "]
-        bug:
-            filledWith: ["","component"]
         criteria:
             ratingtreshold: 0.7
             active: false
@@ -47,5 +55,11 @@ validation:
             whenKeywords: ["when"]
             thenKeywords: ["then"]
         estimation:
+            ratingtreshold: 0.7
+            active: false
+        bug:
+            active: true
+            filledWith: ["","component"]
+        epic:
             ratingtreshold: 0.7
             active: false
