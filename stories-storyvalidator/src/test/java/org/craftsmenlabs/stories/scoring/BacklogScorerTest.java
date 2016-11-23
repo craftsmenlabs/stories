@@ -40,6 +40,9 @@ public class BacklogScorerTest {
             backlog.getFeatures();
             result = features;
 
+            backlog.getAllItems();
+            result = features;
+
             ranking.createRanking(withNotNull());
             result = 0.5f;
 
@@ -67,6 +70,9 @@ public class BacklogScorerTest {
             backlog.getFeatures();
             result = features;
 
+            backlog.getAllItems();
+            result = features;
+
             ranking.createRanking(withNotNull());
             result = 0f;
 
@@ -87,6 +93,9 @@ public class BacklogScorerTest {
 
         new Expectations() {{
             backlog.getFeatures();
+            result = features;
+
+            backlog.getAllItems();
             result = features;
 
             ranking.createRanking(withNotNull());
@@ -114,6 +123,10 @@ public class BacklogScorerTest {
             backlog.getBugs();
             result = bugs;
 
+
+            backlog.getAllItems();
+            result = bugs;
+
             ranking.createRanking(withNotNull());
             result = 0.4f;
             maxTimes = 2;
@@ -137,6 +150,9 @@ public class BacklogScorerTest {
 
         new Expectations() {{
             backlog.getEpics();
+            result = epics;
+
+            backlog.getAllItems();
             result = epics;
 
             ranking.createRanking(withNotNull());

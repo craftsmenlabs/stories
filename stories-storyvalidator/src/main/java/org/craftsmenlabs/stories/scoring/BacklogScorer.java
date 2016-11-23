@@ -34,11 +34,7 @@ public class BacklogScorer {
                 .build();
 
 
-        if (backlog == null
-                || (validationConfig.getFeature().isActive() && (backlog.getFeatures() == null || backlog.getFeatures().size() == 0))
-                || (validationConfig.getBug().isActive() && (backlog.getBugs() == null || backlog.getBugs().size() == 0))
-
-                ) {
+        if ( backlog == null || backlog.getAllItems().size()==0 ) {
             backlogValidatorEntry.getViolations().add(new Violation(
                     ViolationType.BacklogEmptyViolation,
                     "The backlog is empty, or doesn't contain any issues."
