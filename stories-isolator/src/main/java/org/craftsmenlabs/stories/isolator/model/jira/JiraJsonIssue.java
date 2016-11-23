@@ -44,4 +44,14 @@ public class JiraJsonIssue {
         this.additionalProperties.put(name, value);
     }
 
+    // Shortcut to get the status field
+    @JsonIgnore
+    public String getStatus() {
+        return this.fields.getStatus().getStatusCategory().getName();
+    }
+
+    @JsonIgnore
+    public String getType() {
+        return this.fields.getIssuetype().getName().toLowerCase();
+    }
 }

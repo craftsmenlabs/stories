@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -16,8 +17,8 @@ public class ValidationConfig {
     @JsonProperty("backlog")
     private ValidatorEntry backlog;
 
-    @JsonProperty("issue")
-    private ValidatorEntry issue;
+    @JsonProperty("feature")
+    private ValidatorEntry feature;
 
     @JsonProperty("story")
     private StoryValidatorEntry story;
@@ -27,6 +28,12 @@ public class ValidationConfig {
 
     @JsonProperty("estimation")
     private ValidatorEntry estimation;
+
+    @JsonProperty("bug")
+    private BugValidatorEntry bug;
+
+    @JsonProperty("epic")
+    private EpicValidatorEntry epic;
 
     @Data
     public static class ValidatorEntry {
@@ -73,6 +80,28 @@ public class ValidationConfig {
                     ", whenKeywords=" + whenKeywords +
                     ", thenKeywords=" + thenKeywords +
                     '}';
+        }
+    }
+
+    @Data
+    public static class BugValidatorEntry extends ValidatorEntry {
+        private List<String> enabledFields;
+
+        @Override
+        public String toString() {
+            return super.toString() +
+                    " EnabledFields: {" + StringUtils.join(enabledFields, ", ") + "}";
+        }
+    }
+
+    @Data
+    public static class EpicValidatorEntry extends ValidatorEntry {
+        private List<String> enabledFields;
+
+        @Override
+        public String toString() {
+            return super.toString() +
+                    " EnabledFields: {" + StringUtils.join(enabledFields, ", ") + "}";
         }
     }
 }

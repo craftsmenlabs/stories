@@ -7,36 +7,36 @@ import lombok.Data;
 @Builder
 public class FieldMappingConfig {
     private BacklogMapping backlog;
-    private IssueMapping issue;
-    private StoryMapping story;
-    private CriteriaMapping criteria;
-    private EstimationMapping estimation;
+    private FeatureMapping feature;
+    private BugMapping bug;
+    private EpicMapping epic;
+    private String rank;
 
     @Data
     @Builder
-    public static class IssueMapping {
-        private String rank;
+    public static class FeatureMapping {
         private String estimation;
-        private String acceptenceCriteria;
+        private String acceptanceCriteria;
     }
 
     @Data
     @Builder
-    public static class StoryMapping {
+    public static class BugMapping {
+        private String priority;
+        private String reproductionPath;
+        private String software;
+        private String expectedBehavior;
+        private String acceptationCriteria;
+    }
+
+    @Data
+    @Builder
+    public static class EpicMapping {
+        private String goal;
     }
 
     @Data
     @Builder
     public static class BacklogMapping {
-    }
-
-    @Data
-    @Builder
-    public static class CriteriaMapping {
-    }
-
-    @Data
-    @Builder
-    public static class EstimationMapping {
     }
 }

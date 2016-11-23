@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Issue implements ScrumItem{
+public class Feature implements ScrumItem{
     @JsonProperty("key")
     private String key;
 
@@ -21,6 +21,4 @@ public class Issue implements ScrumItem{
     private String userstory;
     private String acceptanceCriteria;
     private Float estimation;
-
-    private String issueType;
 }

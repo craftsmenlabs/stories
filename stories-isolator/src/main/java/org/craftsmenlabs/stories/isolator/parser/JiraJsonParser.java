@@ -3,92 +3,65 @@ package org.craftsmenlabs.stories.isolator.parser;
 import org.apache.commons.lang3.StringUtils;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.FilterConfig;
-import org.craftsmenlabs.stories.api.models.exception.StoriesException;
-import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
+import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
-import org.craftsmenlabs.stories.isolator.SentenceSplitter;
+import org.craftsmenlabs.stories.isolator.parser.converters.jira.BugConverter;
+import org.craftsmenlabs.stories.isolator.parser.converters.jira.EpicConverter;
+import org.craftsmenlabs.stories.isolator.parser.converters.jira.FeatureConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 public class JiraJsonParser {
-
     private final Logger logger = LoggerFactory.getLogger(JiraJsonParser.class);
-    private FieldMappingConfig fieldMapping;
     private FilterConfig filterConfig;
 
+    private FeatureConverter featureConverter;
+    private BugConverter bugConverter;
+    private EpicConverter epicConverter;
+
     public JiraJsonParser(FieldMappingConfig fieldMapping, FilterConfig filterConfig) {
-        this.fieldMapping = fieldMapping;
         this.filterConfig = filterConfig;
+
+        this.featureConverter = new FeatureConverter(fieldMapping);
+        this.bugConverter = new BugConverter(fieldMapping);
+        this.epicConverter = new EpicConverter(fieldMapping);
     }
 
-    public List<Issue> parse(JiraBacklog backlog) {
-        SentenceSplitter sentenceSplitter = new SentenceSplitter();
-
-        if(backlog == null) {
+    public Backlog parse(JiraBacklog jiraBacklog) {
+        if (jiraBacklog == null) {
             return null;
         }
 
-        return backlog.getJiraJsonIssues().stream()
-                .filter(jiraJsonIssue -> jiraJsonIssue.getFields().getStatus().getStatusCategory().getName().equals(filterConfig.getStatus()))
-                .map(jiraJsonIssue -> {
-                    Issue issue;
+        Backlog backlog = new Backlog();
 
-                    if (hasNoValidDescription(jiraJsonIssue)) {
-                        issue = new Issue();
-                    } else {
-                        issue = sentenceSplitter.splitSentence(jiraJsonIssue.getFields().getDescription());
-                    }
+        // Filter issues on status
+        List<JiraJsonIssue> jiraJsonIssues = jiraBacklog.getJiraJsonIssues().stream()
+                .filter(jiraJsonIssue -> jiraJsonIssue.getStatus().equals(filterConfig.getStatus()))
+                .collect(Collectors.toList());
 
-                    issue.setSummary(jiraJsonIssue.getFields().getSummary());
-                    issue.setKey(jiraJsonIssue.getKey());
-                    issue.setIssueType(jiraJsonIssue.getFields().getIssuetype().getName());
+        // Filter and convert features
+        backlog.setFeatures(jiraJsonIssues.stream()
+                .filter(featureConverter::supportsIssue)
+                .map(featureConverter::convert)
+                .filter(issue -> StringUtils.isNotEmpty(issue.getUserstory()))
+                .collect(Collectors.toList())
+        );
 
-                    String criteriaKey = fieldMapping.getIssue().getAcceptenceCriteria();
-                    if(StringUtils.isNotEmpty(criteriaKey) && jiraJsonIssue.getFields().getAdditionalProperties().containsKey(criteriaKey)) {
-                        // We should get the acceptence Criteria from this field
-                        issue.setAcceptanceCriteria((String) jiraJsonIssue.getFields().getAdditionalProperties().get(criteriaKey));
-                    }
+        // Filter and convert bugs
+        backlog.setBugs(jiraJsonIssues.stream()
+                .filter(bugConverter::supportsIssue)
+                .map(bugConverter::convert)
+                .collect(Collectors.toList()));
 
-                    Map<String, Object> additionalProps = jiraJsonIssue.getFields().getAdditionalProperties();
-                    Map<String, String> stringProps = new HashMap<>();
-                    for (Entry<String, Object> entries : additionalProps.entrySet()) {
-                        if (entries.getValue() != null) {
-                            stringProps.put(entries.getKey(), entries.getValue().toString());
-                        } else {
-                            stringProps.put(entries.getKey(), "");
-                        }
-                    }
+        backlog.setEpics(jiraJsonIssues.stream()
+                .filter(epicConverter::supportsIssue)
+                .map(epicConverter::convert)
+                .collect(Collectors.toList()));
 
-                    String rank = stringProps.get(fieldMapping.getIssue().getRank());
-                    if (rank == null || StringUtils.isEmpty(rank)) {
-                        throw new StoriesException(
-                                "The rank field mapping was not defined in your application yaml or parameters. " +
-                                "Is the field mapping configured correctly?");
-                    }
-                    issue.setRank(rank);
-
-                    float estimation = 0f;
-                    try {
-                        if (stringProps.get(fieldMapping.getIssue().getEstimation()) != null) {
-                            estimation = Float.parseFloat(stringProps.get(fieldMapping.getIssue().getEstimation()));
-                        }
-                    } catch (NumberFormatException nfe) {
-                        logger.warn("Parsing of estimation to float failed. By default set to 0.0");
-                    }
-                    issue.setEstimation(estimation);
-
-                    return issue;
-                }).collect(Collectors.toList());
-    }
-
-    public boolean hasNoValidDescription(JiraJsonIssue jiraJsonIssue) {
-        return jiraJsonIssue.getFields().getDescription() == null || jiraJsonIssue.getFields().getDescription().isEmpty();
+        return backlog;
     }
 }

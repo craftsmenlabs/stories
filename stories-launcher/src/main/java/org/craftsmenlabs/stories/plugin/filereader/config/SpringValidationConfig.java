@@ -12,19 +12,23 @@ import java.util.List;
 @ConfigurationProperties(prefix="validation")
 public class SpringValidationConfig {
     private ValidatorEntry backlog;
-    private ValidatorEntry issue;
+    private ValidatorEntry feature;
     private StoryValidatorEntry story;
     private CriteriaValidatorEntry criteria;
     private ValidatorEntry estimation;
+    private BugValidatorEntry bug;
+    private EpicValidatorEntry epic;
 
     public ValidationConfig convert() {
         ValidationConfig validationConfig = new ValidationConfig();
 
         validationConfig.setBacklog(this.getBacklog().convert());
-        validationConfig.setIssue(this.getIssue().convert());
+        validationConfig.setFeature(this.getFeature().convert());
         validationConfig.setStory(this.getStory().convert());
         validationConfig.setCriteria(this.getCriteria().convert());
         validationConfig.setEstimation(this.getEstimation().convert());
+        validationConfig.setBug(this.getBug().convert());
+        validationConfig.setEpic(this.getEpic().convert());
 
         return validationConfig;
     }
@@ -79,6 +83,33 @@ public class SpringValidationConfig {
             sve.setThenKeywords(getThenKeywords());
 
             return sve;
+        }
+    }
+
+    @Data
+    public static class BugValidatorEntry extends ValidatorEntry {
+        private List<String> enabledFields;
+
+        public ValidationConfig.BugValidatorEntry convert() {
+            ValidationConfig.BugValidatorEntry bug = new ValidationConfig.BugValidatorEntry();
+            bug.setActive(isActive());
+            bug.setRatingtreshold(getRatingtreshold());
+            bug.setEnabledFields(enabledFields);
+            return bug;
+        }
+    }
+
+    @Data
+    public static class EpicValidatorEntry extends ValidatorEntry {
+        private List<String> enabledFields;
+
+        public ValidationConfig.EpicValidatorEntry convert() {
+            ValidationConfig.EpicValidatorEntry epic = new ValidationConfig.EpicValidatorEntry();
+            epic.setActive(isActive());
+            epic.setRatingtreshold(getRatingtreshold());
+            epic.setEnabledFields(getEnabledFields());
+
+            return epic;
         }
     }
 }

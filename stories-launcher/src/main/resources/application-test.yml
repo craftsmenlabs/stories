@@ -7,33 +7,48 @@ source:
     enabled: file
 
     file:
-        location: /home/morlack/jiradata
+        location: /Users/youritjang/Downloads/demo-project2
+report:
+  dashboard:
+    enabled: false
+    url: http://localhost:8090
+    token:
+  file:
+    enabled: true
+    location: /Users/youritjang/Downloads/demo-project2/dump.json
 
 filters:
     status: "To Do"
 
-field_mapping:
-    issue:
-        rank: "customfield_11400"
-        summary: "customfield_11400"
+field-mapping:
+    rank: "customfield_11400"
+    feature:
         estimation: "customfield_11400"
         acceptanceCriteria: "customfield_10502"
+    bug:
+        reproductionPath: "customfield_13001"
+        software: "customfield_13002"
+        expectedBehavior: "customfield_13003"
+        acceptationCriteria: "customfield_13004"
+
+    epic:
+        goal: "customfield_12001"
+
 
 validation:
         backlog:
             ratingtreshold: 60.0
-        issue:
+            active: true
+        feature:
             ratingtreshold: 0.7
+            active: true
         story:
             ratingtreshold: 0.6
             active: true
             asKeywords: ["as a"]
             iKeywords: ["i want to"]
             soKeywords: ["so "]
-        bug:
-            filledWith: ["","component"]
         criteria:
-            fieldSource: "description#criteria"
             ratingtreshold: 0.7
             active: false
             givenKeywords: ["given"]
@@ -42,6 +57,9 @@ validation:
         estimation:
             ratingtreshold: 0.7
             active: false
-
-dashboard:
-  serviceUrl: http://localhost:8090
+        bug:
+            active: true
+            filledWith: ["","component"]
+        epic:
+            ratingtreshold: 0.7
+            active: false

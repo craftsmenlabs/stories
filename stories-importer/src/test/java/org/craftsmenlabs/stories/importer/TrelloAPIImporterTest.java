@@ -4,13 +4,12 @@ import mockit.Expectations;
 import mockit.Mocked;
 import org.apache.commons.io.FileUtils;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
-import org.craftsmenlabs.stories.api.models.scrumitems.Issue;
+import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.junit.Test;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.net.URL;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -32,8 +31,8 @@ public class TrelloAPIImporterTest
 
 		}};
 
-		List<Issue> issues = trelloAPIImporter.getIssues();
-		assertThat(issues).hasSize(6);
+		Backlog backlog = trelloAPIImporter.getBacklog();
+		assertThat(backlog.getFeatures()).hasSize(6);
 	}
 
 	@Test(expected = StoriesException.class)
@@ -44,11 +43,11 @@ public class TrelloAPIImporterTest
 
 		}};
 
-		trelloAPIImporter.getIssues();
+		trelloAPIImporter.getBacklog();
 	}
 
 	private String readFile(String resource) throws Exception {
 		URL url = this.getClass().getClassLoader().getResource(resource);
-		return FileUtils.readFileToString(new File(url.toURI()));
-	}
+        return FileUtils.readFileToString(new File(url.toURI()), "UTF-8");
+    }
 }

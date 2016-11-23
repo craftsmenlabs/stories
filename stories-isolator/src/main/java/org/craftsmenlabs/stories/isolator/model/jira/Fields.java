@@ -88,6 +88,8 @@ public class Fields {
     public Issuetype issuetype;
     @JsonProperty("status")
     public Status status;
+    @JsonProperty("priority")
+    public Priority priority;
 
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();

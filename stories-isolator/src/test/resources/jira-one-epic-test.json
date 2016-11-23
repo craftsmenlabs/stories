@@ -1,0 +1,142 @@
+{
+  "expand": "schema,names",
+  "startAt": 0,
+  "maxResults": 1000,
+  "total": 1,
+  "issues": [
+    {
+      "expand": "operations,editmeta,changelog,transitions,renderedFields",
+      "id": "18511",
+      "self": "http://jira.x.nl/rest/api/2/feature/18511",
+      "key": "EPIC-1",
+      "fields": {
+        "issuetype": {
+          "self": "http://jira.foo.bar/rest/api/2/issuetype/6",
+          "id": "6",
+          "description": "Created by JIRA Agile - do not edit or delete. Issue type for a user story.",
+          "iconUrl": "http://jira.foo.bar/secure/viewavatar?size=xsmall&avatarId=10915&avatarType=issuetype",
+          "name": "Epic",
+          "subtask": false,
+          "avatarId": 10915
+        },
+        "components": [
+          {
+            "self": "http://jira.foo.bar/rest/api/2/component/11200",
+            "id": "11200",
+            "name": "Profiling"
+          }
+        ],
+        "timespent": null,
+        "timeoriginalestimate": null,
+        "description": "Input box is not displayed correctly",
+        "project": {
+          "self": "http://jira.foo.bar/rest/api/2/project/11106",
+          "id": "11106",
+          "key": "EPM",
+          "name": "epic interslicer",
+          "avatarUrls": {
+            "48x48": "http://jira.foo.bar/secure/projectavatar?pid=11106&avatarId=11829",
+            "24x24": "http://jira.foo.bar/secure/projectavatar?size=small&pid=11106&avatarId=11829",
+            "16x16": "http://jira.foo.bar/secure/projectavatar?size=xsmall&pid=11106&avatarId=11829",
+            "32x32": "http://jira.foo.bar/secure/projectavatar?size=medium&pid=11106&avatarId=11829"
+          }
+        },
+        "customfield_10302": "9223372036854775807",
+        "customfield_11400": "0|zgby24:",
+        "customfield_11404": "Goal",
+        "workratio": -1,
+        "summary": "Search component for systems",
+        "lastViewed": null,
+        "watches": {
+          "self": "http://jira.foo.bar/rest/api/2/feature/EPM-632/watchers",
+          "watchCount": 1,
+          "isWatching": false
+        },
+        "creator": {
+          "self": "http://jira.foo.bar/rest/api/2/user?username=self",
+          "name": "self",
+          "key": "self",
+          "emailAddress": "self@wcc-group.com",
+          "avatarUrls": {
+            "48x48": "http://jira.foo.bar/secure/useravatar?ownerId=self&avatarId=11826",
+            "24x24": "http://jira.foo.bar/secure/useravatar?size=small&ownerId=self&avatarId=11826",
+            "16x16": "http://jira.foo.bar/secure/useravatar?size=xsmall&ownerId=self&avatarId=11826",
+            "32x32": "http://jira.foo.bar/secure/useravatar?size=medium&ownerId=self&avatarId=11826"
+          },
+          "displayName": "Foo Bar",
+          "active": true,
+          "timeZone": "Europe/Amsterdam"
+        },
+        "subtasks": [
+        ],
+        "created": "2016-11-16T11:53:28.000+0100",
+        "reporter": {
+          "self": "http://jira.foo.bar/rest/api/2/user?username=self",
+          "name": "self",
+          "key": "self",
+          "emailAddress": "self@wcc-group.com",
+          "avatarUrls": {
+            "48x48": "http://jira.foo.bar/secure/useravatar?ownerId=self&avatarId=11826",
+            "24x24": "http://jira.foo.bar/secure/useravatar?size=small&ownerId=self&avatarId=11826",
+            "16x16": "http://jira.foo.bar/secure/useravatar?size=xsmall&ownerId=self&avatarId=11826",
+            "32x32": "http://jira.foo.bar/secure/useravatar?size=medium&ownerId=self&avatarId=11826"
+          },
+          "displayName": "Foo Bar",
+          "active": true,
+          "timeZone": "Europe/Amsterdam"
+        },
+        "customfield_10000": null,
+        "aggregateprogress": {
+          "progress": 0,
+          "total": 0
+        },
+        "priority": {
+          "self": "http://jira.foo.bar/rest/api/2/priority/3",
+          "iconUrl": "http://jira.foo.bar/images/icons/priorities/major.png",
+          "name": "High",
+          "id": "3"
+        },
+        "customfield_10100": null,
+        "customfield_10200": null,
+        "customfield_10201": null,
+        "customfield_10300": null,
+        "labels": [
+        ],
+        "customfield_10301": "EPM-626",
+        "environment": null,
+        "timeestimate": null,
+        "aggregatetimeoriginalestimate": null,
+        "versions": [
+        ],
+        "duedate": null,
+        "progress": {
+          "progress": 0,
+          "total": 0
+        },
+        "issuelinks": [
+        ],
+        "votes": {
+          "self": "http://jira.foo.bar/rest/api/2/feature/EPM-632/votes",
+          "votes": 0,
+          "hasVoted": false
+        },
+        "assignee": null,
+        "updated": "2016-11-16T17:14:07.000+0100",
+        "status": {
+          "self": "http://jira.foo.bar/rest/api/2/status/10002",
+          "description": "",
+          "iconUrl": "http://jira.foo.bar/images/icons/statuses/open.png",
+          "name": "To Do",
+          "id": "10002",
+          "statusCategory": {
+            "self": "http://jira.foo.bar/rest/api/2/statuscategory/2",
+            "id": 2,
+            "key": "new",
+            "colorName": "blue-gray",
+            "name": "To Do"
+          }
+        }
+      }
+    }
+  ]
+}

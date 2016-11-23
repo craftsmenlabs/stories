@@ -25,6 +25,9 @@ public class ConsoleReporter implements Reporter
     public static final String ANSI_PURPLE = "\u001B[35m";
     public static final String ANSI_CYAN = "\u001B[36m";
 
+    private final DecimalFormat decimalFormat = new DecimalFormat("#.#");
+    private final DecimalFormat doubleDecimalFormat = new DecimalFormat("#.##");
+
     public static final String[] COLORS = {
             ANSI_BLACK,
             ANSI_RED,
@@ -69,8 +72,17 @@ public class ConsoleReporter implements Reporter
         log("------------------------------------------------------------");
 
         //verbose output
-        List<IssueValidatorEntry> entries = backlogValidatorEntry.getIssueValidatorEntries();
-        entries.forEach(issue -> reportOnIssue(issue));
+        List<FeatureValidatorEntry> features = backlogValidatorEntry.getFeatureValidatorEntries();
+        features.forEach(this::reportOnIssue);
+
+        // Log bugs
+
+        List<BugValidatorEntry> bugs = backlogValidatorEntry.getBugValidatorEntries();
+        bugs.forEach(this::reportOnBug);
+
+        // Log epics
+        List<EpicValidatorEntry> epics = backlogValidatorEntry.getEpicValidatorEntries();
+        epics.forEach(this::reportOnEpic);
 
         //show backlog violations
         log("------------------------------------------------------------");
@@ -83,38 +95,51 @@ public class ConsoleReporter implements Reporter
         log("--                  Storynator report                     --");
         log("------------------------------------------------------------");
 
-        log("Processed a total of " + entries.size() + " issues.");
-        log("Backlog score of "
-            + new DecimalFormat("#.##").format(backlogValidatorEntry.getPointsValuation() * 100f)
-            + " / "
-            + MAX_SCORE);
+        log("Processed a total of " + features.size() + " user stories, " + bugs.size() + " bugs and " + epics.size() + " epics\r\n");
+
+        if (features.size() > 0) {
+            log("User Story score:    " + doubleDecimalFormat.format(backlogValidatorEntry.getFeatureScore() * 100f) + " / " + MAX_SCORE);
+        }
+        if (bugs.size() > 0) {
+            log("Bug score:           " + doubleDecimalFormat.format(backlogValidatorEntry.getBugScore() * 100f) + " / " + MAX_SCORE);
+        }
+        if (epics.size() > 0) {
+            log("Epic score:          " + doubleDecimalFormat.format(backlogValidatorEntry.getEpicScore() * 100f) + " / " + MAX_SCORE);
+        }
+
+
+        log("\r\n");
+        log("Those three combined result in a score of "
+                + doubleDecimalFormat.format(backlogValidatorEntry.getAverageScore() * 100f)
+                + " / "
+                + MAX_SCORE);
         log("Rated: " + backlogValidatorEntry.getRating() + "  (with threshold on: " + validationConfig.getBacklog()
             .getRatingtreshold() + ")");
     }
 
-    public void reportOnIssue(IssueValidatorEntry issue){
+    public void reportOnIssue(FeatureValidatorEntry issue){
         prefix = issue.getRating() == Rating.SUCCESS ? ANSI_GREEN : ANSI_RED;
 
         log("------------------------------------------------------------");
         log("Issue "
-                        + issue.getIssue().getKey()
+                        + issue.getFeature().getKey()
                 + " Item total ("
-                + new DecimalFormat("#.#").format(issue.getPointsValuation() * 100)
+                        + decimalFormat.format(issue.getPointsValuation() * 100)
                 + "/"
                 + MAX_SCORE
                 + ") \t"
                 + " US ("
-                + new DecimalFormat("#.#").format(issue.getUserStoryValidatorEntry().getPointsValuation() * 100)
+                        + decimalFormat.format(issue.getUserStoryValidatorEntry().getPointsValuation() * 100)
                 + "/"
                 + MAX_SCORE
                 + ")\t"
                 + " AC ("
-                + new DecimalFormat("#.#").format(issue.getAcceptanceCriteriaValidatorEntry().getPointsValuation() * 100)
+                        + decimalFormat.format(issue.getAcceptanceCriteriaValidatorEntry().getPointsValuation() * 100)
                 + "/"
                 + MAX_SCORE
                 + ")\t"
                   );
-        log(issue.getIssue().getSummary());
+        log(issue.getFeature().getSummary());
         issue.getViolations()
                 .forEach(violation ->
                         log("Violation found:" + violation.toString()));
@@ -122,6 +147,36 @@ public class ConsoleReporter implements Reporter
         reportOnUserstory(issue.getUserStoryValidatorEntry());
         reportOnAcceptanceCriteria(issue.getAcceptanceCriteriaValidatorEntry());
         reportOnEstimation(issue.getEstimationValidatorEntry());
+    }
+
+    public void reportOnBug(BugValidatorEntry bug) {
+        prefix = bug.getRating() == Rating.SUCCESS ? ANSI_GREEN : ANSI_RED;
+        log("------------------------------------------------------------");
+        log("Bug "
+                + bug.getBug().getKey()
+                + " Item total ("
+                + decimalFormat.format(bug.getPointsValuation() * 100)
+                + "/"
+                + MAX_SCORE
+                + ") \t"
+        );
+        log(bug.getBug().getSummary());
+        reportOnViolations(bug.getViolations());
+    }
+
+    public void reportOnEpic(EpicValidatorEntry epic) {
+        prefix = epic.getRating() == Rating.SUCCESS ? ANSI_GREEN : ANSI_RED;
+        log("------------------------------------------------------------");
+        log("Epic "
+                + epic.getEpic().getKey()
+                + " Item total ("
+                + decimalFormat.format(epic.getPointsValuation() * 100)
+                + "/"
+                + MAX_SCORE
+                + ") \t"
+        );
+        log(epic.getEpic().getSummary());
+        reportOnViolations(epic.getViolations());
     }
 
     public void reportOnUserstory(UserStoryValidatorEntry entry){
@@ -159,10 +214,12 @@ public class ConsoleReporter implements Reporter
 
     private void reportOnConfig(ValidationConfig validationConfig) {
         log("backlog: " + validationConfig.getBacklog().toString());
-        log("issues: " + validationConfig.getIssue());
+        log("issues: " + validationConfig.getFeature());
         log("stories: " + validationConfig.getStory());
         log("criteria: " + validationConfig.getCriteria());
-        log("estimation" + validationConfig.getEstimation());
+        log("estimation: " + validationConfig.getEstimation());
+        log("bugs: " + validationConfig.getBug());
+        log("epics: " + validationConfig.getEpic());
     }
 
     private void log(String msg){

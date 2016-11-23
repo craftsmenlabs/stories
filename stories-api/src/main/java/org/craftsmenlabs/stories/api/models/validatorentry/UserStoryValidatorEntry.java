@@ -17,10 +17,12 @@ public class UserStoryValidatorEntry extends AbstractValidatorEntry{
 
     @Builder
     public UserStoryValidatorEntry(String userStory, float pointsValuation, List<Violation> violations, Rating rating, boolean isActive) {
+        super(pointsValuation, violations, rating, isActive);
         this.userStory = userStory;
-        super.setPointsValuation(pointsValuation);
-        super.setViolations(violations);
-        super.setRating(rating);
-        super.setActive(isActive);
+    }
+
+    @Override
+    public String getRank() {
+        return null;
     }
 }

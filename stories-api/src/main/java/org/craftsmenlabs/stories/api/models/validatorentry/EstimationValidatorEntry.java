@@ -17,10 +17,12 @@ public class EstimationValidatorEntry extends AbstractValidatorEntry {
 
     @Builder
     public EstimationValidatorEntry(Float estimation, float pointsValuation, List<Violation> violations, Rating rating, boolean isActive) {
+        super(pointsValuation, violations, rating, isActive);
         this.estimation = estimation;
-        super.setPointsValuation(pointsValuation);
-        super.setViolations(violations);
-        super.setRating(rating);
-        super.setActive(isActive);
+    }
+
+    @Override
+    public String getRank() {
+        return null;
     }
 }

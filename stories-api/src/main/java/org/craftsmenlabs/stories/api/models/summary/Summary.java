@@ -32,4 +32,12 @@ public class Summary {
     private long passedCriteriaCount;
     private long totalCriteriaViolationsCount;
 
+    private long bugCount;
+    private long failedBugCount;
+    private long passedBugCount;
+
+    private long epicCount;
+    private long failedEpicCount;
+    private long passedEpicCount;
+
 }

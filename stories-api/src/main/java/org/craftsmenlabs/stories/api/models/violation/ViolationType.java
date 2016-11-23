@@ -16,5 +16,6 @@ public enum ViolationType
     CriteriaGivenClauseViolation,
 	CriteriaWhenClauseViolation,
 	CriteriaThenClauseViolation,
-	CriteriaRatingViolation
+	CriteriaRatingViolation,
+	BugFieldEmptyViolation
 }
