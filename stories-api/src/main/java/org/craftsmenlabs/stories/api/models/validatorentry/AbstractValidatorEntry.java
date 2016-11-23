@@ -13,8 +13,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class AbstractValidatorEntry implements ValidatorEntry{
-
+public abstract class AbstractValidatorEntry implements ValidatorEntry {
     private float pointsValuation = 0.0f;
 
     @JsonProperty("violations")

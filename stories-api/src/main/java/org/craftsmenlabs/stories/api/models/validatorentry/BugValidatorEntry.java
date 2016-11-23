@@ -12,24 +12,17 @@ import org.craftsmenlabs.stories.api.models.violation.Violation;
 import java.util.List;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class BugValidatorEntry extends AbstractValidatorEntry {
     @JsonProperty("bug")
     private Bug bug;
 
-    @JsonProperty("violations")
-    private List<Violation> violations;
-
-    @JsonProperty("rating")
-    private Rating rating;
-
-
-    @JsonProperty("averageScore")
-    private float pointsValuation = 0.0f;
-
-    private boolean isActive;
+    @Builder
+    public BugValidatorEntry(float pointsValuation, List<Violation> violations, Rating rating, boolean isActive, Bug bug) {
+        super(pointsValuation, violations, rating, isActive);
+        this.bug = bug;
+    }
 
     @Override
     public String getRank() {

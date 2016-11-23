@@ -12,24 +12,17 @@ import org.craftsmenlabs.stories.api.models.violation.Violation;
 import java.util.List;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class EpicValidatorEntry extends AbstractValidatorEntry {
     @JsonProperty("epic")
     private Epic epic;
 
-    @JsonProperty("violations")
-    private List<Violation> violations;
-
-    @JsonProperty("rating")
-    private Rating rating;
-
-
-    @JsonProperty("averageScore")
-    private float pointsValuation = 0.0f;
-
-    private boolean isActive;
+    @Builder
+    public EpicValidatorEntry(float pointsValuation, List<Violation> violations, Rating rating, boolean isActive, Epic epic) {
+        super(pointsValuation, violations, rating, isActive);
+        this.epic = epic;
+    }
 
     @Override
     public String getRank() {

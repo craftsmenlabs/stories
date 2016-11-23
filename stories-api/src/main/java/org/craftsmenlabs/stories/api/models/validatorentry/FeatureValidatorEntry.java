@@ -12,22 +12,11 @@ import org.craftsmenlabs.stories.api.models.violation.Violation;
 import java.util.List;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class FeatureValidatorEntry extends AbstractValidatorEntry {
     @JsonProperty("feature")
     private Feature feature;
-
-    private float pointsValuation = 0.0f;
-
-    @JsonProperty("violations")
-    private List<Violation> violations;
-
-    @JsonProperty("rating")
-    private Rating rating;
-
-    private boolean isActive;
 
     @JsonProperty("userStoryValidatorEntry")
     private UserStoryValidatorEntry userStoryValidatorEntry;
@@ -37,6 +26,17 @@ public class FeatureValidatorEntry extends AbstractValidatorEntry {
 
     @JsonProperty("estimationValidatorEntry")
     private EstimationValidatorEntry estimationValidatorEntry;
+
+    @Builder
+    public FeatureValidatorEntry(float pointsValuation, List<Violation> violations, Rating rating, boolean isActive, UserStoryValidatorEntry userStoryValidatorEntry, Feature feature, AcceptanceCriteriaValidatorEntry acceptanceCriteriaValidatorEntry, EstimationValidatorEntry estimationValidatorEntry) {
+        super(pointsValuation, violations, rating, isActive);
+
+        this.feature = feature;
+        this.userStoryValidatorEntry = userStoryValidatorEntry;
+        this.acceptanceCriteriaValidatorEntry = acceptanceCriteriaValidatorEntry;
+        this.estimationValidatorEntry = estimationValidatorEntry;
+
+    }
 
     @Override
     public String getRank() {
