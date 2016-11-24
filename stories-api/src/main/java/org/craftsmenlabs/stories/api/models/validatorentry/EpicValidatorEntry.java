@@ -28,4 +28,9 @@ public class EpicValidatorEntry extends AbstractValidatorEntry {
     public String getRank() {
         return epic.getRank();
     }
+
+    @Override
+    public String getType() {
+        return "epic";
+    }
 }

@@ -1,5 +1,6 @@
 package org.craftsmenlabs.stories.api.models.validatorentry;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,4 +26,8 @@ public abstract class AbstractValidatorEntry implements ValidatorEntry {
     private boolean isActive;
 
     public abstract String getRank();
+
+    @JsonGetter
+    public abstract String getType();
+
 }

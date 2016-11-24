@@ -25,4 +25,9 @@ public class AcceptanceCriteriaValidatorEntry extends AbstractValidatorEntry{
     public String getRank() {
         return null;
     }
+
+    @Override
+    public String getType() {
+        return "acceptance criteria";
+    }
 }

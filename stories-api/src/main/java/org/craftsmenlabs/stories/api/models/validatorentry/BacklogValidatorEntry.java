@@ -1,5 +1,6 @@
 package org.craftsmenlabs.stories.api.models.validatorentry;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
@@ -8,6 +9,7 @@ import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Data
@@ -25,6 +27,11 @@ public class BacklogValidatorEntry extends AbstractValidatorEntry {
 
     @JsonProperty("epicValidatorEntries")
     private List<EpicValidatorEntry> epicValidatorEntries;
+
+    @JsonIgnore
+    public List<? super AbstractValidatorEntry> getAllValidatorEntries(){
+        return Arrays.asList(featureValidatorEntries, bugValidatorEntries, epicValidatorEntries);
+    }
 
     private float averageScore = 0.0f;
     private float featureScore = 0.0f;
@@ -49,6 +56,11 @@ public class BacklogValidatorEntry extends AbstractValidatorEntry {
 
     @Override
     public String getRank() {
+        return null;
+    }
+
+    @Override
+    public String getType() {
         return null;
     }
 }
