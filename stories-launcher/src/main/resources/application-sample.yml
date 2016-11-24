@@ -10,17 +10,17 @@ source:
     trello:
         url:                                                  # URL to your Trello environment
         token:
-        authKey:
+        auth-key:
         project-key:
 
 ## The ouput data needs to be sent somewhere. There are multiple options available.
 report:
   dashboard:
-    type: false
+    enabled: false
     url: http://localhost:8090
     token:
   file:
-    type: false
+    enabled: false
     location: /path/to/file
 
 ## Filters define what information we should use to filter the issues.
