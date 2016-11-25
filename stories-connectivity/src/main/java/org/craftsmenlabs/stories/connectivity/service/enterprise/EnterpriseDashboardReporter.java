@@ -32,7 +32,7 @@ public class EnterpriseDashboardReporter implements Reporter {
             logger.info("Authkey:" + config.getToken());
             logger.info("Dashboard url:" + config.getUrl());
 
-            String url = config.getUrl() + "/storiesrun";
+            String url = config.getUrl() + "/api/import/v1/report";
             try {
                 RestTemplate template = new RestTemplate();
                 template.postForEntity(url, storiesRun, String.class);
