@@ -88,14 +88,14 @@ public class BacklogScorer {
         float backlogPoints = ranking.createRanking(scoredEntries);
         backlogValidatorEntry.setPointsValuation(backlogPoints);
 
-        if (backlogValidatorEntry.getPointsValuation() * 100f >= validationConfig.getBacklog().getRatingtreshold()) {
+        if (backlogValidatorEntry.getPointsValuation() * 100f >= validationConfig.getBacklog().getRatingThreshold()) {
             backlogValidatorEntry.setRating(Rating.SUCCESS);
         } else {
             // Failed, add violation
             backlogValidatorEntry.setRating(Rating.FAIL);
             backlogValidatorEntry.getViolations().add(new Violation(
                     ViolationType.BacklogRatingViolation,
-                    "The backlog did not score a minimum of " + validationConfig.getBacklog().getRatingtreshold()
+                    "The backlog did not score a minimum of " + validationConfig.getBacklog().getRatingThreshold()
                             + " points and is therefore rated: " + backlogValidatorEntry.getRating()));
         }
 
