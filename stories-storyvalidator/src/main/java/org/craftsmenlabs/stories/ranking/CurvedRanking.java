@@ -21,7 +21,7 @@ public class CurvedRanking<T extends BacklogItem> implements Ranking
 			return 0.0f;
 		}
 
-        List<T> entries2 = entries.<T>stream()
+        List<T> entries2 = entries.stream()
                 .sorted(Comparator.comparing(Rankable::getRank))
                 .collect(Collectors.toList());
 
