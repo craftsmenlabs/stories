@@ -14,13 +14,13 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EpicValidatorEntry extends AbstractValidatorEntry {
+public class EpicValidatorEntry extends BacklogItem{
     @JsonProperty("epic")
     private Epic epic;
 
     @Builder
-    public EpicValidatorEntry(float pointsValuation, List<Violation> violations, Rating rating, boolean isActive, Epic epic) {
-        super(pointsValuation, violations, rating, isActive);
+    public EpicValidatorEntry(float pointsValuation, List<Violation> violations, Rating rating, Epic epic) {
+        super(pointsValuation, violations, rating);
         this.epic = epic;
     }
 
@@ -30,7 +30,7 @@ public class EpicValidatorEntry extends AbstractValidatorEntry {
     }
 
     @Override
-    public String getType() {
-        return "epic";
+    public ValidatorEntryType getType() {
+        return ValidatorEntryType.EPIC;
     }
 }

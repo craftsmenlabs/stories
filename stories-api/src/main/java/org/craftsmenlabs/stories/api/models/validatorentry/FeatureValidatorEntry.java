@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class FeatureValidatorEntry extends AbstractValidatorEntry {
+public class FeatureValidatorEntry extends BacklogItem {
     @JsonProperty("feature")
     private Feature feature;
 
@@ -28,9 +28,8 @@ public class FeatureValidatorEntry extends AbstractValidatorEntry {
     private EstimationValidatorEntry estimationValidatorEntry;
 
     @Builder
-    public FeatureValidatorEntry(float pointsValuation, List<Violation> violations, Rating rating, boolean isActive, UserStoryValidatorEntry userStoryValidatorEntry, Feature feature, AcceptanceCriteriaValidatorEntry acceptanceCriteriaValidatorEntry, EstimationValidatorEntry estimationValidatorEntry) {
-        super(pointsValuation, violations, rating, isActive);
-
+    public FeatureValidatorEntry(float pointsValuation, List<Violation> violations, Rating rating, UserStoryValidatorEntry userStoryValidatorEntry, Feature feature, AcceptanceCriteriaValidatorEntry acceptanceCriteriaValidatorEntry, EstimationValidatorEntry estimationValidatorEntry) {
+        super(pointsValuation, violations, rating);
         this.feature = feature;
         this.userStoryValidatorEntry = userStoryValidatorEntry;
         this.acceptanceCriteriaValidatorEntry = acceptanceCriteriaValidatorEntry;
@@ -44,7 +43,7 @@ public class FeatureValidatorEntry extends AbstractValidatorEntry {
     }
 
     @Override
-    public String getType() {
-        return "feature";
+    public ValidatorEntryType getType() {
+        return ValidatorEntryType.FEATURE;
     }
 }

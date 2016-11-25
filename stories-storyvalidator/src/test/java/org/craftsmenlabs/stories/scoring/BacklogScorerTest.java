@@ -178,7 +178,7 @@ public class BacklogScorerTest {
     public void testPerformScorerFailOnEmptyBacklog(@Injectable Ranking ranking) {
         BacklogValidatorEntry result = BacklogScorer.performScorer(null, ranking, validationConfig);
 
-        assertThat(result.getAverageScore()).isEqualTo(0f);
+        assertThat(result.getPointsValuation()).isEqualTo(0f);
         assertThat(result.getRating()).isEqualTo(Rating.FAIL);
 
     }

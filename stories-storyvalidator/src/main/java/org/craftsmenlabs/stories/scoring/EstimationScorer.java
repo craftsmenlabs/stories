@@ -22,11 +22,10 @@ public class EstimationScorer {
 
         return EstimationValidatorEntry
                 .builder()
-                .estimation(estimation)
+                .item(estimation)
                 .violations(new ArrayList<>())
                 .pointsValuation(points)
                 .rating(rating)
-                .isActive(validationConfig.getEstimation().isActive())
                 .build();
     }
 

@@ -58,11 +58,10 @@ public class StoryScorer {
 
         return UserStoryValidatorEntry
                 .builder()
-                .userStory(userStory)
+                .item(userStory)
                 .pointsValuation(points)
                 .violations(violations)
                 .rating(rating)
-                .isActive(validationConfig.getStory().isActive())
                 .build();
     }
 

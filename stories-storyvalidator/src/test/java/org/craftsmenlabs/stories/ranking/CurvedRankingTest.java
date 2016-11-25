@@ -3,7 +3,7 @@ package org.craftsmenlabs.stories.ranking;
 import mockit.Injectable;
 import mockit.Tested;
 import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
-import org.craftsmenlabs.stories.api.models.validatorentry.AbstractValidatorEntry;
+import org.craftsmenlabs.stories.api.models.validatorentry.BacklogItem;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 import org.craftsmenlabs.stories.api.models.validatorentry.FeatureValidatorEntry;
 import org.junit.Test;
@@ -41,7 +41,7 @@ public class CurvedRankingTest implements RankingTest {
     @Override
     @Test
     public void testRankingIsZeroWithOnlyUnscoredItems(@Injectable BacklogValidatorEntry backlogValidatorEntry) throws Exception {
-        List<AbstractValidatorEntry> issues = Arrays.asList(
+        List<BacklogItem> issues = Arrays.asList(
                 FeatureValidatorEntry.builder().feature(Feature.builder().rank("0|0001").build()).build(),
                 FeatureValidatorEntry.builder().feature(Feature.builder().rank("0|0002").build()).build(),
                 FeatureValidatorEntry.builder().feature(Feature.builder().rank("0|0003").build()).build(),
@@ -55,7 +55,7 @@ public class CurvedRankingTest implements RankingTest {
     @Override
     @Test
     public void testRankingReturnsZeroOnZeroScoreBacklog(@Injectable BacklogValidatorEntry backlogValidatorEntry) throws Exception {
-        List<AbstractValidatorEntry> issues = Arrays.asList(
+        List<BacklogItem> issues = Arrays.asList(
                 FeatureValidatorEntry.builder().pointsValuation(0f).feature(Feature.builder().rank("0|0001").build()).build(),
                 FeatureValidatorEntry.builder().pointsValuation(0f).feature(Feature.builder().rank("0|0002").build()).build(),
                 FeatureValidatorEntry.builder().pointsValuation(0f).feature(Feature.builder().rank("0|0003").build()).build(),
@@ -69,7 +69,7 @@ public class CurvedRankingTest implements RankingTest {
     @Override
     @Test
     public void testRankingReturnsOneOnPerfectBacklog(@Injectable BacklogValidatorEntry backlogValidatorEntry) throws Exception {
-        List<AbstractValidatorEntry> issues = Arrays.asList(
+        List<BacklogItem> issues = Arrays.asList(
                 FeatureValidatorEntry.builder().pointsValuation(1f).feature(Feature.builder().rank("0|0001").build()).build(),
                 FeatureValidatorEntry.builder().pointsValuation(1f).feature(Feature.builder().rank("0|0002").build()).build(),
                 FeatureValidatorEntry.builder().pointsValuation(1f).feature(Feature.builder().rank("0|0003").build()).build(),
@@ -83,7 +83,7 @@ public class CurvedRankingTest implements RankingTest {
     @Override
     @Test
     public void testRankingReturnsScoreOnGoodGradientMixedBacklog(@Injectable BacklogValidatorEntry backlogValidatorEntry) throws Exception {
-        List<AbstractValidatorEntry> issues = Arrays.asList(
+        List<BacklogItem> issues = Arrays.asList(
                 FeatureValidatorEntry.builder().pointsValuation(1.0f).feature(Feature.builder().rank("0|0000").build()).build(),
                 FeatureValidatorEntry.builder().pointsValuation(0.8f).feature(Feature.builder().rank("0|0001").build()).build(),
                 FeatureValidatorEntry.builder().pointsValuation(0.6f).feature(Feature.builder().rank("0|0002").build()).build(),
@@ -99,7 +99,7 @@ public class CurvedRankingTest implements RankingTest {
     @Override
     @Test
     public void testRankingReturnsScoreOnBadGradientMixedBacklog(@Injectable BacklogValidatorEntry backlogValidatorEntry) throws Exception {
-        List<AbstractValidatorEntry> issues = Arrays.asList(
+        List<BacklogItem> issues = Arrays.asList(
                 FeatureValidatorEntry.builder().pointsValuation(0.0f).feature(Feature.builder().rank("0|0001").build()).build(),
                 FeatureValidatorEntry.builder().pointsValuation(0.2f).feature(Feature.builder().rank("0|0002").build()).build(),
                 FeatureValidatorEntry.builder().pointsValuation(0.4f).feature(Feature.builder().rank("0|0003").build()).build(),
@@ -113,7 +113,7 @@ public class CurvedRankingTest implements RankingTest {
 
     @Test
     public void testRankingReturnsHighScoreOnGoodMixedBacklog(@Injectable BacklogValidatorEntry backlogValidatorEntry) throws Exception {
-        List<AbstractValidatorEntry> issues = Arrays.asList(
+        List<BacklogItem> issues = Arrays.asList(
                 FeatureValidatorEntry.builder().pointsValuation(1.0f).feature(Feature.builder().rank("0|0001").build()).build(),
                 FeatureValidatorEntry.builder().pointsValuation(1.0f).feature(Feature.builder().rank("0|0002").build()).build(),
                 FeatureValidatorEntry.builder().pointsValuation(1.0f).feature(Feature.builder().rank("0|0003").build()).build(),
@@ -127,7 +127,7 @@ public class CurvedRankingTest implements RankingTest {
 
     @Test
     public void testRankingReturnsLowScoreOnBadMixedBacklog(@Injectable BacklogValidatorEntry backlogValidatorEntry) throws Exception {
-        List<AbstractValidatorEntry> issues = Arrays.asList(
+        List<BacklogItem> issues = Arrays.asList(
                 FeatureValidatorEntry.builder().pointsValuation(1.0f).feature(Feature.builder().rank("0|0007").build()).build(),
                 FeatureValidatorEntry.builder().pointsValuation(1.0f).feature(Feature.builder().rank("0|0008").build()).build(),
                 FeatureValidatorEntry.builder().pointsValuation(1.0f).feature(Feature.builder().rank("0|0009").build()).build(),

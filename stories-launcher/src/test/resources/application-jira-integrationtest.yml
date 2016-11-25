@@ -20,7 +20,7 @@ report:
 filters:
     status: "To Do"
 
-field_mapping:
+field-mapping:
     rank: "customfield_10401"
     feature:
         estimation: "S"

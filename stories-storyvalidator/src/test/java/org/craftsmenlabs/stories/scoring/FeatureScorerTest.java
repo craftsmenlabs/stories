@@ -2,10 +2,11 @@ package org.craftsmenlabs.stories.scoring;
 
 import mockit.Expectations;
 import mockit.Injectable;
+import mockit.Mock;
+import mockit.MockUp;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
 import org.craftsmenlabs.stories.api.models.validatorentry.UserStoryValidatorEntry;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -70,13 +71,21 @@ public class FeatureScorerTest {
         assertThat(score).isCloseTo(0f, withinPercentage(1));
     }
 
-    @Ignore(value = "TODO fix injecting expectations")
+//    @Ignore(value = "TODO fix injecting expectations")
     @Test
     public void performScorer_ReturnsOneOnOnlyPerfectUerstoryActive(@Injectable Feature feature, @Injectable ValidationConfig validationConfig) {
-        UserStoryValidatorEntry entry = UserStoryValidatorEntry.builder().pointsValuation(1f).userStory("").build();
+
+        new MockUp<StoryScorer>()
+        {
+            @Mock
+            UserStoryValidatorEntry performScorer( String input, ValidationConfig validationConfig1 )
+            {
+                return UserStoryValidatorEntry.builder().pointsValuation(1f).item("").build();
+            }
+        };
         new Expectations(){{
-            StoryScorer.performScorer("", validationConfig);
-            result = entry;
+            feature.getUserstory();
+            result = "as a i want so that as a i want so that as a i want so that as a i want so that ";
 
             validationConfig.getStory().isActive();
             result = true;
