@@ -7,7 +7,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CurvedRanking implements Ranking
+public class CurvedRanking<T extends BacklogItem> implements Ranking
 {
 	public static final int SMOOTH_CURVE = 2;
 
@@ -16,12 +16,12 @@ public class CurvedRanking implements Ranking
         return createRankingConcrete(entries);
     }
 
-    public float createRankingConcrete(List<? extends BacklogItem> entries) {
+    public float createRankingConcrete(List<T> entries) {
         if (entries == null || entries.size() == 0) {
 			return 0.0f;
 		}
 
-        List<? extends BacklogItem> entries2 = entries.stream()
+        List<T> entries2 = entries.<T>stream()
                 .sorted(Comparator.comparing(Rankable::getRank))
                 .collect(Collectors.toList());
 
