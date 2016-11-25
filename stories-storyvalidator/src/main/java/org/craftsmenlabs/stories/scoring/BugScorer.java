@@ -19,7 +19,6 @@ public class BugScorer {
 
     public static BugValidatorEntry performScorer(Bug bug, ValidationConfig validationConfig) {
         BugValidatorEntry entry = BugValidatorEntry.builder()
-                .isActive(validationConfig.getBug().isActive())
                 .violations(new LinkedList<>())
                 .bug(bug)
                 .build();
@@ -27,7 +26,7 @@ public class BugScorer {
         List<String> enabledFields = validationConfig.getBug().getEnabledFields();
 
         // If no fields are enabled, score 0 and FAIL. (otherwise we will get /0)
-        if (enabledFields.size() == 0) {
+        if (enabledFields == null || enabledFields.size() == 0) {
             entry.setRating(Rating.FAIL);
             entry.setPointsValuation(0f);
             return entry;

@@ -1,6 +1,5 @@
 package org.craftsmenlabs.stories.api.models.summary;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,32 +11,32 @@ import org.craftsmenlabs.stories.api.models.Rating;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Summary {
-    private float pointsValuation;
 
-    @JsonProperty("rating")
-    private Rating rating;
+    private ScorableSummary backlog;
+    private BacklogItemListSummary features;
+    private BacklogItemListSummary bugs;
+    private BacklogItemListSummary epics;
 
-    private long issueCount;
-    private long failedIssueCount;
-    private long passedIssueCount;
-    private long totalIssueViolationsCount;
+    private BacklogItemListSummary featureUserStory;
+    private BacklogItemListSummary featureCriteria;
+    private BacklogItemListSummary featureEstimation;
 
-    private long storyCount;
-    private long failedStoryCount;
-    private long passedStoryCount;
-    private long totalStoryViolationsCount;
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ScorableSummary{
+        private float pointsValuation;
+        private Rating rating;
+        private long violationCount;
+    }
 
-    private long criteriaCount;
-    private long failedCriteriaCount;
-    private long passedCriteriaCount;
-    private long totalCriteriaViolationsCount;
-
-    private long bugCount;
-    private long failedBugCount;
-    private long passedBugCount;
-
-    private long epicCount;
-    private long failedEpicCount;
-    private long passedEpicCount;
-
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class BacklogItemListSummary {
+        private long passed;
+        private long failed;
+    }
 }

@@ -72,16 +72,16 @@ public class ConsoleReporter implements Reporter
         log("------------------------------------------------------------");
 
         //verbose output
-        List<FeatureValidatorEntry> features = backlogValidatorEntry.getFeatureValidatorEntries();
+        List<FeatureValidatorEntry> features = backlogValidatorEntry.getFeatureValidatorEntries().getItems();
         features.forEach(this::reportOnIssue);
 
         // Log bugs
 
-        List<BugValidatorEntry> bugs = backlogValidatorEntry.getBugValidatorEntries();
+        List<BugValidatorEntry> bugs = backlogValidatorEntry.getBugValidatorEntries().getItems();
         bugs.forEach(this::reportOnBug);
 
         // Log epics
-        List<EpicValidatorEntry> epics = backlogValidatorEntry.getEpicValidatorEntries();
+        List<EpicValidatorEntry> epics = backlogValidatorEntry.getEpicValidatorEntries().getItems();
         epics.forEach(this::reportOnEpic);
 
         //show backlog violations
@@ -97,20 +97,20 @@ public class ConsoleReporter implements Reporter
 
         log("Processed a total of " + features.size() + " user stories, " + bugs.size() + " bugs and " + epics.size() + " epics\r\n");
 
-        if (features.size() > 0) {
-            log("User Story score:    " + doubleDecimalFormat.format(backlogValidatorEntry.getFeatureScore() * 100f) + " / " + MAX_SCORE);
-        }
-        if (bugs.size() > 0) {
-            log("Bug score:           " + doubleDecimalFormat.format(backlogValidatorEntry.getBugScore() * 100f) + " / " + MAX_SCORE);
-        }
-        if (epics.size() > 0) {
-            log("Epic score:          " + doubleDecimalFormat.format(backlogValidatorEntry.getEpicScore() * 100f) + " / " + MAX_SCORE);
-        }
-
+//        if (features.size() > 0) {
+//            log("User Story score:    " + doubleDecimalFormat.format(backlogValidatorEntry.ge() * 100f) + " / " + MAX_SCORE);
+//        }
+//        if (bugs.size() > 0) {
+//            log("Bug score:           " + doubleDecimalFormat.format(backlogValidatorEntry.getBugScore() * 100f) + " / " + MAX_SCORE);
+//        }
+//        if (epics.size() > 0) {
+//            log("Epic score:          " + doubleDecimalFormat.format(backlogValidatorEntry.getEpicScore() * 100f) + " / " + MAX_SCORE);
+//        }
+//
 
         log("\r\n");
         log("Those three combined result in a score of "
-                + doubleDecimalFormat.format(backlogValidatorEntry.getAverageScore() * 100f)
+                + doubleDecimalFormat.format(backlogValidatorEntry.getPointsValuation() * 100f)
                 + " / "
                 + MAX_SCORE);
         log("Rated: " + backlogValidatorEntry.getRating() + "  (with threshold on: " + validationConfig.getBacklog()
@@ -183,7 +183,7 @@ public class ConsoleReporter implements Reporter
         prefix = entry.getRating() == Rating.SUCCESS ? ANSI_GREEN : ANSI_RED;
 
 
-        String userstory = entry.getUserStory().replace("\n", " ").replace("\r", "");
+        String userstory = entry.getItem().replace("\n", " ").replace("\r", "");
         log("\t Userstory: (" + entry.getPointsValuation() + ") " + userstory);
 
         reportOnViolations(entry.getViolations());
@@ -192,7 +192,7 @@ public class ConsoleReporter implements Reporter
     public void reportOnAcceptanceCriteria(AcceptanceCriteriaValidatorEntry entry){
         prefix = entry.getRating() == Rating.SUCCESS ? ANSI_GREEN : ANSI_RED;
 
-        String criteria = entry.getAcceptanceCriteria().replace("\n", " ").replace("\r", "");
+        String criteria = entry.getItem().replace("\n", " ").replace("\r", "");
         log("\t Criteria: (" + entry.getPointsValuation() + ") " + criteria );
 
         reportOnViolations(entry.getViolations());
@@ -201,7 +201,7 @@ public class ConsoleReporter implements Reporter
     public void reportOnEstimation(EstimationValidatorEntry entry){
         prefix = entry.getRating() == Rating.SUCCESS ? ANSI_GREEN : ANSI_RED;
 
-        Float estimation = entry.getEstimation();
+        Float estimation = entry.getItem();
         log("\t Estimation: (" +entry.getPointsValuation() + ")" + estimation );
 
         reportOnViolations(entry.getViolations());

@@ -74,11 +74,10 @@ public class AcceptanceCriteriaScorer {
 
         return AcceptanceCriteriaValidatorEntry
                 .builder()
-                .acceptanceCriteria(criteria)
+                .item(criteria)
                 .violations(violations)
                 .pointsValuation(points)
                 .rating(rating)
-                .isActive(validationConfig.getCriteria().isActive())
                 .build();
     }
 }

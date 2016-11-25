@@ -1,11 +1,10 @@
 package org.craftsmenlabs.stories;
 
-import java.util.*;
-import java.util.stream.Collectors;
-import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
-import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
-import org.craftsmenlabs.stories.api.models.validatorentry.FeatureValidatorEntry;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  *
@@ -65,37 +64,37 @@ public class TestDataGenerator
 		}
 		return testData;
 	}
-
-    public BacklogValidatorEntry getGoodBacklog(int amount){
-        return BacklogValidatorEntry.builder().featureValidatorEntries(
-            getGoodIssues(amount).stream()
-                    .map(issue ->
-                            FeatureValidatorEntry.builder()
-                                    .feature(issue)
-                                    .pointsValuation(0f)
-                                    .violations(new ArrayList<>())
-                                    .build())
-                    .collect(Collectors.toList())
-        ).build();
-    }
-
-    public BacklogValidatorEntry getMixedBacklog(int amount){
-        return BacklogValidatorEntry.builder().featureValidatorEntries(
-                getMixedValidatorItems(amount).stream()
-                        .map(issue ->
-                                FeatureValidatorEntry.builder()
-                                        .feature(issue)
-                                        .pointsValuation(0f)
-                                        .violations(new ArrayList<>())
-                                        .build())
-                        .collect(Collectors.toList())
-        ).build();
-    }
-
-	public static Backlog getBacklog(List<Feature> features)
-	{
-		Backlog b = new Backlog();
-		b.setFeatures(features);
-		return b;
-	}
+//
+//    public BacklogValidatorEntry getGoodBacklog(int amount){
+//        return BacklogValidatorEntry.builder().featureValidatorEntries(
+//            getGoodIssues(amount).stream()
+//                    .map(issue ->
+//                            FeatureValidatorEntry.builder()
+//                                    .feature(issue)
+//                                    .pointsValuation(0f)
+//                                    .violations(new ArrayList<>())
+//                                    .build())
+//                    .collect(Collectors.toList())
+//        ).build();
+//    }
+//
+//    public BacklogValidatorEntry getMixedBacklog(int amount){
+//        return BacklogValidatorEntry.builder().featureValidatorEntries(
+//                getMixedValidatorItems(amount).stream()
+//                        .map(issue ->
+//                                FeatureValidatorEntry.builder()
+//                                        .feature(issue)
+//                                        .pointsValuation(0f)
+//                                        .violations(new ArrayList<>())
+//                                        .build())
+//                        .collect(Collectors.toList())
+//        ).build();
+//    }
+//
+//	public static Backlog getBacklog(List<Feature> features)
+//	{
+//		Backlog b = new Backlog();
+//		b.setFeatures(features);
+//		return b;
+//	}
 }

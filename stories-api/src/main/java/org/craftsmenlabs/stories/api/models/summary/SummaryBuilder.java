@@ -1,50 +1,40 @@
 package org.craftsmenlabs.stories.api.models.summary;
 
-import org.craftsmenlabs.stories.api.models.Rating;
-import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
-import org.craftsmenlabs.stories.api.models.validatorentry.BugValidatorEntry;
-import org.craftsmenlabs.stories.api.models.validatorentry.EpicValidatorEntry;
-import org.craftsmenlabs.stories.api.models.validatorentry.FeatureValidatorEntry;
+import org.craftsmenlabs.stories.api.models.validatorentry.*;
 
-import java.util.List;
+import static org.craftsmenlabs.stories.api.models.Rating.FAIL;
+import static org.craftsmenlabs.stories.api.models.Rating.SUCCESS;
 
 public class SummaryBuilder {
 
     public Summary build(BacklogValidatorEntry entry){
 
-        List<FeatureValidatorEntry> issues = entry.getFeatureValidatorEntries();
-        List<BugValidatorEntry> bugs = entry.getBugValidatorEntries();
-        List<EpicValidatorEntry> epics = entry.getEpicValidatorEntries();
+        BacklogItemList<FeatureValidatorEntry> issues = entry.getFeatureValidatorEntries();
+        BacklogItemList<BugValidatorEntry> bugs = entry.getBugValidatorEntries();
+        BacklogItemList<EpicValidatorEntry> epics = entry.getEpicValidatorEntries();
 
         return Summary.builder()
-                .pointsValuation(entry.getAverageScore())
-                .rating(entry.getRating())
-                .issueCount(issues.size())
-                .failedIssueCount(issues.stream().filter(issueValidatorEntry -> issueValidatorEntry.getRating() == Rating.FAIL).count())
-                .passedIssueCount(issues.stream().filter(issueValidatorEntry -> issueValidatorEntry.getRating() == Rating.SUCCESS).count())
-                .totalIssueViolationsCount(issues.stream().mapToInt(issue -> issue.getViolations().size()).sum())
-                
-                .storyCount(issues.stream().map(FeatureValidatorEntry::getUserStoryValidatorEntry).filter(story -> story.getUserStory() != null && !story.getUserStory().isEmpty()).count())
-                .failedStoryCount(issues.stream().map(FeatureValidatorEntry::getUserStoryValidatorEntry).filter(storyValidatorEntry -> storyValidatorEntry.getRating() == Rating.FAIL).count())
-                .passedStoryCount(issues.stream().map(FeatureValidatorEntry::getUserStoryValidatorEntry).filter(storyValidatorEntry -> storyValidatorEntry.getRating() == Rating.SUCCESS).count())
-                .totalStoryViolationsCount(issues.stream()
-                        .map(FeatureValidatorEntry::getUserStoryValidatorEntry)
-                        .mapToInt(Story -> Story.getViolations().size())
-                        .sum())
-                
-                .criteriaCount(issues.stream().map(FeatureValidatorEntry::getAcceptanceCriteriaValidatorEntry).count())
-                .failedCriteriaCount(issues.stream().map(FeatureValidatorEntry::getAcceptanceCriteriaValidatorEntry).filter(criteria -> criteria.getRating()== Rating.FAIL).count())
-                .passedCriteriaCount(issues.stream().map(FeatureValidatorEntry::getAcceptanceCriteriaValidatorEntry).filter(criteria -> criteria.getRating() == Rating.SUCCESS).count())
-                .totalCriteriaViolationsCount(issues.stream().mapToInt(issue-> issue.getAcceptanceCriteriaValidatorEntry().getViolations().size()).sum())
+                .backlog(Summary.ScorableSummary.builder()
+                        .pointsValuation(entry.getPointsValuation())
+                        .rating(entry.getRating())
+                        .build())
+                .features(getCount(issues))
+                .bugs(getCount(bugs))
+                .epics(getCount(epics))
+                .build();
+    }
 
-                .bugCount(bugs.size())
-                .failedBugCount(bugs.stream().filter(bugValidatorEntry -> bugValidatorEntry.getRating() == Rating.FAIL).count())
-                .passedBugCount(bugs.stream().filter(bugValidatorEntry -> bugValidatorEntry.getRating() == Rating.SUCCESS).count())
+    public static Summary.BacklogItemListSummary getCount(BacklogItemList<? extends BacklogItem> list) {
+        if(list.getItems() == null){
+            return Summary.BacklogItemListSummary.builder()
+                    .failed(0)
+                    .passed(0)
+                    .build();
+        }
 
-                .epicCount(epics.size())
-                .failedEpicCount(epics.stream().filter(epicValidatorEntry -> epicValidatorEntry.getRating() == Rating.FAIL).count())
-                .passedEpicCount(epics.stream().filter(epicValidatorEntry -> epicValidatorEntry.getRating() == Rating.SUCCESS).count())
-
+        return Summary.BacklogItemListSummary.builder()
+                .failed(list.getItems().stream().filter(o -> o.getRating() == FAIL).count())
+                .passed(list.getItems().stream().filter(o -> o.getRating() == SUCCESS).count())
                 .build();
     }
 }

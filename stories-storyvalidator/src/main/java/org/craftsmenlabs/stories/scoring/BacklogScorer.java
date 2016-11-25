@@ -9,7 +9,6 @@ import org.craftsmenlabs.stories.api.models.violation.ViolationType;
 import org.craftsmenlabs.stories.ranking.Ranking;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,9 +26,9 @@ public class BacklogScorer {
     public static BacklogValidatorEntry performScorer(Backlog backlog, Ranking ranking, ValidationConfig validationConfig) {
         BacklogValidatorEntry backlogValidatorEntry = BacklogValidatorEntry.builder()
                 .backlog(backlog)
-                .bugValidatorEntries(new LinkedList<>())
-                .featureValidatorEntries(new LinkedList<>())
-                .epicValidatorEntries(new LinkedList<>())
+                .bugValidatorEntries(new BacklogItemList<>())
+                .featureValidatorEntries(new BacklogItemList<>())
+                .epicValidatorEntries(new BacklogItemList<>())
                 .violations(new ArrayList<>())
                 .build();
 
@@ -40,60 +39,81 @@ public class BacklogScorer {
                     "The backlog is empty, or doesn't contain any issues."
             ));
 
-            backlogValidatorEntry.setAverageScore(0f);
+            backlogValidatorEntry.setPointsValuation(0f);
             backlogValidatorEntry.setRating(Rating.FAIL);
             return backlogValidatorEntry;
         }
-
-        List<AbstractValidatorEntry> scoredEntries = new LinkedList<>();
+        List<FeatureValidatorEntry> features = new ArrayList<>();
+        List<BugValidatorEntry> bugs = new ArrayList<>();
+        List<EpicValidatorEntry> epics = new ArrayList<>();
 
         // Feature scores
         if (validationConfig.getFeature().isActive()) {
-            List<FeatureValidatorEntry> features = getValidatedFeatures(backlog, validationConfig);
-            backlogValidatorEntry.setFeatureValidatorEntries(features);
-            scoredEntries.addAll(features);
+            features = getValidatedFeatures(backlog, validationConfig);
 
-            // Determine feature points
-            Float featurePoints = ranking.createRanking(features.stream().map(feature -> (AbstractValidatorEntry) feature).collect(Collectors.toList()));
-            backlogValidatorEntry.setFeatureScore(featurePoints);
-
+            backlogValidatorEntry.setFeatureValidatorEntries(
+                    BacklogItemList.<FeatureValidatorEntry>builder()
+                            .items(features)
+                            .isActive(validationConfig.getFeature().isActive())
+                            .build());
         }
 
         // Bug scores
         if (validationConfig.getBug().isActive()) {
-            List<BugValidatorEntry> bugs = getValidatedBugs(backlog, validationConfig);
-            backlogValidatorEntry.setBugValidatorEntries(bugs);
-            scoredEntries.addAll(bugs);
+            bugs = getValidatedBugs(backlog, validationConfig);
 
-            // Determine bug points
-            Float bugPoints = ranking.createRanking(bugs.stream().map(bug -> (AbstractValidatorEntry) bug).collect(Collectors.toList()));
-            backlogValidatorEntry.setBugScore(bugPoints);
+            backlogValidatorEntry.setBugValidatorEntries(
+                    BacklogItemList.<BugValidatorEntry>builder()
+                            .items(bugs)
+                            .isActive(validationConfig.getBug().isActive())
+                            .build());
         }
 
+        // Epic scores
         if (validationConfig.getEpic().isActive()) {
-            List<EpicValidatorEntry> epics = getValidatedEpics(backlog, validationConfig);
-            backlogValidatorEntry.setEpicValidatorEntries(epics);
-            scoredEntries.addAll(epics);
+            epics = getValidatedEpics(backlog, validationConfig);
 
-            Float epicPoints = ranking.createRanking(epics.stream().map(epic -> (AbstractValidatorEntry) epic).collect(Collectors.toList()));
-            backlogValidatorEntry.setEpicScore(epicPoints);
+            backlogValidatorEntry.setEpicValidatorEntries(
+                    BacklogItemList.<EpicValidatorEntry>builder()
+                            .items(epics)
+                            .isActive(validationConfig.getEpic().isActive())
+                            .build());
         }
-
 
         // Backlog scores
-        float backlogPoints = ranking.createRanking(scoredEntries);
-        backlogValidatorEntry.setAverageScore(backlogPoints);
+        List<? super BacklogItem> scoredEntries = new ArrayList<>(features);
+        scoredEntries.addAll(bugs);
+        scoredEntries.addAll(epics);
 
-        if (backlogValidatorEntry.getAverageScore() * 100f >= validationConfig.getBacklog().getRatingThreshold()) {
+        float backlogPoints = ranking.createRanking(scoredEntries);
+        backlogValidatorEntry.setPointsValuation(backlogPoints);
+
+        if (backlogValidatorEntry.getPointsValuation() * 100f >= validationConfig.getBacklog().getRatingtreshold()) {
             backlogValidatorEntry.setRating(Rating.SUCCESS);
         } else {
             // Failed, add violation
             backlogValidatorEntry.setRating(Rating.FAIL);
             backlogValidatorEntry.getViolations().add(new Violation(
                     ViolationType.BacklogRatingViolation,
-                    "The backlog did not score a minimum of " + validationConfig.getBacklog().getRatingThreshold()
+                    "The backlog did not score a minimum of " + validationConfig.getBacklog().getRatingtreshold()
                             + " points and is therefore rated: " + backlogValidatorEntry.getRating()));
         }
+
+        backlogValidatorEntry.setFeatureValidatorEntries(
+                BacklogItemList.<FeatureValidatorEntry>builder()
+                        .items(features)
+                        .isActive(validationConfig.getBug().isActive())
+                        .build());
+        backlogValidatorEntry.setBugValidatorEntries(
+                BacklogItemList.<BugValidatorEntry>builder()
+                        .items(bugs)
+                        .isActive(validationConfig.getBug().isActive())
+                        .build());
+        backlogValidatorEntry.setEpicValidatorEntries(
+                BacklogItemList.<EpicValidatorEntry>builder()
+                        .items(epics)
+                        .isActive(validationConfig.getBug().isActive())
+                        .build());
         return backlogValidatorEntry;
     }
 

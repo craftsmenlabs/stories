@@ -19,7 +19,6 @@ public class EpicScorer {
 
     public static EpicValidatorEntry performScorer(Epic epic, ValidationConfig validationConfig) {
         EpicValidatorEntry entry = EpicValidatorEntry.builder()
-                .isActive(validationConfig.getEpic().isActive())
                 .violations(new LinkedList<>())
                 .epic(epic)
                 .build();
