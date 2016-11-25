@@ -86,6 +86,8 @@ public class importJiraJson {
         ValidationConfig validationConfig = springValidationConfig.convert();
         FieldMappingConfig fieldMappingConfigCopy = springFieldMappingConfig.convert();
         ReportConfig reportConfig = springReportConfig.convert();
+        reportConfig.getDashboard().setToken(projectToken);
+
 
         ObjectMapper mapper = new ObjectMapper();
         JiraBacklog jiraBacklog = null;
