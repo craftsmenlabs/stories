@@ -1,7 +1,9 @@
 package org.craftsmenlabs.stories.ranking;
 
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogItem;
+import org.craftsmenlabs.stories.api.models.validatorentry.Rankable;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,9 +20,9 @@ public class CurvedRanking implements Ranking
         if (entries == null || entries.size() == 0) {
 			return 0.0f;
 		}
-//        Collections.sort(entries);
+
         List<BacklogItem> entries2 = entries.stream()
-                .sorted((a,b) -> a.getRank().compareTo(b.getRank()))
+                .sorted(Comparator.comparing(Rankable::getRank))
                 .collect(Collectors.toList());
 
 		float scoredPoints = 0f;
