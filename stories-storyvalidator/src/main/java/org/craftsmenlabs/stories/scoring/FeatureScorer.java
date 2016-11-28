@@ -5,8 +5,9 @@ import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
 import org.craftsmenlabs.stories.api.models.validatorentry.*;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,14 +35,14 @@ public class FeatureScorer {
         EstimationValidatorEntry estimationValidatorEntry = EstimationScorer.performScorer(feature.getEstimation(), validationConfig);
 
 
-        HashMap<Boolean, AbstractStoryalidatorEntryItem> itemMap = new HashMap<Boolean, AbstractStoryalidatorEntryItem>(){{
-            put(validationConfig.getStory().isActive(),  userStoryValidatorEntry);
-            put(validationConfig.getCriteria().isActive(),  acceptanceCriteriaValidatorEntry);
-            put(validationConfig.getEstimation().isActive(),  estimationValidatorEntry);
-        }};
+        List<Map.Entry<Boolean, AbstractStoryalidatorEntryItem>> entryList = new ArrayList<>();
+        entryList.add(new AbstractMap.SimpleEntry<>(validationConfig.getStory().isActive(),  userStoryValidatorEntry));
+        entryList.add(new AbstractMap.SimpleEntry<>(validationConfig.getCriteria().isActive(),  acceptanceCriteriaValidatorEntry));
+        entryList.add(new AbstractMap.SimpleEntry<>(validationConfig.getEstimation().isActive(),  estimationValidatorEntry));
+
 
         float points = (float)
-                itemMap.entrySet().stream()
+                entryList.stream()
                         .filter(Map.Entry::getKey)
                         .mapToDouble(item -> item.getValue().getPointsValuation())
                         .average()

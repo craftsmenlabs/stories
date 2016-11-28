@@ -38,5 +38,6 @@ public class Summary {
     public static class BacklogItemListSummary {
         private long passed;
         private long failed;
+        private long count;
     }
 }

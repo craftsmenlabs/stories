@@ -2,7 +2,7 @@ package org.craftsmenlabs.stories.api.models.validatorentry;
 
 import java.util.List;
 
-public class BacklogItemList<T extends BacklogItem >  {
+public class BacklogItemList<T extends BacklogItem>  {
     private List<T> items;
     private boolean isActive;
 
