@@ -22,7 +22,7 @@
 	<url>https://github.com/craftsmenlabs/stories</url>
 
 	<scm>
-		<connection>scm:git:git@github.com:craftsmenlabs/stories.git</connection>
+		<connection>scm:git:git://github.com/craftsmenlabs/stories.git</connection>
 		<tag>HEAD</tag>
 	</scm>
 
