@@ -1,10 +1,9 @@
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.craftsmenlabs.stories</groupId>
 	<artifactId>stories</artifactId>
-	<version>1.3-SNAPSHOT</version>
+	<version>1.4-SNAPSHOT</version>
 	<modules>
         <module>stories-launcher</module>
         <module>stories-importer</module>
@@ -22,8 +21,8 @@
 	<url>https://github.com/craftsmenlabs/stories</url>
 
 	<scm>
-		<connection>scm:git:git://github.com/craftsmenlabs/stories.git</connection>
-		<tag>HEAD</tag>
+		<connection>scm:git:https://github.com/craftsmenlabs/stories.git</connection>
+		<tag>stories-1.3</tag>
 	</scm>
 
 	<properties>
