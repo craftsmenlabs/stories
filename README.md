@@ -6,7 +6,7 @@
 
 
 # Stories
-Stories is a issue validation framework that continiously validates the quality of a backlog (checking all user stories). 
+Stories is a issue validation framework that continuously validates the quality of a backlog (checking all user stories). 
 
 We want to apply the same principles we apply to code quality to the input (the product backlog). 
 With Stories we are able to determine the "coverage" of a backlog. 
