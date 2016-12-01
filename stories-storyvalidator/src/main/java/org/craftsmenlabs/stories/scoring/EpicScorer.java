@@ -26,7 +26,7 @@ public class EpicScorer {
         List<String> enabledFields = validationConfig.getEpic().getEnabledFields();
 
         // If no fields are type, score 0 and FAIL. (otherwise we will get /0)
-        if (enabledFields.size() == 0) {
+        if (enabledFields == null || enabledFields.size() == 0) {
             entry.setRating(Rating.FAIL);
             entry.setPointsValuation(0f);
             return entry;
