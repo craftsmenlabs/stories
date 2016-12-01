@@ -57,7 +57,7 @@ public class EpicScorer {
             default:
                 throw new StoriesException("Enabled field " + field + " does not exist! Please select one or " +
                         "multiple of the following: " +
-                        "\"priority\", \"reproduction\", \"software\", \"expected\", \"acceptation\"");
+                        "\"goal\"");
         }
     }
 
