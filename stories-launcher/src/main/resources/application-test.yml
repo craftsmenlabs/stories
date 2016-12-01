@@ -58,7 +58,9 @@ validation:
             rating-threshold: 0.7
             active: false
         bug:
+            rating-threshold: 0.7
             active: true
         epic:
             rating-threshold: 0.7
-            active: false
+            fill-fields: ['goal']
+            active: true
