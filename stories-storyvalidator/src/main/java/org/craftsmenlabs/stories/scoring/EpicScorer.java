@@ -29,6 +29,7 @@ public class EpicScorer {
         if (enabledFields == null || enabledFields.size() == 0) {
             entry.setRating(Rating.FAIL);
             entry.setPointsValuation(0f);
+            entry.getViolations().add(new Violation(ViolationType.NoFillableFieldsViolation, "There were no fillable fields defined!"));
             return entry;
         }
 
