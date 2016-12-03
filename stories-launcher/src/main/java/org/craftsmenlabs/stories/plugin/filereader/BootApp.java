@@ -27,7 +27,7 @@ public class BootApp {
 
         // Load in default properties
         Properties defaults = new Properties();
-        defaults.load(BootApp.class.getClassLoader().getResourceAsStream("application-sample.properties"));
+        defaults.load(BootApp.class.getClassLoader().getResourceAsStream("application-default.properties"));
         application.setDefaultProperties(defaults);
 
         ApplicationContext context = application.run(args);
