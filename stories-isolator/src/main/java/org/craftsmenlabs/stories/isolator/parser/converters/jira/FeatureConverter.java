@@ -42,7 +42,7 @@ public class FeatureConverter extends AbstractJiraConverter<Feature> {
         }
         feature.setRank(rank);
 
-        feature.setEstimation(this.parseEstimation((String) additionalProps.get(config.getFeature().getEstimation())));
+        feature.setEstimation(this.parseEstimation(additionalProps.getOrDefault(config.getFeature().getEstimation(), "").toString()));
 
         return feature;
     }
