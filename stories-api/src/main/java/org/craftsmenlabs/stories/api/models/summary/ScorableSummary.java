@@ -22,8 +22,8 @@ public class ScorableSummary implements Summarizable<ScorableSummary>{
     @Override
     public ScorableSummary divideBy(int denominator) {
         return ScorableSummary.builder()
-                .pointsValuation( this.getPointsValuation()/ denominator )
-                .violationCount(  this.getViolationCount() / denominator )
+                .pointsValuation( this.getPointsValuation()/ denominator > 0 ? denominator : 1 )
+                .violationCount(  this.getViolationCount() / denominator > 0 ? denominator : 1 )
                 .build();
     }
 

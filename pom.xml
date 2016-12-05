@@ -203,7 +203,7 @@
 				<configuration>
 					<excludes>
 						<exclude>**/stories-api/**</exclude>
-						<exclude>**/stories/isolator/model/**</exclude>
+						<exclude>**/stories/isolator/model/**/*</exclude>
 					</excludes>
 				</configuration>
 				<executions>
