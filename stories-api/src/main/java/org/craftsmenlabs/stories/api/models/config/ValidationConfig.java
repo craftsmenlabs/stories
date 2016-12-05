@@ -1,10 +1,7 @@
 package org.craftsmenlabs.stories.api.models.config;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -95,10 +92,13 @@ public class ValidationConfig {
     }
 
     @Data
+    @ToString(callSuper = true)
     public static class BugValidatorEntry extends FillableValidatorEntry {
+
     }
 
     @Data
+    @ToString(callSuper = true)
     public static class EpicValidatorEntry extends FillableValidatorEntry {
     }
 }

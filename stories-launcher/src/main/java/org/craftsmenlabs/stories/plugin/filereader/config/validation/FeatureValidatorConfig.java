@@ -7,7 +7,7 @@ import org.craftsmenlabs.stories.plugin.filereader.config.validation.types.Valid
 @Data
 public class FeatureValidatorConfig extends ValidatorConfig {
     public ValidationConfig.ValidatorEntry convert() {
-        ValidationConfig.StoryValidatorEntry sve = new ValidationConfig.StoryValidatorEntry();
+        ValidationConfig.ValidatorEntry sve = new ValidationConfig.ValidatorEntry();
         super.complement(sve);
         return sve;
     }
