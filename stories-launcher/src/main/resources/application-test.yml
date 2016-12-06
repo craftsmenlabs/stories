@@ -7,11 +7,11 @@ source:
     enabled: file
 
     file:
-        location: /home/morlack/jiradata
+        location: /Users/youritjang/Downloads/demo-project3
 report:
   dashboard:
-    enabled: false
-    url: http://localhost:8090
+    enabled: true
+    url: http://cmidevserv.nl
     token:
   file:
     enabled: true
@@ -37,10 +37,10 @@ field-mapping:
 
 validation:
         backlog:
-            rating-threshold: 0.6
+            rating-threshold: 60.0
             active: true
         feature:
-            rating-threshold: 0.7
+            rating-threshold: 0.8
             active: true
         story:
             rating-threshold: 0.6
@@ -58,9 +58,8 @@ validation:
             rating-threshold: 0.7
             active: false
         bug:
-            rating-threshold: 0.7
             active: true
+            filledWith: ["","component"]
         epic:
             rating-threshold: 0.7
-            fill-fields: ['goal']
-            active: true
+            active: false

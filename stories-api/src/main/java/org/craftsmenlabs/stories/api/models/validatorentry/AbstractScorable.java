@@ -25,23 +25,27 @@ public abstract class AbstractScorable implements Scorable{
         this.rating = rating;
     }
 
+    @Override
     public float getPointsValuation() {
         return pointsValuation;
     }
 
+    @Override
     public void setPointsValuation(float pointsValuation) {
         this.pointsValuation = pointsValuation;
     }
 
+    @Override
     public List<Violation> getViolations() {
         return violations;
     }
 
+    @Override
     public void setViolations(List<Violation> violations) {
         this.violations = violations;
     }
 
-
+    @Override
     public Rating getRating() {
         return rating;
     }
