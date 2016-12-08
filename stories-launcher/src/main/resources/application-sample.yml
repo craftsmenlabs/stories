@@ -73,7 +73,7 @@ validation:
         fill-fields: ["goal"]
     criteria:
         rating-threshold: 0.7
-        active: false
+        active: true
 
         # Keywords in your criteria. Normal format is: Given.. When... Then
         given-keywords: ["given"]

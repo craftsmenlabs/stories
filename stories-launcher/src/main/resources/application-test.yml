@@ -7,11 +7,11 @@ source:
     enabled: file
 
     file:
-        location: /Users/youritjang/Downloads/demo-project2
+        location: /Users/youritjang/Downloads/demo-project3
 report:
   dashboard:
-    enabled: false
-    url: http://localhost:8090
+    enabled: true
+    url: http://cmidevserv.nl
     token:
   file:
     enabled: true
@@ -37,29 +37,29 @@ field-mapping:
 
 validation:
         backlog:
-            ratingtreshold: 60.0
+            rating-threshold: 60.0
             active: true
         feature:
-            ratingtreshold: 0.7
+            rating-threshold: 0.8
             active: true
         story:
-            ratingtreshold: 0.6
+            rating-threshold: 0.6
             active: true
-            asKeywords: ["as a"]
-            iKeywords: ["i want to"]
-            soKeywords: ["so "]
+            as-keywords: ["as a"]
+            i-keywords: ["i want to"]
+            so-keywords: ["so "]
         criteria:
-            ratingtreshold: 0.7
-            active: false
-            givenKeywords: ["given"]
-            whenKeywords: ["when"]
-            thenKeywords: ["then"]
+            rating-threshold: 0.7
+            active: true
+            given-keywords: ["given"]
+            when-keywords: ["when"]
+            then-keywords: ["then"]
         estimation:
-            ratingtreshold: 0.7
+            rating-threshold: 0.7
             active: false
         bug:
             active: true
             filledWith: ["","component"]
         epic:
-            ratingtreshold: 0.7
+            rating-threshold: 0.7
             active: false

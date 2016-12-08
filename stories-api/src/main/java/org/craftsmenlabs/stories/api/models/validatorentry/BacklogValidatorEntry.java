@@ -26,13 +26,6 @@ public class BacklogValidatorEntry extends AbstractScorable {
     public BacklogValidatorEntry() {
     }
 
-//    public BacklogValidatorEntry(Backlog backlog, BacklogItemList<FeatureValidatorEntry> featureValidatorEntries, BacklogItemList<BugValidatorEntry> bugValidatorEntries, BacklogItemList<EpicValidatorEntry> epicValidatorEntries) {
-//        this.backlog = backlog;
-//        this.featureValidatorEntries = featureValidatorEntries;
-//        this.bugValidatorEntries = bugValidatorEntries;
-//        this.epicValidatorEntries = epicValidatorEntries;
-//    }
-
     public BacklogValidatorEntry(float pointsValuation, List<Violation> violations, Rating rating, Backlog backlog, BacklogItemList<FeatureValidatorEntry> featureValidatorEntries, BacklogItemList<BugValidatorEntry> bugValidatorEntries, BacklogItemList<EpicValidatorEntry> epicValidatorEntries) {
         super(pointsValuation, violations, rating);
         this.backlog = backlog;

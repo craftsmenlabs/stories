@@ -1,5 +1,6 @@
 package org.craftsmenlabs.stories.api.models.summary;
 
+import org.apache.commons.lang3.builder.ToStringExclude;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.junit.Test;
 
@@ -18,6 +19,14 @@ public class ScorableSummaryTest {
         ScorableSummary b = new ScorableSummary(3f, Rating.FAIL, 5);
         ScorableSummary c = new ScorableSummary(33f, null, 55);
         assertThat(a.plus(b)).isEqualTo(c);
+    }
+
+    @Test
+    public void shouldNotThrowNullpointer() throws Exception {
+        ScorableSummary a = new ScorableSummary(30f, Rating.FAIL, 50).divideBy(0);
+        assertThat(a.getPointsValuation()).isEqualTo(0f);
+        assertThat(a.getViolationCount()).isEqualTo(0L);
+
     }
 
 }

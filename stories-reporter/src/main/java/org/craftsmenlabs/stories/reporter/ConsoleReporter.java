@@ -97,16 +97,6 @@ public class ConsoleReporter implements Reporter
 
         log("Processed a total of " + features.size() + " user stories, " + bugs.size() + " bugs and " + epics.size() + " epics\r\n");
 
-//        if (features.size() > 0) {
-//            log("User Story score:    " + doubleDecimalFormat.format(backlogValidatorEntry.ge() * 100f) + " / " + MAX_SCORE);
-//        }
-//        if (bugs.size() > 0) {
-//            log("Bug score:           " + doubleDecimalFormat.format(backlogValidatorEntry.getBugScore() * 100f) + " / " + MAX_SCORE);
-//        }
-//        if (epics.size() > 0) {
-//            log("Epic score:          " + doubleDecimalFormat.format(backlogValidatorEntry.getEpicScore() * 100f) + " / " + MAX_SCORE);
-//        }
-//
 
         log("\r\n");
         log("Those three combined result in a score of "
@@ -208,6 +198,7 @@ public class ConsoleReporter implements Reporter
     }
 
     public void reportOnViolations(List<Violation> violations){
+        prefix = ANSI_BLUE;
         violations.forEach(violation ->
                 log("\t\t Violation found: " + violation.toString()));
     }

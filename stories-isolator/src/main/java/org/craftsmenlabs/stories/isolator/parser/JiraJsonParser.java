@@ -1,6 +1,5 @@
 package org.craftsmenlabs.stories.isolator.parser;
 
-import org.apache.commons.lang3.StringUtils;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.FilterConfig;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
@@ -47,7 +46,6 @@ public class JiraJsonParser {
         backlog.setFeatures(jiraJsonIssues.stream()
                 .filter(featureConverter::supportsIssue)
                 .map(featureConverter::convert)
-                .filter(issue -> StringUtils.isNotEmpty(issue.getUserstory()))
                 .collect(Collectors.toList())
         );
 

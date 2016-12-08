@@ -42,7 +42,7 @@ public class FeatureConverter extends AbstractJiraConverter<Feature> {
         }
         feature.setRank(rank);
 
-        feature.setEstimation(this.parseEstimation((String) additionalProps.get(config.getFeature().getEstimation())));
+        feature.setEstimation(this.parseEstimation(additionalProps.getOrDefault(config.getFeature().getEstimation(), "").toString()));
 
         return feature;
     }
@@ -59,8 +59,8 @@ public class FeatureConverter extends AbstractJiraConverter<Feature> {
     private void getAcceptanceCriteria(Feature feature, JiraJsonIssue jiraJsonIssue) {
         String criteriaKey = config.getFeature().getAcceptanceCriteria();
         if (StringUtils.isNotEmpty(criteriaKey)
-                && StringUtils.isEmpty(feature.getAcceptanceCriteria())
-                && jiraJsonIssue.getFields().getAdditionalProperties().containsKey(criteriaKey)) {
+                && jiraJsonIssue.getFields().getAdditionalProperties().containsKey(criteriaKey)
+                && StringUtils.isNotEmpty((String) jiraJsonIssue.getFields().getAdditionalProperties().get(criteriaKey))) {
             // We should get the acceptance Criteria from this field
             feature.setAcceptanceCriteria((String) jiraJsonIssue.getFields().getAdditionalProperties().get(criteriaKey));
         }
