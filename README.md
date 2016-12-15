@@ -39,7 +39,7 @@ In order to function properly:
 * User stories should end with a dot (.), and
 * User stories should be in a format: As a...I...So i
 * Acceptance criteria should end with a dot (.)
-* User stories should use Gherkin language: Given..When..Then
+* Acceptance criteria should use Gherkin language: Given..When..Then
 
 # Create your own build
 ### Prerequisities
