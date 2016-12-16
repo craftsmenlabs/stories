@@ -6,7 +6,7 @@
 
 
 # Stories
-Stories is a Jenkins plugin and is a validator for checking the quality of a backlog (checking all user stories). 
+Stories is a issue validation framework that continuously validates the quality of a backlog (checking all user stories). 
 
 We want to apply the same principles we apply to code quality to the input (the product backlog). 
 With Stories we are able to determine the "coverage" of a backlog. 
@@ -39,7 +39,7 @@ In order to function properly:
 * User stories should end with a dot (.), and
 * User stories should be in a format: As a...I...So i
 * Acceptance criteria should end with a dot (.)
-* User stories should use Gherkin language: Given..When..Then
+* Acceptance criteria should use Gherkin language: Given..When..Then
 
 # Create your own build
 ### Prerequisities

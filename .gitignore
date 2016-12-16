@@ -81,3 +81,5 @@ fabric.properties
 # SCRIPTS
 executor.sh
 pit.sh
+
+*.sh
