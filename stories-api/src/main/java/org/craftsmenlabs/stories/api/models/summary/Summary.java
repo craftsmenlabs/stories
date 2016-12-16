@@ -30,15 +30,20 @@ public class Summary implements Summarizable<Summary>{
 
     @Override
     public Summary divideBy(int denominator) {
-        return Summary.builder()
-                .backlog( backlog.divideBy(denominator) )
-                .features( features.divideBy(denominator) )
-                .bugs( bugs.divideBy(denominator) )
-                .epics( epics.divideBy(denominator) )
-                .featureUserStory( featureUserStory.divideBy(denominator) )
-                .featureCriteria( featureCriteria.divideBy(denominator) )
-                .featureEstimation( featureEstimation.divideBy(denominator) )
-                .build();
+        if(denominator == 0){
+            return new Summary();
+        }else{
+            return Summary.builder()
+                    .backlog( backlog.divideBy(denominator) )
+                    .features( features.divideBy(denominator) )
+                    .bugs( bugs.divideBy(denominator) )
+                    .epics( epics.divideBy(denominator) )
+                    .featureUserStory( featureUserStory.divideBy(denominator) )
+                    .featureCriteria( featureCriteria.divideBy(denominator) )
+                    .featureEstimation( featureEstimation.divideBy(denominator) )
+                    .build();
+
+        }
     }
 
     @Override

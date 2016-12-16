@@ -20,6 +20,9 @@ public class BacklogItemListSummary implements Summarizable<BacklogItemListSumma
 
     @Override
     public BacklogItemListSummary divideBy(int denominator) {
+        if(denominator == 0){
+            return new BacklogItemListSummary();
+        }
         return BacklogItemListSummary.builder()
                 .failed(this.getFailed() / denominator)
                 .passed(this.getPassed() / denominator)
