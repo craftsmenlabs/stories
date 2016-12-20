@@ -18,8 +18,11 @@ public class Backlog implements ScrumItem {
     @JsonProperty("epics")
     private List<Epic> epics;
 
+    @JsonProperty("teamtasks")
+    private List<TeamTask> teamTasks;
+
     @JsonIgnore
     public List<? super ScrumItem> getAllItems(){
-        return Arrays.asList(features, bugs, epics);
+        return Arrays.asList(features, bugs, epics, teamTasks);
     }
 }

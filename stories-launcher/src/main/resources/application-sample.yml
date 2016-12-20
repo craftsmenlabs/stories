@@ -42,6 +42,9 @@ field-mapping:
         acceptation-criteria: "customfield_13004"
     epic:
         goal: "customfield_13005"
+    team-task:
+        estimation: "customfield_11402"
+        acceptance-criteria: "customfield_11403"
 
 ## Defines what parts of the validation are active. General ones are:
 ##
@@ -71,6 +74,9 @@ validation:
     epic:
         active: true
         fill-fields: ["goal"]
+    team-task:
+        rating-threshold: 0.6
+        active: true
     criteria:
         rating-threshold: 0.7
         active: true

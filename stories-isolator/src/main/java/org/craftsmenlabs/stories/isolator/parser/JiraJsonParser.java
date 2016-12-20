@@ -8,6 +8,7 @@ import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
 import org.craftsmenlabs.stories.isolator.parser.converters.jira.BugConverter;
 import org.craftsmenlabs.stories.isolator.parser.converters.jira.EpicConverter;
 import org.craftsmenlabs.stories.isolator.parser.converters.jira.FeatureConverter;
+import org.craftsmenlabs.stories.isolator.parser.converters.jira.TeamTaskConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +22,7 @@ public class JiraJsonParser {
     private FeatureConverter featureConverter;
     private BugConverter bugConverter;
     private EpicConverter epicConverter;
+    private TeamTaskConverter teamTaskConverter;
 
     public JiraJsonParser(FieldMappingConfig fieldMapping, FilterConfig filterConfig) {
         this.filterConfig = filterConfig;
@@ -28,6 +30,7 @@ public class JiraJsonParser {
         this.featureConverter = new FeatureConverter(fieldMapping);
         this.bugConverter = new BugConverter(fieldMapping);
         this.epicConverter = new EpicConverter(fieldMapping);
+        this.teamTaskConverter = new TeamTaskConverter(fieldMapping);
     }
 
     public Backlog parse(JiraBacklog jiraBacklog) {
@@ -58,6 +61,11 @@ public class JiraJsonParser {
         backlog.setEpics(jiraJsonIssues.stream()
                 .filter(epicConverter::supportsIssue)
                 .map(epicConverter::convert)
+                .collect(Collectors.toList()));
+
+        backlog.setTeamTasks(jiraJsonIssues.stream()
+                .filter(teamTaskConverter::supportsIssue)
+                .map(teamTaskConverter::convert)
                 .collect(Collectors.toList()));
 
         return backlog;

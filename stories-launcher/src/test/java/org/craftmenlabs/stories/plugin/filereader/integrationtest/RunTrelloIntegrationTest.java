@@ -29,7 +29,7 @@ public class RunTrelloIntegrationTest {
     private JiraRequest jiraRequest;
 
     @Test
-    public void jiraTest() throws Exception {
+    public void trelloTest() throws Exception {
         new Expectations() {{
             restTemplate.getForObject(withAny(""), withAny(String.class));
             result = readFile("trello-test.json");

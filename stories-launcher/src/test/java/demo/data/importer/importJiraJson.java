@@ -67,6 +67,7 @@ public class importJiraJson {
     // <projectToken>_YYYY-MM-DD_HH-MM.json
     // projectToken_2016-02-13_16-00.json
     public void importFile(File file) {
+        System.out.println("importing " + file.getName() + " with:");
 
         String[] split = file.getName().split("_|\\.");
         if (split.length != 4) {
@@ -77,16 +78,25 @@ public class importJiraJson {
         }
 
         String projectToken = split[0];
+        System.out.println("project token: " + projectToken);
+
         String date = split[1];
         List<Integer> time = Arrays.stream(split[2].split("-"))
                 .map(Integer::parseInt).collect(Collectors.toList());
 
         LocalDateTime dateTime = LocalDate.parse(date).atTime(time.get(0), time.get(1));
+        System.out.println("date time: " + dateTime);
+
 
         ValidationConfig validationConfig = springValidationConfig.convert();
+        System.out.println("validation config: " + validationConfig);
+
         FieldMappingConfig fieldMappingConfigCopy = springFieldMappingConfig.convert();
+        System.out.println("fieldmapping: "+ fieldMappingConfigCopy);
+
         ReportConfig reportConfig = springReportConfig.convert();
         reportConfig.getDashboard().setToken(projectToken);
+        System.out.println("reporting config: "+ reportConfig);
 
 
         ObjectMapper mapper = new ObjectMapper();

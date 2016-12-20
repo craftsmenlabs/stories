@@ -45,6 +45,9 @@ validation:
         active: false
     epic:
         active: false
+    team-task:
+        ratingtreshold: 0.6
+        active: true
     criteria:
         ratingtreshold: 0.7
         active: false

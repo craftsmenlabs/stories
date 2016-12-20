@@ -14,6 +14,7 @@ public class SummaryBuilder {
         List<FeatureValidatorEntry> issues = entry.getFeatureValidatorEntries().getItems();
         List<BugValidatorEntry> bugs = entry.getBugValidatorEntries().getItems();
         List<EpicValidatorEntry> epics = entry.getEpicValidatorEntries().getItems();
+        List<TeamTaskValidatorEntry> teamTasks = entry.getTeamTaskValidatorEntries().getItems();
         List<UserStoryValidatorEntry> featureStories     = entry.getFeatureValidatorEntries().getItems().stream().map(FeatureValidatorEntry::getUserStoryValidatorEntry).collect(Collectors.toList());
         List<AcceptanceCriteriaValidatorEntry> featureCriteria    = entry.getFeatureValidatorEntries().getItems().stream().map(FeatureValidatorEntry::getAcceptanceCriteriaValidatorEntry).collect(Collectors.toList());
         List<EstimationValidatorEntry> featureEstimations = entry.getFeatureValidatorEntries().getItems().stream().map(FeatureValidatorEntry::getEstimationValidatorEntry).collect(Collectors.toList());
@@ -26,6 +27,7 @@ public class SummaryBuilder {
                 .features(getCount(issues))
                 .bugs(getCount(bugs))
                 .epics(getCount(epics))
+                .teamTask(getCount(teamTasks))
                 .featureUserStory(getCount(featureStories))
                 .featureCriteria(getCount(featureCriteria))
                 .featureEstimation(getCount(featureEstimations))

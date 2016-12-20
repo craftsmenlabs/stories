@@ -35,7 +35,9 @@ public class TrelloJsonParser {
             result.add(feature);
         }
         backlog.setFeatures(result);
-
+        backlog.setBugs(new ArrayList<>());
+        backlog.setEpics(new ArrayList<>());
+        backlog.setTeamTasks(new ArrayList<>());
         return backlog;
 
     }

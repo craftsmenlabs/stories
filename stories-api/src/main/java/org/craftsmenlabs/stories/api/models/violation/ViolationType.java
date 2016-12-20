@@ -18,5 +18,8 @@ public enum ViolationType
 	CriteriaThenClauseViolation,
 	CriteriaRatingViolation,
     BugFieldEmptyViolation,
+    TeamTaskSummaryEmptyViolation,
+    TeamTaskDescriptionEmptyViolation,
+    TeamTaskEstimationEmptyViolation,
     NoFillableFieldsViolation
 }

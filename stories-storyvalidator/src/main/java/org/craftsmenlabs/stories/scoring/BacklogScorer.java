@@ -29,6 +29,7 @@ public class BacklogScorer {
                 .bugValidatorEntries(new BacklogItemList<>())
                 .featureValidatorEntries(new BacklogItemList<>())
                 .epicValidatorEntries(new BacklogItemList<>())
+                .teamTaskValidatorEntries(new BacklogItemList<>())
                 .violations(new ArrayList<>())
                 .build();
 
@@ -46,37 +47,49 @@ public class BacklogScorer {
         List<FeatureValidatorEntry> features = new ArrayList<>();
         List<BugValidatorEntry> bugs = new ArrayList<>();
         List<EpicValidatorEntry> epics = new ArrayList<>();
+        List<TeamTaskValidatorEntry> teamTasks = new ArrayList<>();
 
         // Feature scores
-        if (validationConfig.getFeature().isActive()) {
+        if (validationConfig.getFeature().isActive() ) {
             features = getValidatedFeatures(backlog, validationConfig);
-
-            backlogValidatorEntry.setFeatureValidatorEntries(
-                    BacklogItemList.<FeatureValidatorEntry>builder()
-                            .items(features)
-                            .isActive(validationConfig.getFeature().isActive())
-                            .build());
         }
+        backlogValidatorEntry.setFeatureValidatorEntries(
+                BacklogItemList.<FeatureValidatorEntry>builder()
+                        .items(features)
+                        .isActive(validationConfig.getFeature().isActive())
+                        .build());
+
 
         // Bug scores
         if (validationConfig.getBug().isActive()) {
             bugs = getValidatedBugs(backlog, validationConfig);
-
-            backlogValidatorEntry.setBugValidatorEntries(
-                    BacklogItemList.<BugValidatorEntry>builder()
-                            .items(bugs)
-                            .isActive(validationConfig.getBug().isActive())
-                            .build());
         }
+        backlogValidatorEntry.setBugValidatorEntries(
+                BacklogItemList.<BugValidatorEntry>builder()
+                        .items(bugs)
+                        .isActive(validationConfig.getBug().isActive())
+                        .build());
+
 
         // Epic scores
         if (validationConfig.getEpic().isActive()) {
             epics = getValidatedEpics(backlog, validationConfig);
+        }
+        backlogValidatorEntry.setEpicValidatorEntries(
+                BacklogItemList.<EpicValidatorEntry>builder()
+                        .items(epics)
+                        .isActive(validationConfig.getEpic().isActive())
+                        .build());
 
-            backlogValidatorEntry.setEpicValidatorEntries(
-                    BacklogItemList.<EpicValidatorEntry>builder()
-                            .items(epics)
-                            .isActive(validationConfig.getEpic().isActive())
+
+        // Team tasks scores
+        if (validationConfig.getTeamTask().isActive()) {
+            teamTasks = getValidatedTeamTasks(backlog, validationConfig);
+
+            backlogValidatorEntry.setTeamTaskValidatorEntries(
+                    BacklogItemList.<TeamTaskValidatorEntry>builder()
+                            .items(teamTasks)
+                            .isActive(validationConfig.getTeamTask().isActive())
                             .build());
         }
 
@@ -84,6 +97,7 @@ public class BacklogScorer {
         List<? super BacklogItem> scoredEntries = new ArrayList<>(features);
         scoredEntries.addAll(bugs);
         scoredEntries.addAll(epics);
+        scoredEntries.addAll(teamTasks);
 
         float backlogPoints = ranking.createRanking(scoredEntries);
         backlogValidatorEntry.setPointsValuation(backlogPoints);
@@ -99,21 +113,28 @@ public class BacklogScorer {
                             + " points and is therefore rated: " + backlogValidatorEntry.getRating()));
         }
 
-        backlogValidatorEntry.setFeatureValidatorEntries(
-                BacklogItemList.<FeatureValidatorEntry>builder()
-                        .items(features)
-                        .isActive(validationConfig.getBug().isActive())
-                        .build());
-        backlogValidatorEntry.setBugValidatorEntries(
-                BacklogItemList.<BugValidatorEntry>builder()
-                        .items(bugs)
-                        .isActive(validationConfig.getBug().isActive())
-                        .build());
-        backlogValidatorEntry.setEpicValidatorEntries(
-                BacklogItemList.<EpicValidatorEntry>builder()
-                        .items(epics)
-                        .isActive(validationConfig.getBug().isActive())
-                        .build());
+
+//        //TODO everytime config.getBUg?????
+//        backlogValidatorEntry.setFeatureValidatorEntries(
+//                BacklogItemList.<FeatureValidatorEntry>builder()
+//                        .items(features)
+//                        .isActive(validationConfig.getBug().isActive())
+//                        .build());
+//        backlogValidatorEntry.setBugValidatorEntries(
+//                BacklogItemList.<BugValidatorEntry>builder()
+//                        .items(bugs)
+//                        .isActive(validationConfig.getBug().isActive())
+//                        .build());
+//        backlogValidatorEntry.setEpicValidatorEntries(
+//                BacklogItemList.<EpicValidatorEntry>builder()
+//                        .items(epics)
+//                        .isActive(validationConfig.getBug().isActive())
+//                        .build());
+//        backlogValidatorEntry.setTeamTaskValidatorEntries(
+//                BacklogItemList.<TeamTaskValidatorEntry>builder()
+//                        .items(teamTasks)
+//                        .isActive(validationConfig.getTeamTask().isActive())
+//                        .build());
         return backlogValidatorEntry;
     }
 
@@ -132,6 +153,12 @@ public class BacklogScorer {
     private static List<EpicValidatorEntry> getValidatedEpics(Backlog backlog, ValidationConfig validationConfig) {
         return backlog.getEpics().stream()
                 .map(epic -> EpicScorer.performScorer(epic, validationConfig))
+                .collect(Collectors.toList());
+    }
+
+    private static List<TeamTaskValidatorEntry> getValidatedTeamTasks(Backlog backlog, ValidationConfig validationConfig) {
+        return backlog.getTeamTasks().stream()
+                .map(task -> TeamTaskScorer.performScorer(task, validationConfig))
                 .collect(Collectors.toList());
     }
 }

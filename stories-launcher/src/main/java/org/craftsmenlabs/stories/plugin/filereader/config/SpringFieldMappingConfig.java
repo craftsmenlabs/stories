@@ -13,6 +13,7 @@ public class SpringFieldMappingConfig implements ValidatableConfig {
     private FeatureMapping feature;
     private BugMapping bug;
     private EpicMapping epic;
+    private TeamTaskMapping teamTask;
     private String rank;
 
     public FieldMappingConfig convert() {
@@ -20,6 +21,7 @@ public class SpringFieldMappingConfig implements ValidatableConfig {
                 .feature(this.getFeature().convert())
                 .bug(this.getBug() != null ? this.getBug().convert() : null)
                 .epic(this.getEpic() != null ? this.epic.convert() : null)
+                .teamTask(this.getTeamTask() != null ? this.getTeamTask().convert() : null)
                 .rank(rank)
                 .build();
     }
@@ -38,6 +40,20 @@ public class SpringFieldMappingConfig implements ValidatableConfig {
 
         public FieldMappingConfig.FeatureMapping convert() {
             return FieldMappingConfig.FeatureMapping.builder()
+                    .estimation(estimation)
+                    .acceptanceCriteria(acceptanceCriteria)
+                    .build();
+        }
+    }
+
+
+    @Data
+    public static class TeamTaskMapping {
+        private String estimation;
+        private String acceptanceCriteria;
+
+        public FieldMappingConfig.TeamTaskMapping convert() {
+            return FieldMappingConfig.TeamTaskMapping.builder()
                     .estimation(estimation)
                     .acceptanceCriteria(acceptanceCriteria)
                     .build();
