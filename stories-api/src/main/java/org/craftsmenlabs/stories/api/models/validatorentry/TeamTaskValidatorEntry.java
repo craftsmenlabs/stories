@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TeamTaskValidatorEntry extends BacklogItem {
-    @JsonProperty("team-task")
+    @JsonProperty("teamTask")
     private TeamTask teamTask;
 
     @JsonProperty("acceptanceCriteriaValidatorEntry")

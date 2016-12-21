@@ -45,7 +45,7 @@ public class TeamTaskConverter extends AbstractJiraConverter<TeamTask> {
 
     @Override
     public String[] getSupportedTypes() {
-        return new String[]{"Team task"};
+        return new String[]{"Task", "Team task"};
     }
 
     private boolean hasValidDescription(JiraJsonIssue jiraJsonIssue) {

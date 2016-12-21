@@ -1,10 +1,11 @@
 package org.craftsmenlabs.stories.api.models.validatorentry;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BacklogItemList<T extends BacklogItem>  {
-    private List<T> items;
-    private boolean isActive;
+    private List<T> items = new ArrayList<>();
+    private boolean isActive = false;
 
     @java.beans.ConstructorProperties({"items", "isActive"})
     public BacklogItemList(List<T> items, boolean isActive) {
@@ -65,8 +66,8 @@ public class BacklogItemList<T extends BacklogItem>  {
     }
 
     public static class BacklogItemListBuilder<T extends BacklogItem> {
-        private List<T> items;
-        private boolean isActive;
+        private List<T> items = new ArrayList<T>();
+        private boolean isActive = false;
 
         BacklogItemListBuilder() {
         }

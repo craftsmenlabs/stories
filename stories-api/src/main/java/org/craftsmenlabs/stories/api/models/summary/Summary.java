@@ -45,7 +45,6 @@ public class Summary implements Summarizable<Summary>{
                     .featureCriteria( featureCriteria.divideBy(denominator) )
                     .featureEstimation( featureEstimation.divideBy(denominator) )
                     .build();
-
         }
     }
 

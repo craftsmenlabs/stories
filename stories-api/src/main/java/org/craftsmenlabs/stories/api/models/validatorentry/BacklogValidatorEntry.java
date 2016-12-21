@@ -16,16 +16,16 @@ public class BacklogValidatorEntry extends AbstractScorable {
     private Backlog backlog;
 
     @JsonProperty("featureValidatorEntries")
-    private BacklogItemList<FeatureValidatorEntry> featureValidatorEntries;
+    private BacklogItemList<FeatureValidatorEntry> featureValidatorEntries = new BacklogItemList<>();
 
     @JsonProperty("bugValidatorEntries")
-    private BacklogItemList<BugValidatorEntry> bugValidatorEntries;
+    private BacklogItemList<BugValidatorEntry> bugValidatorEntries = new BacklogItemList<>();
 
     @JsonProperty("epicValidatorEntries")
-    private BacklogItemList<EpicValidatorEntry> epicValidatorEntries;
+    private BacklogItemList<EpicValidatorEntry> epicValidatorEntries = new BacklogItemList<>();
 
     @JsonProperty("teamTaskValidatorEntries")
-    private BacklogItemList<TeamTaskValidatorEntry> teamTaskValidatorEntries;
+    private BacklogItemList<TeamTaskValidatorEntry> teamTaskValidatorEntries = new BacklogItemList<>();
 
     public BacklogValidatorEntry() {
     }
@@ -109,10 +109,10 @@ public class BacklogValidatorEntry extends AbstractScorable {
 
     public static class BacklogValidatorEntryBuilder {
         private Backlog backlog;
-        private BacklogItemList<FeatureValidatorEntry> featureValidatorEntries;
-        private BacklogItemList<BugValidatorEntry> bugValidatorEntries;
-        private BacklogItemList<EpicValidatorEntry> epicValidatorEntries;
-        private BacklogItemList<TeamTaskValidatorEntry> teamTaskValidatorEntries;
+        private BacklogItemList<FeatureValidatorEntry> featureValidatorEntries = new BacklogItemList<>();
+        private BacklogItemList<BugValidatorEntry> bugValidatorEntries = new BacklogItemList<>();
+        private BacklogItemList<EpicValidatorEntry> epicValidatorEntries = new BacklogItemList<>();
+        private BacklogItemList<TeamTaskValidatorEntry> teamTaskValidatorEntries = new BacklogItemList<>();
         private float pointsValuation = 0.0f;
         private List<Violation> violations;
         private Rating rating;
