@@ -102,6 +102,7 @@ public class JiraJsonParserTest {
         assertNotNull(backlog.getBugs().get(0));
         Bug bug = backlog.getBugs().get(0);
         assertNotNull(bug.getAcceptationCriteria());
+        assertNotNull(bug.getDescription());
         assertNotNull(bug.getRank());
         assertNotNull(bug.getReproductionPath());
         assertNotNull(bug.getExpectedBehavior());
