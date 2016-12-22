@@ -13,6 +13,7 @@ public class SpringSourceConfig implements ValidatableConfig {
     private String type;
     private JiraConfig jira;
     private TrelloConfig trello;
+    private GithubConfig github;
     private FileConfig file;
 
     @Override
@@ -22,6 +23,9 @@ public class SpringSourceConfig implements ValidatableConfig {
         }
         if (StringUtils.equals(this.type, "trello")) {
             this.trello.validate();
+        }
+        if (StringUtils.equals(this.type, "github")) {
+            this.github.validate();
         }
     }
 
@@ -51,6 +55,22 @@ public class SpringSourceConfig implements ValidatableConfig {
 
             if(StringUtils.isEmpty(url) || StringUtils.isEmpty(token) || StringUtils.isEmpty(authKey) || StringUtils.isEmpty(projectKey)) {
                 throw new StoriesException("Your Trello configuration is invalid. It should have the url, authKey, token and projectKey defined. Please refer to the documentation");
+            }
+        }
+    }
+
+    @Data
+    public static class GithubConfig implements ValidatableConfig {
+        private String url;
+        private String token;
+        private String authKey;
+        private String projectKey;
+
+        @Override
+        public void validate() throws StoriesException {
+
+            if(StringUtils.isEmpty(url) || StringUtils.isEmpty(token) || StringUtils.isEmpty(authKey) || StringUtils.isEmpty(projectKey)) {
+                throw new StoriesException("Your Github configuration is invalid. It should have the url, authKey, token and projectKey defined. Please refer to the documentation");
             }
         }
     }

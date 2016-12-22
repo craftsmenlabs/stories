@@ -13,9 +13,7 @@ import org.craftsmenlabs.stories.api.models.summary.SummaryBuilder;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 import org.craftsmenlabs.stories.connectivity.service.community.CommunityDashboardReporter;
 import org.craftsmenlabs.stories.connectivity.service.enterprise.EnterpriseDashboardReporter;
-import org.craftsmenlabs.stories.importer.Importer;
-import org.craftsmenlabs.stories.importer.JiraAPIImporter;
-import org.craftsmenlabs.stories.importer.TrelloAPIImporter;
+import org.craftsmenlabs.stories.importer.*;
 import org.craftsmenlabs.stories.plugin.filereader.config.*;
 import org.craftsmenlabs.stories.ranking.CurvedRanking;
 import org.craftsmenlabs.stories.reporter.ConsoleReporter;
@@ -115,6 +113,10 @@ public class PluginExecutor {
                 logger.info("Using TrelloAPIImporter for import.");
                 SpringSourceConfig.TrelloConfig trelloConfig = springSourceConfig.getTrello();
                 return new TrelloAPIImporter(trelloConfig.getUrl(), trelloConfig.getProjectKey(), trelloConfig.getAuthKey(), trelloConfig.getToken());
+            case "github":
+                logger.info("Using GithubAPIImporter for import.");
+                SpringSourceConfig.GithubConfig githubConfig = springSourceConfig.getGithub();
+                return new GithubAPIImporter(githubConfig.getUrl(), githubConfig.getProjectKey(), githubConfig.getAuthKey(), githubConfig.getToken());
             default:
                 throw new StoriesException(StoriesException.ERR_SOURCE_ENABLED_MISSING);
         }
