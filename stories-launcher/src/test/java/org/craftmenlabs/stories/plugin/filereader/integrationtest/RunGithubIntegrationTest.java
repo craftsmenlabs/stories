@@ -6,8 +6,6 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import org.apache.commons.io.FileUtils;
 import org.craftsmenlabs.stories.api.models.Rating;
-import org.craftsmenlabs.stories.importer.JiraRequest;
-import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.craftsmenlabs.stories.plugin.filereader.BootApp;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,8 +20,6 @@ import mockit.integration.junit4.JMockit;
 @RunWith(JMockit.class)
 public class RunGithubIntegrationTest
 {
-
-    private ObjectMapper objectMapper = new ObjectMapper();
     @Mocked
     private RestTemplate restTemplate;
 

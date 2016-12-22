@@ -8,9 +8,7 @@ import org.apache.commons.io.FileUtils;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
 import org.craftsmenlabs.stories.isolator.model.github.GithubJsonIssue;
-import org.craftsmenlabs.stories.isolator.model.trello.TrelloJsonIssue;
 import org.craftsmenlabs.stories.isolator.parser.GithubJsonParser;
-import org.craftsmenlabs.stories.isolator.parser.TrelloJsonParser;
 import org.junit.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
@@ -20,6 +18,7 @@ public class GithubJsonParserTest
 {
 
     private ObjectMapper mapper = new ObjectMapper();
+
     @Tested
     private GithubJsonParser githubJsonParser;
 
