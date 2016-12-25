@@ -1,17 +1,16 @@
 package org.craftsmenlabs.stories.plugin.filereader;
 
+import lombok.RequiredArgsConstructor;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.Reporter;
 import org.craftsmenlabs.stories.api.models.StoriesRun;
-import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
-import org.craftsmenlabs.stories.api.models.config.FilterConfig;
-import org.craftsmenlabs.stories.api.models.config.ReportConfig;
-import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
+import org.craftsmenlabs.stories.api.models.config.*;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.api.models.summary.SummaryBuilder;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 import org.craftsmenlabs.stories.connectivity.service.community.CommunityDashboardReporter;
+import org.craftsmenlabs.stories.connectivity.service.enterprise.EnterpriseDashboardConfigRetriever;
 import org.craftsmenlabs.stories.connectivity.service.enterprise.EnterpriseDashboardReporter;
 import org.craftsmenlabs.stories.importer.Importer;
 import org.craftsmenlabs.stories.importer.JiraAPIImporter;
@@ -35,50 +34,51 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class PluginExecutor {
     private final Logger logger = LoggerFactory.getLogger(PluginExecutor.class);
-    public ValidationConfig validationConfig;
-    public FieldMappingConfig fieldMappingConfig;
-    public FilterConfig filterConfig;
-    public ReportConfig reportConfig;
-
-    @Autowired
-    private Environment env;
-    @Autowired
-    private SpringReportConfig springReportConfig;
-    @Autowired
-    private SpringSourceConfig springSourceConfig;
-    @Autowired
-    private SpringFilterConfig springFilterConfig;
-    @Autowired
-    private SpringValidationConfig springValidationConfig;
-    @Autowired
-    private SpringFieldMappingConfig springFieldMappingConfig;
+    private final Environment env;
+    private final SpringReportConfig springReportConfig;
+    private final SpringSourceConfig springSourceConfig;
+    private final SpringFilterConfig springFilterConfig;
+    private final SpringValidationConfig springValidationConfig;
+    private final SpringFieldMappingConfig springFieldMappingConfig;
+    private ValidationConfig validationConfig;
+    private FieldMappingConfig fieldMappingConfig;
+    private FilterConfig filterConfig;
+    private ReportConfig reportConfig;
+    private SourceConfig sourceConfig;
 
     public Rating startApplication() {
-        logger.info("Starting stories plugin.");
+        logger.info("Initializing Gareth Storynator");
 
 
-        // Validate configs
-        this.springReportConfig.validate();
-        this.springSourceConfig.validate();
-        this.springFieldMappingConfig.validate();
+        if (this.springReportConfig.getDashboard().isEnabled()) {
+            // We should retrieve settings there.
+            this.loadSettingsFromEnterpriseDashboard();
+        } else {
+            // Validate configs
+            this.springReportConfig.validate();
+            this.springSourceConfig.validate();
+            this.springFieldMappingConfig.validate();
 
-        // Convert configs
-        validationConfig = springValidationConfig.convert();
-        fieldMappingConfig = springFieldMappingConfig.convert();
-        filterConfig = springFilterConfig.convert();
-        reportConfig = springReportConfig.convert();
+            // Convert configs
+            validationConfig = springValidationConfig.convert();
+            fieldMappingConfig = springFieldMappingConfig.convert();
+            filterConfig = springFilterConfig.convert();
+            reportConfig = springReportConfig.convert();
+            sourceConfig = springSourceConfig.convert();
+        }
 
         // Import the data
-        Importer importer = getImporter(springSourceConfig.getType());
+        Importer importer = getImporter(sourceConfig.getType());
         Backlog backlog = importer.getBacklog();
 
         // Perform the backlog validation
         BacklogValidatorEntry backlogValidatorEntry = BacklogScorer.performScorer(backlog, new CurvedRanking(), validationConfig);
 
         if ((backlogValidatorEntry.getBacklog().getBugs() == null || backlogValidatorEntry.getBacklog().getBugs().size() == 0)
-          && (backlogValidatorEntry.getBacklog().getFeatures() == null || backlogValidatorEntry.getBacklog().getFeatures().size() == 0)) {
+                && (backlogValidatorEntry.getBacklog().getFeatures() == null || backlogValidatorEntry.getBacklog().getFeatures().size() == 0)) {
             throw new StoriesException("Sorry. No items to be found in de backlog for Storynator to process. Exiting Storynator.");
         }
 
@@ -107,12 +107,12 @@ public class PluginExecutor {
     public Importer getImporter(String enabled) {
         switch (enabled) {
             case "jira":
-                SpringSourceConfig.JiraConfig jiraConfig = springSourceConfig.getJira();
+                SourceConfig.JiraConfig jiraConfig = sourceConfig.getJira();
                 logger.info("Using JiraAPIImporter for import." + jiraConfig.getUrl());
                 return new JiraAPIImporter(jiraConfig.getUrl(), jiraConfig.getProjectKey(), jiraConfig.getAuthKey(), fieldMappingConfig, filterConfig);
             case "trello":
                 logger.info("Using TrelloAPIImporter for import.");
-                SpringSourceConfig.TrelloConfig trelloConfig = springSourceConfig.getTrello();
+                SourceConfig.TrelloConfig trelloConfig = sourceConfig.getTrello();
                 return new TrelloAPIImporter(trelloConfig.getUrl(), trelloConfig.getProjectKey(), trelloConfig.getAuthKey(), trelloConfig.getToken());
             default:
                 throw new StoriesException(StoriesException.ERR_SOURCE_ENABLED_MISSING);
@@ -145,5 +145,17 @@ public class PluginExecutor {
         }
 
         return reporters;
+    }
+
+    /**
+     *
+     */
+    private void loadSettingsFromEnterpriseDashboard() {
+        EnterpriseDashboardConfigRetriever.ConfigMapping mapping =
+                EnterpriseDashboardConfigRetriever.retrieveSettings(this.springReportConfig.getDashboard().getUrl(), this.springReportConfig.getDashboard().getToken());
+
+        this.fieldMappingConfig = mapping.getFieldMappingConfig();
+        this.filterConfig = mapping.getFilterConfig();
+        this.validationConfig = mapping.getValidationConfig();
     }
 }

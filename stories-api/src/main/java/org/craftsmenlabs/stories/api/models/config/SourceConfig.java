@@ -9,26 +9,29 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReportConfig {
-    private DashboardConfig dashboard;
-    private FileConfig file;
+public class SourceConfig {
+    private String type;
+    private JiraConfig jira;
+    private TrelloConfig trello;
 
     @Data
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class DashboardConfig {
-        private boolean enabled = false;
+    public static class JiraConfig {
         private String url;
-        private String token;
+        private String authKey;
+        private String projectKey;
     }
 
     @Data
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class FileConfig {
-        private boolean enabled = false;
-        private String location;
+    public static class TrelloConfig {
+        private String url;
+        private String token;
+        private String authKey;
+        private String projectKey;
     }
 }
