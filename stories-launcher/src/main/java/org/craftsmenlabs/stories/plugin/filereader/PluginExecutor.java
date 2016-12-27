@@ -113,11 +113,11 @@ public class PluginExecutor {
         reporters.add(new SummaryConsoleReporter());
 
         ReportConfig reportConfig = storynatorConfig.getReport();
-        if (reportConfig.getFile() != null && reportConfig.getFile().isEnabled()) {
+        if (reportConfig != null && reportConfig.getFile() != null && reportConfig.getFile().isEnabled()) {
             reporters.add(new JsonFileReporter(new File(reportConfig.getFile().getLocation())));
         }
 
-        if (reportConfig.getDashboard() != null && reportConfig.getDashboard().isEnabled()) {
+        if (reportConfig != null && reportConfig.getDashboard() != null && reportConfig.getDashboard().isEnabled()) {
             List<String> profiles = Arrays.asList(env.getActiveProfiles());
             if (profiles.contains("enterprise") && !profiles.contains("community")) {
                 logger.debug("Started enterprise version of reporter.");
