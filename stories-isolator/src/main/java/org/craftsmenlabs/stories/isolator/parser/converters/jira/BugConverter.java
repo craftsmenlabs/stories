@@ -1,14 +1,15 @@
 package org.craftsmenlabs.stories.isolator.parser.converters.jira;
 
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
+import org.craftsmenlabs.stories.api.models.config.SourceConfig;
 import org.craftsmenlabs.stories.api.models.scrumitems.Bug;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
 
 import java.util.Map;
 
 public class BugConverter extends AbstractJiraConverter<Bug> {
-    public BugConverter(FieldMappingConfig config) {
-        super(config);
+    public BugConverter(FieldMappingConfig config, SourceConfig sourceConfig) {
+        super(config, sourceConfig);
     }
 
     @Override
@@ -21,6 +22,7 @@ public class BugConverter extends AbstractJiraConverter<Bug> {
 
         bug.setRank((String) jiraJsonIssue.getFields().getAdditionalProperties().get(config.getRank()));
         bug.setSummary(jiraJsonIssue.getFields().getSummary());
+        bug.setExternalURI(jiraJsonIssue.getSelf());
         bug.setDescription(jiraJsonIssue.getFields().getDescription());
         bug.setPriority(jiraJsonIssue.getFields().getPriority().getName());
         bug.setAcceptationCriteria((String) props.get(config.getBug().getAcceptationCriteria()));

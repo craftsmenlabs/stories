@@ -2,6 +2,7 @@ package org.craftsmenlabs.stories.isolator.parser.converters.jira;
 
 import org.apache.commons.lang3.StringUtils;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
+import org.craftsmenlabs.stories.api.models.config.SourceConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
 import org.craftsmenlabs.stories.api.models.scrumitems.TeamTask;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
@@ -13,8 +14,8 @@ import java.util.Map;
 public class TeamTaskConverter extends AbstractJiraConverter<TeamTask> {
     private final Logger logger = LoggerFactory.getLogger(TeamTaskConverter.class);
 
-    public TeamTaskConverter(FieldMappingConfig config) {
-        super(config);
+    public TeamTaskConverter(FieldMappingConfig config, SourceConfig sourceConfig) {
+        super(config, sourceConfig);
     }
 
     public TeamTask convert(JiraJsonIssue jiraJsonIssue) {
@@ -22,6 +23,7 @@ public class TeamTaskConverter extends AbstractJiraConverter<TeamTask> {
 
         teamTask.setKey(jiraJsonIssue.getKey());
         teamTask.setSummary(jiraJsonIssue.getFields().getSummary());
+        teamTask.setExternalURI(jiraJsonIssue.getSelf());
         teamTask.setDescription(jiraJsonIssue.getFields().getDescription());
         getAcceptanceCriteria(teamTask, jiraJsonIssue);
 

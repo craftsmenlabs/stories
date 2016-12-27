@@ -6,6 +6,7 @@ public class RetrieveTestData {
     public static Feature getJiraTestIssueFromResource() {
         return Feature.builder()
                 .summary("interslice")
+                .externalURI("http://jira.foo.bar/projects/EPM/issues/EPM-512")
                 .userstory(
                         "As a super office user " +
                                 "I would like to be informed about the alarms in my user " +
@@ -37,6 +38,7 @@ public class RetrieveTestData {
                 )
                 .rank("0")
                 .key("581b199ba7dfd7e8f737262c")
+                .externalURI("https://trello.com/c/TjrGg23O/52-this-should-succeed")
                 .estimation(0f)
                 .build();
     }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.FilterConfig;
+import org.craftsmenlabs.stories.api.models.config.SourceConfig;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
@@ -32,7 +33,18 @@ public class RunIntegrationTest {
                         .epic(FieldMappingConfig.EpicMapping.builder().goal("customfield_114007").build())
                         .build();
 
-        JiraJsonParser jiraJsonParser = new JiraJsonParser(fieldMappingConfig, FilterConfig.builder().status("To Do").build());
+        JiraJsonParser jiraJsonParser =
+                new JiraJsonParser(
+                        fieldMappingConfig,
+                        FilterConfig.builder()
+                                .status("To Do")
+                                .build(),
+                        SourceConfig.builder()
+                                .jira(SourceConfig.JiraConfig.builder()
+                                        .url("http://jira.foo.bar")
+                                        .projectKey("EPM")
+                                        .build())
+                                .build());
         String testData = readFile("jira-integration-test.json");
         Feature testResult = RetrieveTestData.getJiraTestIssueFromResource();
 

@@ -30,7 +30,9 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -46,6 +48,7 @@ public class importJiraJson {
     private StorynatorConfig storynatorConfig;
 
 
+//    @Ignore
     @Test
     public void importData() {
         Files.fileNamesIn(storynatorConfig.getSource().getFile().getLocation(), false).stream()
@@ -69,7 +72,20 @@ public class importJiraJson {
                             "Example:  projectToken_2016-02-13_16-00.json\n");
         }
 
-        String projectToken = split[0];
+        //generate a random token in the dashboard,
+        // then insert the old token and the new one here.
+        //Do not commit this
+        Map<String, String> tokenNameMapping = new HashMap<String, String>(){{
+            put("androidApp", "585a5cb28ed75e37a1433198");
+            put("examples-2", "58623cf57dcf040438669e96");
+            put("App"       , "585a5ce28ed75e37a143319b");
+            put("examples"  , "58623cf27dcf040438669e95");
+            put("sales"     , "58623cec7dcf040438669e94");
+            put("webshop"   , "585a5cb68ed75e37a1433199");
+            put("WebshopBE" , "585be3d7fee17365ea781d02");
+        }};
+
+        String projectToken = tokenNameMapping.getOrDefault(split[0], split[0]);
         System.out.println("project token: " + projectToken);
 
         String date = split[1];
@@ -99,7 +115,7 @@ public class importJiraJson {
             e.printStackTrace();
         }
 
-        JiraJsonParser jiraJsonParser = new JiraJsonParser(fieldMappingConfigCopy, storynatorConfig.getFilter());
+        JiraJsonParser jiraJsonParser = new JiraJsonParser(fieldMappingConfigCopy, storynatorConfig.getFilter(), storynatorConfig.getSource());
 
         Backlog backlog = jiraJsonParser.parse(jiraBacklog);
 

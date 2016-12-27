@@ -2,6 +2,7 @@ package org.craftsmenlabs.stories.isolator.parser.converters.jira;
 
 import org.apache.commons.lang3.StringUtils;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
+import org.craftsmenlabs.stories.api.models.config.SourceConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
 import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
 import org.craftsmenlabs.stories.isolator.SentenceSplitter;
@@ -16,8 +17,8 @@ public class FeatureConverter extends AbstractJiraConverter<Feature> {
 
     private final SentenceSplitter sentenceSplitter = new SentenceSplitter();
 
-    public FeatureConverter(FieldMappingConfig config) {
-        super(config);
+    public FeatureConverter(FieldMappingConfig config, SourceConfig sourceConfig) {
+        super(config, sourceConfig);
     }
 
     public Feature convert(JiraJsonIssue jiraJsonIssue) {
@@ -30,6 +31,12 @@ public class FeatureConverter extends AbstractJiraConverter<Feature> {
 
         feature.setSummary(jiraJsonIssue.getFields().getSummary());
         feature.setKey(jiraJsonIssue.getKey());
+
+        feature.setExternalURI(
+                        sourceConfig.getJira().getUrl() +
+                        "/projects/" + sourceConfig.getJira().getProjectKey() +
+                        "/issues/" + jiraJsonIssue.getKey()
+        );
         getAcceptanceCriteria(feature, jiraJsonIssue);
 
         Map<String, Object> additionalProps = jiraJsonIssue.getFields().getAdditionalProperties();

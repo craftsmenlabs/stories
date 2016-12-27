@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.FilterConfig;
+import org.craftsmenlabs.stories.api.models.config.SourceConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.api.models.scrumitems.Bug;
@@ -34,7 +35,14 @@ public class JiraJsonParserTest {
             .status("To Do")
             .build();
 
-    private JiraJsonParser jiraJsonParser = new JiraJsonParser(fieldMappingConfigCopy, filterConfig);
+    private SourceConfig sourceConfig = SourceConfig.builder()
+            .jira(SourceConfig.JiraConfig.builder()
+                    .url("http://jira.x.nl")
+                    .projectKey("testKey")
+                    .build()
+            ).build();
+
+    private JiraJsonParser jiraJsonParser = new JiraJsonParser(fieldMappingConfigCopy, filterConfig, sourceConfig);
 
 
     @Test
@@ -133,6 +141,16 @@ public class JiraJsonParserTest {
                 backlog.getFeatures().get(0).getUserstory());
 
     }
+
+    @Test
+    public void testGetJiraJsonissuesBuildsCorrectIssueURL() throws Exception {
+
+        String json = readFile("jira-one-story-with-acceptance-criteria-test.json");
+        Backlog backlog = jiraJsonParser.parse(mapper.readValue(json, JiraBacklog.class));
+
+        assertThat(backlog.getFeatures().get(0).getExternalURI()).isEqualTo("http://jira.x.nl/projects/testKey/issues/DIU-726");
+    }
+
 
     private String readFile(String resource) throws Exception {
         URL url = this.getClass().getClassLoader().getResource(resource);

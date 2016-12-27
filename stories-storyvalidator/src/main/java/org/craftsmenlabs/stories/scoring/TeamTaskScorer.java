@@ -33,7 +33,7 @@ public class TeamTaskScorer {
 
 
         if (teamTask == null) {
-            teamTask = new TeamTask("0", "0", "", "", "", 0f);
+            teamTask = new TeamTask("0", "0", "", "", "", "", 0f);
         }
 
         if (StringUtils.isEmpty(teamTask.getSummary())) {

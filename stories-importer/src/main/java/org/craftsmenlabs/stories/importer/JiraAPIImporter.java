@@ -34,7 +34,16 @@ public class JiraAPIImporter implements Importer {
         this.username = jiraConfig.getUsername();
         this.password = jiraConfig.getPassword();
 
-        this.parser = new JiraJsonParser(storynatorConfig.getFieldMapping(), storynatorConfig.getFilter());
+        this.parser = new JiraJsonParser(
+                storynatorConfig.getFieldMapping(),
+                storynatorConfig.getFilter(),
+                SourceConfig.builder()
+                .jira(SourceConfig.JiraConfig.builder()
+                            .projectKey("")
+                            .url("")
+                            .build())
+                        .build()
+        );
     }
 
     @Override

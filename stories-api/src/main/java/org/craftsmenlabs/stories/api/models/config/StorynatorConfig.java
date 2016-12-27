@@ -16,6 +16,8 @@ public class StorynatorConfig {
     private FilterConfig filter;
     private FieldMappingConfig fieldMapping;
 
+    //used in the gareth dashboard
+    @SuppressWarnings("unused")
     public static StorynatorConfig createDefault() {
         return StorynatorConfig.builder()
                 .fieldMapping(

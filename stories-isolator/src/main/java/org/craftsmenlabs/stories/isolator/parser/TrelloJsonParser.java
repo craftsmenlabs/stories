@@ -21,10 +21,10 @@ public class TrelloJsonParser {
         for (int i = 0; i < trelloJsonIssues.size(); i++) {
             TrelloJsonIssue trelloJsonIssue = trelloJsonIssues.get(i);
 
-
             String content = trelloJsonIssue.getDesc().length() == 0 ? trelloJsonIssue.getName() : trelloJsonIssue.getDesc();
             Feature feature = sentenceSplitter.splitSentence(new Feature(), content);
             feature.setKey(trelloJsonIssue.getId());
+            feature.setExternalURI(trelloJsonIssue.getUrl());
 
             String rankString = String.valueOf(i);
 
