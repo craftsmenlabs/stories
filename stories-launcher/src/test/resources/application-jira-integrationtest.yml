@@ -29,6 +29,9 @@ field-mapping:
         reproduction-path: "customfield_10403"
         software: "customfield_10404"
         expected-behavior: "customfield_10405"
+    team-task:
+        estimation: "customfield_11400"
+        acceptance-criteria: "customfield_10402"
 
 validation:
     backlog:
@@ -49,8 +52,11 @@ validation:
     bug:
         fill-fields: ["priority"]
         active: false
+    team-task:
+        ratingtreshold: 0.6
+        active: false
     criteria:
-        ratingtreshold: 0.7
+        rating-treshold: 0.7
         active: false
         givenKeywords: ["given"]
         whenKeywords: ["when"]

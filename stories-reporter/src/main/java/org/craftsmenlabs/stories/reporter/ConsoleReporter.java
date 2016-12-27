@@ -73,16 +73,27 @@ public class ConsoleReporter implements Reporter
 
         //verbose output
         List<FeatureValidatorEntry> features = backlogValidatorEntry.getFeatureValidatorEntries().getItems();
-        features.forEach(this::reportOnIssue);
-
+        if(features != null) {
+            features.forEach(this::reportOnIssue);
+        }
         // Log bugs
 
         List<BugValidatorEntry> bugs = backlogValidatorEntry.getBugValidatorEntries().getItems();
-        bugs.forEach(this::reportOnBug);
+        if(bugs != null) {
+            bugs.forEach(this::reportOnBug);
+        }
 
         // Log epics
         List<EpicValidatorEntry> epics = backlogValidatorEntry.getEpicValidatorEntries().getItems();
-        epics.forEach(this::reportOnEpic);
+        if(epics != null) {
+            epics.forEach(this::reportOnEpic);
+        }
+
+        // Log epics
+        List<TeamTaskValidatorEntry> teamTasks = backlogValidatorEntry.getTeamTaskValidatorEntries().getItems();
+        if(teamTasks != null) {
+            teamTasks.forEach(this::reportOnTeamTask);
+        }
 
         //show backlog violations
         log("------------------------------------------------------------");
@@ -167,6 +178,24 @@ public class ConsoleReporter implements Reporter
         );
         log(epic.getEpic().getSummary());
         reportOnViolations(epic.getViolations());
+    }
+
+    public void reportOnTeamTask(TeamTaskValidatorEntry teamTask) {
+        prefix = teamTask.getRating() == Rating.SUCCESS ? ANSI_GREEN : ANSI_RED;
+        log("------------------------------------------------------------");
+        log("teamTask "
+                + teamTask.getTeamTask().getKey()
+                + " Item total ("
+                + decimalFormat.format(teamTask.getPointsValuation() * 100)
+                + "/"
+                + MAX_SCORE
+                + ") \t"
+        );
+        log("Summary: " + teamTask.getTeamTask().getSummary());
+        log("Description: " + teamTask.getTeamTask().getDescription());
+        log("Criteria: " + teamTask.getTeamTask().getAcceptationCriteria());
+        log("Estimation: " + Float.toString(teamTask.getTeamTask().getEstimation()));
+        reportOnViolations(teamTask.getViolations());
     }
 
     public void reportOnUserstory(UserStoryValidatorEntry entry){

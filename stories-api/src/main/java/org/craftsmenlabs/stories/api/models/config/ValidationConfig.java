@@ -32,6 +32,9 @@ public class ValidationConfig {
     @JsonProperty("epic")
     private EpicValidatorEntry epic;
 
+    @JsonProperty("teamTask")
+    private ValidatorEntry teamTask;
+
     @Data
     public static class ValidatorEntry {
         private float ratingThreshold;

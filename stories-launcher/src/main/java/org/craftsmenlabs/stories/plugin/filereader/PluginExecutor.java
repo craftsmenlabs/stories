@@ -76,7 +76,7 @@ public class PluginExecutor {
         BacklogValidatorEntry backlogValidatorEntry = BacklogScorer.performScorer(backlog, new CurvedRanking(), validationConfig);
 
         if ((backlogValidatorEntry.getBacklog().getBugs() == null || backlogValidatorEntry.getBacklog().getBugs().size() == 0)
-                && (backlogValidatorEntry.getBacklog().getFeatures() == null || backlogValidatorEntry.getBacklog().getFeatures().size() == 0)) {
+          && (backlogValidatorEntry.getBacklog().getFeatures() == null || backlogValidatorEntry.getBacklog().getFeatures().size() == 0)) {
             throw new StoriesException("Sorry. No items to be found in de backlog for Storynator to process. Exiting Storynator.");
         }
 
@@ -93,7 +93,6 @@ public class PluginExecutor {
             reporter.report(storiesRun);
         }
 
-        //Multiply by 100%
         return backlogValidatorEntry.getRating();
     }
 

@@ -9,29 +9,34 @@ import org.craftsmenlabs.stories.api.models.violation.Violation;
 import java.util.Arrays;
 import java.util.List;
 
+
 public class BacklogValidatorEntry extends AbstractScorable {
 
     @JsonProperty("backlog")
     private Backlog backlog;
 
     @JsonProperty("featureValidatorEntries")
-    private BacklogItemList<FeatureValidatorEntry> featureValidatorEntries;
+    private BacklogItemList<FeatureValidatorEntry> featureValidatorEntries = new BacklogItemList<>();
 
     @JsonProperty("bugValidatorEntries")
-    private BacklogItemList<BugValidatorEntry> bugValidatorEntries;
+    private BacklogItemList<BugValidatorEntry> bugValidatorEntries = new BacklogItemList<>();
 
     @JsonProperty("epicValidatorEntries")
-    private BacklogItemList<EpicValidatorEntry> epicValidatorEntries;
+    private BacklogItemList<EpicValidatorEntry> epicValidatorEntries = new BacklogItemList<>();
+
+    @JsonProperty("teamTaskValidatorEntries")
+    private BacklogItemList<TeamTaskValidatorEntry> teamTaskValidatorEntries = new BacklogItemList<>();
 
     public BacklogValidatorEntry() {
     }
 
-    public BacklogValidatorEntry(float pointsValuation, List<Violation> violations, Rating rating, Backlog backlog, BacklogItemList<FeatureValidatorEntry> featureValidatorEntries, BacklogItemList<BugValidatorEntry> bugValidatorEntries, BacklogItemList<EpicValidatorEntry> epicValidatorEntries) {
+    public BacklogValidatorEntry(float pointsValuation, List<Violation> violations, Rating rating, Backlog backlog, BacklogItemList<FeatureValidatorEntry> featureValidatorEntries, BacklogItemList<BugValidatorEntry> bugValidatorEntries, BacklogItemList<EpicValidatorEntry> epicValidatorEntries, BacklogItemList<TeamTaskValidatorEntry> teamTaskValidatorEntries) {
         super(pointsValuation, violations, rating);
         this.backlog = backlog;
         this.featureValidatorEntries = featureValidatorEntries;
         this.bugValidatorEntries = bugValidatorEntries;
         this.epicValidatorEntries = epicValidatorEntries;
+        this.teamTaskValidatorEntries = teamTaskValidatorEntries;
     }
 
     public static BacklogValidatorEntryBuilder builder() {
@@ -40,7 +45,7 @@ public class BacklogValidatorEntry extends AbstractScorable {
 
     @JsonIgnore
     public List<? super BacklogItem> getAllValidatorEntries(){
-        return Arrays.asList(featureValidatorEntries, bugValidatorEntries, epicValidatorEntries);
+        return Arrays.asList(featureValidatorEntries, bugValidatorEntries, epicValidatorEntries, teamTaskValidatorEntries);
     }
 
     public BacklogValidatorEntry(float pointsValuation,
@@ -49,7 +54,8 @@ public class BacklogValidatorEntry extends AbstractScorable {
                                  Backlog backlog,
                                  List<FeatureValidatorEntry> featureValidatorEntries,
                                  List<BugValidatorEntry> bugValidatorEntries,
-                                 List<EpicValidatorEntry> epicValidatorEntries
+                                 List<EpicValidatorEntry> epicValidatorEntries,
+                                 List<TeamTaskValidatorEntry> teamTaskValidatorEntries
     ) {
         super(pointsValuation, violations, rating);
         this.backlog = backlog;
@@ -57,6 +63,8 @@ public class BacklogValidatorEntry extends AbstractScorable {
         this.featureValidatorEntries = BacklogItemList.<FeatureValidatorEntry>builder().items(featureValidatorEntries).build();
         this.bugValidatorEntries     = BacklogItemList.<BugValidatorEntry>builder().items(bugValidatorEntries).build();
         this.epicValidatorEntries    = BacklogItemList.<EpicValidatorEntry>builder().items(epicValidatorEntries).build();
+        this.teamTaskValidatorEntries= BacklogItemList.<TeamTaskValidatorEntry>builder().items(teamTaskValidatorEntries).build();
+
     }
 
     public Backlog getBacklog() {
@@ -75,6 +83,10 @@ public class BacklogValidatorEntry extends AbstractScorable {
         return this.epicValidatorEntries;
     }
 
+    public BacklogItemList<TeamTaskValidatorEntry> getTeamTaskValidatorEntries() {
+        return this.teamTaskValidatorEntries;
+    }
+
     public void setBacklog(Backlog backlog) {
         this.backlog = backlog;
     }
@@ -91,81 +103,21 @@ public class BacklogValidatorEntry extends AbstractScorable {
         this.epicValidatorEntries = epicValidatorEntries;
     }
 
-    public boolean equals(Object o) {
-        if (o == this) return true;
-        if (!(o instanceof BacklogValidatorEntry)) return false;
-        final BacklogValidatorEntry other = (BacklogValidatorEntry) o;
-        if (!other.canEqual((Object) this)) return false;
-        final Object this$backlog = this.getBacklog();
-        final Object other$backlog = other.getBacklog();
-        if (this$backlog == null ? other$backlog != null : !this$backlog.equals(other$backlog)) return false;
-        final Object this$featureValidatorEntries = this.getFeatureValidatorEntries();
-        final Object other$featureValidatorEntries = other.getFeatureValidatorEntries();
-        if (this$featureValidatorEntries == null ? other$featureValidatorEntries != null : !this$featureValidatorEntries.equals(other$featureValidatorEntries))
-            return false;
-        final Object this$bugValidatorEntries = this.getBugValidatorEntries();
-        final Object other$bugValidatorEntries = other.getBugValidatorEntries();
-        if (this$bugValidatorEntries == null ? other$bugValidatorEntries != null : !this$bugValidatorEntries.equals(other$bugValidatorEntries))
-            return false;
-        final Object this$epicValidatorEntries = this.getEpicValidatorEntries();
-        final Object other$epicValidatorEntries = other.getEpicValidatorEntries();
-        if (this$epicValidatorEntries == null ? other$epicValidatorEntries != null : !this$epicValidatorEntries.equals(other$epicValidatorEntries))
-            return false;
-        return true;
-    }
-
-    public int hashCode() {
-        final int PRIME = 59;
-        int result = 1;
-        final Object $backlog = this.getBacklog();
-        result = result * PRIME + ($backlog == null ? 43 : $backlog.hashCode());
-        final Object $featureValidatorEntries = this.getFeatureValidatorEntries();
-        result = result * PRIME + ($featureValidatorEntries == null ? 43 : $featureValidatorEntries.hashCode());
-        final Object $bugValidatorEntries = this.getBugValidatorEntries();
-        result = result * PRIME + ($bugValidatorEntries == null ? 43 : $bugValidatorEntries.hashCode());
-        final Object $epicValidatorEntries = this.getEpicValidatorEntries();
-        result = result * PRIME + ($epicValidatorEntries == null ? 43 : $epicValidatorEntries.hashCode());
-        return result;
-    }
-
-    protected boolean canEqual(Object other) {
-        return other instanceof BacklogValidatorEntry;
-    }
-
-    public String toString() {
-        return "org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry(backlog=" + this.getBacklog() + ", featureValidatorEntries=" + this.getFeatureValidatorEntries() + ", bugValidatorEntries=" + this.getBugValidatorEntries() + ", epicValidatorEntries=" + this.getEpicValidatorEntries() + ")";
+    public void setTeamTaskValidatorEntries(BacklogItemList<TeamTaskValidatorEntry> teamTaskValidatorEntries) {
+        this.teamTaskValidatorEntries = teamTaskValidatorEntries;
     }
 
     public static class BacklogValidatorEntryBuilder {
         private Backlog backlog;
-        private BacklogItemList<FeatureValidatorEntry> featureValidatorEntries;
-        private BacklogItemList<BugValidatorEntry> bugValidatorEntries;
-        private BacklogItemList<EpicValidatorEntry> epicValidatorEntries;
+        private BacklogItemList<FeatureValidatorEntry> featureValidatorEntries = new BacklogItemList<>();
+        private BacklogItemList<BugValidatorEntry> bugValidatorEntries = new BacklogItemList<>();
+        private BacklogItemList<EpicValidatorEntry> epicValidatorEntries = new BacklogItemList<>();
+        private BacklogItemList<TeamTaskValidatorEntry> teamTaskValidatorEntries = new BacklogItemList<>();
         private float pointsValuation = 0.0f;
         private List<Violation> violations;
         private Rating rating;
 
         BacklogValidatorEntryBuilder() {
-        }
-
-        public BacklogValidatorEntry.BacklogValidatorEntryBuilder backlog(Backlog backlog) {
-            this.backlog = backlog;
-            return this;
-        }
-
-        public BacklogValidatorEntry.BacklogValidatorEntryBuilder featureValidatorEntries(BacklogItemList<FeatureValidatorEntry> featureValidatorEntries) {
-            this.featureValidatorEntries = featureValidatorEntries;
-            return this;
-        }
-
-        public BacklogValidatorEntry.BacklogValidatorEntryBuilder bugValidatorEntries(BacklogItemList<BugValidatorEntry> bugValidatorEntries) {
-            this.bugValidatorEntries = bugValidatorEntries;
-            return this;
-        }
-
-        public BacklogValidatorEntry.BacklogValidatorEntryBuilder epicValidatorEntries(BacklogItemList<EpicValidatorEntry> epicValidatorEntries) {
-            this.epicValidatorEntries = epicValidatorEntries;
-            return this;
         }
 
 
@@ -187,12 +139,37 @@ public class BacklogValidatorEntry extends AbstractScorable {
         }
 
 
+        public BacklogValidatorEntry.BacklogValidatorEntryBuilder backlog(Backlog backlog) {
+            this.backlog = backlog;
+            return this;
+        }
+
+        public BacklogValidatorEntry.BacklogValidatorEntryBuilder featureValidatorEntries(BacklogItemList<FeatureValidatorEntry> featureValidatorEntries) {
+            this.featureValidatorEntries = featureValidatorEntries;
+            return this;
+        }
+
+        public BacklogValidatorEntry.BacklogValidatorEntryBuilder bugValidatorEntries(BacklogItemList<BugValidatorEntry> bugValidatorEntries) {
+            this.bugValidatorEntries = bugValidatorEntries;
+            return this;
+        }
+
+        public BacklogValidatorEntry.BacklogValidatorEntryBuilder epicValidatorEntries(BacklogItemList<EpicValidatorEntry> epicValidatorEntries) {
+            this.epicValidatorEntries = epicValidatorEntries;
+            return this;
+        }
+
+        public BacklogValidatorEntry.BacklogValidatorEntryBuilder teamTaskValidatorEntries(BacklogItemList<TeamTaskValidatorEntry> teamTaskValidatorEntries) {
+            this.teamTaskValidatorEntries = teamTaskValidatorEntries;
+            return this;
+        }
+
         public BacklogValidatorEntry build() {
-            return new BacklogValidatorEntry(pointsValuation, violations, rating, backlog, featureValidatorEntries, bugValidatorEntries, epicValidatorEntries);
+            return new BacklogValidatorEntry(pointsValuation, violations, rating, backlog, featureValidatorEntries, bugValidatorEntries, epicValidatorEntries, teamTaskValidatorEntries);
         }
 
         public String toString() {
-            return "org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry.BacklogValidatorEntryBuilder(backlog=" + this.backlog + ", featureValidatorEntries=" + this.featureValidatorEntries + ", bugValidatorEntries=" + this.bugValidatorEntries + ", epicValidatorEntries=" + this.epicValidatorEntries + ")";
+            return "org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry.BacklogValidatorEntryBuilder(backlog=" + this.backlog + ", featureValidatorEntries=" + this.featureValidatorEntries + ", bugValidatorEntries=" + this.bugValidatorEntries + ", epicValidatorEntries=" + this.epicValidatorEntries + ", teamTaskValidatorEntries=" + this.teamTaskValidatorEntries + ")";
         }
     }
 }

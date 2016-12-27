@@ -17,6 +17,7 @@ public class SpringValidationConfig {
     private EstimationValidatorConfig estimation;
     private BugValidatorConfig bug;
     private EpicValidatorConfig epic;
+    private TeamTaskValidatorConfig teamTask;
 
     public ValidationConfig convert() {
         ValidationConfig validationConfig = new ValidationConfig();
@@ -28,6 +29,7 @@ public class SpringValidationConfig {
         validationConfig.setEstimation(this.getEstimation().convert());
         validationConfig.setBug(this.getBug().convert());
         validationConfig.setEpic(this.getEpic().convert());
+        validationConfig.setTeamTask(this.getTeamTask().convert());
 
         return validationConfig;
     }
