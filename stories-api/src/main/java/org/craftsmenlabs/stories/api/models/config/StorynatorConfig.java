@@ -17,7 +17,7 @@ public class StorynatorConfig {
     private FieldMappingConfig fieldMapping;
 
     public static StorynatorConfig createDefault() {
-        return StorynatorConfig.builder()
+        StorynatorConfig config = StorynatorConfig.builder()
                 .fieldMapping(
                         FieldMappingConfig.builder()
                                 .rank("")
@@ -29,13 +29,13 @@ public class StorynatorConfig {
                 )
                 .validation(
                         ValidationConfig.builder()
-                                .backlog(new ValidationConfig.ValidatorEntry())
-                                .feature(new ValidationConfig.ValidatorEntry())
+                                .backlog(new ValidationConfig.ValidatorEntry(60, true))
+                                .feature(new ValidationConfig.ValidatorEntry(0.6f, true))
                                 .bug(new ValidationConfig.BugValidatorEntry())
                                 .criteria(new ValidationConfig.CriteriaValidatorEntry())
-                                .estimation(new ValidationConfig.ValidatorEntry())
+                                .estimation(new ValidationConfig.ValidatorEntry(0.6f, true))
                                 .epic(new ValidationConfig.EpicValidatorEntry())
-                                .teamTask(new ValidationConfig.ValidatorEntry())
+                                .teamTask(new ValidationConfig.ValidatorEntry(0.6f, true))
                                 .build()
 
                 )
@@ -48,5 +48,14 @@ public class StorynatorConfig {
                 )
                 .filter(FilterConfig.builder().status("To Do").build())
                 .build();
+
+        config.getValidation().getBug().setActive(true);
+        config.getValidation().getBug().setRatingThreshold(0.6f);
+        config.getValidation().getEpic().setActive(true);
+        config.getValidation().getEpic().setRatingThreshold(0.6f);
+        config.getValidation().getCriteria().setActive(true);
+        config.getValidation().getCriteria().setRatingThreshold(0.6f);
+
+        return config;
     }
 }
