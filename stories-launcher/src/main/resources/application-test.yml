@@ -3,63 +3,73 @@ spring:
     active: test
     include: enterprise
 
-source:
+storynator:
+  source:
     enabled: file
 
     file:
-        location: /Users/youritjang/Downloads/demo-project3
-report:
-  dashboard:
-    enabled: true
-    url: http://cmidevserv.nl
-    token:
-  file:
-    enabled: true
-    location: /Users/youritjang/Downloads/demo-project2/dump.json
+      location: /Users/youritjang/Downloads/demo-project
 
-filters:
-    status: "To Do"
+    jira:
+        url: http://jira-url-here.net
+        project-key: GAR
+        auth-key: KEY
+  report:
+    dashboard:
+      enabled: false
+      url: http://localhost:8090
+      token:
+    file:
+      enabled: false
+      location: /Users/youritjang/Downloads/demo-project2/dump.json
 
-field-mapping:
-    rank: "customfield_11400"
-    feature:
-        estimation: "customfield_11400"
-        acceptanceCriteria: "customfield_10502"
-    bug:
-        reproductionPath: "customfield_13001"
-        software: "customfield_13002"
-        expectedBehavior: "customfield_13003"
-        acceptationCriteria: "customfield_13004"
+  filter:
+      status: "To Do"
 
-    epic:
-        goal: "customfield_12001"
+  field-mapping:
+      rank: "customfield_11400"
+      feature:
+          estimation: "customfield_11400"
+          acceptance-criteria: "customfield_10502"
+      bug:
+          reproduction-path: "customfield_13001"
+          software: "customfield_13002"
+          expected-behavior: "customfield_13003"
+          acceptation-criteria: "customfield_13004"
+      epic:
+          goal: "customfield_12001"
+      team-task:
+          estimation: "customfield_11400"
+          acceptance-criteria: "customfield_10502"
 
-
-validation:
-        backlog:
-            rating-threshold: 60.0
-            active: true
-        feature:
-            rating-threshold: 0.8
-            active: true
-        story:
-            rating-threshold: 0.6
-            active: true
-            as-keywords: ["as a"]
-            i-keywords: ["i want to"]
-            so-keywords: ["so "]
-        criteria:
-            rating-threshold: 0.7
-            active: true
-            given-keywords: ["given"]
-            when-keywords: ["when"]
-            then-keywords: ["then"]
-        estimation:
-            rating-threshold: 0.7
-            active: false
-        bug:
-            active: true
-            filledWith: ["","component"]
-        epic:
-            rating-threshold: 0.7
-            active: false
+  validation:
+          backlog:
+              rating-threshold: 60.0
+              active: true
+          feature:
+              rating-threshold: 0.8
+              active: true
+          story:
+              rating-threshold: 0.6
+              active: true
+              as-keywords: ["as a"]
+              i-keywords: ["i want to"]
+              so-keywords: ["so "]
+          criteria:
+              rating-threshold: 0.7
+              active: true
+              given-keywords: ["given"]
+              when-keywords: ["when"]
+              then-keywords: ["then"]
+          estimation:
+              rating-threshold: 0.7
+              active: false
+          bug:
+              active: true
+              filledWith: ["","component"]
+          epic:
+              rating-threshold: 0.7
+              active: false
+          team-task:
+              rating-threshold: 0.8
+              active: true
