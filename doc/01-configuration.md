@@ -113,51 +113,6 @@ If you want to use the command-line arguments for various reasons, here is the f
 
 | Parameter | Default | Description | Valid Values |
 |-----------|---------|-------------|--------------|
-<<<<<<< Updated upstream
-| source.type| jira | The source API type | trello / jira |
-| source.jira.url | - | The URL of your JIRA installation | Any URL
-| source.jira.project-key | - | The key of the project which you want to validate | Any String |
-| source.jira.auth-key | - | Auth key, base64 encoded string containing _username:password_ | Any String |
-| source.trello.url | - | Trello url | Any URL |
-| source.trello.token | - | Trello API token| Any String|
-| source.trello.auth-key | - | Trello auth key | Any string |
-| source.trello.project-key | - | Trello project key | any string|
-| report.dashboard.enabled | false | Report result to dashboard. Enterprise feature. | true / false |
-| report.dashboard.url | - | Dashboard internet location | Any URL |
-| report.dashboard.token | - | Dashboard token | Any String |
-| report.file.enabled | false | Report result to file | true / false |
-| report.file.location | /path/to/file | File to write result to. Must be a file, not a directory | Any filepath |
-| filters.status | To Do | Only retrieve issues/cards with this status | Any String |
-| field-mapping.rank | - | Custom field the rank of your issue is in | Any String |
-| field-mapping.feature.estimation | - | Custom field the estimation of your user stories are in | Any String |
-| field-mapping.feature.acceptance-criteria | - | Custom field the estimation of your user stories are in | Any String |
-| field-mapping.bug.reproduction-path | - | Custom field the reproduction path of your bugs are in | Any String |
-| field-mapping.bug.software | - | Custom field the software of your bugs are in | Any String |
-| field-mapping.bug.expected-behavior | - | Custom field the expected behavior of your bugs are in | Any String |
-| field-mapping.bug.acceptance-criteria | - | Custom field the acceptance criteria of your bugs are in | Any String |
-| field-mapping.epic.goal | - | Custom field the goal of your epics are in | Any String
-| validation.backlog.rating-threshold | 60.0 | Minimal backlog score for a success rating | 0.0 - 100.0 (float) |
-| validation.feature.active | true | Whether to enable the validation of features (User Stories) | true / false |
-| validation.feature.rating-threshold | 0.7 | Minimal scores for a feature entry to be rated success | 0-1 (float) |
-| validation.criteria.active | false | Whether to enable the validation of acceptance criteria in your features (User Stories) | true / false |
-| validation.criteria.rating-threshold | 0.7 | Minimal scores for the acceptance criteria to be rated success | 0-1 (float) |
-| validation.criteria.given-keywords | ["given"] | Keywords used in your acceptance criteria for the given part | Array of Strings |
-| validation.criteria.when-keywords | ["when"] | Keywords used in your acceptance criteria for the when part | Array of Strings |
-| validation.criteria.then-keywords | ["then"] | Keywords used in your acceptance criteria for the then part | Array of Strings |
-| validation.estimation.active | false | Whether to enable the validation of estimation in your features (User Stories) | true / false |
-| validation.estimation.rating-threshold | 0.7 | Minimal scores for an estimation to be rated success | 0-1 (float) |
-| validation.story.active | true | Whether to enable the validation of stories in your features (User Stories) | true / false |
-| validation.story.rating-threshold | 0.7 | Minimal score for a story to be rated success | 0-1 (float) |
-| validation.story.as-keywords | ["as a"] | Keywords for the 'As a' part of your user stories | Array of Strings |
-| validation.story.i-keywords | ["i want"] | Keywords for the 'I want' part of your user stories | Array of Strings |
-| validation.story.so-keywords | ["so"] | Keywords for the 'So that' part of your user stories | Array of Strings |
-| validation.bug.active | true | Whether to enable validation of bugs in your backlog | true / false |
-| validation.bug.fill-fields | [See sample] | What fields to be filled for a maximum score on bugs | Array of strings |
-| validation.bug.rating-threshold | 0.7 | Minimal score for a bug to be marked success | 0-1 (float) |
-| validation.epic.active | true | Whether to enable validation of epics in your backlog | true / false |
-| validation.epic.fill-fields | [See sample] | What fields to be filled for a maximum score on epics | Array of strings |
-| validation.epic.rating-threshold | 0.7 | Minimal score for an epic to be marked success | 0-1 (float) |
-=======
 | storynator.source.type| jira | The source API type | trello / jira |
 | storynator.source.jira.url | - | The URL of your JIRA installation | Any URL
 | storynator.source.jira.project-key | - | The key of the project which you want to validate | Any String |
@@ -205,6 +160,5 @@ If you want to use the command-line arguments for various reasons, here is the f
 | storynator.validation.epic.active | true | Whether to enable validation of epics in your backlog | true / false |
 | storynator.validation.epic.fill-fields | [See sample] | What fields to be filled for a maximum score on epics | Array of strings |
 | storynator.validation.epic.rating-threshold | 0.7 | Minimal score for an epic to be marked success | 0-1 (float) |
->>>>>>> Stashed changes
 
 

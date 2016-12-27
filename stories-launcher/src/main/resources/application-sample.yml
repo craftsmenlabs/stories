@@ -12,6 +12,13 @@ storynator:
           token:
           auth-key:
           project-key:
+      github:
+          url:                                                  # URL to the GitHub API
+          project-key:                                          # Name of your project repository
+          auth-key:                                             # GitHub username of the owner of the repository
+          token:                                                # Personal access token of the owner
+
+
 
   ## The ouput data needs to be sent somewhere. There are multiple options available.
   report:
