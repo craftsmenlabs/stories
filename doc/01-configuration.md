@@ -17,7 +17,7 @@ To get the application up and running, you should at least supply the source sec
 ```yaml
 ## Source is the section where you declare your input API.
 source:
-    type: jira                                             # The type source of your application. Currently jira or trello
+    type: jira                                             	  # The type source of your application. Currently jira or trello
 
     jira:
         url: http://jira-url-here.net                         # URL to your JIRA environment
@@ -28,6 +28,12 @@ source:
         token:
         authKey:
         project-key:
+	github:
+		url:                                              	  # URL to the GitHub API
+		project-key:                                      	  # Name of your project repository
+		auth-key:                                         	  # GitHub username of the owner of the repository
+		token:                                            	  # Personal access token of the owner
+
 
 ## The ouput data needs to be sent somewhere. There are multiple options available.
 report:
@@ -114,6 +120,10 @@ If you want to use the command-line arguments for various reasons, here is the f
 | source.trello.token | - | Trello API token| Any String|
 | source.trello.auth-key | - | Trello auth key | Any string |
 | source.trello.project-key | - | Trello project key | any string|
+| source.github.url | - | GitHub url | any URL|
+| source.github.auth-key | - | GitHub auth key | any string|
+| source.github.project-key | - | GitHub project key | any string|
+| source.github.token | - | GitHub token | any string|
 | report.dashboard.enabled | false | Report result to dashboard. Enterprise feature. | true / false |
 | report.dashboard.url | - | Dashboard internet location | Any URL |
 | report.dashboard.token | - | Dashboard token | Any String |

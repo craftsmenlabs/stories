@@ -1,0 +1,58 @@
+spring:
+  profiles:
+    active: test
+    include: enterprise
+
+source:
+    type: github
+
+    github:
+        url:  https://api.github.com
+        projectKey: project
+        authKey: authKey
+        token: token
+
+report:
+  dashboard:
+    enabled: false
+    url:
+    token:
+
+filters:
+    status: "To Do"
+
+field_mapping:
+    rank: "customfield_10401"
+    feature:
+        estimation: "S"
+        acceptanceCriteria: "dadada"
+
+
+validation:
+    backlog:
+        ratingtreshold: 60.0
+    feature:
+        ratingtreshold: 0.7
+        active: true
+    story:
+        ratingtreshold: 0.6
+        active: true
+        asKeywords: ["As a"]
+        iKeywords: ["I want"]
+        soKeywords: ["so"]
+    bug:
+        filledWith: ["","component"]
+        active: false
+    epic:
+        active: false
+    criteria:
+        ratingtreshold: 0.7
+        active: false
+        givenKeywords: ["given"]
+        whenKeywords: ["when"]
+        thenKeywords: ["then"]
+    estimation:
+        ratingtreshold: 0.7
+        active: false
+
+
