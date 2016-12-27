@@ -16,90 +16,6 @@ To get the application up and running, you should at least supply the source sec
 
 ```yaml
 ## Source is the section where you declare your input API.
-<<<<<<< Updated upstream
-source:
-    type: jira                                             # The type source of your application. Currently jira or trello
-
-    jira:
-        url: http://jira-url-here.net                         # URL to your JIRA environment
-        project-key: GAR                                      # Your project key
-        auth-key: KEY                                         # Basic auth key. Base64 encoded string of {username}:{password}
-    trello:
-        url:                                                  # URL to your Trello environment
-        token:
-        authKey:
-        project-key:
-
-## The ouput data needs to be sent somewhere. There are multiple options available.
-report:
-  dashboard:
-    type: false
-    url: http://localhost:8090
-    token:
-  file:
-    type: false
-    location: /path/to/file
-
-## Filters define what information we should use to filter the issues.
-filters:
-    status: "To Do"
-
-## JIRA Agile uses custom fields to store some information it needs.
-## To use the Storynator to it's full potential, you should create additional fields that represent the different data of the issue.
-field-mapping:
-    rank: "customfield_11400"
-                                  # The rank field present in all issue types. Used for the curved ranking
-    feature:
-        estimation: "customfield_11402"
-        acceptance-criteria: "customfield_11403"
-    bug:
-        reproduction-path: "customfield_13001"
-        software: "customfield_13002"
-        expected-behavior: "customfield_13003"
-        acceptation-criteria: "customfield_13004"
-    epic:
-        goal: "customfield_13005"
-
-## Defines what parts of the validation are active. General ones are:
-##
-## rating-threshold: The amount of points needed for a SUCCESS rating. 0-100 for backlog and 0-1 for everything else
-## fill-fields: Determine score based on those fields filled.
-## active: Whether you want to enable this or not
-##
-##
-validation:
-    backlog:
-        rating-threshold: 60.0
-    feature:
-        active: true
-        rating-threshold: 0.7
-    story:
-        rating-threshold: 0.6
-        active: true
-
-        # Keywords in your user story. Normal format is: As a.... I want... So that..
-        as-keywords: ["as a"]
-        i-keywords: ["i want"]
-        so-keywords: ["so"]
-    bug:
-        active: true
-        fill-fields: ["priority", "reproduction", "software", "expected", "acceptation"]
-        rating-threshold: 0.7
-    epic:
-        active: true
-        fill-fields: ["goal"]
-    criteria:
-        rating-threshold: 0.7
-        active: false
-
-        # Keywords in your criteria. Normal format is: Given.. When... Then
-        given-keywords: ["given"]
-        when-keywords: ["when"]
-        then-keywords: ["then"]
-    estimation:
-        rating-threshold: 0.7
-        active: false
-=======
 storynator:
     source:
         type: jira                                             	  # The type source of your application. Currently jira, trello and github
@@ -189,7 +105,6 @@ storynator:
         estimation:
             rating-threshold: 0.7
             active: false
->>>>>>> Stashed changes
 
 ```
 
