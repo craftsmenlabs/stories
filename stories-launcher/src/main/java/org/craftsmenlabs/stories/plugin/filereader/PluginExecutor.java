@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.Reporter;
 import org.craftsmenlabs.stories.api.models.StoriesRun;
-import org.craftsmenlabs.stories.api.models.config.*;
+import org.craftsmenlabs.stories.api.models.config.ReportConfig;
+import org.craftsmenlabs.stories.api.models.config.SourceConfig;
+import org.craftsmenlabs.stories.api.models.config.StorynatorConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.api.models.summary.SummaryBuilder;
@@ -15,7 +17,7 @@ import org.craftsmenlabs.stories.connectivity.service.enterprise.EnterpriseDashb
 import org.craftsmenlabs.stories.importer.Importer;
 import org.craftsmenlabs.stories.importer.JiraAPIImporter;
 import org.craftsmenlabs.stories.importer.TrelloAPIImporter;
-import org.craftsmenlabs.stories.plugin.filereader.config.*;
+import org.craftsmenlabs.stories.plugin.filereader.config.EnterpriseConfig;
 import org.craftsmenlabs.stories.ranking.CurvedRanking;
 import org.craftsmenlabs.stories.reporter.ConsoleReporter;
 import org.craftsmenlabs.stories.reporter.JsonFileReporter;
@@ -38,44 +40,25 @@ import java.util.List;
 public class PluginExecutor {
     private final Logger logger = LoggerFactory.getLogger(PluginExecutor.class);
     private final Environment env;
-    private final SpringReportConfig springReportConfig;
-    private final SpringSourceConfig springSourceConfig;
-    private final SpringFilterConfig springFilterConfig;
-    private final SpringValidationConfig springValidationConfig;
-    private final SpringFieldMappingConfig springFieldMappingConfig;
-    private ValidationConfig validationConfig;
-    private FieldMappingConfig fieldMappingConfig;
-    private FilterConfig filterConfig;
-    private ReportConfig reportConfig;
-    private SourceConfig sourceConfig;
+    private final EnterpriseConfig enterpriseConfig;
+
+
+    @Autowired
+    private StorynatorConfig storynatorConfig;
 
     public Rating startApplication() {
         logger.info("Initializing Gareth Storynator");
 
-
-        if (this.springReportConfig.getDashboard().isEnabled()) {
+        if (enterpriseConfig.isEnabled()) {
             // We should retrieve settings there.
             this.loadSettingsFromEnterpriseDashboard();
-        } else {
-            // Validate configs
-            this.springReportConfig.validate();
-            this.springSourceConfig.validate();
-            this.springFieldMappingConfig.validate();
-
-            // Convert configs
-            validationConfig = springValidationConfig.convert();
-            fieldMappingConfig = springFieldMappingConfig.convert();
-            filterConfig = springFilterConfig.convert();
-            reportConfig = springReportConfig.convert();
-            sourceConfig = springSourceConfig.convert();
         }
-
         // Import the data
-        Importer importer = getImporter(sourceConfig.getType());
+        Importer importer = getImporter(storynatorConfig.getSource().getType());
         Backlog backlog = importer.getBacklog();
 
         // Perform the backlog validation
-        BacklogValidatorEntry backlogValidatorEntry = BacklogScorer.performScorer(backlog, new CurvedRanking(), validationConfig);
+        BacklogValidatorEntry backlogValidatorEntry = BacklogScorer.performScorer(backlog, new CurvedRanking(), storynatorConfig.getValidation());
 
         if ((backlogValidatorEntry.getBacklog().getBugs() == null || backlogValidatorEntry.getBacklog().getBugs().size() == 0)
                 && (backlogValidatorEntry.getBacklog().getFeatures() == null || backlogValidatorEntry.getBacklog().getFeatures().size() == 0)) {
@@ -86,7 +69,7 @@ public class PluginExecutor {
         StoriesRun storiesRun = StoriesRun.builder()
                 .summary(new SummaryBuilder().build(backlogValidatorEntry))
                 .backlogValidatorEntry(backlogValidatorEntry)
-                .runConfig(validationConfig)
+                .runConfig(storynatorConfig.getValidation())
                 .runDateTime(LocalDateTime.now())
                 .build();
 
@@ -104,15 +87,15 @@ public class PluginExecutor {
      * @param enabled source
      * @return Importer importer
      */
-    public Importer getImporter(String enabled) {
+    private Importer getImporter(String enabled) {
         switch (enabled) {
             case "jira":
-                SourceConfig.JiraConfig jiraConfig = sourceConfig.getJira();
+                SourceConfig.JiraConfig jiraConfig = storynatorConfig.getSource().getJira();
                 logger.info("Using JiraAPIImporter for import." + jiraConfig.getUrl());
-                return new JiraAPIImporter(jiraConfig.getUrl(), jiraConfig.getProjectKey(), jiraConfig.getAuthKey(), fieldMappingConfig, filterConfig);
+                return new JiraAPIImporter(storynatorConfig);
             case "trello":
                 logger.info("Using TrelloAPIImporter for import.");
-                SourceConfig.TrelloConfig trelloConfig = sourceConfig.getTrello();
+                SourceConfig.TrelloConfig trelloConfig = storynatorConfig.getSource().getTrello();
                 return new TrelloAPIImporter(trelloConfig.getUrl(), trelloConfig.getProjectKey(), trelloConfig.getAuthKey(), trelloConfig.getToken());
             default:
                 throw new StoriesException(StoriesException.ERR_SOURCE_ENABLED_MISSING);
@@ -126,14 +109,15 @@ public class PluginExecutor {
      */
     private List<Reporter> getReporters() {
         List<Reporter> reporters = new LinkedList<>();
-        reporters.add(new ConsoleReporter(this.validationConfig));
+        reporters.add(new ConsoleReporter(storynatorConfig.getValidation()));
         reporters.add(new SummaryConsoleReporter());
 
-        if (this.springReportConfig.getFile() != null && this.springReportConfig.getFile().isEnabled()) {
-            reporters.add(new JsonFileReporter(new File(this.springReportConfig.getFile().getLocation())));
+        ReportConfig reportConfig = storynatorConfig.getReport();
+        if (reportConfig.getFile() != null && reportConfig.getFile().isEnabled()) {
+            reporters.add(new JsonFileReporter(new File(reportConfig.getFile().getLocation())));
         }
 
-        if (this.springReportConfig.getDashboard() != null && this.springReportConfig.getDashboard().isEnabled()) {
+        if (reportConfig.getDashboard() != null && reportConfig.getDashboard().isEnabled()) {
             List<String> profiles = Arrays.asList(env.getActiveProfiles());
             if (profiles.contains("enterprise") && !profiles.contains("community")) {
                 logger.debug("Started enterprise version of reporter.");
@@ -151,11 +135,12 @@ public class PluginExecutor {
      *
      */
     private void loadSettingsFromEnterpriseDashboard() {
-        EnterpriseDashboardConfigRetriever.ConfigMapping mapping =
-                EnterpriseDashboardConfigRetriever.retrieveSettings(this.springReportConfig.getDashboard().getUrl(), this.springReportConfig.getDashboard().getToken());
+        try {
+            EnterpriseDashboardConfigRetriever dashboardConfigRetriever = new EnterpriseDashboardConfigRetriever();
+            this.storynatorConfig = dashboardConfigRetriever.retrieveSettings(enterpriseConfig.getUrl(), enterpriseConfig.getToken(), enterpriseConfig.getPassword());
 
-        this.fieldMappingConfig = mapping.getFieldMappingConfig();
-        this.filterConfig = mapping.getFilterConfig();
-        this.validationConfig = mapping.getValidationConfig();
+        } catch (Exception e) {
+            throw new StoriesException("Could not retrieve settings for the project: " + e.getMessage());
+        }
     }
 }

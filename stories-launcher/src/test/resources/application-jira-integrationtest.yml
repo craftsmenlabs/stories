@@ -3,66 +3,67 @@ spring:
     active: test
     include: enterprise
 
-source:
-    type: jira
+storynator:
+  source:
+      type: jira
 
-    jira:
-        url:  https://jira.com
-        authKey: authKey
-        projectKey: GAR
+      jira:
+          url:  https://jira.com
+          authKey: authKey
+          projectKey: GAR
 
-report:
-  dashboard:
-    enabled: false
-    url:
-    token:
+  report:
+    dashboard:
+      enabled: false
+      url:
+      token:
 
-filters:
-    status: "To Do"
+  filter:
+      status: "To Do"
 
-field-mapping:
-    rank: "customfield_10401"
-    feature:
-        estimation: "S"
-    bug:
-        acceptation-criteria: "customfield_10402"
-        reproduction-path: "customfield_10403"
-        software: "customfield_10404"
-        expected-behavior: "customfield_10405"
-    team-task:
-        estimation: "customfield_11400"
-        acceptance-criteria: "customfield_10402"
+  field-mapping:
+      rank: "customfield_10401"
+      feature:
+          estimation: "S"
+      bug:
+          acceptation-criteria: "customfield_10402"
+          reproduction-path: "customfield_10403"
+          software: "customfield_10404"
+          expected-behavior: "customfield_10405"
+      team-task:
+          estimation: "customfield_11400"
+          acceptance-criteria: "customfield_10402"
 
-validation:
-    backlog:
-        ratingtreshold: 60.0
-    feature:
-        ratingtreshold: 0.7
-        active: true
-    story:
-        ratingtreshold: 0.6
-        active: true
-        asKeywords: ["as a"]
-        iKeywords: ["i want"]
-        soKeywords: ["so"]
-    epic:
-        active: true
-        enabled-fields: ["goal"]
-        ratingtreshold: 0.7
-    bug:
-        fill-fields: ["priority"]
-        active: false
-    team-task:
-        ratingtreshold: 0.6
-        active: false
-    criteria:
-        rating-treshold: 0.7
-        active: false
-        givenKeywords: ["given"]
-        whenKeywords: ["when"]
-        thenKeywords: ["then"]
-    estimation:
-        ratingtreshold: 0.7
-        active: false
+  validation:
+      backlog:
+          ratingtreshold: 60.0
+      feature:
+          ratingtreshold: 0.7
+          active: true
+      story:
+          ratingtreshold: 0.6
+          active: true
+          asKeywords: ["as a"]
+          iKeywords: ["i want"]
+          soKeywords: ["so"]
+      epic:
+          active: true
+          enabled-fields: ["goal"]
+          ratingtreshold: 0.7
+      bug:
+          fill-fields: ["priority"]
+          active: false
+      team-task:
+          ratingtreshold: 0.6
+          active: false
+      criteria:
+          rating-treshold: 0.7
+          active: false
+          givenKeywords: ["given"]
+          whenKeywords: ["when"]
+          thenKeywords: ["then"]
+      estimation:
+          ratingtreshold: 0.7
+          active: false
 
 

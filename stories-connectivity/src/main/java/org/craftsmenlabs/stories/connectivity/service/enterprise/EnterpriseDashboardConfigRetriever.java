@@ -1,31 +1,25 @@
 package org.craftsmenlabs.stories.connectivity.service.enterprise;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
-import org.craftsmenlabs.stories.api.models.config.FilterConfig;
-import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
-import org.craftsmenlabs.stories.api.models.exception.StoriesException;
+import org.apache.commons.lang3.StringUtils;
+import org.craftsmenlabs.stories.api.models.config.SourceConfig;
+import org.craftsmenlabs.stories.api.models.config.StorynatorConfig;
 import org.springframework.web.client.RestTemplate;
 
 public class EnterpriseDashboardConfigRetriever {
-    public static ConfigMapping retrieveSettings(String baseUrl, String token) {
+    private RestTemplate restTemplate = new RestTemplate();
 
-        try {
-            RestTemplate template = new RestTemplate();
-            String url = baseUrl + "/api/import/v1/config/" + token;
-            return template.getForObject(url, ConfigMapping.class);
+    public StorynatorConfig retrieveSettings(String baseUrl, String token, String password) throws Exception {
 
-        } catch (Exception e) {
-            throw new StoriesException("Could not retrieve settings for the project: " + e.getMessage());
+        String url = baseUrl + "/api/import/v1/config/" + token;
+        StorynatorConfig storynatorConfig = restTemplate.getForObject(url, StorynatorConfig.class);
+
+        // Set auth tokens if needed
+        SourceConfig source = storynatorConfig.getSource();
+        if (StringUtils.equalsIgnoreCase("jira", source.getType()) && StringUtils.isNotEmpty(password)) {
+            source.getJira().setPassword(password);
         }
-    }
 
-    @Data
-    @NoArgsConstructor
-    public static class ConfigMapping {
-        private FilterConfig filterConfig;
-        private FieldMappingConfig fieldMappingConfig;
-        private ValidationConfig validationConfig;
+        return storynatorConfig;
+
     }
 }

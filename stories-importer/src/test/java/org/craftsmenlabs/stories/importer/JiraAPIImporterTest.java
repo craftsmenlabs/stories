@@ -7,6 +7,8 @@ import mockit.Mocked;
 import org.apache.commons.io.FileUtils;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.FilterConfig;
+import org.craftsmenlabs.stories.api.models.config.SourceConfig;
+import org.craftsmenlabs.stories.api.models.config.StorynatorConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
@@ -39,14 +41,15 @@ public class JiraAPIImporterTest {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    private JiraAPIImporter jiraAPIImporter = new JiraAPIImporter("http://foo.bar", "1", "key", fieldMappingConfigCopy, filterConfig);
+    private JiraAPIImporter jiraAPIImporter = new JiraAPIImporter(StorynatorConfig.builder().fieldMapping(fieldMappingConfigCopy).filter(filterConfig).source(SourceConfig.builder().jira(SourceConfig.JiraConfig.builder().url("").password("").username("").projectKey("HAR").build()).build()).build());
+
 
     @Mocked
     private RestTemplate restTemplate;
 
     @Test
     public void testSuccessResponse(@Injectable JiraRequest jiraRequest) throws Exception {
-        new Expectations(){{
+        new Expectations() {{
             restTemplate.postForObject(withAny(""), withAny(jiraRequest), withAny(JiraBacklog.class));
             result = objectMapper.readValue(readFile("jira-test.json"), JiraBacklog.class);
 
@@ -58,7 +61,7 @@ public class JiraAPIImporterTest {
 
     @Test(expected = StoriesException.class)
     public void testErrorResponse(@Injectable JiraRequest jiraRequest) throws Exception {
-        new Expectations(){{
+        new Expectations() {{
             restTemplate.postForObject(withAny(""), withAny(jiraRequest), withAny(JiraBacklog.class));
             result = new HttpClientErrorException(HttpStatus.BAD_REQUEST);
         }};

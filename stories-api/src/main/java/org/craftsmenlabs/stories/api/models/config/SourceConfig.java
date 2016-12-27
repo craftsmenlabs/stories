@@ -13,6 +13,7 @@ public class SourceConfig {
     private String type;
     private JiraConfig jira;
     private TrelloConfig trello;
+    private FileConfig file;
 
     @Data
     @Builder
@@ -20,7 +21,8 @@ public class SourceConfig {
     @AllArgsConstructor
     public static class JiraConfig {
         private String url;
-        private String authKey;
+        private String username;
+        private String password;
         private String projectKey;
     }
 
@@ -33,5 +35,13 @@ public class SourceConfig {
         private String token;
         private String authKey;
         private String projectKey;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class FileConfig {
+        private String location;
     }
 }

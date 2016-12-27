@@ -6,6 +6,7 @@ import org.assertj.core.util.Files;
 import org.craftsmenlabs.stories.api.models.StoriesRun;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.ReportConfig;
+import org.craftsmenlabs.stories.api.models.config.StorynatorConfig;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.api.models.summary.SummaryBuilder;
@@ -14,7 +15,6 @@ import org.craftsmenlabs.stories.connectivity.service.enterprise.EnterpriseDashb
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
 import org.craftsmenlabs.stories.plugin.filereader.BootApp;
-import org.craftsmenlabs.stories.plugin.filereader.config.*;
 import org.craftsmenlabs.stories.ranking.CurvedRanking;
 import org.craftsmenlabs.stories.scoring.BacklogScorer;
 import org.junit.Test;
@@ -43,20 +43,12 @@ import java.util.stream.Collectors;
 @TestPropertySource(locations = "classpath:application-test.yml")
 public class importJiraJson {
     @Autowired
-    private SpringSourceConfig springSourceConfig;
-    @Autowired
-    private SpringValidationConfig springValidationConfig;
-    @Autowired
-    private SpringFieldMappingConfig springFieldMappingConfig;
-    @Autowired
-    private SpringFilterConfig springFilterConfig;
-    @Autowired
-    private SpringReportConfig springReportConfig;
+    private StorynatorConfig storynatorConfig;
 
 
     @Test
     public void importData() {
-        Files.fileNamesIn(springSourceConfig.getFile().getLocation(), false).stream()
+        Files.fileNamesIn(storynatorConfig.getSource().getFile().getLocation(), false).stream()
                 .map(File::new)
                 .filter(file -> !file.getName().startsWith("."))
                 .forEach(this::importFile);
@@ -88,15 +80,15 @@ public class importJiraJson {
         System.out.println("date time: " + dateTime);
 
 
-        ValidationConfig validationConfig = springValidationConfig.convert();
+        ValidationConfig validationConfig = storynatorConfig.getValidation();
         System.out.println("validation config: " + validationConfig);
 
-        FieldMappingConfig fieldMappingConfigCopy = springFieldMappingConfig.convert();
-        System.out.println("fieldmapping: "+ fieldMappingConfigCopy);
+        FieldMappingConfig fieldMappingConfigCopy = storynatorConfig.getFieldMapping();
+        System.out.println("fieldmapping: " + fieldMappingConfigCopy);
 
-        ReportConfig reportConfig = springReportConfig.convert();
+        ReportConfig reportConfig = storynatorConfig.getReport();
         reportConfig.getDashboard().setToken(projectToken);
-        System.out.println("reporting config: "+ reportConfig);
+        System.out.println("reporting config: " + reportConfig);
 
 
         ObjectMapper mapper = new ObjectMapper();
@@ -107,7 +99,7 @@ public class importJiraJson {
             e.printStackTrace();
         }
 
-        JiraJsonParser jiraJsonParser = new JiraJsonParser(fieldMappingConfigCopy, springFilterConfig.convert());
+        JiraJsonParser jiraJsonParser = new JiraJsonParser(fieldMappingConfigCopy, storynatorConfig.getFilter());
 
         Backlog backlog = jiraJsonParser.parse(jiraBacklog);
 
