@@ -3,59 +3,60 @@ spring:
     active: test
     include: enterprise
 
-source:
-    type: trello
+storynator:
+  source:
+      type: trello
 
-    trello:
-        url:  https://trello.com
-        projectKey: project
-        authKey: authKey
-        token: token
+      trello:
+          url:  https://trello.com
+          projectKey: project
+          authKey: authKey
+          token: token
 
-report:
-  dashboard:
-    enabled: false
-    url:
-    token:
+  report:
+    dashboard:
+      enabled: false
+      url:
+      token:
 
-filters:
-    status: "To Do"
+  filter:
+      status: "To Do"
 
-field_mapping:
-    rank: "customfield_10401"
-    feature:
-        estimation: "S"
-        acceptanceCriteria: "dadada"
+  field_mapping:
+      rank: "customfield_10401"
+      feature:
+          estimation: "S"
+          acceptanceCriteria: "dadada"
 
 
-validation:
-    backlog:
-        ratingtreshold: 60.0
-    feature:
-        ratingtreshold: 0.7
-        active: true
-    story:
-        ratingtreshold: 0.6
-        active: true
-        asKeywords: ["als"]
-        iKeywords: ["wil ik"]
-        soKeywords: ["zodat"]
-    bug:
-        filledWith: ["","component"]
-        active: false
-    epic:
-        active: false
-    team-task:
-        ratingtreshold: 0.6
-        active: true
-    criteria:
-        ratingtreshold: 0.7
-        active: false
-        givenKeywords: ["given"]
-        whenKeywords: ["when"]
-        thenKeywords: ["then"]
-    estimation:
-        ratingtreshold: 0.7
-        active: false
+  validation:
+      backlog:
+          ratingtreshold: 60.0
+      feature:
+          ratingtreshold: 0.7
+          active: true
+      story:
+          ratingtreshold: 0.6
+          active: true
+          asKeywords: ["als"]
+          iKeywords: ["wil ik"]
+          soKeywords: ["zodat"]
+      bug:
+          filledWith: ["","component"]
+          active: false
+      epic:
+          active: false
+      team-task:
+          ratingtreshold: 0.6
+          active: true
+      criteria:
+          ratingtreshold: 0.7
+          active: false
+          givenKeywords: ["given"]
+          whenKeywords: ["when"]
+          thenKeywords: ["then"]
+      estimation:
+          ratingtreshold: 0.7
+          active: false
 
 

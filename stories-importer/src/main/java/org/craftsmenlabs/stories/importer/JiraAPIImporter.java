@@ -1,13 +1,14 @@
 package org.craftsmenlabs.stories.importer;
 
-import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
-import org.craftsmenlabs.stories.api.models.config.FilterConfig;
+import org.craftsmenlabs.stories.api.models.config.SourceConfig;
+import org.craftsmenlabs.stories.api.models.config.StorynatorConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.Base64Utils;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
@@ -16,54 +17,60 @@ import java.util.Collections;
 /**
  * Importer
  */
-public class JiraAPIImporter implements Importer
-{
-	private final Logger logger = LoggerFactory.getLogger(JiraAPIImporter.class);
+public class JiraAPIImporter implements Importer {
+    private final Logger logger = LoggerFactory.getLogger(JiraAPIImporter.class);
 
-	private String urlResource;
-	private String projectKey;
-	private String authKey;
+    private String urlResource;
+    private String projectKey;
+    private String username;
+    private String password;
 
-	private FilterConfig filterConfig;
-	private JiraJsonParser parser;
+    private JiraJsonParser parser;
 
-	public JiraAPIImporter(String urlResource, String projectKey, String authKey, FieldMappingConfig fieldMappingConfig, FilterConfig filterConfig)
-	{
-		this.urlResource = urlResource;
-		this.projectKey = projectKey;
-		this.authKey = authKey;
-		this.filterConfig = filterConfig;
+    public JiraAPIImporter(StorynatorConfig storynatorConfig) {
+        SourceConfig.JiraConfig jiraConfig = storynatorConfig.getSource().getJira();
+        this.urlResource = jiraConfig.getUrl();
+        this.projectKey = jiraConfig.getProjectKey();
+        this.username = jiraConfig.getUsername();
+        this.password = jiraConfig.getPassword();
 
-		this.parser = new JiraJsonParser(fieldMappingConfig, filterConfig);
-	}
+        this.parser = new JiraJsonParser(
+                storynatorConfig.getFieldMapping(),
+                storynatorConfig.getFilter(),
+                SourceConfig.builder()
+                .jira(SourceConfig.JiraConfig.builder()
+                            .projectKey("")
+                            .url("")
+                            .build())
+                        .build()
+        );
+    }
 
-	@Override
-	public Backlog getBacklog()
-	{
+    @Override
+    public Backlog getBacklog() {
 
-		// build URL params
-		String url = urlResource + "/rest/api/2/search";
-		logger.info("Retrieving data from: " + url);
+        // build URL params
+        String url = urlResource + "/rest/api/2/search";
+        logger.info("Retrieving data from: " + url);
 
-		RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = new RestTemplate();
 
-		JiraRequest jiraRequest = JiraRequest.builder()
-				.jql("project=" + projectKey)
-			.maxResults(10000)
-			.build();
-		try
-		{
-			// Add auth token
-			restTemplate.setInterceptors(Collections.singletonList((request, body, execution) -> {
-				request.getHeaders().add("Authorization", "Basic " + authKey);
-				return execution.execute(request, body);
-			}));
+        JiraRequest jiraRequest = JiraRequest.builder()
+                .jql("project=" + projectKey)
+                .maxResults(10000)
+                .build();
+        try {
+            // Add auth token
+            restTemplate.setInterceptors(Collections.singletonList((request, body, execution) -> {
+                request.getHeaders().add("Authorization", "Basic " + Base64Utils.encodeToString((this.username + ":" + this.password).getBytes()));
+                return execution.execute(request, body);
+            }));
 
-			JiraBacklog backlog = restTemplate.postForObject(url, jiraRequest, JiraBacklog.class);
-			return parser.parse(backlog);
-		} catch (HttpClientErrorException e) {
-			logger.error("Jira call went wrong with url: " + urlResource + " and body: " + jiraRequest);
-			throw new StoriesException("Failed to connect to " + url + " Error message was: " + e.getMessage() + "body: \r\n" + e.getResponseBodyAsString());
-		}
-	}
+            JiraBacklog backlog = restTemplate.postForObject(url, jiraRequest, JiraBacklog.class);
+            return parser.parse(backlog);
+        } catch (HttpClientErrorException e) {
+            logger.error("Jira call went wrong with url: " + urlResource + " and body: " + jiraRequest);
+            throw new StoriesException("Failed to connect to " + url + " Error message was: " + e.getMessage() + "body: \r\n" + e.getResponseBodyAsString());
+        }
+    }
 }

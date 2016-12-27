@@ -36,6 +36,8 @@ public class ValidationConfig {
     private ValidatorEntry teamTask;
 
     @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class ValidatorEntry {
         private float ratingThreshold;
         private boolean active;
@@ -50,6 +52,8 @@ public class ValidationConfig {
     }
 
     @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class FillableValidatorEntry extends ValidatorEntry {
         private List<String> enabledFields;
 
@@ -61,6 +65,8 @@ public class ValidationConfig {
     }
 
     @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class StoryValidatorEntry extends ValidatorEntry {
         private List<String> asKeywords;
         private List<String> iKeywords;
@@ -78,6 +84,8 @@ public class ValidationConfig {
     }
 
     @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class CriteriaValidatorEntry extends ValidatorEntry {
         private List<String> givenKeywords;
         private List<String> whenKeywords;
@@ -95,12 +103,14 @@ public class ValidationConfig {
     }
 
     @Data
+    @NoArgsConstructor
     @ToString(callSuper = true)
     public static class BugValidatorEntry extends FillableValidatorEntry {
 
     }
 
     @Data
+    @NoArgsConstructor
     @ToString(callSuper = true)
     public static class EpicValidatorEntry extends FillableValidatorEntry {
     }

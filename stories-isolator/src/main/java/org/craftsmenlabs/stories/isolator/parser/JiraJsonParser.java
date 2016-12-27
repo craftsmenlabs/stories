@@ -2,6 +2,7 @@ package org.craftsmenlabs.stories.isolator.parser;
 
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.FilterConfig;
+import org.craftsmenlabs.stories.api.models.config.SourceConfig;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
@@ -18,19 +19,21 @@ import java.util.stream.Collectors;
 public class JiraJsonParser {
     private final Logger logger = LoggerFactory.getLogger(JiraJsonParser.class);
     private FilterConfig filterConfig;
+    private SourceConfig sourceConfig;
 
     private FeatureConverter featureConverter;
     private BugConverter bugConverter;
     private EpicConverter epicConverter;
     private TeamTaskConverter teamTaskConverter;
 
-    public JiraJsonParser(FieldMappingConfig fieldMapping, FilterConfig filterConfig) {
+    public JiraJsonParser(FieldMappingConfig fieldMapping, FilterConfig filterConfig, SourceConfig sourceConfig) {
         this.filterConfig = filterConfig;
+        this.sourceConfig = sourceConfig;
 
-        this.featureConverter = new FeatureConverter(fieldMapping);
-        this.bugConverter = new BugConverter(fieldMapping);
-        this.epicConverter = new EpicConverter(fieldMapping);
-        this.teamTaskConverter = new TeamTaskConverter(fieldMapping);
+        this.featureConverter = new FeatureConverter(fieldMapping, sourceConfig);
+        this.bugConverter = new BugConverter(fieldMapping, sourceConfig);
+        this.epicConverter = new EpicConverter(fieldMapping, sourceConfig);
+        this.teamTaskConverter = new TeamTaskConverter(fieldMapping, sourceConfig);
     }
 
     public Backlog parse(JiraBacklog jiraBacklog) {

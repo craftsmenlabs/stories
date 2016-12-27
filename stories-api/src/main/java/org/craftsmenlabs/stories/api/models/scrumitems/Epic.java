@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 public class Epic implements ScrumItem {
     private String key;
     private String rank;
+    private String externalURI;
+
     private String summary;
     private String goal;
 }

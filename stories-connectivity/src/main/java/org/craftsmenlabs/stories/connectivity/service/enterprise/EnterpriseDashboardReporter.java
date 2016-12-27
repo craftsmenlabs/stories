@@ -1,5 +1,7 @@
 package org.craftsmenlabs.stories.connectivity.service.enterprise;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.craftsmenlabs.stories.api.models.Reporter;
 import org.craftsmenlabs.stories.api.models.StoriesRun;
@@ -35,6 +37,12 @@ public class EnterpriseDashboardReporter implements Reporter {
             String url = config.getUrl() + "/api/import/v1/report";
             try {
                 RestTemplate template = new RestTemplate();
+                ObjectMapper objectMapper = new ObjectMapper();
+                try {
+                    logger.error(objectMapper.writeValueAsString(storiesRun));
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
                 template.postForEntity(url, storiesRun, String.class);
             } catch (HttpClientErrorException e) {
                 logger.error("Failed to connect to "

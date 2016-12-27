@@ -24,6 +24,7 @@ public class TrelloJsonParser {
             String content = trelloJsonIssue.getDesc().length() == 0 ? trelloJsonIssue.getName() : trelloJsonIssue.getDesc();
             Feature feature = sentenceSplitter.splitSentence(new Feature(), content);
             feature.setKey(trelloJsonIssue.getId());
+            feature.setExternalURI(trelloJsonIssue.getUrl());
 
             String rankString = String.valueOf(i);
 

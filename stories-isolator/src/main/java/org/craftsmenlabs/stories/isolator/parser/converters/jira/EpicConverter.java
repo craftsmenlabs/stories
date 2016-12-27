@@ -2,12 +2,13 @@ package org.craftsmenlabs.stories.isolator.parser.converters.jira;
 
 
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
+import org.craftsmenlabs.stories.api.models.config.SourceConfig;
 import org.craftsmenlabs.stories.api.models.scrumitems.Epic;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
 
 public class EpicConverter extends AbstractJiraConverter<Epic> {
-    public EpicConverter(FieldMappingConfig config) {
-        super(config);
+    public EpicConverter(FieldMappingConfig config, SourceConfig sourceConfig) {
+        super(config, sourceConfig);
     }
 
     @Override
@@ -16,6 +17,7 @@ public class EpicConverter extends AbstractJiraConverter<Epic> {
 
         epic.setKey(jiraJsonIssue.getKey());
         epic.setSummary(jiraJsonIssue.getFields().getSummary());
+        epic.setExternalURI(jiraJsonIssue.getSelf());
         epic.setRank((String) jiraJsonIssue.getFields().getAdditionalProperties().get(config.getRank()));
         epic.setGoal((String) jiraJsonIssue.getFields().getAdditionalProperties().get(config.getEpic().getGoal()));
         return epic;

@@ -2,6 +2,7 @@ package org.craftsmenlabs.stories.isolator.parser.converters.jira;
 
 import org.apache.commons.lang3.StringUtils;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
+import org.craftsmenlabs.stories.api.models.config.SourceConfig;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
 
 import java.util.Arrays;
@@ -13,9 +14,11 @@ import java.util.Arrays;
  */
 public abstract class AbstractJiraConverter<T> {
     protected FieldMappingConfig config;
+    protected SourceConfig sourceConfig;
 
-    public AbstractJiraConverter(FieldMappingConfig config) {
+    public AbstractJiraConverter(FieldMappingConfig config, SourceConfig sourceConfig) {
         this.config = config;
+        this.sourceConfig = sourceConfig;
     }
 
     public abstract T convert(JiraJsonIssue jiraJsonIssue);
