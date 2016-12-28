@@ -37,6 +37,7 @@ public class StorynatorConfig {
                                 .criteria(new ValidationConfig.CriteriaValidatorEntry())
                                 .estimation(new ValidationConfig.ValidatorEntry(0.6f, true))
                                 .epic(new ValidationConfig.EpicValidatorEntry())
+                                .story(new ValidationConfig.StoryValidatorEntry())
                                 .teamTask(new ValidationConfig.ValidatorEntry(0.6f, true))
                                 .build()
 
@@ -57,6 +58,8 @@ public class StorynatorConfig {
         config.getValidation().getEpic().setRatingThreshold(0.6f);
         config.getValidation().getCriteria().setActive(true);
         config.getValidation().getCriteria().setRatingThreshold(0.6f);
+        config.getValidation().getStory().setActive(true);
+        config.getValidation().getStory().setRatingThreshold(0.6f);
 
         return config;
     }
