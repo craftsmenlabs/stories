@@ -23,7 +23,13 @@ public class TeamTaskConverter extends AbstractJiraConverter<TeamTask> {
 
         teamTask.setKey(jiraJsonIssue.getKey());
         teamTask.setSummary(jiraJsonIssue.getFields().getSummary());
-        teamTask.setExternalURI(jiraJsonIssue.getSelf());
+
+        teamTask.setExternalURI(
+                sourceConfig.getJira().getUrl() +
+                        "/projects/" + sourceConfig.getJira().getProjectKey() +
+                        "/issues/" + jiraJsonIssue.getKey()
+        );
+
         teamTask.setDescription(jiraJsonIssue.getFields().getDescription());
         getAcceptanceCriteria(teamTask, jiraJsonIssue);
 

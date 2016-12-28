@@ -22,7 +22,13 @@ public class BugConverter extends AbstractJiraConverter<Bug> {
 
         bug.setRank((String) jiraJsonIssue.getFields().getAdditionalProperties().get(config.getRank()));
         bug.setSummary(jiraJsonIssue.getFields().getSummary());
-        bug.setExternalURI(jiraJsonIssue.getSelf());
+
+        bug.setExternalURI(
+                sourceConfig.getJira().getUrl() +
+                        "/projects/" + sourceConfig.getJira().getProjectKey() +
+                        "/issues/" + jiraJsonIssue.getKey()
+        );
+
         bug.setDescription(jiraJsonIssue.getFields().getDescription());
         bug.setPriority(jiraJsonIssue.getFields().getPriority().getName());
         bug.setAcceptationCriteria((String) props.get(config.getBug().getAcceptationCriteria()));
