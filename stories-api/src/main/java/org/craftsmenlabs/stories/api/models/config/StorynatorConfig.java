@@ -47,6 +47,7 @@ public class StorynatorConfig {
                                 .type("jira")
                                 .trello(SourceConfig.TrelloConfig.builder().build())
                                 .jira(SourceConfig.JiraConfig.builder().build())
+                                .github(SourceConfig.GithubConfig.builder().build())
                                 .build()
                 )
                 .filter(FilterConfig.builder().status("To Do").build())
