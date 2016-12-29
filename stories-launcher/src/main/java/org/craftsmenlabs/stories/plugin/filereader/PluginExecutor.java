@@ -101,7 +101,7 @@ public class PluginExecutor {
             case "github":
                 logger.info("Using GithubAPIImporter for import.");
                 SourceConfig.GithubConfig githubConfig = storynatorConfig.getSource().getGithub();
-                return new GithubAPIImporter(githubConfig.getUrl(), githubConfig.getProjectKey(), githubConfig.getAuthKey(), githubConfig.getToken());
+                return new GithubAPIImporter(githubConfig.getUrl(), githubConfig.getProject(), githubConfig.getOwner(), githubConfig.getToken());
             default:
                 throw new StoriesException(StoriesException.ERR_SOURCE_ENABLED_MISSING);
         }

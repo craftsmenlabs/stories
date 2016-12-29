@@ -27,12 +27,12 @@ storynator:
         trello:
             url:                                                  # URL to your Trello environment
             token:
-            authKey:
+            owner:
             project-key:
         github:
             url:                                              	  # URL to the GitHub API
-            project-key:                                      	  # Name of your project repository
-            auth-key:                                         	  # GitHub username of the owner of the repository
+            project:                                      	  # Name of your project repository
+            owner:                                         	      # GitHub username of the owner of the repository
             token:                                            	  # Personal access token of the owner
     
     

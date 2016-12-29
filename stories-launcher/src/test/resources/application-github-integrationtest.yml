@@ -9,8 +9,8 @@ storynator:
 
       github:
           url:  https://api.github.com
-          projectKey: project
-          authKey: authKey
+          project: project
+          owner: owner
           token: token
 
   ## The ouput data needs to be sent somewhere. There are multiple options available.

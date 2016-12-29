@@ -44,8 +44,8 @@ public class SourceConfig {
     public static class GithubConfig {
         private String url;
         private String token;
-        private String authKey;
-        private String projectKey;
+        private String owner;
+        private String project;
     }
 
     @Data
