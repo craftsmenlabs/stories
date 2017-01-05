@@ -27,7 +27,7 @@ public class SummaryBuilder {
                 .features(getCount(issues))
                 .bugs(getCount(bugs))
                 .epics(getCount(epics))
-                .teamTask(getCount(teamTasks))
+                .teamTasks(getCount(teamTasks))
                 .featureUserStory(getCount(featureStories))
                 .featureCriteria(getCount(featureCriteria))
                 .featureEstimation(getCount(featureEstimations))

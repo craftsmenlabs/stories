@@ -13,7 +13,7 @@ public class Summary implements Summarizable<Summary>{
     private BacklogItemListSummary features;
     private BacklogItemListSummary bugs;
     private BacklogItemListSummary epics;
-    private BacklogItemListSummary teamTask;
+    private BacklogItemListSummary teamTasks;
     private BacklogItemListSummary featureUserStory;
     private BacklogItemListSummary featureCriteria;
     private BacklogItemListSummary featureEstimation;
@@ -23,7 +23,7 @@ public class Summary implements Summarizable<Summary>{
         features = new BacklogItemListSummary();
         bugs = new BacklogItemListSummary();
         epics = new BacklogItemListSummary();
-        teamTask = new BacklogItemListSummary();
+        teamTasks = new BacklogItemListSummary();
 
         featureUserStory = new BacklogItemListSummary();
         featureCriteria = new BacklogItemListSummary();
@@ -40,7 +40,7 @@ public class Summary implements Summarizable<Summary>{
                     .features( features.divideBy(denominator) )
                     .bugs( bugs.divideBy(denominator) )
                     .epics( epics.divideBy(denominator) )
-                    .teamTask( teamTask.divideBy(denominator))
+                    .teamTasks( teamTasks.divideBy(denominator))
                     .featureUserStory( featureUserStory.divideBy(denominator) )
                     .featureCriteria( featureCriteria.divideBy(denominator) )
                     .featureEstimation( featureEstimation.divideBy(denominator) )
@@ -55,7 +55,7 @@ public class Summary implements Summarizable<Summary>{
             .features( features.plus(that.getFeatures()) )
             .bugs( bugs.plus(that.getBugs()) )
             .epics( epics.plus(that.getEpics()) )
-            .teamTask( teamTask.plus(that.getTeamTask()) )
+            .teamTasks( teamTasks.plus(that.getTeamTasks()) )
             .featureUserStory( featureUserStory.plus(that.getFeatureUserStory()) )
             .featureCriteria( featureCriteria.plus(that.getFeatureCriteria()) )
             .featureEstimation( featureEstimation.plus(that.getFeatureEstimation()) )
