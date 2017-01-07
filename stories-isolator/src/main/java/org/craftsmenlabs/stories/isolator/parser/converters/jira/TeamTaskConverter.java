@@ -4,18 +4,18 @@ import org.apache.commons.lang3.StringUtils;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.SourceConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
+import org.craftsmenlabs.stories.api.models.logging.StorynatorLogger;
 import org.craftsmenlabs.stories.api.models.scrumitems.TeamTask;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
 public class TeamTaskConverter extends AbstractJiraConverter<TeamTask> {
-    private final Logger logger = LoggerFactory.getLogger(TeamTaskConverter.class);
+    private final StorynatorLogger logger;
 
-    public TeamTaskConverter(FieldMappingConfig config, SourceConfig sourceConfig) {
+    public TeamTaskConverter(StorynatorLogger logger, FieldMappingConfig config, SourceConfig sourceConfig) {
         super(config, sourceConfig);
+        this.logger = logger;
     }
 
     public TeamTask convert(JiraJsonIssue jiraJsonIssue) {
@@ -54,10 +54,6 @@ public class TeamTaskConverter extends AbstractJiraConverter<TeamTask> {
     @Override
     public String[] getSupportedTypes() {
         return new String[]{"Task", "Team task"};
-    }
-
-    private boolean hasValidDescription(JiraJsonIssue jiraJsonIssue) {
-        return StringUtils.isNotEmpty(jiraJsonIssue.getFields().getDescription());
     }
 
     private void getAcceptanceCriteria(TeamTask teamTask, JiraJsonIssue jiraJsonIssue) {

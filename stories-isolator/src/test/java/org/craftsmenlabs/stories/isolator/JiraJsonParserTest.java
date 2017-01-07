@@ -6,6 +6,7 @@ import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.FilterConfig;
 import org.craftsmenlabs.stories.api.models.config.SourceConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
+import org.craftsmenlabs.stories.api.models.logging.StandaloneLogger;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.api.models.scrumitems.Bug;
 import org.craftsmenlabs.stories.api.models.scrumitems.Epic;
@@ -42,7 +43,7 @@ public class JiraJsonParserTest {
                     .build()
             ).build();
 
-    private JiraJsonParser jiraJsonParser = new JiraJsonParser(fieldMappingConfigCopy, filterConfig, sourceConfig);
+    private JiraJsonParser jiraJsonParser = new JiraJsonParser(new StandaloneLogger(), fieldMappingConfigCopy, filterConfig, sourceConfig);
 
 
     @Test

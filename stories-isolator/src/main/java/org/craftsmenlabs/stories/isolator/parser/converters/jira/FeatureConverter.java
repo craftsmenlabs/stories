@@ -4,21 +4,21 @@ import org.apache.commons.lang3.StringUtils;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.SourceConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
+import org.craftsmenlabs.stories.api.models.logging.StorynatorLogger;
 import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
 import org.craftsmenlabs.stories.isolator.SentenceSplitter;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
 public class FeatureConverter extends AbstractJiraConverter<Feature> {
-    private final Logger logger = LoggerFactory.getLogger(FeatureConverter.class);
+    private final StorynatorLogger logger;
 
     private final SentenceSplitter sentenceSplitter = new SentenceSplitter();
 
-    public FeatureConverter(FieldMappingConfig config, SourceConfig sourceConfig) {
+    public FeatureConverter(StorynatorLogger logger, FieldMappingConfig config, SourceConfig sourceConfig) {
         super(config, sourceConfig);
+        this.logger = logger;
     }
 
     public Feature convert(JiraJsonIssue jiraJsonIssue) {

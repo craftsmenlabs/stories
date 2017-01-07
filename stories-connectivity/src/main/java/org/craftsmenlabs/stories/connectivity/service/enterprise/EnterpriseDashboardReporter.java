@@ -7,8 +7,7 @@ import org.craftsmenlabs.stories.api.models.Reporter;
 import org.craftsmenlabs.stories.api.models.StoriesRun;
 import org.craftsmenlabs.stories.api.models.config.ReportConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.craftsmenlabs.stories.api.models.logging.StorynatorLogger;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
@@ -16,11 +15,12 @@ import org.springframework.web.client.RestTemplate;
  * Reports the information to the dashboard
  */
 public class EnterpriseDashboardReporter implements Reporter {
-    private final Logger logger = LoggerFactory.getLogger(EnterpriseDashboardReporter.class);
+    private final StorynatorLogger logger;
     private ReportConfig.DashboardConfig config;
 
-    public EnterpriseDashboardReporter(ReportConfig reportConfig) {
+    public EnterpriseDashboardReporter(StorynatorLogger logger, ReportConfig reportConfig) {
         this.config = reportConfig.getDashboard();
+        this.logger = logger;
     }
 
     public void report(StoriesRun storiesRun) {

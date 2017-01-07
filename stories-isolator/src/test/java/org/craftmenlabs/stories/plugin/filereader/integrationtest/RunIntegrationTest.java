@@ -5,6 +5,7 @@ import org.apache.commons.io.FileUtils;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.FilterConfig;
 import org.craftsmenlabs.stories.api.models.config.SourceConfig;
+import org.craftsmenlabs.stories.api.models.logging.StandaloneLogger;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
@@ -35,6 +36,7 @@ public class RunIntegrationTest {
 
         JiraJsonParser jiraJsonParser =
                 new JiraJsonParser(
+                        new StandaloneLogger(),
                         fieldMappingConfig,
                         FilterConfig.builder()
                                 .status("To Do")

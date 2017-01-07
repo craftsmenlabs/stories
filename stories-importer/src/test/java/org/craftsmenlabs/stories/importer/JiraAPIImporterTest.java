@@ -10,6 +10,7 @@ import org.craftsmenlabs.stories.api.models.config.FilterConfig;
 import org.craftsmenlabs.stories.api.models.config.SourceConfig;
 import org.craftsmenlabs.stories.api.models.config.StorynatorConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
+import org.craftsmenlabs.stories.api.models.logging.StandaloneLogger;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.junit.Test;
@@ -41,7 +42,7 @@ public class JiraAPIImporterTest {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    private JiraAPIImporter jiraAPIImporter = new JiraAPIImporter(StorynatorConfig.builder().fieldMapping(fieldMappingConfigCopy).filter(filterConfig).source(SourceConfig.builder().jira(SourceConfig.JiraConfig.builder().url("").password("").username("").projectKey("HAR").build()).build()).build());
+    private JiraAPIImporter jiraAPIImporter = new JiraAPIImporter(new StandaloneLogger(), StorynatorConfig.builder().fieldMapping(fieldMappingConfigCopy).filter(filterConfig).source(SourceConfig.builder().jira(SourceConfig.JiraConfig.builder().url("").password("").username("").projectKey("HAR").build()).build()).build());
 
 
     @Mocked

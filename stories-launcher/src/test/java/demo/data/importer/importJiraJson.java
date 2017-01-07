@@ -79,7 +79,7 @@ public class importJiraJson {
             put("androidApp", "585a5cb28ed75e37a1433198");
             put("examples-2", "58623cf57dcf040438669e96");
             put("App"       , "585a5ce28ed75e37a143319b");
-            put("examples"  , "58623cf27dcf040438669e95");
+            put("examples", "586387f3857aba00074cc041");
             put("sales"     , "58623cec7dcf040438669e94");
             put("webshop"   , "585a5cb68ed75e37a1433199");
             put("WebshopBE" , "585be3d7fee17365ea781d02");

@@ -4,18 +4,16 @@ import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.Reporter;
 import org.craftsmenlabs.stories.api.models.StoriesRun;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
+import org.craftsmenlabs.stories.api.models.logging.StorynatorLogger;
 import org.craftsmenlabs.stories.api.models.validatorentry.*;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-public class ConsoleReporter implements Reporter
-{
+public class ConsoleReporter implements Reporter {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
     public static final String ANSI_RED = "\u001B[31m";
@@ -24,10 +22,6 @@ public class ConsoleReporter implements Reporter
     public static final String ANSI_BLUE = "\u001B[34m";
     public static final String ANSI_PURPLE = "\u001B[35m";
     public static final String ANSI_CYAN = "\u001B[36m";
-
-    private final DecimalFormat decimalFormat = new DecimalFormat("#.#");
-    private final DecimalFormat doubleDecimalFormat = new DecimalFormat("#.##");
-
     public static final String[] COLORS = {
             ANSI_BLACK,
             ANSI_RED,
@@ -38,7 +32,9 @@ public class ConsoleReporter implements Reporter
             ANSI_CYAN,
     };
     private static final int MAX_SCORE = 100;
-    private final Logger logger = LoggerFactory.getLogger(ConsoleReporter.class);
+    private final DecimalFormat decimalFormat = new DecimalFormat("#.#");
+    private final DecimalFormat doubleDecimalFormat = new DecimalFormat("#.##");
+    private final StorynatorLogger logger;
     private String prefix = ANSI_PURPLE;
     private ValidationConfig validationConfig;
     private String postfix = ANSI_RESET;
@@ -51,7 +47,8 @@ public class ConsoleReporter implements Reporter
                     "   \\/_88P'  \"88_/  \"88_-~  888      /     888  888  \"88_-888  \"88_/  \"88_-~  888    \n" +
                     "                                  _/";
 
-    public ConsoleReporter(ValidationConfig validationConfig) {
+    public ConsoleReporter(StorynatorLogger logger, ValidationConfig validationConfig) {
+        this.logger = logger;
         this.validationConfig = validationConfig;
     }
 
@@ -59,7 +56,7 @@ public class ConsoleReporter implements Reporter
         BacklogValidatorEntry backlogValidatorEntry = storiesRun.getBacklogValidatorEntry();
         //header
         Random r = new Random();
-        String stry = storynator.chars().mapToObj(chr ->"" + COLORS[r.nextInt(COLORS.length)] + (char)chr + ANSI_RESET).collect(Collectors.joining(""));
+        String stry = storynator.chars().mapToObj(chr -> "" + COLORS[r.nextInt(COLORS.length)] + (char) chr + ANSI_RESET).collect(Collectors.joining(""));
 
         log("\n\n\n" + stry + " \n\n\n");
         log("------------------------------------------------------------");
@@ -73,25 +70,25 @@ public class ConsoleReporter implements Reporter
 
         //verbose output
         List<FeatureValidatorEntry> features = backlogValidatorEntry.getFeatureValidatorEntries().getItems();
-        if(features != null) {
+        if (features != null) {
             features.forEach(this::reportOnIssue);
         }
         // Log bugs
 
         List<BugValidatorEntry> bugs = backlogValidatorEntry.getBugValidatorEntries().getItems();
-        if(bugs != null) {
+        if (bugs != null) {
             bugs.forEach(this::reportOnBug);
         }
 
         // Log epics
         List<EpicValidatorEntry> epics = backlogValidatorEntry.getEpicValidatorEntries().getItems();
-        if(epics != null) {
+        if (epics != null) {
             epics.forEach(this::reportOnEpic);
         }
 
         // Log epics
         List<TeamTaskValidatorEntry> teamTasks = backlogValidatorEntry.getTeamTaskValidatorEntries().getItems();
-        if(teamTasks != null) {
+        if (teamTasks != null) {
             teamTasks.forEach(this::reportOnTeamTask);
         }
 
@@ -118,28 +115,28 @@ public class ConsoleReporter implements Reporter
                 .getRatingThreshold() + ")");
     }
 
-    public void reportOnIssue(FeatureValidatorEntry issue){
+    public void reportOnIssue(FeatureValidatorEntry issue) {
         prefix = issue.getRating() == Rating.SUCCESS ? ANSI_GREEN : ANSI_RED;
 
         log("------------------------------------------------------------");
         log("Issue "
-                        + issue.getFeature().getKey()
+                + issue.getFeature().getKey()
                 + " Item total ("
-                        + decimalFormat.format(issue.getPointsValuation() * 100)
+                + decimalFormat.format(issue.getPointsValuation() * 100)
                 + "/"
                 + MAX_SCORE
                 + ") \t"
                 + " US ("
-                        + decimalFormat.format(issue.getUserStoryValidatorEntry().getPointsValuation() * 100)
+                + decimalFormat.format(issue.getUserStoryValidatorEntry().getPointsValuation() * 100)
                 + "/"
                 + MAX_SCORE
                 + ")\t"
                 + " AC ("
-                        + decimalFormat.format(issue.getAcceptanceCriteriaValidatorEntry().getPointsValuation() * 100)
+                + decimalFormat.format(issue.getAcceptanceCriteriaValidatorEntry().getPointsValuation() * 100)
                 + "/"
                 + MAX_SCORE
                 + ")\t"
-                  );
+        );
         log(issue.getFeature().getSummary());
         issue.getViolations()
                 .forEach(violation ->
@@ -198,7 +195,7 @@ public class ConsoleReporter implements Reporter
         reportOnViolations(teamTask.getViolations());
     }
 
-    public void reportOnUserstory(UserStoryValidatorEntry entry){
+    public void reportOnUserstory(UserStoryValidatorEntry entry) {
         prefix = entry.getRating() == Rating.SUCCESS ? ANSI_GREEN : ANSI_RED;
 
 
@@ -208,25 +205,25 @@ public class ConsoleReporter implements Reporter
         reportOnViolations(entry.getViolations());
     }
 
-    public void reportOnAcceptanceCriteria(AcceptanceCriteriaValidatorEntry entry){
+    public void reportOnAcceptanceCriteria(AcceptanceCriteriaValidatorEntry entry) {
         prefix = entry.getRating() == Rating.SUCCESS ? ANSI_GREEN : ANSI_RED;
 
         String criteria = entry.getItem().replace("\n", " ").replace("\r", "");
-        log("\t Criteria: (" + entry.getPointsValuation() + ") " + criteria );
+        log("\t Criteria: (" + entry.getPointsValuation() + ") " + criteria);
 
         reportOnViolations(entry.getViolations());
     }
 
-    public void reportOnEstimation(EstimationValidatorEntry entry){
+    public void reportOnEstimation(EstimationValidatorEntry entry) {
         prefix = entry.getRating() == Rating.SUCCESS ? ANSI_GREEN : ANSI_RED;
 
         Float estimation = entry.getItem();
-        log("\t Estimation: (" +entry.getPointsValuation() + ")" + estimation );
+        log("\t Estimation: (" + entry.getPointsValuation() + ")" + estimation);
 
         reportOnViolations(entry.getViolations());
     }
 
-    public void reportOnViolations(List<Violation> violations){
+    public void reportOnViolations(List<Violation> violations) {
         prefix = ANSI_BLUE;
         violations.forEach(violation ->
                 log("\t\t Violation found: " + violation.toString()));
@@ -242,7 +239,7 @@ public class ConsoleReporter implements Reporter
         log("epics: " + validationConfig.getEpic());
     }
 
-    private void log(String msg){
+    private void log(String msg) {
         logger.info(prefix + msg + postfix);
     }
 

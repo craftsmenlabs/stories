@@ -1,6 +1,5 @@
 package org.craftsmenlabs.stories.plugin.filereader;
 
-import lombok.RequiredArgsConstructor;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.Reporter;
 import org.craftsmenlabs.stories.api.models.StoriesRun;
@@ -8,52 +7,40 @@ import org.craftsmenlabs.stories.api.models.config.ReportConfig;
 import org.craftsmenlabs.stories.api.models.config.SourceConfig;
 import org.craftsmenlabs.stories.api.models.config.StorynatorConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
+import org.craftsmenlabs.stories.api.models.logging.StorynatorLogger;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.api.models.summary.SummaryBuilder;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 import org.craftsmenlabs.stories.connectivity.service.community.CommunityDashboardReporter;
-import org.craftsmenlabs.stories.connectivity.service.enterprise.EnterpriseDashboardConfigRetriever;
 import org.craftsmenlabs.stories.connectivity.service.enterprise.EnterpriseDashboardReporter;
 import org.craftsmenlabs.stories.importer.GithubAPIImporter;
 import org.craftsmenlabs.stories.importer.Importer;
 import org.craftsmenlabs.stories.importer.JiraAPIImporter;
 import org.craftsmenlabs.stories.importer.TrelloAPIImporter;
-import org.craftsmenlabs.stories.plugin.filereader.config.EnterpriseConfig;
 import org.craftsmenlabs.stories.ranking.CurvedRanking;
 import org.craftsmenlabs.stories.reporter.ConsoleReporter;
 import org.craftsmenlabs.stories.reporter.JsonFileReporter;
 import org.craftsmenlabs.stories.reporter.SummaryConsoleReporter;
 import org.craftsmenlabs.stories.scoring.BacklogScorer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 @Component
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class PluginExecutor {
-    private final Logger logger = LoggerFactory.getLogger(PluginExecutor.class);
-    private final Environment env;
-    private final EnterpriseConfig enterpriseConfig;
-
-
-    @Autowired
+public class Executor {
     private StorynatorConfig storynatorConfig;
+    private StorynatorVersion storynatorVersion;
+    private StorynatorLogger logger;
 
-    public Rating startApplication() {
-        logger.info("Initializing Gareth Storynator");
+    public Rating runApplication(StorynatorConfig config, StorynatorVersion version, StorynatorLogger logger) {
+        this.logger = logger;
+        this.storynatorConfig = config;
+        this.storynatorVersion = version;
+        this.logger.info("Initializing Gareth Storynator");
 
-        if (enterpriseConfig.isEnabled()) {
-            // We should retrieve settings there.
-            this.loadSettingsFromEnterpriseDashboard();
-        }
         // Import the data
         Importer importer = getImporter(storynatorConfig.getSource().getType());
         Backlog backlog = importer.getBacklog();
@@ -93,15 +80,15 @@ public class PluginExecutor {
             case "jira":
                 SourceConfig.JiraConfig jiraConfig = storynatorConfig.getSource().getJira();
                 logger.info("Using JiraAPIImporter for import." + jiraConfig.getUrl());
-                return new JiraAPIImporter(storynatorConfig);
+                return new JiraAPIImporter(logger, storynatorConfig);
             case "trello":
                 logger.info("Using TrelloAPIImporter for import.");
                 SourceConfig.TrelloConfig trelloConfig = storynatorConfig.getSource().getTrello();
-                return new TrelloAPIImporter(trelloConfig.getUrl(), trelloConfig.getProjectKey(), trelloConfig.getAuthKey(), trelloConfig.getToken());
+                return new TrelloAPIImporter(logger, trelloConfig.getUrl(), trelloConfig.getProjectKey(), trelloConfig.getAuthKey(), trelloConfig.getToken());
             case "github":
                 logger.info("Using GithubAPIImporter for import.");
                 SourceConfig.GithubConfig githubConfig = storynatorConfig.getSource().getGithub();
-                return new GithubAPIImporter(githubConfig.getUrl(), githubConfig.getProject(), githubConfig.getOwner(), githubConfig.getToken());
+                return new GithubAPIImporter(logger, githubConfig.getUrl(), githubConfig.getProject(), githubConfig.getOwner(), githubConfig.getToken());
             default:
                 throw new StoriesException(StoriesException.ERR_SOURCE_ENABLED_MISSING);
         }
@@ -114,8 +101,8 @@ public class PluginExecutor {
      */
     private List<Reporter> getReporters() {
         List<Reporter> reporters = new LinkedList<>();
-        reporters.add(new ConsoleReporter(storynatorConfig.getValidation()));
-        reporters.add(new SummaryConsoleReporter());
+        reporters.add(new ConsoleReporter(logger, storynatorConfig.getValidation()));
+        reporters.add(new SummaryConsoleReporter(logger));
 
         ReportConfig reportConfig = storynatorConfig.getReport();
         if (reportConfig != null && reportConfig.getFile() != null && reportConfig.getFile().isEnabled()) {
@@ -123,29 +110,15 @@ public class PluginExecutor {
         }
 
         if (reportConfig != null && reportConfig.getDashboard() != null && reportConfig.getDashboard().isEnabled()) {
-            List<String> profiles = Arrays.asList(env.getActiveProfiles());
-            if (profiles.contains("enterprise") && !profiles.contains("community")) {
+            if (this.storynatorVersion == StorynatorVersion.ENTERPRISE) {
                 logger.debug("Started enterprise version of reporter.");
-                reporters.add(new EnterpriseDashboardReporter(reportConfig));
+                reporters.add(new EnterpriseDashboardReporter(logger, reportConfig));
             } else {
                 logger.debug("Started community version of reporter.");
-                reporters.add(new CommunityDashboardReporter());
+                reporters.add(new CommunityDashboardReporter(logger));
             }
         }
 
         return reporters;
-    }
-
-    /**
-     *
-     */
-    private void loadSettingsFromEnterpriseDashboard() {
-        try {
-            EnterpriseDashboardConfigRetriever dashboardConfigRetriever = new EnterpriseDashboardConfigRetriever();
-            this.storynatorConfig = dashboardConfigRetriever.retrieveSettings(enterpriseConfig.getUrl(), enterpriseConfig.getToken(), enterpriseConfig.getPassword());
-
-        } catch (Exception e) {
-            throw new StoriesException("Could not retrieve settings for the project: " + e.getMessage());
-        }
     }
 }

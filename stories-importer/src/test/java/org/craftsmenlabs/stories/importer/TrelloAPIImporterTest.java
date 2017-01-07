@@ -4,6 +4,7 @@ import mockit.Expectations;
 import mockit.Mocked;
 import org.apache.commons.io.FileUtils;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
+import org.craftsmenlabs.stories.api.models.logging.StandaloneLogger;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.junit.Test;
 import org.springframework.web.client.RestTemplate;
@@ -18,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class TrelloAPIImporterTest
 {
-	private TrelloAPIImporter trelloAPIImporter = new TrelloAPIImporter("http://foo.bar", "key", "authKey", "token");
+	private TrelloAPIImporter trelloAPIImporter = new TrelloAPIImporter(new StandaloneLogger(), "http://foo.bar", "key", "authKey", "token");
 
 	@Mocked
 	private RestTemplate restTemplate;

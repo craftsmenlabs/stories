@@ -19,7 +19,7 @@ public class BootApp {
     private final static Logger logger = LoggerFactory.getLogger(BootApp.class);
 
     @Autowired
-    private PluginExecutor pluginExecutor;
+    private StandaloneExecutor standaloneExecutor;
 
     public static void main(String[] args) throws IOException {
         SpringApplication application = new SpringApplication(BootApp.class);
@@ -42,7 +42,7 @@ public class BootApp {
 
     public Rating startApplication() {
         try {
-            Rating rating = pluginExecutor.startApplication();
+            Rating rating = standaloneExecutor.runApplication();
             logger.info("Finished Storynator application with success.");
             return rating;
         } catch (StoriesException e) {

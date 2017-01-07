@@ -2,15 +2,17 @@ package org.craftsmenlabs.stories.connectivity.service.community;
 
 import org.craftsmenlabs.stories.api.models.Reporter;
 import org.craftsmenlabs.stories.api.models.StoriesRun;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.craftsmenlabs.stories.api.models.logging.StorynatorLogger;
 
 /**
  *
  */
 public class CommunityDashboardReporter implements Reporter {
+    private StorynatorLogger logger;
 
-    private final Logger logger = LoggerFactory.getLogger(CommunityDashboardReporter.class);
+    public CommunityDashboardReporter(StorynatorLogger logger) {
+        this.logger = logger;
+    }
 
     @Override
     public void report(StoriesRun storiesRun) {

@@ -3,11 +3,10 @@ package org.craftsmenlabs.stories.importer;
 import org.craftsmenlabs.stories.api.models.config.SourceConfig;
 import org.craftsmenlabs.stories.api.models.config.StorynatorConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
+import org.craftsmenlabs.stories.api.models.logging.StorynatorLogger;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.util.Base64Utils;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -18,7 +17,7 @@ import java.util.Collections;
  * Importer
  */
 public class JiraAPIImporter implements Importer {
-    private final Logger logger = LoggerFactory.getLogger(JiraAPIImporter.class);
+    private final StorynatorLogger logger;
 
     private String urlResource;
     private String projectKey;
@@ -27,7 +26,8 @@ public class JiraAPIImporter implements Importer {
 
     private JiraJsonParser parser;
 
-    public JiraAPIImporter(StorynatorConfig storynatorConfig) {
+    public JiraAPIImporter(StorynatorLogger logger, StorynatorConfig storynatorConfig) {
+        this.logger = logger;
         SourceConfig.JiraConfig jiraConfig = storynatorConfig.getSource().getJira();
         this.urlResource = jiraConfig.getUrl();
         this.projectKey = jiraConfig.getProjectKey();
@@ -35,6 +35,7 @@ public class JiraAPIImporter implements Importer {
         this.password = jiraConfig.getPassword();
 
         this.parser = new JiraJsonParser(
+                logger,
                 storynatorConfig.getFieldMapping(),
                 storynatorConfig.getFilter(),
                 SourceConfig.builder()

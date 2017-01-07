@@ -3,6 +3,7 @@ package org.craftsmenlabs.stories.isolator.parser;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.FilterConfig;
 import org.craftsmenlabs.stories.api.models.config.SourceConfig;
+import org.craftsmenlabs.stories.api.models.logging.StorynatorLogger;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
@@ -10,30 +11,25 @@ import org.craftsmenlabs.stories.isolator.parser.converters.jira.BugConverter;
 import org.craftsmenlabs.stories.isolator.parser.converters.jira.EpicConverter;
 import org.craftsmenlabs.stories.isolator.parser.converters.jira.FeatureConverter;
 import org.craftsmenlabs.stories.isolator.parser.converters.jira.TeamTaskConverter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class JiraJsonParser {
-    private final Logger logger = LoggerFactory.getLogger(JiraJsonParser.class);
     private FilterConfig filterConfig;
-    private SourceConfig sourceConfig;
 
     private FeatureConverter featureConverter;
     private BugConverter bugConverter;
     private EpicConverter epicConverter;
     private TeamTaskConverter teamTaskConverter;
 
-    public JiraJsonParser(FieldMappingConfig fieldMapping, FilterConfig filterConfig, SourceConfig sourceConfig) {
+    public JiraJsonParser(StorynatorLogger logger, FieldMappingConfig fieldMapping, FilterConfig filterConfig, SourceConfig sourceConfig) {
         this.filterConfig = filterConfig;
-        this.sourceConfig = sourceConfig;
 
-        this.featureConverter = new FeatureConverter(fieldMapping, sourceConfig);
+        this.featureConverter = new FeatureConverter(logger, fieldMapping, sourceConfig);
         this.bugConverter = new BugConverter(fieldMapping, sourceConfig);
         this.epicConverter = new EpicConverter(fieldMapping, sourceConfig);
-        this.teamTaskConverter = new TeamTaskConverter(fieldMapping, sourceConfig);
+        this.teamTaskConverter = new TeamTaskConverter(logger, fieldMapping, sourceConfig);
     }
 
     public Backlog parse(JiraBacklog jiraBacklog) {
