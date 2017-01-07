@@ -1,4 +1,4 @@
-package org.craftmenlabs.stories.plugin.filereader.integrationtest;
+package org.craftmenlabs.stories.launcher.integrationtest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;

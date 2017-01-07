@@ -15,7 +15,7 @@ import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry
 import org.craftsmenlabs.stories.connectivity.service.enterprise.EnterpriseDashboardReporter;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
-import org.craftsmenlabs.stories.plugin.filereader.BootApp;
+import org.craftsmenlabs.stories.launcher.BootApp;
 import org.craftsmenlabs.stories.ranking.CurvedRanking;
 import org.craftsmenlabs.stories.scoring.BacklogScorer;
 import org.junit.Test;

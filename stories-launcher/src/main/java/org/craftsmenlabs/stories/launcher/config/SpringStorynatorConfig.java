@@ -1,4 +1,4 @@
-package org.craftsmenlabs.stories.plugin.filereader.config;
+package org.craftsmenlabs.stories.launcher.config;
 
 import lombok.AllArgsConstructor;
 import org.craftsmenlabs.stories.api.models.config.StorynatorConfig;

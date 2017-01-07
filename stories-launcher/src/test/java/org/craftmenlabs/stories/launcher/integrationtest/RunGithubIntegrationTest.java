@@ -1,11 +1,11 @@
-package org.craftmenlabs.stories.plugin.filereader.integrationtest;
+package org.craftmenlabs.stories.launcher.integrationtest;
 
 import mockit.Expectations;
 import mockit.Mocked;
 import mockit.integration.junit4.JMockit;
 import org.apache.commons.io.FileUtils;
 import org.craftsmenlabs.stories.api.models.Rating;
-import org.craftsmenlabs.stories.plugin.filereader.BootApp;
+import org.craftsmenlabs.stories.launcher.BootApp;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.Banner;

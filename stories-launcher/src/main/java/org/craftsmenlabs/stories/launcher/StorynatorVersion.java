@@ -1,4 +1,4 @@
-package org.craftsmenlabs.stories.plugin.filereader;
+package org.craftsmenlabs.stories.launcher;
 
 public enum StorynatorVersion {
     COMMUNITY,

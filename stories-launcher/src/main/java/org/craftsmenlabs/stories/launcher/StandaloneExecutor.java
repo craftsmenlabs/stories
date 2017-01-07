@@ -1,4 +1,4 @@
-package org.craftsmenlabs.stories.plugin.filereader;
+package org.craftsmenlabs.stories.launcher;
 
 import lombok.RequiredArgsConstructor;
 import org.craftsmenlabs.stories.api.models.Rating;
@@ -7,7 +7,7 @@ import org.craftsmenlabs.stories.api.models.exception.StoriesException;
 import org.craftsmenlabs.stories.api.models.logging.StandaloneLogger;
 import org.craftsmenlabs.stories.api.models.logging.StorynatorLogger;
 import org.craftsmenlabs.stories.connectivity.service.enterprise.EnterpriseDashboardConfigRetriever;
-import org.craftsmenlabs.stories.plugin.filereader.config.EnterpriseConfig;
+import org.craftsmenlabs.stories.launcher.config.EnterpriseConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;

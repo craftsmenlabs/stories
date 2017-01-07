@@ -1,4 +1,4 @@
-package org.craftsmenlabs.stories.plugin.filereader;
+package org.craftsmenlabs.stories.launcher;
 
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.Reporter;
