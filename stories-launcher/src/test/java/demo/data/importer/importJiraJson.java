@@ -8,6 +8,7 @@ import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.ReportConfig;
 import org.craftsmenlabs.stories.api.models.config.StorynatorConfig;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
+import org.craftsmenlabs.stories.api.models.logging.StandaloneLogger;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.api.models.summary.SummaryBuilder;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
@@ -115,7 +116,7 @@ public class importJiraJson {
             e.printStackTrace();
         }
 
-        JiraJsonParser jiraJsonParser = new JiraJsonParser(fieldMappingConfigCopy, storynatorConfig.getFilter(), storynatorConfig.getSource());
+        JiraJsonParser jiraJsonParser = new JiraJsonParser(new StandaloneLogger(), fieldMappingConfigCopy, storynatorConfig.getFilter(), storynatorConfig.getSource());
 
         Backlog backlog = jiraJsonParser.parse(jiraBacklog);
 
@@ -134,7 +135,7 @@ public class importJiraJson {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        EnterpriseDashboardReporter enterpriseDashboardReporter = new EnterpriseDashboardReporter(reportConfig);
+        EnterpriseDashboardReporter enterpriseDashboardReporter = new EnterpriseDashboardReporter(new StandaloneLogger(), reportConfig);
         enterpriseDashboardReporter.report(storiesRun);
     }
 }
