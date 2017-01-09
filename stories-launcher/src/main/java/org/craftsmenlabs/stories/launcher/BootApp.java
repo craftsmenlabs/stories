@@ -2,6 +2,7 @@ package org.craftsmenlabs.stories.launcher;
 
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
+import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class BootApp {
     private final static Logger logger = LoggerFactory.getLogger(BootApp.class);
 
     @Autowired
-    private StandaloneExecutor standaloneExecutor;
+    private StorynatorStandaloneExecutor storynatorStandaloneExecutor;
 
     public static void main(String[] args) throws IOException {
         SpringApplication application = new SpringApplication(BootApp.class);
@@ -42,9 +43,9 @@ public class BootApp {
 
     public Rating startApplication() {
         try {
-            Rating rating = standaloneExecutor.runApplication();
+            BacklogValidatorEntry backlogValidatorEntry = storynatorStandaloneExecutor.runApplication();
             logger.info("Finished Storynator application with success.");
-            return rating;
+            return backlogValidatorEntry.getRating();
         } catch (StoriesException e) {
             logger.info(e.getMessage());
             return Rating.FAIL;

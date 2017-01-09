@@ -1,6 +1,5 @@
 package org.craftsmenlabs.stories.launcher;
 
-import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.Reporter;
 import org.craftsmenlabs.stories.api.models.StoriesRun;
 import org.craftsmenlabs.stories.api.models.config.ReportConfig;
@@ -30,12 +29,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Component
-public class Executor {
+public class StorynatorPluginExecutor {
     private StorynatorConfig storynatorConfig;
     private StorynatorVersion storynatorVersion;
     private StorynatorLogger logger;
 
-    public Rating runApplication(StorynatorConfig config, StorynatorVersion version, StorynatorLogger logger) {
+    public BacklogValidatorEntry runApplication(StorynatorConfig config, StorynatorVersion version, StorynatorLogger logger) {
         this.logger = logger;
         this.storynatorConfig = config;
         this.storynatorVersion = version;
@@ -66,7 +65,7 @@ public class Executor {
             reporter.report(storiesRun);
         }
 
-        return backlogValidatorEntry.getRating();
+        return backlogValidatorEntry;
     }
 
     /**
