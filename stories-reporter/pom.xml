@@ -4,13 +4,13 @@
 	<parent>
 		<artifactId>stories</artifactId>
 		<groupId>org.craftsmenlabs.stories</groupId>
-        <version>1.5</version>
+        <version>1.6-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>stories-reporter</artifactId>
 	<packaging>jar</packaging>
-    <version>1.5</version>
+    <version>1.6-SNAPSHOT</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -23,7 +23,7 @@
         <dependency>
             <groupId>org.craftsmenlabs.stories</groupId>
             <artifactId>stories-api</artifactId>
-            <version>1.5</version>
+            <version>1.6-SNAPSHOT</version>
         </dependency>
 
 
