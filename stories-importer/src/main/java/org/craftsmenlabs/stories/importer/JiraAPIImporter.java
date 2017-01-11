@@ -38,12 +38,7 @@ public class JiraAPIImporter implements Importer {
                 logger,
                 storynatorConfig.getFieldMapping(),
                 storynatorConfig.getFilter(),
-                SourceConfig.builder()
-                .jira(SourceConfig.JiraConfig.builder()
-                            .projectKey("")
-                            .url("")
-                            .build())
-                        .build()
+                storynatorConfig.getSource()
         );
     }
 
