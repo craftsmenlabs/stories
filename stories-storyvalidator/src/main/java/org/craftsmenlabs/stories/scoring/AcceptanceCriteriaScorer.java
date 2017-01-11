@@ -34,7 +34,8 @@ public class AcceptanceCriteriaScorer {
 
         final String criteriaLower = criteria.toLowerCase();
 
-        if (validationConfig.getCriteria().getGivenKeywords().stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
+        List<String> givenWords = validationConfig.getCriteria().getGivenKeywords();
+        if (givenWords != null && givenWords.stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
             points += GIVEN_POINTS;
         } else {
             violations.add(new Violation(ViolationType.CriteriaGivenClauseViolation,
@@ -43,7 +44,8 @@ public class AcceptanceCriteriaScorer {
                             + String.join(", ", validationConfig.getCriteria().getGivenKeywords())));
         }
 
-        if (validationConfig.getCriteria().getWhenKeywords().stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
+        List<String> whenWords = validationConfig.getCriteria().getWhenKeywords();
+        if (whenWords != null && whenWords.stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
             points += WHEN_POINTS;
         } else {
             violations.add(new Violation(ViolationType.CriteriaWhenClauseViolation,
@@ -53,7 +55,8 @@ public class AcceptanceCriteriaScorer {
 
         }
 
-        if (validationConfig.getCriteria().getThenKeywords().stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
+        List<String> thenWords = validationConfig.getCriteria().getThenKeywords();
+        if (thenWords != null && thenWords.stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
             points += THEN_POINTS;
         } else {
             violations.add(new Violation(ViolationType.CriteriaThenClauseViolation,
