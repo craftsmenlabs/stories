@@ -40,7 +40,7 @@ public class StoryScorer {
             } else {
                 violations.add(new Violation(ViolationType.StoryAsIsClauseViolation, "<As a> section is not described properly." +
                         "The story should contain any of the following keywords: "
-                        + String.join(", ", validationConfig.getStory().getAsKeywords())));
+                        + String.join(", ", asKeywords)));
             }
 
             List<String> iKeywords = validationConfig.getStory().getIKeywords() != null ? validationConfig.getStory().getIKeywords() : Collections.emptyList();
@@ -49,7 +49,7 @@ public class StoryScorer {
             } else {
                 violations.add(new Violation(ViolationType.StoryIClauseViolation, "<I want> section is not described properly." +
                         "The story should contain any of the following keywords: "
-                        + String.join(", ", validationConfig.getStory().getIKeywords())));
+                        + String.join(", ", iKeywords)));
             }
 
             List<String> soKeywords = validationConfig.getStory().getSoKeywords() != null ? validationConfig.getStory().getSoKeywords() : Collections.emptyList();
@@ -58,7 +58,7 @@ public class StoryScorer {
             } else {
                 violations.add(new Violation(ViolationType.StorySoClauseViolation, "<So that> section is not described properly." +
                         "The story should contain any of the following keywords: "
-                        + String.join(", ", validationConfig.getStory().getSoKeywords())));
+                        + String.join(", ", iKeywords)));
             }
         }
 

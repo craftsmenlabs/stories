@@ -42,7 +42,7 @@ public class AcceptanceCriteriaScorer {
             violations.add(new Violation(ViolationType.CriteriaGivenClauseViolation,
                     "<Given> section is not described properly. " +
                             "The criteria should contain any of the following keywords: "
-                            + String.join(", ", validationConfig.getCriteria().getGivenKeywords())));
+                            + String.join(", ", givenWords)));
         }
 
         List<String> whenWords = validationConfig.getCriteria().getWhenKeywords() != null ? validationConfig.getCriteria().getWhenKeywords() : Collections.emptyList();
@@ -52,7 +52,7 @@ public class AcceptanceCriteriaScorer {
             violations.add(new Violation(ViolationType.CriteriaWhenClauseViolation,
                     "<When> section is not described properly. " +
                             "The criteria should contain any of the following keywords: "
-                            + String.join(", ", validationConfig.getCriteria().getWhenKeywords())));
+                            + String.join(", ", whenWords)));
 
         }
 
@@ -63,7 +63,7 @@ public class AcceptanceCriteriaScorer {
             violations.add(new Violation(ViolationType.CriteriaThenClauseViolation,
                     "<Then> section is not described properly. " +
                             "The criteria should contain any of the following keywords: "
-                            + String.join(", ", validationConfig.getCriteria().getThenKeywords())));
+                            + String.join(", ", thenWords)));
         }
 
         if (criteria.length() <= MINIMUM_LENGTH_OF_ACC_CRITERIA) {
