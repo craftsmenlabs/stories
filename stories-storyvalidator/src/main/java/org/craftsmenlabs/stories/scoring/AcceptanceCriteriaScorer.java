@@ -7,6 +7,7 @@ import org.craftsmenlabs.stories.api.models.violation.Violation;
 import org.craftsmenlabs.stories.api.models.violation.ViolationType;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -34,7 +35,8 @@ public class AcceptanceCriteriaScorer {
 
         final String criteriaLower = criteria.toLowerCase();
 
-        if (validationConfig.getCriteria().getGivenKeywords().stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
+        List<String> givenWords = validationConfig.getCriteria().getGivenKeywords() != null ? validationConfig.getCriteria().getGivenKeywords() : Collections.emptyList();
+        if (givenWords.stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
             points += GIVEN_POINTS;
         } else {
             violations.add(new Violation(ViolationType.CriteriaGivenClauseViolation,
@@ -43,7 +45,8 @@ public class AcceptanceCriteriaScorer {
                             + String.join(", ", validationConfig.getCriteria().getGivenKeywords())));
         }
 
-        if (validationConfig.getCriteria().getWhenKeywords().stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
+        List<String> whenWords = validationConfig.getCriteria().getWhenKeywords() != null ? validationConfig.getCriteria().getWhenKeywords() : Collections.emptyList();
+        if (whenWords.stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
             points += WHEN_POINTS;
         } else {
             violations.add(new Violation(ViolationType.CriteriaWhenClauseViolation,
@@ -53,7 +56,8 @@ public class AcceptanceCriteriaScorer {
 
         }
 
-        if (validationConfig.getCriteria().getThenKeywords().stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
+        List<String> thenWords = validationConfig.getCriteria().getThenKeywords() != null ? validationConfig.getCriteria().getThenKeywords() : Collections.emptyList();
+        if (thenWords.stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
             points += THEN_POINTS;
         } else {
             violations.add(new Violation(ViolationType.CriteriaThenClauseViolation,
