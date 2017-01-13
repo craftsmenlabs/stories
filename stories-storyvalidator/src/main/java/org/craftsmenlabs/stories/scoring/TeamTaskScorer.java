@@ -3,10 +3,10 @@ package org.craftsmenlabs.stories.scoring;
 import org.apache.commons.lang3.StringUtils;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
-import org.craftsmenlabs.stories.api.models.scrumitems.TeamTask;
-import org.craftsmenlabs.stories.api.models.validatorentry.AcceptanceCriteriaValidatorEntry;
-import org.craftsmenlabs.stories.api.models.validatorentry.EstimationValidatorEntry;
-import org.craftsmenlabs.stories.api.models.validatorentry.TeamTaskValidatorEntry;
+import org.craftsmenlabs.stories.api.models.items.TeamTask;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedAcceptanceCriteria;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedEstimation;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedTeamTask;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 import org.craftsmenlabs.stories.api.models.violation.ViolationType;
 
@@ -20,7 +20,7 @@ import java.util.stream.Stream;
  */
 public class TeamTaskScorer {
 
-    public static TeamTaskValidatorEntry performScorer(TeamTask teamTask, ValidationConfig validationConfig) {
+    public static ValidatedTeamTask performScorer(TeamTask teamTask, ValidationConfig validationConfig) {
         List<Violation> violations = new ArrayList<>();
         float points = 0f;
         float pointsRatio = 1f / Stream.of(
@@ -49,28 +49,28 @@ public class TeamTaskScorer {
             points += pointsRatio;
         }
 
-        AcceptanceCriteriaValidatorEntry acceptanceCriteriaValidatorEntry = AcceptanceCriteriaScorer.performScorer(teamTask.getAcceptationCriteria(), validationConfig);
+        ValidatedAcceptanceCriteria validatedAcceptanceCriteria = AcceptanceCriteriaScorer.performScorer(teamTask.getAcceptationCriteria(), validationConfig);
         if (teamTask.getAcceptationCriteria() != null && validationConfig.getCriteria().isActive()) {
-            violations.addAll(acceptanceCriteriaValidatorEntry.getViolations());
-            points += pointsRatio * acceptanceCriteriaValidatorEntry.getPointsValuation();
+            violations.addAll(validatedAcceptanceCriteria.getViolations());
+            points += pointsRatio * validatedAcceptanceCriteria.getPointsValuation();
         }
 
-        EstimationValidatorEntry estimationValidatorEntry = EstimationScorer.performScorer(teamTask.getEstimation(), validationConfig);
+        ValidatedEstimation validatedEstimation = EstimationScorer.performScorer(teamTask.getEstimation(), validationConfig);
         if (teamTask.getEstimation() != null && validationConfig.getEstimation().isActive()) {
-            violations.addAll(estimationValidatorEntry.getViolations());
-            points += pointsRatio * estimationValidatorEntry.getPointsValuation();
+            violations.addAll(validatedEstimation.getViolations());
+            points += pointsRatio * validatedEstimation.getPointsValuation();
         }
 
         Rating rating = points >= validationConfig.getTeamTask().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL;
 
-        return TeamTaskValidatorEntry
+        return ValidatedTeamTask
                 .builder()
                 .teamTask(teamTask)
                 .violations(violations)
                 .pointsValuation(points)
                 .rating(rating)
-                .acceptanceCriteriaValidatorEntry(acceptanceCriteriaValidatorEntry)
-                .estimationValidatorEntry(estimationValidatorEntry)
+                .validatedAcceptanceCriteria(validatedAcceptanceCriteria)
+                .validatedEstimation(validatedEstimation)
                 .build();
     }
 

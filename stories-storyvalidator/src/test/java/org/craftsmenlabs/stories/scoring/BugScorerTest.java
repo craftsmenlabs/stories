@@ -3,8 +3,8 @@ package org.craftsmenlabs.stories.scoring;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
-import org.craftsmenlabs.stories.api.models.scrumitems.Bug;
-import org.craftsmenlabs.stories.api.models.validatorentry.BugValidatorEntry;
+import org.craftsmenlabs.stories.api.models.items.Bug;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedBug;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -20,7 +20,7 @@ public class BugScorerTest {
         config.getBug().setEnabledFields(new LinkedList<>());
         Bug testedBug = this.getDefaultBug();
 
-        BugValidatorEntry result = BugScorer.performScorer(testedBug, config);
+        ValidatedBug result = BugScorer.performScorer(testedBug, config);
         assertThat(result.getRating()).isEqualTo(Rating.FAIL);
         assertThat(result.getPointsValuation()).isEqualTo(0.0f);
     }
@@ -30,7 +30,7 @@ public class BugScorerTest {
         ValidationConfig config = this.getDefaultConfig();
         Bug testedBug = this.getDefaultBug();
 
-        BugValidatorEntry result = BugScorer.performScorer(testedBug, config);
+        ValidatedBug result = BugScorer.performScorer(testedBug, config);
         assertThat(result.getRating()).isEqualTo(Rating.SUCCESS);
         assertThat(result.getPointsValuation()).isEqualTo(1f);
     }
@@ -49,7 +49,7 @@ public class BugScorerTest {
         ValidationConfig config = this.getDefaultConfig();
         Bug testedBug = this.getDefaultBug();
         testedBug.setReproductionPath("");
-        BugValidatorEntry result = BugScorer.performScorer(testedBug, config);
+        ValidatedBug result = BugScorer.performScorer(testedBug, config);
 
         assertThat(result.getPointsValuation()).isEqualTo(0.8f);
         assertThat(result.getViolations().size()).isEqualTo(1);

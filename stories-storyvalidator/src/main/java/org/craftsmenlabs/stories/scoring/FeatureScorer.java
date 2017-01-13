@@ -2,8 +2,12 @@ package org.craftsmenlabs.stories.scoring;
 
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
-import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
-import org.craftsmenlabs.stories.api.models.validatorentry.*;
+import org.craftsmenlabs.stories.api.models.items.Feature;
+import org.craftsmenlabs.stories.api.models.items.types.AbstractValidatedItem;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedAcceptanceCriteria;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedEstimation;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedFeature;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedUserStory;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -16,7 +20,7 @@ import java.util.Map;
  */
 public class FeatureScorer {
 
-    public static FeatureValidatorEntry performScorer(Feature feature, ValidationConfig validationConfig) {
+    public static ValidatedFeature performScorer(Feature feature, ValidationConfig validationConfig) {
         if (feature == null) {
             feature = Feature.builder().rank("0").summary("").userstory("").acceptanceCriteria("").key("0").build();
         }
@@ -30,15 +34,15 @@ public class FeatureScorer {
             feature.setEstimation(null);
         }
 
-        UserStoryValidatorEntry userStoryValidatorEntry = StoryScorer.performScorer(feature.getUserstory(), validationConfig);
-        AcceptanceCriteriaValidatorEntry acceptanceCriteriaValidatorEntry = AcceptanceCriteriaScorer.performScorer(feature.getAcceptanceCriteria(), validationConfig);
-        EstimationValidatorEntry estimationValidatorEntry = EstimationScorer.performScorer(feature.getEstimation(), validationConfig);
+        ValidatedUserStory validatedUserStory = StoryScorer.performScorer(feature.getUserstory(), validationConfig);
+        ValidatedAcceptanceCriteria validatedAcceptanceCriteria = AcceptanceCriteriaScorer.performScorer(feature.getAcceptanceCriteria(), validationConfig);
+        ValidatedEstimation validatedEstimation = EstimationScorer.performScorer(feature.getEstimation(), validationConfig);
 
 
-        List<Map.Entry<Boolean, AbstractStoryalidatorEntryItem>> entryList = new ArrayList<>();
-        entryList.add(new AbstractMap.SimpleEntry<>(validationConfig.getStory().isActive(),  userStoryValidatorEntry));
-        entryList.add(new AbstractMap.SimpleEntry<>(validationConfig.getCriteria().isActive(),  acceptanceCriteriaValidatorEntry));
-        entryList.add(new AbstractMap.SimpleEntry<>(validationConfig.getEstimation().isActive(),  estimationValidatorEntry));
+        List<Map.Entry<Boolean, AbstractValidatedItem>> entryList = new ArrayList<>();
+        entryList.add(new AbstractMap.SimpleEntry<>(validationConfig.getStory().isActive(), validatedUserStory));
+        entryList.add(new AbstractMap.SimpleEntry<>(validationConfig.getCriteria().isActive(), validatedAcceptanceCriteria));
+        entryList.add(new AbstractMap.SimpleEntry<>(validationConfig.getEstimation().isActive(), validatedEstimation));
 
 
         float points = (float)
@@ -50,15 +54,15 @@ public class FeatureScorer {
 
         Rating rating = points >= validationConfig.getFeature().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL;
 
-        return FeatureValidatorEntry
+        return ValidatedFeature
                 .builder()
                 .feature(feature)
                 .violations(new ArrayList<>())
                 .pointsValuation(points)
                 .rating(rating)
-                .userStoryValidatorEntry(userStoryValidatorEntry)
-                .acceptanceCriteriaValidatorEntry(acceptanceCriteriaValidatorEntry)
-                .estimationValidatorEntry(estimationValidatorEntry)
+                .validatedUserStory(validatedUserStory)
+                .validatedAcceptanceCriteria(validatedAcceptanceCriteria)
+                .validatedEstimation(validatedEstimation)
                 .build();
     }
 

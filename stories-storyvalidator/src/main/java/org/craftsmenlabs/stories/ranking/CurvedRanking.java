@@ -1,13 +1,13 @@
 package org.craftsmenlabs.stories.ranking;
 
-import org.craftsmenlabs.stories.api.models.validatorentry.BacklogItem;
-import org.craftsmenlabs.stories.api.models.validatorentry.Rankable;
+import org.craftsmenlabs.stories.api.models.items.types.Rankable;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedBacklogItem;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CurvedRanking<T extends BacklogItem> implements Ranking
+public class CurvedRanking<T extends ValidatedBacklogItem> implements Ranking
 {
 	public static final int SMOOTH_CURVE = 2;
 

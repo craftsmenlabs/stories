@@ -4,8 +4,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
-import org.craftsmenlabs.stories.api.models.scrumitems.Epic;
-import org.craftsmenlabs.stories.api.models.validatorentry.EpicValidatorEntry;
+import org.craftsmenlabs.stories.api.models.items.Epic;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedEpic;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 import org.craftsmenlabs.stories.api.models.violation.ViolationType;
 
@@ -17,8 +17,8 @@ import java.util.List;
  */
 public class EpicScorer {
 
-    public static EpicValidatorEntry performScorer(Epic epic, ValidationConfig validationConfig) {
-        EpicValidatorEntry entry = EpicValidatorEntry.builder()
+    public static ValidatedEpic performScorer(Epic epic, ValidationConfig validationConfig) {
+        ValidatedEpic entry = ValidatedEpic.builder()
                 .violations(new LinkedList<>())
                 .epic(epic)
                 .build();

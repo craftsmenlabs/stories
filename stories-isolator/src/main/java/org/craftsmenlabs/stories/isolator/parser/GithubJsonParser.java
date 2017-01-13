@@ -1,12 +1,13 @@
 package org.craftsmenlabs.stories.isolator.parser;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.apache.commons.lang3.StringUtils;
-import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
-import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
+import org.craftsmenlabs.stories.api.models.items.Backlog;
+import org.craftsmenlabs.stories.api.models.items.Feature;
 import org.craftsmenlabs.stories.isolator.SentenceSplitter;
 import org.craftsmenlabs.stories.isolator.model.github.GithubJsonIssue;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GithubJsonParser
 {

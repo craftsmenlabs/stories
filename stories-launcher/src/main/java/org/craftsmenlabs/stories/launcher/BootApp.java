@@ -2,7 +2,7 @@ package org.craftsmenlabs.stories.launcher;
 
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
-import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
+import org.craftsmenlabs.stories.api.models.items.validated.BacklogValidatorEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

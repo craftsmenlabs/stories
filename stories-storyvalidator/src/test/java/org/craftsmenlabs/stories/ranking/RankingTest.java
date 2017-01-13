@@ -1,7 +1,7 @@
 package org.craftsmenlabs.stories.ranking;
 
 import mockit.Injectable;
-import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
+import org.craftsmenlabs.stories.api.models.items.validated.BacklogValidatorEntry;
 import org.junit.Test;
 
 /**

@@ -1,9 +1,10 @@
-package org.craftsmenlabs.stories.api.models.scrumitems;
+package org.craftsmenlabs.stories.api.models.items;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.craftsmenlabs.stories.api.models.items.types.ScrumItem;
 
 @Data
 @AllArgsConstructor

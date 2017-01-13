@@ -1,6 +1,7 @@
 package org.craftsmenlabs.stories.api.models.summary;
 
-import org.craftsmenlabs.stories.api.models.validatorentry.*;
+import org.craftsmenlabs.stories.api.models.items.types.AbstractScorable;
+import org.craftsmenlabs.stories.api.models.items.validated.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,13 +12,13 @@ import static org.craftsmenlabs.stories.api.models.Rating.SUCCESS;
 public class SummaryBuilder {
 
     public Summary build(BacklogValidatorEntry entry){
-        List<FeatureValidatorEntry> issues = entry.getFeatureValidatorEntries().getItems();
-        List<BugValidatorEntry> bugs = entry.getBugValidatorEntries().getItems();
-        List<EpicValidatorEntry> epics = entry.getEpicValidatorEntries().getItems();
-        List<TeamTaskValidatorEntry> teamTasks = entry.getTeamTaskValidatorEntries().getItems();
-        List<UserStoryValidatorEntry> featureStories     = entry.getFeatureValidatorEntries().getItems().stream().map(FeatureValidatorEntry::getUserStoryValidatorEntry).collect(Collectors.toList());
-        List<AcceptanceCriteriaValidatorEntry> featureCriteria    = entry.getFeatureValidatorEntries().getItems().stream().map(FeatureValidatorEntry::getAcceptanceCriteriaValidatorEntry).collect(Collectors.toList());
-        List<EstimationValidatorEntry> featureEstimations = entry.getFeatureValidatorEntries().getItems().stream().map(FeatureValidatorEntry::getEstimationValidatorEntry).collect(Collectors.toList());
+        List<ValidatedFeature> issues = entry.getFeatureValidatorEntries().getItems();
+        List<ValidatedBug> bugs = entry.getBugValidatorEntries().getItems();
+        List<ValidatedEpic> epics = entry.getEpicValidatorEntries().getItems();
+        List<ValidatedTeamTask> teamTasks = entry.getTeamTaskValidatorEntries().getItems();
+        List<ValidatedUserStory> featureStories = entry.getFeatureValidatorEntries().getItems().stream().map(ValidatedFeature::getValidatedUserStory).collect(Collectors.toList());
+        List<ValidatedAcceptanceCriteria> featureCriteria = entry.getFeatureValidatorEntries().getItems().stream().map(ValidatedFeature::getValidatedAcceptanceCriteria).collect(Collectors.toList());
+        List<ValidatedEstimation> featureEstimations = entry.getFeatureValidatorEntries().getItems().stream().map(ValidatedFeature::getValidatedEstimation).collect(Collectors.toList());
 
         return Summary.builder()
                 .backlog(ScorableSummary.builder()

@@ -1,4 +1,4 @@
-package org.craftsmenlabs.stories.api.models.validatorentry;
+package org.craftsmenlabs.stories.api.models.items.types;
 
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.violation.Violation;

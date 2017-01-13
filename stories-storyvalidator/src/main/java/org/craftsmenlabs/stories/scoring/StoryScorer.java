@@ -2,19 +2,18 @@ package org.craftsmenlabs.stories.scoring;
 
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
-import org.craftsmenlabs.stories.api.models.validatorentry.UserStoryValidatorEntry;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedUserStory;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 import org.craftsmenlabs.stories.api.models.violation.ViolationType;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 public class StoryScorer {
     public final static int USERSTORY_MINIMUM_LENGTH = 50;
 
-    public static UserStoryValidatorEntry performScorer(String userStory, ValidationConfig validationConfig) {
+    public static ValidatedUserStory performScorer(String userStory, ValidationConfig validationConfig) {
 
         List<Violation> violations = new ArrayList<>();
 
@@ -64,7 +63,7 @@ public class StoryScorer {
 
         Rating rating = points >= validationConfig.getStory().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL;
 
-        return UserStoryValidatorEntry
+        return ValidatedUserStory
                 .builder()
                 .item(userStory)
                 .pointsValuation(points)

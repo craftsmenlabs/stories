@@ -1,4 +1,4 @@
-package org.craftsmenlabs.stories.api.models.validatorentry;
+package org.craftsmenlabs.stories.api.models.items.types;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -7,7 +7,7 @@ import org.craftsmenlabs.stories.api.models.violation.Violation;
 
 import java.util.List;
 
-public abstract class AbstractScorable implements Scorable{
+public abstract class AbstractScorable implements Scorable {
     private float pointsValuation = 0.0f;
 
     @JsonProperty("violations")

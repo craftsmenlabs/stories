@@ -4,8 +4,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.SourceConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
+import org.craftsmenlabs.stories.api.models.items.TeamTask;
 import org.craftsmenlabs.stories.api.models.logging.StorynatorLogger;
-import org.craftsmenlabs.stories.api.models.scrumitems.TeamTask;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
 
 import java.util.Map;

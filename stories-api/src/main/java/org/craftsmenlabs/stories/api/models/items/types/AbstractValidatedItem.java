@@ -1,23 +1,22 @@
-package org.craftsmenlabs.stories.api.models.validatorentry;
+package org.craftsmenlabs.stories.api.models.items.types;
 
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 
 import java.util.List;
 
-
-public abstract class AbstractStoryalidatorEntryItem<T> extends AbstractScorable {
+public abstract class AbstractValidatedItem<T> extends AbstractScorable {
     private T item;
 
-    public AbstractStoryalidatorEntryItem() {
+    public AbstractValidatedItem() {
     }
 
-    public AbstractStoryalidatorEntryItem(T item) {
+    public AbstractValidatedItem(T item) {
         this.item = item;
     }
 
 
-    public AbstractStoryalidatorEntryItem(float pointsValuation, List<Violation> violations, Rating rating, T item) {
+    public AbstractValidatedItem(float pointsValuation, List<Violation> violations, Rating rating, T item) {
         super(pointsValuation, violations, rating);
         this.item = item;
     }

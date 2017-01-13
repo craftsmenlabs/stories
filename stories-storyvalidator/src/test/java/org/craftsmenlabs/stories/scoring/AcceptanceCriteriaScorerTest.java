@@ -4,8 +4,8 @@ import mockit.Expectations;
 import mockit.Injectable;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
-import org.craftsmenlabs.stories.api.models.validatorentry.AcceptanceCriteriaValidatorEntry;
-import org.craftsmenlabs.stories.api.models.validatorentry.FeatureValidatorEntry;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedAcceptanceCriteria;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedFeature;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 import org.craftsmenlabs.stories.api.models.violation.ViolationType;
 import org.junit.Test;
@@ -28,10 +28,10 @@ public class AcceptanceCriteriaScorerTest {
 
 
     @Test
-    public void testPerformScorer_ReturnsZeroOnEmpty(@Injectable FeatureValidatorEntry entry, @Injectable ValidationConfig validationConfig) throws Exception {
+    public void testPerformScorer_ReturnsZeroOnEmpty(@Injectable ValidatedFeature entry, @Injectable ValidationConfig validationConfig) throws Exception {
         List<Violation> v = new ArrayList<>();
         new Expectations() {{
-            entry.getFeature().getAcceptanceCriteria();
+            entry.getItem().getAcceptanceCriteria();
             result = "";
 
             validationConfig.getCriteria().getRatingThreshold();
@@ -39,14 +39,14 @@ public class AcceptanceCriteriaScorerTest {
 
         }};
 
-        float score = AcceptanceCriteriaScorer.performScorer(entry.getFeature().getAcceptanceCriteria(), validationConfig).getPointsValuation();
+        float score = AcceptanceCriteriaScorer.performScorer(entry.getItem().getAcceptanceCriteria(), validationConfig).getPointsValuation();
         assertThat(score).isCloseTo(0.0f, withinPercentage(1));
     }
 
     @Test
-    public void testPerformScorerReturnsNullOnEmpty(@Injectable FeatureValidatorEntry entry, @Injectable ValidationConfig validationConfig) throws Exception {
+    public void testPerformScorerReturnsNullOnEmpty(@Injectable ValidatedFeature entry, @Injectable ValidationConfig validationConfig) throws Exception {
         new Expectations() {{
-            entry.getFeature().getAcceptanceCriteria();
+            entry.getItem().getAcceptanceCriteria();
             result = null;
 
 
@@ -54,12 +54,12 @@ public class AcceptanceCriteriaScorerTest {
             result = 0.7f;
         }};
 
-        float score = AcceptanceCriteriaScorer.performScorer(entry.getFeature().getAcceptanceCriteria(), validationConfig).getPointsValuation();
+        float score = AcceptanceCriteriaScorer.performScorer(entry.getItem().getAcceptanceCriteria(), validationConfig).getPointsValuation();
         assertThat(score).isCloseTo(0.0f, withinPercentage(1));
     }
 
     @Test
-    public void testPerformScorerAddsGivenClauseViolationOnNoGiven(@Injectable FeatureValidatorEntry entry, @Injectable ValidationConfig validationConfig) {
+    public void testPerformScorerAddsGivenClauseViolationOnNoGiven(@Injectable ValidatedFeature entry, @Injectable ValidationConfig validationConfig) {
         new Expectations() {{
             validationConfig.getCriteria().getGivenKeywords();
             result = Arrays.asList("gooooven ");
@@ -69,20 +69,20 @@ public class AcceptanceCriteriaScorerTest {
             result = Arrays.asList("then ");
 
 
-            entry.getFeature().getAcceptanceCriteria();
+            entry.getItem().getAcceptanceCriteria();
             result = goodCriteria;
 
             validationConfig.getCriteria().getRatingThreshold();
             result = 0.9999f;
         }};
 
-        AcceptanceCriteriaValidatorEntry entry1 = AcceptanceCriteriaScorer.performScorer(entry.getFeature().getAcceptanceCriteria(), validationConfig);
+        ValidatedAcceptanceCriteria entry1 = AcceptanceCriteriaScorer.performScorer(entry.getItem().getAcceptanceCriteria(), validationConfig);
         assertThat(entry1.getPointsValuation()).isCloseTo(1.0f - 0.33333f, withinPercentage(1));
         assertThat(entry1.getViolations()).contains(new Violation(ViolationType.CriteriaGivenClauseViolation, "<Given> section is not described properly. The criteria should contain any of the following keywords: gooooven "));
     }
 
     @Test
-    public void testPerformScorerAddsWhenClauseViolationOnNoGiven(@Injectable FeatureValidatorEntry entry, @Injectable ValidationConfig validationConfig) {
+    public void testPerformScorerAddsWhenClauseViolationOnNoGiven(@Injectable ValidatedFeature entry, @Injectable ValidationConfig validationConfig) {
         new Expectations() {{
             validationConfig.getCriteria().getGivenKeywords();
             result = Arrays.asList("given ");
@@ -92,20 +92,20 @@ public class AcceptanceCriteriaScorerTest {
             result = Arrays.asList("then ");
 
 
-            entry.getFeature().getAcceptanceCriteria();
+            entry.getItem().getAcceptanceCriteria();
             result = goodCriteria;
 
             validationConfig.getCriteria().getRatingThreshold();
             result = 0.9999f;
         }};
 
-        AcceptanceCriteriaValidatorEntry entry1 = AcceptanceCriteriaScorer.performScorer(entry.getFeature().getAcceptanceCriteria(), validationConfig);
+        ValidatedAcceptanceCriteria entry1 = AcceptanceCriteriaScorer.performScorer(entry.getItem().getAcceptanceCriteria(), validationConfig);
         assertThat(entry1.getPointsValuation()).isCloseTo(1.0f - 0.33333f, withinPercentage(1));
         assertThat(entry1.getViolations()).contains(new Violation(ViolationType.CriteriaWhenClauseViolation, "<When> section is not described properly. The criteria should contain any of the following keywords: whooon "));
     }
 
     @Test
-    public void testPerformScorerAddsThenClauseViolationOnNoGiven(@Injectable FeatureValidatorEntry entry, @Injectable ValidationConfig validationConfig) {
+    public void testPerformScorerAddsThenClauseViolationOnNoGiven(@Injectable ValidatedFeature entry, @Injectable ValidationConfig validationConfig) {
         new Expectations() {{
             validationConfig.getCriteria().getGivenKeywords();
             result = Arrays.asList("given ");
@@ -115,46 +115,46 @@ public class AcceptanceCriteriaScorerTest {
             result = Arrays.asList("thooon ");
 
 
-            entry.getFeature().getAcceptanceCriteria();
+            entry.getItem().getAcceptanceCriteria();
             result = goodCriteria;
 
             validationConfig.getCriteria().getRatingThreshold();
             result = 0.9999f;
         }};
 
-        AcceptanceCriteriaValidatorEntry entry1 = AcceptanceCriteriaScorer.performScorer(entry.getFeature().getAcceptanceCriteria(), validationConfig);
+        ValidatedAcceptanceCriteria entry1 = AcceptanceCriteriaScorer.performScorer(entry.getItem().getAcceptanceCriteria(), validationConfig);
         assertThat(entry1.getPointsValuation()).isCloseTo(1.0f - 0.33333f, withinPercentage(1));
         assertThat(entry1.getViolations()).contains(new Violation(ViolationType.CriteriaThenClauseViolation, "<Then> section is not described properly. The criteria should contain any of the following keywords: thooon "));
     }
 
     @Test
-    public void testPerformScorerAndRatesFail(@Injectable FeatureValidatorEntry entry, @Injectable ValidationConfig validationConfig)
+    public void testPerformScorerAndRatesFail(@Injectable ValidatedFeature entry, @Injectable ValidationConfig validationConfig)
     {
         new Expectations()
         {{
             validationConfig.getCriteria().getGivenKeywords();
             result = Arrays.asList("given ");
 
-            entry.getFeature().getAcceptanceCriteria();
+            entry.getItem().getAcceptanceCriteria();
             result = goodCriteria;
 
             validationConfig.getCriteria().getRatingThreshold();
             result = 0.3334f;
         }};
 
-        AcceptanceCriteriaValidatorEntry ae = AcceptanceCriteriaScorer.performScorer(entry.getFeature().getAcceptanceCriteria(), validationConfig);
+        ValidatedAcceptanceCriteria ae = AcceptanceCriteriaScorer.performScorer(entry.getItem().getAcceptanceCriteria(), validationConfig);
         assertThat(ae.getRating()).isEqualTo(Rating.FAIL);
     }
 
     @Test
-    public void testPerformScorerAndRatesSuccess(@Injectable FeatureValidatorEntry entry, @Injectable ValidationConfig validationConfig)
+    public void testPerformScorerAndRatesSuccess(@Injectable ValidatedFeature entry, @Injectable ValidationConfig validationConfig)
     {
         new Expectations()
         {{
             validationConfig.getCriteria().getGivenKeywords();
             result = Arrays.asList("given ");
 
-            entry.getFeature().getAcceptanceCriteria();
+            entry.getItem().getAcceptanceCriteria();
             result = goodCriteria;
 
             validationConfig.getCriteria().getRatingThreshold();
@@ -162,12 +162,12 @@ public class AcceptanceCriteriaScorerTest {
 
         }};
 
-        AcceptanceCriteriaValidatorEntry ae = AcceptanceCriteriaScorer.performScorer(entry.getFeature().getAcceptanceCriteria(), validationConfig);
+        ValidatedAcceptanceCriteria ae = AcceptanceCriteriaScorer.performScorer(entry.getItem().getAcceptanceCriteria(), validationConfig);
         assertThat(ae.getRating()).isEqualTo(Rating.SUCCESS);
     }
 
     @Test
-    public void testPerformScorerMatchesAllKeywords(@Injectable FeatureValidatorEntry entry, @Injectable ValidationConfig validationConfig) {
+    public void testPerformScorerMatchesAllKeywords(@Injectable ValidatedFeature entry, @Injectable ValidationConfig validationConfig) {
         new Expectations() {{
             validationConfig.getCriteria().getGivenKeywords();
             result = Arrays.asList("given ");
@@ -177,21 +177,21 @@ public class AcceptanceCriteriaScorerTest {
             result = Arrays.asList("then ");
 
 
-            entry.getFeature().getAcceptanceCriteria();
+            entry.getItem().getAcceptanceCriteria();
             result = goodCriteria;
 
             validationConfig.getCriteria().getRatingThreshold();
             result = 0.9999f;
         }};
 
-        AcceptanceCriteriaValidatorEntry entry1 = AcceptanceCriteriaScorer.performScorer(entry.getFeature().getAcceptanceCriteria(), validationConfig);
+        ValidatedAcceptanceCriteria entry1 = AcceptanceCriteriaScorer.performScorer(entry.getItem().getAcceptanceCriteria(), validationConfig);
         assertThat(entry1.getPointsValuation()).isCloseTo(1f, withinPercentage(0.0001));
         assertThat(entry1.getRating()).isEqualTo(Rating.SUCCESS);
     }
 
 
     @Test
-    public void testPerformScorerDoesntMatchGivenKeyword(@Injectable FeatureValidatorEntry entry, @Injectable ValidationConfig validationConfig) {
+    public void testPerformScorerDoesntMatchGivenKeyword(@Injectable ValidatedFeature entry, @Injectable ValidationConfig validationConfig) {
         new Expectations() {{
             validationConfig.getCriteria().getGivenKeywords();
             result = Arrays.asList("goooven ");
@@ -201,19 +201,19 @@ public class AcceptanceCriteriaScorerTest {
             result = Arrays.asList("then ");
 
 
-            entry.getFeature().getAcceptanceCriteria();
+            entry.getItem().getAcceptanceCriteria();
             result = goodCriteria;
 
             validationConfig.getCriteria().getRatingThreshold();
             result = 0.6f;
         }};
 
-        AcceptanceCriteriaValidatorEntry entry1 = AcceptanceCriteriaScorer.performScorer(entry.getFeature().getAcceptanceCriteria(), validationConfig);
+        ValidatedAcceptanceCriteria entry1 = AcceptanceCriteriaScorer.performScorer(entry.getItem().getAcceptanceCriteria(), validationConfig);
         assertThat(entry1.getPointsValuation()).isCloseTo(0.6666f, withinPercentage(0.1));
     }
 
     @Test
-    public void testPerformScorerDoesntMatchWhenKeyword(@Injectable FeatureValidatorEntry entry, @Injectable ValidationConfig validationConfig) {
+    public void testPerformScorerDoesntMatchWhenKeyword(@Injectable ValidatedFeature entry, @Injectable ValidationConfig validationConfig) {
         new Expectations() {{
             validationConfig.getCriteria().getGivenKeywords();
             result = Arrays.asList("given ");
@@ -223,19 +223,19 @@ public class AcceptanceCriteriaScorerTest {
             result = Arrays.asList("then ");
 
 
-            entry.getFeature().getAcceptanceCriteria();
+            entry.getItem().getAcceptanceCriteria();
             result = goodCriteria;
 
             validationConfig.getCriteria().getRatingThreshold();
             result = 0.7f;
         }};
 
-        AcceptanceCriteriaValidatorEntry entry1 = AcceptanceCriteriaScorer.performScorer(entry.getFeature().getAcceptanceCriteria(), validationConfig);
+        ValidatedAcceptanceCriteria entry1 = AcceptanceCriteriaScorer.performScorer(entry.getItem().getAcceptanceCriteria(), validationConfig);
         assertThat(entry1.getPointsValuation()).isCloseTo(0.6666f, withinPercentage(0.1));
     }
 
     @Test
-    public void testPerformScorerDoesntMatchThenKeyword(@Injectable FeatureValidatorEntry entry, @Injectable ValidationConfig validationConfig) {
+    public void testPerformScorerDoesntMatchThenKeyword(@Injectable ValidatedFeature entry, @Injectable ValidationConfig validationConfig) {
         new Expectations() {{
             validationConfig.getCriteria().getGivenKeywords();
             result = Arrays.asList("given ");
@@ -245,33 +245,33 @@ public class AcceptanceCriteriaScorerTest {
             result = Arrays.asList("thoooon ");
 
 
-            entry.getFeature().getAcceptanceCriteria();
+            entry.getItem().getAcceptanceCriteria();
             result = goodCriteria;
 
             validationConfig.getCriteria().getRatingThreshold();
             result = 0.7f;
         }};
 
-        AcceptanceCriteriaValidatorEntry entry1 = AcceptanceCriteriaScorer.performScorer(entry.getFeature().getAcceptanceCriteria(), validationConfig);
+        ValidatedAcceptanceCriteria entry1 = AcceptanceCriteriaScorer.performScorer(entry.getItem().getAcceptanceCriteria(), validationConfig);
         assertThat(entry1.getPointsValuation()).isCloseTo(0.6666f, withinPercentage(0.1));
     }
 
     @Test
-    public void testPerformScoreCriteriaTooShort(@Injectable FeatureValidatorEntry entry, @Injectable ValidationConfig validationConfig) {
+    public void testPerformScoreCriteriaTooShort(@Injectable ValidatedFeature entry, @Injectable ValidationConfig validationConfig) {
         new Expectations() {{
-            entry.getFeature().getAcceptanceCriteria();
+            entry.getItem().getAcceptanceCriteria();
             result = "given when then given when then given when then ".substring(0, AcceptanceCriteriaScorer.MINIMUM_LENGTH_OF_ACC_CRITERIA - 1);
 
             validationConfig.getCriteria().getRatingThreshold();
             result = 0.7f;
         }};
 
-        AcceptanceCriteriaValidatorEntry entry1 = AcceptanceCriteriaScorer.performScorer(entry.getFeature().getAcceptanceCriteria(), validationConfig);
+        ValidatedAcceptanceCriteria entry1 = AcceptanceCriteriaScorer.performScorer(entry.getItem().getAcceptanceCriteria(), validationConfig);
         assertThat(entry1.getPointsValuation()).isCloseTo(0.0f, withinPercentage(0.1));
     }
 
     @Test
-    public void testPerformScorerCriteriaRightLength(@Injectable FeatureValidatorEntry entry, @Injectable ValidationConfig validationConfig) {
+    public void testPerformScorerCriteriaRightLength(@Injectable ValidatedFeature entry, @Injectable ValidationConfig validationConfig) {
         new Expectations() {{
             validationConfig.getCriteria().getGivenKeywords();
             result = Arrays.asList("given ");
@@ -280,19 +280,19 @@ public class AcceptanceCriteriaScorerTest {
             validationConfig.getCriteria().getThenKeywords();
             result = Arrays.asList("then ");
 
-            entry.getFeature().getAcceptanceCriteria();
+            entry.getItem().getAcceptanceCriteria();
             result = "given when then given when then given when then ".substring(0, AcceptanceCriteriaScorer.MINIMUM_LENGTH_OF_ACC_CRITERIA);
 
             validationConfig.getCriteria().getRatingThreshold();
             result = 0.7f;
         }};
 
-        AcceptanceCriteriaValidatorEntry entry1 = AcceptanceCriteriaScorer.performScorer(entry.getFeature().getAcceptanceCriteria(), validationConfig);
+        ValidatedAcceptanceCriteria entry1 = AcceptanceCriteriaScorer.performScorer(entry.getItem().getAcceptanceCriteria(), validationConfig);
         assertThat(entry1.getPointsValuation()).isCloseTo(1f, withinPercentage(0.1));
     }
 
     @Test
-    public void testPerformScorerReturnsFailOnLowScore(@Injectable FeatureValidatorEntry entry, @Injectable ValidationConfig validationConfig) {
+    public void testPerformScorerReturnsFailOnLowScore(@Injectable ValidatedFeature entry, @Injectable ValidationConfig validationConfig) {
         new Expectations() {{
             validationConfig.getCriteria().getGivenKeywords();
             result = Arrays.asList("given ");
@@ -302,14 +302,14 @@ public class AcceptanceCriteriaScorerTest {
             result = Arrays.asList("then ");
 
 
-            entry.getFeature().getAcceptanceCriteria();
+            entry.getItem().getAcceptanceCriteria();
             result = goodCriteria;
 
             validationConfig.getCriteria().getRatingThreshold();
             result = 1.1f;
         }};
 
-        Rating rating = AcceptanceCriteriaScorer.performScorer(entry.getFeature().getAcceptanceCriteria(), validationConfig).getRating();
+        Rating rating = AcceptanceCriteriaScorer.performScorer(entry.getItem().getAcceptanceCriteria(), validationConfig).getRating();
         assertThat(rating).isEqualTo(Rating.FAIL);
     }
 

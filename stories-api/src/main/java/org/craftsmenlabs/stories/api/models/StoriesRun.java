@@ -6,8 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
+import org.craftsmenlabs.stories.api.models.items.validated.BacklogValidatorEntry;
 import org.craftsmenlabs.stories.api.models.summary.Summary;
-import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 
 import java.time.LocalDateTime;
 

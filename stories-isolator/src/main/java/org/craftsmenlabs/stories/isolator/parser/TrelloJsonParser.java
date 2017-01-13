@@ -1,8 +1,8 @@
 package org.craftsmenlabs.stories.isolator.parser;
 
 import org.apache.commons.lang3.StringUtils;
-import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
-import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
+import org.craftsmenlabs.stories.api.models.items.Backlog;
+import org.craftsmenlabs.stories.api.models.items.Feature;
 import org.craftsmenlabs.stories.isolator.SentenceSplitter;
 import org.craftsmenlabs.stories.isolator.model.trello.TrelloJsonIssue;
 

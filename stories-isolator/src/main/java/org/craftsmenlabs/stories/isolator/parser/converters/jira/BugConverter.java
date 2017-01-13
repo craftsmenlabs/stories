@@ -2,7 +2,7 @@ package org.craftsmenlabs.stories.isolator.parser.converters.jira;
 
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.SourceConfig;
-import org.craftsmenlabs.stories.api.models.scrumitems.Bug;
+import org.craftsmenlabs.stories.api.models.items.Bug;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
 
 import java.util.Map;

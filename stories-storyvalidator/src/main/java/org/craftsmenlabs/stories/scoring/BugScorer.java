@@ -4,8 +4,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
-import org.craftsmenlabs.stories.api.models.scrumitems.Bug;
-import org.craftsmenlabs.stories.api.models.validatorentry.BugValidatorEntry;
+import org.craftsmenlabs.stories.api.models.items.Bug;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedBug;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 import org.craftsmenlabs.stories.api.models.violation.ViolationType;
 
@@ -17,8 +17,8 @@ import java.util.List;
  */
 public class BugScorer {
 
-    public static BugValidatorEntry performScorer(Bug bug, ValidationConfig validationConfig) {
-        BugValidatorEntry entry = BugValidatorEntry.builder()
+    public static ValidatedBug performScorer(Bug bug, ValidationConfig validationConfig) {
+        ValidatedBug entry = ValidatedBug.builder()
                 .violations(new LinkedList<>())
                 .bug(bug)
                 .build();

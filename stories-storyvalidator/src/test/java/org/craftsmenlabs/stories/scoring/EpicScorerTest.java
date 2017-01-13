@@ -3,8 +3,8 @@ package org.craftsmenlabs.stories.scoring;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
-import org.craftsmenlabs.stories.api.models.scrumitems.Epic;
-import org.craftsmenlabs.stories.api.models.validatorentry.EpicValidatorEntry;
+import org.craftsmenlabs.stories.api.models.items.Epic;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedEpic;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -20,7 +20,7 @@ public class EpicScorerTest {
         config.getEpic().setEnabledFields(new LinkedList<>());
         Epic testedEpic = this.getDefaultEpic();
 
-        EpicValidatorEntry result = EpicScorer.performScorer(testedEpic, config);
+        ValidatedEpic result = EpicScorer.performScorer(testedEpic, config);
         assertThat(result.getRating()).isEqualTo(Rating.FAIL);
         assertThat(result.getPointsValuation()).isEqualTo(0.0f);
     }
@@ -30,7 +30,7 @@ public class EpicScorerTest {
         ValidationConfig config = this.getDefaultConfig();
         Epic testedEpic = this.getDefaultEpic();
 
-        EpicValidatorEntry result = EpicScorer.performScorer(testedEpic, config);
+        ValidatedEpic result = EpicScorer.performScorer(testedEpic, config);
         assertThat(result.getRating()).isEqualTo(Rating.SUCCESS);
         assertThat(result.getPointsValuation()).isEqualTo(1f);
     }
@@ -49,7 +49,7 @@ public class EpicScorerTest {
         ValidationConfig config = this.getDefaultConfig();
         Epic testedEpic = this.getDefaultEpic();
         testedEpic.setGoal("");
-        EpicValidatorEntry result = EpicScorer.performScorer(testedEpic, config);
+        ValidatedEpic result = EpicScorer.performScorer(testedEpic, config);
 
         assertThat(result.getPointsValuation()).isEqualTo(0.0f);
         assertThat(result.getViolations().size()).isEqualTo(1);

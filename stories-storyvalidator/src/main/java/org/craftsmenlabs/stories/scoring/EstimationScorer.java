@@ -2,7 +2,7 @@ package org.craftsmenlabs.stories.scoring;
 
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
-import org.craftsmenlabs.stories.api.models.validatorentry.EstimationValidatorEntry;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedEstimation;
 
 import java.util.ArrayList;
 
@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * Assigns points if a estimation is ok
  */
 public class EstimationScorer {
-    public static EstimationValidatorEntry performScorer(Float estimation, ValidationConfig validationConfig) {
+    public static ValidatedEstimation performScorer(Float estimation, ValidationConfig validationConfig) {
 
         float points;
         if(estimation == null || estimation.compareTo(0f) == 0){
@@ -20,7 +20,7 @@ public class EstimationScorer {
         }
         Rating rating = points >= validationConfig.getEstimation().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL;
 
-        return EstimationValidatorEntry
+        return ValidatedEstimation
                 .builder()
                 .item(estimation)
                 .violations(new ArrayList<>())

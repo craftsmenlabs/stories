@@ -5,11 +5,11 @@ import mockit.Injectable;
 import mockit.Mocked;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
-import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
-import org.craftsmenlabs.stories.api.models.scrumitems.Bug;
-import org.craftsmenlabs.stories.api.models.scrumitems.Epic;
-import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
-import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
+import org.craftsmenlabs.stories.api.models.items.Backlog;
+import org.craftsmenlabs.stories.api.models.items.Bug;
+import org.craftsmenlabs.stories.api.models.items.Epic;
+import org.craftsmenlabs.stories.api.models.items.Feature;
+import org.craftsmenlabs.stories.api.models.items.validated.BacklogValidatorEntry;
 import org.craftsmenlabs.stories.ranking.Ranking;
 import org.junit.Test;
 

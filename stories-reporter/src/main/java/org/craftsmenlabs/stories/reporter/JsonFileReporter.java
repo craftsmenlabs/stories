@@ -1,12 +1,12 @@
 package org.craftsmenlabs.stories.reporter;
 
-import java.io.File;
-import java.io.IOException;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.craftsmenlabs.stories.api.models.Reporter;
 import org.craftsmenlabs.stories.api.models.StoriesRun;
-import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.craftsmenlabs.stories.api.models.items.validated.BacklogValidatorEntry;
+
+import java.io.File;
+import java.io.IOException;
 
 public class JsonFileReporter implements Reporter {
     private File output;

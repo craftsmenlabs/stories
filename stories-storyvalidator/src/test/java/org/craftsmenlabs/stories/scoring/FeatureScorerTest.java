@@ -5,8 +5,8 @@ import mockit.Injectable;
 import mockit.Mock;
 import mockit.MockUp;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
-import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
-import org.craftsmenlabs.stories.api.models.validatorentry.UserStoryValidatorEntry;
+import org.craftsmenlabs.stories.api.models.items.Feature;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedUserStory;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -78,9 +78,9 @@ public class FeatureScorerTest {
         new MockUp<StoryScorer>()
         {
             @Mock
-            UserStoryValidatorEntry performScorer( String input, ValidationConfig validationConfig1 )
+            ValidatedUserStory performScorer(String input, ValidationConfig validationConfig1)
             {
-                return UserStoryValidatorEntry.builder().pointsValuation(1f).item("").build();
+                return ValidatedUserStory.builder().pointsValuation(1f).item("").build();
             }
         };
         new Expectations(){{

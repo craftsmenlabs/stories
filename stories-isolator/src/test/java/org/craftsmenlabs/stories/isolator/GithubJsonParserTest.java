@@ -1,18 +1,22 @@
 package org.craftsmenlabs.stories.isolator;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import java.io.File;
-import java.net.URL;
-import java.util.*;
-import org.apache.commons.io.FileUtils;
-import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
-import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
-import org.craftsmenlabs.stories.isolator.model.github.GithubJsonIssue;
-import org.craftsmenlabs.stories.isolator.parser.GithubJsonParser;
-import org.junit.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import mockit.Tested;
+import org.apache.commons.io.FileUtils;
+import org.craftsmenlabs.stories.api.models.items.Backlog;
+import org.craftsmenlabs.stories.api.models.items.Feature;
+import org.craftsmenlabs.stories.isolator.model.github.GithubJsonIssue;
+import org.craftsmenlabs.stories.isolator.parser.GithubJsonParser;
+import org.junit.Test;
+
+import java.io.File;
+import java.net.URL;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class GithubJsonParserTest
 {

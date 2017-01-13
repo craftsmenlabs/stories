@@ -1,9 +1,10 @@
 package org.craftsmenlabs.stories.api.models.summary;
 
 import org.junit.Test;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class BacklogItemListSummaryTest {
+public class ValidatedBacklogItemListSummaryTest {
 
     @Test
     public void testdivideByReturnsCorrectResult() throws Exception {

@@ -4,8 +4,8 @@ import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.Reporter;
 import org.craftsmenlabs.stories.api.models.StoriesRun;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
+import org.craftsmenlabs.stories.api.models.items.validated.*;
 import org.craftsmenlabs.stories.api.models.logging.StorynatorLogger;
-import org.craftsmenlabs.stories.api.models.validatorentry.*;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 
 import java.text.DecimalFormat;
@@ -69,25 +69,25 @@ public class ConsoleReporter implements Reporter {
         log("------------------------------------------------------------");
 
         //verbose output
-        List<FeatureValidatorEntry> features = backlogValidatorEntry.getFeatureValidatorEntries().getItems();
+        List<ValidatedFeature> features = backlogValidatorEntry.getFeatureValidatorEntries().getItems();
         if (features != null) {
             features.forEach(this::reportOnIssue);
         }
         // Log bugs
 
-        List<BugValidatorEntry> bugs = backlogValidatorEntry.getBugValidatorEntries().getItems();
+        List<ValidatedBug> bugs = backlogValidatorEntry.getBugValidatorEntries().getItems();
         if (bugs != null) {
             bugs.forEach(this::reportOnBug);
         }
 
         // Log epics
-        List<EpicValidatorEntry> epics = backlogValidatorEntry.getEpicValidatorEntries().getItems();
+        List<ValidatedEpic> epics = backlogValidatorEntry.getEpicValidatorEntries().getItems();
         if (epics != null) {
             epics.forEach(this::reportOnEpic);
         }
 
         // Log epics
-        List<TeamTaskValidatorEntry> teamTasks = backlogValidatorEntry.getTeamTaskValidatorEntries().getItems();
+        List<ValidatedTeamTask> teamTasks = backlogValidatorEntry.getTeamTaskValidatorEntries().getItems();
         if (teamTasks != null) {
             teamTasks.forEach(this::reportOnTeamTask);
         }
@@ -115,87 +115,87 @@ public class ConsoleReporter implements Reporter {
                 .getRatingThreshold() + ")");
     }
 
-    public void reportOnIssue(FeatureValidatorEntry issue) {
+    public void reportOnIssue(ValidatedFeature issue) {
         prefix = issue.getRating() == Rating.SUCCESS ? ANSI_GREEN : ANSI_RED;
 
         log("------------------------------------------------------------");
         log("Issue "
-                + issue.getFeature().getKey()
+                + issue.getItem().getKey()
                 + " Item total ("
                 + decimalFormat.format(issue.getPointsValuation() * 100)
                 + "/"
                 + MAX_SCORE
                 + ") \t"
                 + " US ("
-                + decimalFormat.format(issue.getUserStoryValidatorEntry().getPointsValuation() * 100)
+                + decimalFormat.format(issue.getValidatedUserStory().getPointsValuation() * 100)
                 + "/"
                 + MAX_SCORE
                 + ")\t"
                 + " AC ("
-                + decimalFormat.format(issue.getAcceptanceCriteriaValidatorEntry().getPointsValuation() * 100)
+                + decimalFormat.format(issue.getValidatedAcceptanceCriteria().getPointsValuation() * 100)
                 + "/"
                 + MAX_SCORE
                 + ")\t"
         );
-        log(issue.getFeature().getSummary());
+        log(issue.getItem().getSummary());
         issue.getViolations()
                 .forEach(violation ->
                         log("Violation found:" + violation.toString()));
 
-        reportOnUserstory(issue.getUserStoryValidatorEntry());
-        reportOnAcceptanceCriteria(issue.getAcceptanceCriteriaValidatorEntry());
-        reportOnEstimation(issue.getEstimationValidatorEntry());
+        reportOnUserstory(issue.getValidatedUserStory());
+        reportOnAcceptanceCriteria(issue.getValidatedAcceptanceCriteria());
+        reportOnEstimation(issue.getValidatedEstimation());
     }
 
-    public void reportOnBug(BugValidatorEntry bug) {
+    public void reportOnBug(ValidatedBug bug) {
         prefix = bug.getRating() == Rating.SUCCESS ? ANSI_GREEN : ANSI_RED;
         log("------------------------------------------------------------");
         log("Bug "
-                + bug.getBug().getKey()
+                + bug.getItem().getKey()
                 + " Item total ("
                 + decimalFormat.format(bug.getPointsValuation() * 100)
                 + "/"
                 + MAX_SCORE
                 + ") \t"
         );
-        log(bug.getBug().getSummary());
+        log(bug.getItem().getSummary());
         reportOnViolations(bug.getViolations());
     }
 
-    public void reportOnEpic(EpicValidatorEntry epic) {
+    public void reportOnEpic(ValidatedEpic epic) {
         prefix = epic.getRating() == Rating.SUCCESS ? ANSI_GREEN : ANSI_RED;
         log("------------------------------------------------------------");
         log("Epic "
-                + epic.getEpic().getKey()
+                + epic.getItem().getKey()
                 + " Item total ("
                 + decimalFormat.format(epic.getPointsValuation() * 100)
                 + "/"
                 + MAX_SCORE
                 + ") \t"
         );
-        log(epic.getEpic().getSummary());
+        log(epic.getItem().getSummary());
         reportOnViolations(epic.getViolations());
     }
 
-    public void reportOnTeamTask(TeamTaskValidatorEntry teamTask) {
+    public void reportOnTeamTask(ValidatedTeamTask teamTask) {
         prefix = teamTask.getRating() == Rating.SUCCESS ? ANSI_GREEN : ANSI_RED;
         log("------------------------------------------------------------");
         log("teamTask "
-                + teamTask.getTeamTask().getKey()
+                + teamTask.getItem().getKey()
                 + " Item total ("
                 + decimalFormat.format(teamTask.getPointsValuation() * 100)
                 + "/"
                 + MAX_SCORE
                 + ") \t"
         );
-        log("Summary: " + teamTask.getTeamTask().getSummary());
-        log("Description: " + teamTask.getTeamTask().getDescription());
-        log("Criteria: " + teamTask.getTeamTask().getAcceptationCriteria());
-        log("Estimation: " + Float.toString(teamTask.getTeamTask().getEstimation()));
+        log("Summary: " + teamTask.getItem().getSummary());
+        log("Description: " + teamTask.getItem().getDescription());
+        log("Criteria: " + teamTask.getItem().getAcceptationCriteria());
+        log("Estimation: " + Float.toString(teamTask.getItem().getEstimation()));
         reportOnViolations(teamTask.getViolations());
     }
 
-    public void reportOnUserstory(UserStoryValidatorEntry entry) {
+    public void reportOnUserstory(ValidatedUserStory entry) {
         prefix = entry.getRating() == Rating.SUCCESS ? ANSI_GREEN : ANSI_RED;
 
 
@@ -205,7 +205,7 @@ public class ConsoleReporter implements Reporter {
         reportOnViolations(entry.getViolations());
     }
 
-    public void reportOnAcceptanceCriteria(AcceptanceCriteriaValidatorEntry entry) {
+    public void reportOnAcceptanceCriteria(ValidatedAcceptanceCriteria entry) {
         prefix = entry.getRating() == Rating.SUCCESS ? ANSI_GREEN : ANSI_RED;
 
         String criteria = entry.getItem().replace("\n", " ").replace("\r", "");
@@ -214,7 +214,7 @@ public class ConsoleReporter implements Reporter {
         reportOnViolations(entry.getViolations());
     }
 
-    public void reportOnEstimation(EstimationValidatorEntry entry) {
+    public void reportOnEstimation(ValidatedEstimation entry) {
         prefix = entry.getRating() == Rating.SUCCESS ? ANSI_GREEN : ANSI_RED;
 
         Float estimation = entry.getItem();
