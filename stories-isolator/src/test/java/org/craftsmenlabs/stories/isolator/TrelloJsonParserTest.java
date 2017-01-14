@@ -53,7 +53,6 @@ public class TrelloJsonParserTest {
         );
 
         Backlog backlog = trelloJsonParser.parse(trelloJsonIssues);
-        backlog.getItems().sort(Comparator.comparing(BacklogItem::getRank));
 
         assertThat(backlog.getItems().stream()
                 .map(item -> (Feature) item)
