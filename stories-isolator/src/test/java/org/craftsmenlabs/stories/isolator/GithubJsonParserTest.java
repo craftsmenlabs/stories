@@ -6,7 +6,6 @@ import mockit.Tested;
 import org.apache.commons.io.FileUtils;
 import org.craftsmenlabs.stories.api.models.items.base.Backlog;
 import org.craftsmenlabs.stories.api.models.items.base.Feature;
-import org.craftsmenlabs.stories.api.models.items.types.BacklogItem;
 import org.craftsmenlabs.stories.isolator.model.github.GithubJsonIssue;
 import org.craftsmenlabs.stories.isolator.parser.GithubJsonParser;
 import org.junit.Test;
@@ -55,9 +54,11 @@ public class GithubJsonParserTest
         );
 
         Backlog backlog = githubJsonParser.parse(githubJsonIssues);
-        backlog.getItems().sort(Comparator.comparing(BacklogItem::getRank));
 
-        assertThat(backlog.getItems().stream().map(item -> (Feature) item).collect(Collectors.toList())).containsExactly(
+        assertThat(backlog.getItems().stream()
+                .map(item -> (Feature) item)
+                .sorted(Comparator.comparing(Feature::getRank))
+                .collect(Collectors.toList())).containsExactly(
                 Feature.builder().key("0").rank("00").estimation(0f).build(),
                 Feature.builder().key("1").rank("01").estimation(0f).build(),
                 Feature.builder().key("2").rank("02").estimation(0f).build(),

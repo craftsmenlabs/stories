@@ -55,7 +55,10 @@ public class TrelloJsonParserTest {
         Backlog backlog = trelloJsonParser.parse(trelloJsonIssues);
         backlog.getItems().sort(Comparator.comparing(BacklogItem::getRank));
 
-        assertThat(backlog.getItems().stream().map(item -> (Feature) item).collect(Collectors.toList())).containsExactly(
+        assertThat(backlog.getItems().stream()
+                .map(item -> (Feature) item)
+                .sorted(Comparator.comparing(Feature::getRank))
+                .collect(Collectors.toList())).containsExactly(
                 Feature.builder().key("0").rank("00").estimation(0f).build(),
                 Feature.builder().key("1").rank("01").estimation(0f).build(),
                 Feature.builder().key("2").rank("02").estimation(0f).build(),
