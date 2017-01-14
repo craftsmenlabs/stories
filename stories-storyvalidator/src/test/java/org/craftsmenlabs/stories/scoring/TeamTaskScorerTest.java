@@ -4,13 +4,16 @@ import mockit.Expectations;
 import mockit.Injectable;
 import org.apache.commons.lang3.StringUtils;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
-import org.craftsmenlabs.stories.api.models.items.TeamTask;
+import org.craftsmenlabs.stories.api.models.items.base.TeamTask;
 import org.craftsmenlabs.stories.api.models.items.validated.ValidatedTeamTask;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TeamTaskScorerTest {
+    private TeamTaskScorer getScorer(ValidationConfig validationConfig) {
+        return new TeamTaskScorer(validationConfig);
+    }
 
     @Test
     public void testPerformScorerReturnsZeroOnEmpty(@Injectable ValidatedTeamTask entry, @Injectable ValidationConfig validationConfig) throws Exception {
@@ -22,7 +25,7 @@ public class TeamTaskScorerTest {
             result = 0.7f;
         }};
 
-        float score = TeamTaskScorer.performScorer(entry.getItem(), validationConfig).getPointsValuation();
+        float score = getScorer(validationConfig).validate(entry.getItem()).getPointsValuation();
         assertThat(score).isEqualTo(0.0f);
     }
 
@@ -36,7 +39,7 @@ public class TeamTaskScorerTest {
             result = 0.7f;
         }};
 
-        float score = TeamTaskScorer.performScorer(entry.getItem(), validationConfig).getPointsValuation();
+        float score = getScorer(validationConfig).validate(entry.getItem()).getPointsValuation();
         assertThat(score).isEqualTo(0.0f);
     }
 
@@ -56,7 +59,7 @@ public class TeamTaskScorerTest {
             result = 0.7f;
         }};
 
-        float score = TeamTaskScorer.performScorer(entry.getItem(), validationConfig).getPointsValuation();
+        float score = getScorer(validationConfig).validate(entry.getItem()).getPointsValuation();
         assertThat(score).isEqualTo(1.0f);
     }
 

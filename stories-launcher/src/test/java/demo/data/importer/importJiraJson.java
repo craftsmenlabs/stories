@@ -8,8 +8,8 @@ import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.ReportConfig;
 import org.craftsmenlabs.stories.api.models.config.StorynatorConfig;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
-import org.craftsmenlabs.stories.api.models.items.Backlog;
-import org.craftsmenlabs.stories.api.models.items.validated.BacklogValidatorEntry;
+import org.craftsmenlabs.stories.api.models.items.base.Backlog;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedBacklog;
 import org.craftsmenlabs.stories.api.models.logging.StandaloneLogger;
 import org.craftsmenlabs.stories.api.models.summary.SummaryBuilder;
 import org.craftsmenlabs.stories.connectivity.service.enterprise.EnterpriseDashboardReporter;
@@ -120,13 +120,14 @@ public class importJiraJson {
 
         Backlog backlog = jiraJsonParser.parse(jiraBacklog);
 
-        BacklogValidatorEntry backlogValidatorEntry = BacklogScorer.performScorer(backlog, new CurvedRanking(), validationConfig);
+        BacklogScorer scorer = new BacklogScorer(validationConfig, new CurvedRanking());
+        ValidatedBacklog validatedBacklog = scorer.validate(backlog);
 
         StoriesRun storiesRun = StoriesRun.builder()
                 .projectToken(projectToken)
                 .runDateTime(dateTime)
-                .backlogValidatorEntry(backlogValidatorEntry)
-                .summary(new SummaryBuilder().build(backlogValidatorEntry))
+                .validatedBacklog(validatedBacklog)
+                .summary(new SummaryBuilder().build(validatedBacklog))
                 .runConfig(validationConfig)
                 .build();
 

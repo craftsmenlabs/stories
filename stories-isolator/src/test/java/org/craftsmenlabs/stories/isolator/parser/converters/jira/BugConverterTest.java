@@ -4,7 +4,7 @@ import mockit.Expectations;
 import mockit.Mocked;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.SourceConfig;
-import org.craftsmenlabs.stories.api.models.items.Bug;
+import org.craftsmenlabs.stories.api.models.items.base.Bug;
 import org.craftsmenlabs.stories.isolator.model.jira.Fields;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
 import org.craftsmenlabs.stories.isolator.model.jira.Priority;

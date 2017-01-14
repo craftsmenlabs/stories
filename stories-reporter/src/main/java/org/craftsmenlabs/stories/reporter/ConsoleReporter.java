@@ -53,7 +53,7 @@ public class ConsoleReporter implements Reporter {
     }
 
     public void report(StoriesRun storiesRun) {
-        BacklogValidatorEntry backlogValidatorEntry = storiesRun.getBacklogValidatorEntry();
+        ValidatedBacklog validatedBacklog = storiesRun.getValidatedBacklog();
         //header
         Random r = new Random();
         String stry = storynator.chars().mapToObj(chr -> "" + COLORS[r.nextInt(COLORS.length)] + (char) chr + ANSI_RESET).collect(Collectors.joining(""));
@@ -69,35 +69,35 @@ public class ConsoleReporter implements Reporter {
         log("------------------------------------------------------------");
 
         //verbose output
-        List<ValidatedFeature> features = backlogValidatorEntry.getFeatureValidatorEntries().getItems();
+        List<ValidatedFeature> features = validatedBacklog.getValidatedFeatures();
         if (features != null) {
             features.forEach(this::reportOnIssue);
         }
         // Log bugs
 
-        List<ValidatedBug> bugs = backlogValidatorEntry.getBugValidatorEntries().getItems();
+        List<ValidatedBug> bugs = validatedBacklog.getValidatedBugs();
         if (bugs != null) {
             bugs.forEach(this::reportOnBug);
         }
 
         // Log epics
-        List<ValidatedEpic> epics = backlogValidatorEntry.getEpicValidatorEntries().getItems();
+        List<ValidatedEpic> epics = validatedBacklog.getValidatedEpics();
         if (epics != null) {
             epics.forEach(this::reportOnEpic);
         }
 
         // Log epics
-        List<ValidatedTeamTask> teamTasks = backlogValidatorEntry.getTeamTaskValidatorEntries().getItems();
+        List<ValidatedTeamTask> teamTasks = validatedBacklog.getValidatedTeamTasks();
         if (teamTasks != null) {
             teamTasks.forEach(this::reportOnTeamTask);
         }
 
         //show backlog violations
         log("------------------------------------------------------------");
-        backlogValidatorEntry.getViolations().forEach(violation -> log(violation.toString()));
+        validatedBacklog.getViolations().forEach(violation -> log(violation.toString()));
 
         //Summary
-        prefix = backlogValidatorEntry.getRating() == Rating.SUCCESS ? ANSI_GREEN : ANSI_RED;
+        prefix = validatedBacklog.getRating() == Rating.SUCCESS ? ANSI_GREEN : ANSI_RED;
         log("\n\n\n" + stry + " \n\n\n");
         log("------------------------------------------------------------");
         log("--                  Storynator report                     --");
@@ -108,10 +108,10 @@ public class ConsoleReporter implements Reporter {
 
         log("\r\n");
         log("Those three combined result in a score of "
-                + doubleDecimalFormat.format(backlogValidatorEntry.getPointsValuation() * 100f)
+                + doubleDecimalFormat.format(validatedBacklog.getPointsValuation() * 100f)
                 + " / "
                 + MAX_SCORE);
-        log("Rated: " + backlogValidatorEntry.getRating() + "  (with threshold on: " + validationConfig.getBacklog()
+        log("Rated: " + validatedBacklog.getRating() + "  (with threshold on: " + validationConfig.getBacklog()
                 .getRatingThreshold() + ")");
     }
 

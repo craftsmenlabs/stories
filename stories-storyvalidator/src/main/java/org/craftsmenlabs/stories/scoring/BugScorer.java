@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
-import org.craftsmenlabs.stories.api.models.items.Bug;
+import org.craftsmenlabs.stories.api.models.items.base.Bug;
 import org.craftsmenlabs.stories.api.models.items.validated.ValidatedBug;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 import org.craftsmenlabs.stories.api.models.violation.ViolationType;
@@ -15,9 +15,14 @@ import java.util.List;
 /**
  * Assigns points to a bug, based on the rate of which fields are filled
  */
-public class BugScorer {
+public class BugScorer extends AbstractScorer<Bug, ValidatedBug> {
 
-    public static ValidatedBug performScorer(Bug bug, ValidationConfig validationConfig) {
+    public BugScorer(ValidationConfig validationConfig) {
+        super(validationConfig);
+    }
+
+    @Override
+    public ValidatedBug validate(Bug bug) {
         ValidatedBug entry = ValidatedBug.builder()
                 .violations(new LinkedList<>())
                 .bug(bug)
@@ -51,7 +56,7 @@ public class BugScorer {
         return entry;
     }
 
-    private static String getField(String field, Bug bug) {
+    private String getField(String field, Bug bug) {
         switch (field) {
             case "priority":
                 return bug.getPriority();
@@ -69,5 +74,4 @@ public class BugScorer {
                         "\"priority\", \"reproduction\", \"software\", \"expected\", \"acceptation\"");
         }
     }
-
 }

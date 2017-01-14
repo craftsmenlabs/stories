@@ -1,6 +1,6 @@
 package org.craftsmenlabs.stories;
 
-import org.craftsmenlabs.stories.api.models.items.Feature;
+import org.craftsmenlabs.stories.api.models.items.base.Feature;
 
 import java.util.ArrayList;
 import java.util.Arrays;

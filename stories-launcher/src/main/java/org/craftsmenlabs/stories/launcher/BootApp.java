@@ -2,7 +2,7 @@ package org.craftsmenlabs.stories.launcher;
 
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
-import org.craftsmenlabs.stories.api.models.items.validated.BacklogValidatorEntry;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedBacklog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,9 +43,9 @@ public class BootApp {
 
     public Rating startApplication() {
         try {
-            BacklogValidatorEntry backlogValidatorEntry = storynatorStandaloneExecutor.runApplication();
+            ValidatedBacklog validatedBacklog = storynatorStandaloneExecutor.runApplication();
             logger.info("Finished Storynator application with success.");
-            return backlogValidatorEntry.getRating();
+            return validatedBacklog.getRating();
         } catch (StoriesException e) {
             logger.info(e.getMessage());
             return Rating.FAIL;

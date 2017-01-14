@@ -1,8 +1,8 @@
 package org.craftsmenlabs.stories.isolator.parser;
 
 import org.apache.commons.lang3.StringUtils;
-import org.craftsmenlabs.stories.api.models.items.Backlog;
-import org.craftsmenlabs.stories.api.models.items.Feature;
+import org.craftsmenlabs.stories.api.models.items.base.Backlog;
+import org.craftsmenlabs.stories.api.models.items.base.Feature;
 import org.craftsmenlabs.stories.isolator.SentenceSplitter;
 import org.craftsmenlabs.stories.isolator.model.github.GithubJsonIssue;
 
@@ -13,7 +13,6 @@ public class GithubJsonParser
 {
 
     public Backlog parse(List<GithubJsonIssue> githubJsonIssues) {
-        Backlog backlog = new Backlog();
         SentenceSplitter sentenceSplitter = new SentenceSplitter();
 
         int rankLength = String.valueOf(githubJsonIssues.size()).length();
@@ -34,9 +33,8 @@ public class GithubJsonParser
 
             result.add(feature);
         }
-        backlog.setFeatures(result);
 
-        return backlog;
+        return new Backlog(result);
 
     }
 }

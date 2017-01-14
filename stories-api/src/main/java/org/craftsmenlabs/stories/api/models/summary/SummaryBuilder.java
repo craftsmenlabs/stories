@@ -1,6 +1,6 @@
 package org.craftsmenlabs.stories.api.models.summary;
 
-import org.craftsmenlabs.stories.api.models.items.types.AbstractScorable;
+import org.craftsmenlabs.stories.api.models.items.types.AbstractValidatedItem;
 import org.craftsmenlabs.stories.api.models.items.validated.*;
 
 import java.util.List;
@@ -11,14 +11,14 @@ import static org.craftsmenlabs.stories.api.models.Rating.SUCCESS;
 
 public class SummaryBuilder {
 
-    public Summary build(BacklogValidatorEntry entry){
-        List<ValidatedFeature> issues = entry.getFeatureValidatorEntries().getItems();
-        List<ValidatedBug> bugs = entry.getBugValidatorEntries().getItems();
-        List<ValidatedEpic> epics = entry.getEpicValidatorEntries().getItems();
-        List<ValidatedTeamTask> teamTasks = entry.getTeamTaskValidatorEntries().getItems();
-        List<ValidatedUserStory> featureStories = entry.getFeatureValidatorEntries().getItems().stream().map(ValidatedFeature::getValidatedUserStory).collect(Collectors.toList());
-        List<ValidatedAcceptanceCriteria> featureCriteria = entry.getFeatureValidatorEntries().getItems().stream().map(ValidatedFeature::getValidatedAcceptanceCriteria).collect(Collectors.toList());
-        List<ValidatedEstimation> featureEstimations = entry.getFeatureValidatorEntries().getItems().stream().map(ValidatedFeature::getValidatedEstimation).collect(Collectors.toList());
+    public Summary build(ValidatedBacklog entry) {
+        List<ValidatedFeature> issues = entry.getValidatedFeatures();
+        List<ValidatedBug> bugs = entry.getValidatedBugs();
+        List<ValidatedEpic> epics = entry.getValidatedEpics();
+        List<ValidatedTeamTask> teamTasks = entry.getValidatedTeamTasks();
+        List<ValidatedUserStory> featureStories = issues.stream().map(ValidatedFeature::getValidatedUserStory).collect(Collectors.toList());
+        List<ValidatedAcceptanceCriteria> featureCriteria = issues.stream().map(ValidatedFeature::getValidatedAcceptanceCriteria).collect(Collectors.toList());
+        List<ValidatedEstimation> featureEstimations = issues.stream().map(ValidatedFeature::getValidatedEstimation).collect(Collectors.toList());
 
         return Summary.builder()
                 .backlog(ScorableSummary.builder()
@@ -35,7 +35,7 @@ public class SummaryBuilder {
                 .build();
     }
 
-    public BacklogItemListSummary getCount(List<? extends AbstractScorable> list) {
+    public BacklogItemListSummary getCount(List<? extends AbstractValidatedItem> list) {
         if(list == null) return new BacklogItemListSummary();
 
         return BacklogItemListSummary.builder()

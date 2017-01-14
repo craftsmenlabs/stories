@@ -3,7 +3,7 @@ package org.craftsmenlabs.stories.scoring;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
-import org.craftsmenlabs.stories.api.models.items.Bug;
+import org.craftsmenlabs.stories.api.models.items.base.Bug;
 import org.craftsmenlabs.stories.api.models.items.validated.ValidatedBug;
 import org.junit.Test;
 
@@ -13,6 +13,9 @@ import java.util.LinkedList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BugScorerTest {
+    private BugScorer getScorer(ValidationConfig config) {
+        return new BugScorer(config);
+    }
 
     @Test
     public void scorerShouldFailWithoutEnabledFields() throws Exception {
@@ -20,7 +23,7 @@ public class BugScorerTest {
         config.getBug().setEnabledFields(new LinkedList<>());
         Bug testedBug = this.getDefaultBug();
 
-        ValidatedBug result = BugScorer.performScorer(testedBug, config);
+        ValidatedBug result = getScorer(config).validate(testedBug);
         assertThat(result.getRating()).isEqualTo(Rating.FAIL);
         assertThat(result.getPointsValuation()).isEqualTo(0.0f);
     }
@@ -30,7 +33,7 @@ public class BugScorerTest {
         ValidationConfig config = this.getDefaultConfig();
         Bug testedBug = this.getDefaultBug();
 
-        ValidatedBug result = BugScorer.performScorer(testedBug, config);
+        ValidatedBug result = getScorer(config).validate(testedBug);
         assertThat(result.getRating()).isEqualTo(Rating.SUCCESS);
         assertThat(result.getPointsValuation()).isEqualTo(1f);
     }
@@ -41,7 +44,7 @@ public class BugScorerTest {
         config.getBug().setEnabledFields(Arrays.asList("priority", "unknown_field"));
         Bug testedBug = this.getDefaultBug();
 
-        BugScorer.performScorer(testedBug, config);
+        getScorer(config).validate(testedBug);
     }
 
     @Test
@@ -49,7 +52,7 @@ public class BugScorerTest {
         ValidationConfig config = this.getDefaultConfig();
         Bug testedBug = this.getDefaultBug();
         testedBug.setReproductionPath("");
-        ValidatedBug result = BugScorer.performScorer(testedBug, config);
+        ValidatedBug result = getScorer(config).validate(testedBug);
 
         assertThat(result.getPointsValuation()).isEqualTo(0.8f);
         assertThat(result.getViolations().size()).isEqualTo(1);

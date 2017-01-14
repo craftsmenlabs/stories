@@ -3,7 +3,7 @@ package org.craftsmenlabs.stories.scoring;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
-import org.craftsmenlabs.stories.api.models.items.Epic;
+import org.craftsmenlabs.stories.api.models.items.base.Epic;
 import org.craftsmenlabs.stories.api.models.items.validated.ValidatedEpic;
 import org.junit.Test;
 
@@ -13,6 +13,9 @@ import java.util.LinkedList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class EpicScorerTest {
+    private EpicScorer getScorer(ValidationConfig validationConfig) {
+        return new EpicScorer(validationConfig);
+    }
 
     @Test
     public void scorerShouldFailWithoutEnabledFields() throws Exception {
@@ -20,7 +23,7 @@ public class EpicScorerTest {
         config.getEpic().setEnabledFields(new LinkedList<>());
         Epic testedEpic = this.getDefaultEpic();
 
-        ValidatedEpic result = EpicScorer.performScorer(testedEpic, config);
+        ValidatedEpic result = getScorer(config).validate(testedEpic);
         assertThat(result.getRating()).isEqualTo(Rating.FAIL);
         assertThat(result.getPointsValuation()).isEqualTo(0.0f);
     }
@@ -30,7 +33,7 @@ public class EpicScorerTest {
         ValidationConfig config = this.getDefaultConfig();
         Epic testedEpic = this.getDefaultEpic();
 
-        ValidatedEpic result = EpicScorer.performScorer(testedEpic, config);
+        ValidatedEpic result = getScorer(config).validate(testedEpic);
         assertThat(result.getRating()).isEqualTo(Rating.SUCCESS);
         assertThat(result.getPointsValuation()).isEqualTo(1f);
     }
@@ -41,7 +44,7 @@ public class EpicScorerTest {
         config.getEpic().setEnabledFields(Arrays.asList("goal", "unknown_field"));
         Epic testedEpic = this.getDefaultEpic();
 
-        EpicScorer.performScorer(testedEpic, config);
+        getScorer(config).validate(testedEpic);
     }
 
     @Test
@@ -49,7 +52,7 @@ public class EpicScorerTest {
         ValidationConfig config = this.getDefaultConfig();
         Epic testedEpic = this.getDefaultEpic();
         testedEpic.setGoal("");
-        ValidatedEpic result = EpicScorer.performScorer(testedEpic, config);
+        ValidatedEpic result = getScorer(config).validate(testedEpic);
 
         assertThat(result.getPointsValuation()).isEqualTo(0.0f);
         assertThat(result.getViolations().size()).isEqualTo(1);

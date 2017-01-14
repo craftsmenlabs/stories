@@ -1,8 +1,8 @@
 package org.craftsmenlabs.stories.isolator.parser;
 
 import org.apache.commons.lang3.StringUtils;
-import org.craftsmenlabs.stories.api.models.items.Backlog;
-import org.craftsmenlabs.stories.api.models.items.Feature;
+import org.craftsmenlabs.stories.api.models.items.base.Backlog;
+import org.craftsmenlabs.stories.api.models.items.base.Feature;
 import org.craftsmenlabs.stories.isolator.SentenceSplitter;
 import org.craftsmenlabs.stories.isolator.model.trello.TrelloJsonIssue;
 
@@ -12,7 +12,6 @@ import java.util.List;
 public class TrelloJsonParser {
 
     public Backlog parse(List<TrelloJsonIssue> trelloJsonIssues) {
-        Backlog backlog = new Backlog();
         SentenceSplitter sentenceSplitter = new SentenceSplitter();
 
         int rankLength = String.valueOf(trelloJsonIssues.size()).length();
@@ -34,11 +33,8 @@ public class TrelloJsonParser {
 
             result.add(feature);
         }
-        backlog.setFeatures(result);
-        backlog.setBugs(new ArrayList<>());
-        backlog.setEpics(new ArrayList<>());
-        backlog.setTeamTasks(new ArrayList<>());
-        return backlog;
+
+        return new Backlog(result);
 
     }
 }

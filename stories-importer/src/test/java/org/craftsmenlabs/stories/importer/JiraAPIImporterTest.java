@@ -10,7 +10,7 @@ import org.craftsmenlabs.stories.api.models.config.FilterConfig;
 import org.craftsmenlabs.stories.api.models.config.SourceConfig;
 import org.craftsmenlabs.stories.api.models.config.StorynatorConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
-import org.craftsmenlabs.stories.api.models.items.Backlog;
+import org.craftsmenlabs.stories.api.models.items.base.Backlog;
 import org.craftsmenlabs.stories.api.models.logging.StandaloneLogger;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.junit.Test;
@@ -57,7 +57,7 @@ public class JiraAPIImporterTest {
         }};
 
         Backlog backlog = jiraAPIImporter.getBacklog();
-        assertThat(backlog.getFeatures()).hasSize(1);
+        assertThat(backlog.getItems()).hasSize(1);
     }
 
     @Test(expected = StoriesException.class)

@@ -5,8 +5,8 @@ import org.apache.commons.io.FileUtils;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.FilterConfig;
 import org.craftsmenlabs.stories.api.models.config.SourceConfig;
-import org.craftsmenlabs.stories.api.models.items.Backlog;
-import org.craftsmenlabs.stories.api.models.items.Feature;
+import org.craftsmenlabs.stories.api.models.items.base.Backlog;
+import org.craftsmenlabs.stories.api.models.items.base.Feature;
 import org.craftsmenlabs.stories.api.models.logging.StandaloneLogger;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.craftsmenlabs.stories.isolator.model.trello.TrelloJsonIssue;
@@ -52,7 +52,7 @@ public class RunIntegrationTest {
 
         Backlog backlog = jiraJsonParser.parse(mapper.readValue(testData, JiraBacklog.class));
 
-        assertEquals(testResult, backlog.getFeatures().get(0));
+        assertEquals(testResult, backlog.getItems().get(0));
     }
 
     @Test
@@ -63,7 +63,7 @@ public class RunIntegrationTest {
 
         Backlog backlog = trelloJsonParser.parse(mapper.readValue(testData, mapper.getTypeFactory().constructCollectionType(List.class, TrelloJsonIssue.class)));
 
-        assertEquals(testResult, backlog.getFeatures().get(0));
+        assertEquals(testResult, backlog.getItems().get(0));
     }
 
     private String readFile(String resource) throws Exception {

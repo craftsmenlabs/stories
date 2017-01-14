@@ -3,6 +3,7 @@ package org.craftsmenlabs.stories.isolator.parser.converters.jira;
 import org.apache.commons.lang3.StringUtils;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.SourceConfig;
+import org.craftsmenlabs.stories.api.models.items.types.BacklogItem;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
 
 import java.util.Arrays;
@@ -12,7 +13,7 @@ import java.util.Arrays;
  *
  * @param <T>
  */
-public abstract class AbstractJiraConverter<T> {
+public abstract class AbstractJiraConverter<T extends BacklogItem> {
     protected FieldMappingConfig config;
     protected SourceConfig sourceConfig;
 

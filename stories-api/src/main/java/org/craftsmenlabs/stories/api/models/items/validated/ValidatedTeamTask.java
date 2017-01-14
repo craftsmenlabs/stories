@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.craftsmenlabs.stories.api.models.Rating;
-import org.craftsmenlabs.stories.api.models.items.TeamTask;
+import org.craftsmenlabs.stories.api.models.items.base.TeamTask;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 
 import java.util.List;

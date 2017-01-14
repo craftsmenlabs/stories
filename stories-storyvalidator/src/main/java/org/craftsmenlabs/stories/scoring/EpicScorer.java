@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
-import org.craftsmenlabs.stories.api.models.items.Epic;
+import org.craftsmenlabs.stories.api.models.items.base.Epic;
 import org.craftsmenlabs.stories.api.models.items.validated.ValidatedEpic;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 import org.craftsmenlabs.stories.api.models.violation.ViolationType;
@@ -15,9 +15,14 @@ import java.util.List;
 /**
  * Assigns points to a bug, based on the rate of which fields are filled
  */
-public class EpicScorer {
+public class EpicScorer extends AbstractScorer<Epic, ValidatedEpic> {
 
-    public static ValidatedEpic performScorer(Epic epic, ValidationConfig validationConfig) {
+    public EpicScorer(ValidationConfig validationConfig) {
+        super(validationConfig);
+    }
+
+    @Override
+    public ValidatedEpic validate(Epic epic) {
         ValidatedEpic entry = ValidatedEpic.builder()
                 .violations(new LinkedList<>())
                 .epic(epic)
@@ -51,7 +56,7 @@ public class EpicScorer {
         return entry;
     }
 
-    private static String getField(String field, Epic epic) {
+    private String getField(String field, Epic epic) {
         switch (field) {
             case "goal":
                 return epic.getGoal();

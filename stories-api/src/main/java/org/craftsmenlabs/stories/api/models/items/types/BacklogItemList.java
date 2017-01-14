@@ -1,8 +1,9 @@
-package org.craftsmenlabs.stories.api.models.items.validated;
+package org.craftsmenlabs.stories.api.models.items.types;
 
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedBacklogItem;
 
 import java.beans.ConstructorProperties;
 import java.util.ArrayList;

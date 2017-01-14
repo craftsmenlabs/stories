@@ -3,7 +3,7 @@ package org.craftsmenlabs.stories.scoring;
 import org.apache.commons.lang3.StringUtils;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
-import org.craftsmenlabs.stories.api.models.items.TeamTask;
+import org.craftsmenlabs.stories.api.models.items.base.TeamTask;
 import org.craftsmenlabs.stories.api.models.items.validated.ValidatedAcceptanceCriteria;
 import org.craftsmenlabs.stories.api.models.items.validated.ValidatedEstimation;
 import org.craftsmenlabs.stories.api.models.items.validated.ValidatedTeamTask;
@@ -18,28 +18,33 @@ import java.util.stream.Stream;
  * Assigns points to a teamTask, based on all
  * underlying fields, such as user story, acceptance criteria, estimated points
  */
-public class TeamTaskScorer {
+public class TeamTaskScorer extends AbstractScorer<TeamTask, ValidatedTeamTask> {
 
-    public static ValidatedTeamTask performScorer(TeamTask teamTask, ValidationConfig validationConfig) {
+    public TeamTaskScorer(ValidationConfig validationConfig) {
+        super(validationConfig);
+    }
+
+    @Override
+    public ValidatedTeamTask validate(TeamTask teamTask) {
         List<Violation> violations = new ArrayList<>();
         float points = 0f;
         float pointsRatio = 1f / Stream.of(
-                    !"summary".isEmpty(),
-                    !"description".isEmpty(),
-                    validationConfig.getCriteria().isActive(),
-                    validationConfig.getEstimation().isActive())
-                .filter(i->i)
+                !"summary".isEmpty(),
+                !"description".isEmpty(),
+                validationConfig.getCriteria().isActive(),
+                validationConfig.getEstimation().isActive())
+                .filter(i -> i)
                 .count();
 
 
         if (teamTask == null) {
-            teamTask = new TeamTask("0", "0", "", "", "", "", 0f);
+            teamTask = new TeamTask("", "", "", 0f, "", "", "");
         }
 
         if (StringUtils.isEmpty(teamTask.getSummary())) {
             teamTask.setSummary("");
             violations.add(new Violation(ViolationType.TeamTaskSummaryEmptyViolation, "No summary was given."));
-        }else{
+        } else {
             points += pointsRatio;
         }
         if (StringUtils.isEmpty(teamTask.getDescription())) {
@@ -73,5 +78,4 @@ public class TeamTaskScorer {
                 .validatedEstimation(validatedEstimation)
                 .build();
     }
-
 }

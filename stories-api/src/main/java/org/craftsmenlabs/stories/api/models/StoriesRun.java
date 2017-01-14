@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
-import org.craftsmenlabs.stories.api.models.items.validated.BacklogValidatorEntry;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedBacklog;
 import org.craftsmenlabs.stories.api.models.summary.Summary;
 
 import java.time.LocalDateTime;
@@ -32,7 +32,7 @@ public class StoriesRun {
 
     //the complete validated backlog
     @JsonProperty("backlogValidatorEntry")
-    private BacklogValidatorEntry backlogValidatorEntry;
+    private ValidatedBacklog validatedBacklog;
 
     //Statistics summary
     @JsonProperty("summary")

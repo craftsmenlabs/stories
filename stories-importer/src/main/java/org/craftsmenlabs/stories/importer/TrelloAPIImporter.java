@@ -2,7 +2,7 @@ package org.craftsmenlabs.stories.importer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
-import org.craftsmenlabs.stories.api.models.items.Backlog;
+import org.craftsmenlabs.stories.api.models.items.base.Backlog;
 import org.craftsmenlabs.stories.api.models.logging.StorynatorLogger;
 import org.craftsmenlabs.stories.isolator.model.trello.TrelloJsonIssue;
 import org.craftsmenlabs.stories.isolator.parser.TrelloJsonParser;

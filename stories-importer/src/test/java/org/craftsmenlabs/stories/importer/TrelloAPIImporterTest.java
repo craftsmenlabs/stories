@@ -4,7 +4,7 @@ import mockit.Expectations;
 import mockit.Mocked;
 import org.apache.commons.io.FileUtils;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
-import org.craftsmenlabs.stories.api.models.items.Backlog;
+import org.craftsmenlabs.stories.api.models.items.base.Backlog;
 import org.craftsmenlabs.stories.api.models.logging.StandaloneLogger;
 import org.junit.Test;
 import org.springframework.web.client.RestTemplate;
@@ -33,7 +33,7 @@ public class TrelloAPIImporterTest
 		}};
 
 		Backlog backlog = trelloAPIImporter.getBacklog();
-		assertThat(backlog.getFeatures()).hasSize(6);
+		assertThat(backlog.getItems()).hasSize(6);
 	}
 
 	@Test(expected = StoriesException.class)

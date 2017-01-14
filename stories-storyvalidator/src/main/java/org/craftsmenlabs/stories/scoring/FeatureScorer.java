@@ -2,7 +2,7 @@ package org.craftsmenlabs.stories.scoring;
 
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
-import org.craftsmenlabs.stories.api.models.items.Feature;
+import org.craftsmenlabs.stories.api.models.items.base.Feature;
 import org.craftsmenlabs.stories.api.models.items.types.AbstractValidatedItem;
 import org.craftsmenlabs.stories.api.models.items.validated.ValidatedAcceptanceCriteria;
 import org.craftsmenlabs.stories.api.models.items.validated.ValidatedEstimation;
@@ -18,9 +18,14 @@ import java.util.Map;
  * Assigns points to an feature, based on all
  * underlying fields, such as user story, acceptance criteria, estimated points
  */
-public class FeatureScorer {
+public class FeatureScorer extends AbstractScorer<Feature, ValidatedFeature> {
 
-    public static ValidatedFeature performScorer(Feature feature, ValidationConfig validationConfig) {
+    public FeatureScorer(ValidationConfig validationConfig) {
+        super(validationConfig);
+    }
+
+    @Override
+    public ValidatedFeature validate(Feature feature) {
         if (feature == null) {
             feature = Feature.builder().rank("0").summary("").userstory("").acceptanceCriteria("").key("0").build();
         }
@@ -65,5 +70,4 @@ public class FeatureScorer {
                 .validatedEstimation(validatedEstimation)
                 .build();
     }
-
 }

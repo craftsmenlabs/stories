@@ -2,8 +2,8 @@ package org.craftsmenlabs.stories.ranking;
 
 import mockit.Injectable;
 import mockit.Tested;
-import org.craftsmenlabs.stories.api.models.items.Feature;
-import org.craftsmenlabs.stories.api.models.items.validated.BacklogValidatorEntry;
+import org.craftsmenlabs.stories.api.models.items.base.Feature;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedBacklog;
 import org.craftsmenlabs.stories.api.models.items.validated.ValidatedBacklogItem;
 import org.craftsmenlabs.stories.api.models.items.validated.ValidatedFeature;
 import org.junit.Test;
@@ -27,20 +27,20 @@ public class CurvedRankingTest implements RankingTest {
 
     @Override
     @Test
-    public void testRankingReturnsZeroOnNullBacklog(@Injectable BacklogValidatorEntry backlogValidatorEntry) throws Exception {
+    public void testRankingReturnsZeroOnNullBacklog(@Injectable ValidatedBacklog validatedBacklog) throws Exception {
         assertThat(curvedRanking.createRanking(null)).isCloseTo(0f, withinPercentage(1.0));
     }
 
     @Override
     @Test
-    public void testRankingReturnsZeroOnEmptyBacklog(@Injectable BacklogValidatorEntry backlogValidatorEntry) throws Exception {
+    public void testRankingReturnsZeroOnEmptyBacklog(@Injectable ValidatedBacklog validatedBacklog) throws Exception {
 
         assertThat(curvedRanking.createRanking(new ArrayList<>())).isCloseTo(0f, withinPercentage(1.0));
     }
 
     @Override
     @Test
-    public void testRankingIsZeroWithOnlyUnscoredItems(@Injectable BacklogValidatorEntry backlogValidatorEntry) throws Exception {
+    public void testRankingIsZeroWithOnlyUnscoredItems(@Injectable ValidatedBacklog validatedBacklog) throws Exception {
         List<ValidatedBacklogItem> issues = Arrays.asList(
                 ValidatedFeature.builder().feature(Feature.builder().rank("0|0001").build()).build(),
                 ValidatedFeature.builder().feature(Feature.builder().rank("0|0002").build()).build(),
@@ -54,7 +54,7 @@ public class CurvedRankingTest implements RankingTest {
 
     @Override
     @Test
-    public void testRankingReturnsZeroOnZeroScoreBacklog(@Injectable BacklogValidatorEntry backlogValidatorEntry) throws Exception {
+    public void testRankingReturnsZeroOnZeroScoreBacklog(@Injectable ValidatedBacklog validatedBacklog) throws Exception {
         List<ValidatedBacklogItem> issues = Arrays.asList(
                 ValidatedFeature.builder().pointsValuation(0f).feature(Feature.builder().rank("0|0001").build()).build(),
                 ValidatedFeature.builder().pointsValuation(0f).feature(Feature.builder().rank("0|0002").build()).build(),
@@ -68,7 +68,7 @@ public class CurvedRankingTest implements RankingTest {
 
     @Override
     @Test
-    public void testRankingReturnsOneOnPerfectBacklog(@Injectable BacklogValidatorEntry backlogValidatorEntry) throws Exception {
+    public void testRankingReturnsOneOnPerfectBacklog(@Injectable ValidatedBacklog validatedBacklog) throws Exception {
         List<ValidatedBacklogItem> issues = Arrays.asList(
                 ValidatedFeature.builder().pointsValuation(1f).feature(Feature.builder().rank("0|0001").build()).build(),
                 ValidatedFeature.builder().pointsValuation(1f).feature(Feature.builder().rank("0|0002").build()).build(),
@@ -82,7 +82,7 @@ public class CurvedRankingTest implements RankingTest {
 
     @Override
     @Test
-    public void testRankingReturnsScoreOnGoodGradientMixedBacklog(@Injectable BacklogValidatorEntry backlogValidatorEntry) throws Exception {
+    public void testRankingReturnsScoreOnGoodGradientMixedBacklog(@Injectable ValidatedBacklog validatedBacklog) throws Exception {
         List<ValidatedBacklogItem> issues = Arrays.asList(
                 ValidatedFeature.builder().pointsValuation(1.0f).feature(Feature.builder().rank("0|0000").build()).build(),
                 ValidatedFeature.builder().pointsValuation(0.8f).feature(Feature.builder().rank("0|0001").build()).build(),
@@ -98,7 +98,7 @@ public class CurvedRankingTest implements RankingTest {
 
     @Override
     @Test
-    public void testRankingReturnsScoreOnBadGradientMixedBacklog(@Injectable BacklogValidatorEntry backlogValidatorEntry) throws Exception {
+    public void testRankingReturnsScoreOnBadGradientMixedBacklog(@Injectable ValidatedBacklog validatedBacklog) throws Exception {
         List<ValidatedBacklogItem> issues = Arrays.asList(
                 ValidatedFeature.builder().pointsValuation(0.0f).feature(Feature.builder().rank("0|0001").build()).build(),
                 ValidatedFeature.builder().pointsValuation(0.2f).feature(Feature.builder().rank("0|0002").build()).build(),
@@ -112,7 +112,7 @@ public class CurvedRankingTest implements RankingTest {
     }
 
     @Test
-    public void testRankingReturnsHighScoreOnGoodMixedBacklog(@Injectable BacklogValidatorEntry backlogValidatorEntry) throws Exception {
+    public void testRankingReturnsHighScoreOnGoodMixedBacklog(@Injectable ValidatedBacklog validatedBacklog) throws Exception {
         List<ValidatedBacklogItem> issues = Arrays.asList(
                 ValidatedFeature.builder().pointsValuation(1.0f).feature(Feature.builder().rank("0|0001").build()).build(),
                 ValidatedFeature.builder().pointsValuation(1.0f).feature(Feature.builder().rank("0|0002").build()).build(),
@@ -126,7 +126,7 @@ public class CurvedRankingTest implements RankingTest {
     }
 
     @Test
-    public void testRankingReturnsLowScoreOnBadMixedBacklog(@Injectable BacklogValidatorEntry backlogValidatorEntry) throws Exception {
+    public void testRankingReturnsLowScoreOnBadMixedBacklog(@Injectable ValidatedBacklog validatedBacklog) throws Exception {
         List<ValidatedBacklogItem> issues = Arrays.asList(
                 ValidatedFeature.builder().pointsValuation(1.0f).feature(Feature.builder().rank("0|0007").build()).build(),
                 ValidatedFeature.builder().pointsValuation(1.0f).feature(Feature.builder().rank("0|0008").build()).build(),
