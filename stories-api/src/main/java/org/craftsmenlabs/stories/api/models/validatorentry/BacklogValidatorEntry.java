@@ -6,8 +6,10 @@ import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public class BacklogValidatorEntry extends AbstractScorable {
@@ -39,15 +41,6 @@ public class BacklogValidatorEntry extends AbstractScorable {
         this.teamTaskValidatorEntries = teamTaskValidatorEntries;
     }
 
-    public static BacklogValidatorEntryBuilder builder() {
-        return new BacklogValidatorEntryBuilder();
-    }
-
-    @JsonIgnore
-    public List<? super BacklogItem> getAllValidatorEntries(){
-        return Arrays.asList(featureValidatorEntries, bugValidatorEntries, epicValidatorEntries, teamTaskValidatorEntries);
-    }
-
     public BacklogValidatorEntry(float pointsValuation,
                                  List<Violation> violations,
                                  Rating rating,
@@ -67,40 +60,51 @@ public class BacklogValidatorEntry extends AbstractScorable {
 
     }
 
+    public static BacklogValidatorEntryBuilder builder() {
+        return new BacklogValidatorEntryBuilder();
+    }
+
+    @JsonIgnore
+    public List<? extends AbstractScorable> getAllValidatorEntries() {
+        return Stream.of(featureValidatorEntries.getItems(), bugValidatorEntries.getItems(), epicValidatorEntries.getItems(), teamTaskValidatorEntries.getItems())
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+    }
+
     public Backlog getBacklog() {
         return this.backlog;
-    }
-
-    public BacklogItemList<FeatureValidatorEntry> getFeatureValidatorEntries() {
-        return this.featureValidatorEntries;
-    }
-
-    public BacklogItemList<BugValidatorEntry> getBugValidatorEntries() {
-        return this.bugValidatorEntries;
-    }
-
-    public BacklogItemList<EpicValidatorEntry> getEpicValidatorEntries() {
-        return this.epicValidatorEntries;
-    }
-
-    public BacklogItemList<TeamTaskValidatorEntry> getTeamTaskValidatorEntries() {
-        return this.teamTaskValidatorEntries;
     }
 
     public void setBacklog(Backlog backlog) {
         this.backlog = backlog;
     }
 
+    public BacklogItemList<FeatureValidatorEntry> getFeatureValidatorEntries() {
+        return this.featureValidatorEntries;
+    }
+
     public void setFeatureValidatorEntries(BacklogItemList<FeatureValidatorEntry> featureValidatorEntries) {
         this.featureValidatorEntries = featureValidatorEntries;
+    }
+
+    public BacklogItemList<BugValidatorEntry> getBugValidatorEntries() {
+        return this.bugValidatorEntries;
     }
 
     public void setBugValidatorEntries(BacklogItemList<BugValidatorEntry> bugValidatorEntries) {
         this.bugValidatorEntries = bugValidatorEntries;
     }
 
+    public BacklogItemList<EpicValidatorEntry> getEpicValidatorEntries() {
+        return this.epicValidatorEntries;
+    }
+
     public void setEpicValidatorEntries(BacklogItemList<EpicValidatorEntry> epicValidatorEntries) {
         this.epicValidatorEntries = epicValidatorEntries;
+    }
+
+    public BacklogItemList<TeamTaskValidatorEntry> getTeamTaskValidatorEntries() {
+        return this.teamTaskValidatorEntries;
     }
 
     public void setTeamTaskValidatorEntries(BacklogItemList<TeamTaskValidatorEntry> teamTaskValidatorEntries) {
