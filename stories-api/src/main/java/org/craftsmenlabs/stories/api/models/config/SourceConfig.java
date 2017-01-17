@@ -32,7 +32,6 @@ public class SourceConfig {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class TrelloConfig {
-        private String url;
         private String token;
         private String authKey;
         private String projectKey;
