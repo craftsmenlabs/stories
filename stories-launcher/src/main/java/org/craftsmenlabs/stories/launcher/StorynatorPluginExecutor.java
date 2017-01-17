@@ -83,7 +83,7 @@ public class StorynatorPluginExecutor {
             case "trello":
                 logger.info("Using TrelloAPIImporter for import.");
                 SourceConfig.TrelloConfig trelloConfig = storynatorConfig.getSource().getTrello();
-                return new TrelloAPIImporter(logger, trelloConfig.getUrl(), trelloConfig.getProjectKey(), trelloConfig.getAuthKey(), trelloConfig.getToken());
+                return new TrelloAPIImporter(logger, trelloConfig.getProjectKey(), trelloConfig.getAuthKey(), trelloConfig.getToken());
             case "github":
                 logger.info("Using GithubAPIImporter for import.");
                 SourceConfig.GithubConfig githubConfig = storynatorConfig.getSource().getGithub();
