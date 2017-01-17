@@ -7,6 +7,7 @@ import org.craftsmenlabs.stories.api.models.violation.Violation;
 import org.craftsmenlabs.stories.api.models.violation.ViolationType;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -34,32 +35,35 @@ public class AcceptanceCriteriaScorer {
 
         final String criteriaLower = criteria.toLowerCase();
 
-        if (validationConfig.getCriteria().getGivenKeywords().stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
+        List<String> givenWords = validationConfig.getCriteria().getGivenKeywords() != null ? validationConfig.getCriteria().getGivenKeywords() : Collections.emptyList();
+        if (givenWords.stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
             points += GIVEN_POINTS;
         } else {
             violations.add(new Violation(ViolationType.CriteriaGivenClauseViolation,
                     "<Given> section is not described properly. " +
                             "The criteria should contain any of the following keywords: "
-                            + String.join(", ", validationConfig.getCriteria().getGivenKeywords())));
+                            + String.join(", ", givenWords)));
         }
 
-        if (validationConfig.getCriteria().getWhenKeywords().stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
+        List<String> whenWords = validationConfig.getCriteria().getWhenKeywords() != null ? validationConfig.getCriteria().getWhenKeywords() : Collections.emptyList();
+        if (whenWords.stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
             points += WHEN_POINTS;
         } else {
             violations.add(new Violation(ViolationType.CriteriaWhenClauseViolation,
                     "<When> section is not described properly. " +
                             "The criteria should contain any of the following keywords: "
-                            + String.join(", ", validationConfig.getCriteria().getWhenKeywords())));
+                            + String.join(", ", whenWords)));
 
         }
 
-        if (validationConfig.getCriteria().getThenKeywords().stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
+        List<String> thenWords = validationConfig.getCriteria().getThenKeywords() != null ? validationConfig.getCriteria().getThenKeywords() : Collections.emptyList();
+        if (thenWords.stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
             points += THEN_POINTS;
         } else {
             violations.add(new Violation(ViolationType.CriteriaThenClauseViolation,
                     "<Then> section is not described properly. " +
                             "The criteria should contain any of the following keywords: "
-                            + String.join(", ", validationConfig.getCriteria().getThenKeywords())));
+                            + String.join(", ", thenWords)));
         }
 
         if (criteria.length() <= MINIMUM_LENGTH_OF_ACC_CRITERIA) {

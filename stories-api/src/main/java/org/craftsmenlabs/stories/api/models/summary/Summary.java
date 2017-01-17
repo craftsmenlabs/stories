@@ -7,9 +7,10 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class Summary implements Summarizable<Summary>{
+public class Summary implements Summarizable<Summary> {
 
     private ScorableSummary backlog;
+    private BacklogItemListSummary issues;
     private BacklogItemListSummary features;
     private BacklogItemListSummary bugs;
     private BacklogItemListSummary epics;
@@ -19,6 +20,7 @@ public class Summary implements Summarizable<Summary>{
     private BacklogItemListSummary featureEstimation;
 
     public Summary() {
+        issues = new BacklogItemListSummary();
         backlog = new ScorableSummary();
         features = new BacklogItemListSummary();
         bugs = new BacklogItemListSummary();
@@ -32,18 +34,19 @@ public class Summary implements Summarizable<Summary>{
 
     @Override
     public Summary divideBy(int denominator) {
-        if(denominator == 0){
+        if (denominator == 0) {
             return new Summary();
-        }else{
+        } else {
             return Summary.builder()
-                    .backlog( backlog.divideBy(denominator) )
-                    .features( features.divideBy(denominator) )
-                    .bugs( bugs.divideBy(denominator) )
-                    .epics( epics.divideBy(denominator) )
-                    .teamTasks( teamTasks.divideBy(denominator))
-                    .featureUserStory( featureUserStory.divideBy(denominator) )
-                    .featureCriteria( featureCriteria.divideBy(denominator) )
-                    .featureEstimation( featureEstimation.divideBy(denominator) )
+                    .backlog(backlog.divideBy(denominator))
+                    .features(features.divideBy(denominator))
+                    .bugs(bugs.divideBy(denominator))
+                    .epics(epics.divideBy(denominator))
+                    .issues(issues.divideBy(denominator))
+                    .teamTasks(teamTasks.divideBy(denominator))
+                    .featureUserStory(featureUserStory.divideBy(denominator))
+                    .featureCriteria(featureCriteria.divideBy(denominator))
+                    .featureEstimation(featureEstimation.divideBy(denominator))
                     .build();
         }
     }
@@ -51,14 +54,15 @@ public class Summary implements Summarizable<Summary>{
     @Override
     public Summary plus(Summary that) {
         return Summary.builder()
-            .backlog( backlog.plus(that.getBacklog()) )
-            .features( features.plus(that.getFeatures()) )
-            .bugs( bugs.plus(that.getBugs()) )
-            .epics( epics.plus(that.getEpics()) )
-            .teamTasks( teamTasks.plus(that.getTeamTasks()) )
-            .featureUserStory( featureUserStory.plus(that.getFeatureUserStory()) )
-            .featureCriteria( featureCriteria.plus(that.getFeatureCriteria()) )
-            .featureEstimation( featureEstimation.plus(that.getFeatureEstimation()) )
-            .build();
+                .backlog(backlog.plus(that.getBacklog()))
+                .issues(issues.plus(that.getIssues()))
+                .features(features.plus(that.getFeatures()))
+                .bugs(bugs.plus(that.getBugs()))
+                .epics(epics.plus(that.getEpics()))
+                .teamTasks(teamTasks.plus(that.getTeamTasks()))
+                .featureUserStory(featureUserStory.plus(that.getFeatureUserStory()))
+                .featureCriteria(featureCriteria.plus(that.getFeatureCriteria()))
+                .featureEstimation(featureEstimation.plus(that.getFeatureEstimation()))
+                .build();
     }
 }
