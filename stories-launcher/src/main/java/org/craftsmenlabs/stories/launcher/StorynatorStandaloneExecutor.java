@@ -8,6 +8,7 @@ import org.craftsmenlabs.stories.api.models.logging.StorynatorLogger;
 import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 import org.craftsmenlabs.stories.connectivity.service.enterprise.EnterpriseDashboardConfigRetriever;
 import org.craftsmenlabs.stories.launcher.config.EnterpriseConfig;
+import org.craftsmenlabs.stories.launcher.config.SpringStorynatorConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class StorynatorStandaloneExecutor {
     private final EnterpriseConfig enterpriseConfig;
-    private final StorynatorConfig storynatorConfig;
+    private final SpringStorynatorConfig storynatorConfig;
     private final Environment environment;
     private final StorynatorPluginExecutor storynatorPluginExecutor;
 
