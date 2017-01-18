@@ -14,7 +14,7 @@ import org.craftsmenlabs.stories.connectivity.service.community.CommunityDashboa
 import org.craftsmenlabs.stories.connectivity.service.enterprise.EnterpriseDashboardReporter;
 import org.craftsmenlabs.stories.importer.GithubAPIImporter;
 import org.craftsmenlabs.stories.importer.Importer;
-import org.craftsmenlabs.stories.importer.JiraAPIImporter;
+import org.craftsmenlabs.stories.importer.jira.JiraAPIImporter;
 import org.craftsmenlabs.stories.importer.TrelloAPIImporter;
 import org.craftsmenlabs.stories.ranking.CurvedRanking;
 import org.craftsmenlabs.stories.reporter.ConsoleReporter;

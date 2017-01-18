@@ -1,4 +1,4 @@
-package org.craftsmenlabs.stories.importer;
+package org.craftsmenlabs.stories.importer.jira;
 
 import lombok.Builder;
 import lombok.Data;

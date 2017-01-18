@@ -24,6 +24,8 @@ public class JiraJsonParser {
     private TeamTaskConverter teamTaskConverter;
 
     public JiraJsonParser(StorynatorLogger logger, FieldMappingConfig fieldMapping, FilterConfig filterConfig, SourceConfig sourceConfig) {
+
+
         this.filterConfig = filterConfig;
 
         this.featureConverter = new FeatureConverter(logger, fieldMapping, sourceConfig);
