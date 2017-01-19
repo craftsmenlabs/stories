@@ -67,11 +67,12 @@ public class JiraAPIImporter implements Importer {
 
             //retrieve the human readable fieldmap
             final Map<String, String> fieldMap = new JiraFieldMapRetriever(username, password, urlResource, logger).getFieldMap();
+            final FieldMappingConfig fieldMappingConfig = this.mapToHumanReadableFields(storynatorConfig.getFieldMapping(), fieldMap);
 
             //init the parser
             JiraJsonParser parser = new JiraJsonParser(
                     logger,
-                    this.mapToHumanReadableFields(storynatorConfig.getFieldMapping(), fieldMap),
+                    fieldMappingConfig,
                     storynatorConfig.getFilter(),
                     storynatorConfig.getSource()
             );
