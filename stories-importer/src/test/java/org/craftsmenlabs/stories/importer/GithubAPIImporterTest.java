@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class GithubAPIImporterTest
 {
-	private GithubAPIImporter githubAPIImporter = new GithubAPIImporter(new StandaloneLogger(), "http://foo.bar", "key", "authKey", "token");
+	private GithubAPIImporter githubAPIImporter = new GithubAPIImporter(new StandaloneLogger(), "key", "authKey", "token");
 
 	@Mocked
 	private RestTemplate restTemplate;

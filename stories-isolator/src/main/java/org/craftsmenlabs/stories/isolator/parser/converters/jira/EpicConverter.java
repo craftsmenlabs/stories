@@ -17,6 +17,7 @@ public class EpicConverter extends AbstractJiraConverter<Epic> {
 
         epic.setKey(jiraJsonIssue.getKey());
         epic.setSummary(jiraJsonIssue.getFields().getSummary());
+        epic.setDescription(jiraJsonIssue.getFields().getDescription());
 
         epic.setExternalURI(
                 sourceConfig.getJira().getUrl() +

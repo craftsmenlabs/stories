@@ -14,8 +14,8 @@ import org.craftsmenlabs.stories.connectivity.service.community.CommunityDashboa
 import org.craftsmenlabs.stories.connectivity.service.enterprise.EnterpriseDashboardReporter;
 import org.craftsmenlabs.stories.importer.GithubAPIImporter;
 import org.craftsmenlabs.stories.importer.Importer;
-import org.craftsmenlabs.stories.importer.jira.JiraAPIImporter;
 import org.craftsmenlabs.stories.importer.TrelloAPIImporter;
+import org.craftsmenlabs.stories.importer.jira.JiraAPIImporter;
 import org.craftsmenlabs.stories.ranking.CurvedRanking;
 import org.craftsmenlabs.stories.reporter.ConsoleReporter;
 import org.craftsmenlabs.stories.reporter.JsonFileReporter;
@@ -87,7 +87,7 @@ public class StorynatorPluginExecutor {
             case "github":
                 logger.info("Using GithubAPIImporter for import.");
                 SourceConfig.GithubConfig githubConfig = storynatorConfig.getSource().getGithub();
-                return new GithubAPIImporter(logger, githubConfig.getUrl(), githubConfig.getProject(), githubConfig.getOwner(), githubConfig.getToken());
+                return new GithubAPIImporter(logger, githubConfig.getProject(), githubConfig.getOwner(), githubConfig.getToken());
             default:
                 throw new StoriesException(StoriesException.ERR_SOURCE_ENABLED_MISSING);
         }
