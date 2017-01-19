@@ -29,8 +29,7 @@ public class JiraAPIImporter implements Importer {
     private String password;
 
     private StorynatorConfig storynatorConfig;
-
-//    private Map<String, String> fieldMap;
+    private JiraFieldMapRetriever jiraFieldMapRetriever;
 
     public JiraAPIImporter(StorynatorLogger logger, StorynatorConfig storynatorConfig) {
         this.logger = logger;
@@ -41,6 +40,8 @@ public class JiraAPIImporter implements Importer {
         this.password = jiraConfig.getPassword();
 
         this.storynatorConfig = storynatorConfig;
+
+        jiraFieldMapRetriever = new JiraFieldMapRetriever(username, password, urlResource, logger);
     }
 
     @Override
@@ -66,8 +67,8 @@ public class JiraAPIImporter implements Importer {
             JiraBacklog backlog = restTemplate.postForObject(url, jiraRequest, JiraBacklog.class);
 
             //retrieve the human readable fieldmap
-            final Map<String, String> fieldMap = new JiraFieldMapRetriever(username, password, urlResource, logger).getFieldMap();
-            final FieldMappingConfig fieldMappingConfig = this.mapToHumanReadableFields(storynatorConfig.getFieldMapping(), fieldMap);
+            final Map<String, String> fieldMap = jiraFieldMapRetriever.getFieldMap();
+            final FieldMappingConfig fieldMappingConfig = this.mapToJiraIds(storynatorConfig.getFieldMapping(), fieldMap);
 
             //init the parser
             JiraJsonParser parser = new JiraJsonParser(
@@ -91,11 +92,11 @@ public class JiraAPIImporter implements Importer {
     /**
      * Maps the human readable fields which the user provides in the config to the field-id's
      */
-    public FieldMappingConfig mapToHumanReadableFields(FieldMappingConfig nonHumanReadableFieldMappingConfig, Map<String, String> fieldMap) throws IOException {
-        FieldMappingConfig.FeatureMapping featureMapping = nonHumanReadableFieldMappingConfig.getFeature() == null ? new FieldMappingConfig.FeatureMapping() : nonHumanReadableFieldMappingConfig.getFeature();
-        FieldMappingConfig.BugMapping bugMapping = nonHumanReadableFieldMappingConfig.getBug() == null ? new FieldMappingConfig.BugMapping() : nonHumanReadableFieldMappingConfig.getBug();
-        FieldMappingConfig.EpicMapping epicMapping = nonHumanReadableFieldMappingConfig.getEpic() == null ? new FieldMappingConfig.EpicMapping() : nonHumanReadableFieldMappingConfig.getEpic();
-        FieldMappingConfig.TeamTaskMapping teamTaskMapping = nonHumanReadableFieldMappingConfig.getTeamTask() == null ? new FieldMappingConfig.TeamTaskMapping() : nonHumanReadableFieldMappingConfig.getTeamTask();
+    public FieldMappingConfig mapToJiraIds(FieldMappingConfig fieldMappingConfigByJiraNames, Map<String, String> fieldMap) throws IOException {
+        FieldMappingConfig.FeatureMapping featureMapping = fieldMappingConfigByJiraNames.getFeature() == null ? new FieldMappingConfig.FeatureMapping() : fieldMappingConfigByJiraNames.getFeature();
+        FieldMappingConfig.BugMapping bugMapping = fieldMappingConfigByJiraNames.getBug() == null ? new FieldMappingConfig.BugMapping() : fieldMappingConfigByJiraNames.getBug();
+        FieldMappingConfig.EpicMapping epicMapping = fieldMappingConfigByJiraNames.getEpic() == null ? new FieldMappingConfig.EpicMapping() : fieldMappingConfigByJiraNames.getEpic();
+        FieldMappingConfig.TeamTaskMapping teamTaskMapping = fieldMappingConfigByJiraNames.getTeamTask() == null ? new FieldMappingConfig.TeamTaskMapping() : fieldMappingConfigByJiraNames.getTeamTask();
 
         return FieldMappingConfig.builder()
                 .feature(FieldMappingConfig.FeatureMapping.builder()
@@ -114,15 +115,17 @@ public class JiraAPIImporter implements Importer {
                         .estimation(getOrDefault(teamTaskMapping.getEstimation(), fieldMap))
                         .acceptanceCriteria(getOrDefault(teamTaskMapping.getAcceptanceCriteria(), fieldMap))
                         .build())
-                .rank(getOrDefault(nonHumanReadableFieldMappingConfig.getRank(), fieldMap))
+                .rank(getOrDefault(fieldMappingConfigByJiraNames.getRank(), fieldMap))
                 .build();
     }
 
 
-    private String getOrDefault(String estimation, Map<String, String> fieldMap) {
-        if(estimation == null || fieldMap == null){
+    private String getOrDefault(String value, Map<String, String> fieldMap) {
+        if(value == null || fieldMap == null){
             return "";
         }
-        return fieldMap.getOrDefault(estimation.toLowerCase().replace(" ", ""), estimation);
+        final String orDefault = fieldMap.getOrDefault(value, value);
+
+        return orDefault;
     }
 }
