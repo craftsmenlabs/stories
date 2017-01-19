@@ -2,10 +2,8 @@ package org.craftsmenlabs.stories.importer.jira;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
-import org.craftsmenlabs.stories.api.models.exception.StoriesException;
 import org.craftsmenlabs.stories.api.models.logging.StorynatorLogger;
 import org.springframework.util.Base64Utils;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -43,29 +41,24 @@ public class JiraFieldMapRetriever {
 
         RestTemplate restTemplate = new RestTemplate();
 
-        try {
-            // Add auth token
-            restTemplate.setInterceptors(Collections.singletonList((request, body, execution) -> {
-                request.getHeaders().add("Authorization", "Basic " + Base64Utils.encodeToString((this.username + ":" + this.password).getBytes()));
-                return execution.execute(request, body);
-            }));
+        // Add auth token
+        restTemplate.setInterceptors(Collections.singletonList((request, body, execution) -> {
+            request.getHeaders().add("Authorization", "Basic " + Base64Utils.encodeToString((this.username + ":" + this.password).getBytes()));
+            return execution.execute(request, body);
+        }));
 
-            final String responseEntity = restTemplate.getForObject(url, String.class);
+        final String responseEntity = restTemplate.getForObject(url, String.class);
 
-            //if retrieving fails, continue with an empty fieldMapper
-            if(responseEntity == null){
-                return new HashMap<>();
-            }
-
-            ObjectMapper objectMapper = new ObjectMapper();
-
-            final CollectionType valueType = objectMapper.getTypeFactory().constructCollectionType(List.class, JiraFieldMap.class);
-            List<JiraFieldMap> jiraFieldMaps = objectMapper.readValue(responseEntity, valueType);
-
-            return jiraFieldMaps.stream().collect(Collectors.toMap(JiraFieldMap::getName, JiraFieldMap::getId));
-        } catch (HttpClientErrorException e) {
-            logger.error("Jira field mapping call went wrong with url: " + url);
-            throw new StoriesException("Failed to connect to " + url + " Error message was: " + e.getMessage() + "body: \r\n" + e.getResponseBodyAsString());
+        //if retrieving fails, continue with an empty fieldMapper
+        if (responseEntity == null) {
+            return new HashMap<>();
         }
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        final CollectionType valueType = objectMapper.getTypeFactory().constructCollectionType(List.class, JiraFieldMap.class);
+        List<JiraFieldMap> jiraFieldMaps = objectMapper.readValue(responseEntity, valueType);
+
+        return jiraFieldMaps.stream().collect(Collectors.toMap(JiraFieldMap::getName, JiraFieldMap::getId));
     }
 }

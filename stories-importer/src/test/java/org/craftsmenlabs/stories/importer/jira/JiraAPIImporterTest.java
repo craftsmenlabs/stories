@@ -1,4 +1,4 @@
-package org.craftsmenlabs.stories.importer;
+package org.craftsmenlabs.stories.importer.jira;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import mockit.Expectations;
@@ -12,8 +12,6 @@ import org.craftsmenlabs.stories.api.models.config.StorynatorConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
 import org.craftsmenlabs.stories.api.models.logging.StandaloneLogger;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
-import org.craftsmenlabs.stories.importer.jira.JiraAPIImporter;
-import org.craftsmenlabs.stories.importer.jira.JiraRequest;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
@@ -125,5 +123,27 @@ public class JiraAPIImporterTest {
         final FieldMappingConfig actual = jiraAPIImporter.mapToHumanReadableFields(input, fieldMap);
 
         assertThat(actual.getFeature().getEstimation()).isEqualTo("estimation1");
+    }
+    @Test
+    public void testMapToHumanReadableFieldsReturnsEmptiesOnEmptyConfig() throws IOException {
+        final FieldMappingConfig input = FieldMappingConfig.builder()
+                .feature(null)
+                .bug(null)
+                .epic(null)
+                .teamTask(null)
+                .rank("")
+                .build();
+
+        Map<String, String> fieldMap = new HashMap<String, String>(){{
+            put("estimationHuman", "estimation1");
+        }};
+
+        final FieldMappingConfig actual = jiraAPIImporter.mapToHumanReadableFields(input, fieldMap);
+        assertThat(actual.getFeature().getEstimation()).isEqualTo("");
+        assertThat(actual.getBug().getAcceptationCriteria()).isEqualTo("");
+        assertThat(actual.getEpic().getGoal()).isEqualTo("");
+        assertThat(actual.getTeamTask().getEstimation()).isEqualTo("");
+        assertThat(actual.getRank()).isEqualTo("");
+
     }
 }

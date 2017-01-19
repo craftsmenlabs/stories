@@ -111,6 +111,9 @@
 				<artifactId>pitest-maven</artifactId>
 				<configuration>
 					<skip>false</skip>
+					<excludedClasses>
+						<excludedClass>org.craftsmenlabs.stories.isolator.model.*</excludedClass>
+					</excludedClasses>
 				</configuration>
 			</plugin>
 		</plugins>

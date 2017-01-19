@@ -107,6 +107,17 @@
 					<target>${java.version}</target>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.pitest</groupId>
+				<artifactId>pitest-maven</artifactId>
+				<configuration>
+					<skip>false</skip>
+					<excludedClasses>
+						<excludedClass>org.craftsmenlabs.stories.importer.jira.JiraFieldMap</excludedClass>
+						<excludedClass>org.craftsmenlabs.stories.importer.jira.JiraRequest</excludedClass>
+					</excludedClasses>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 

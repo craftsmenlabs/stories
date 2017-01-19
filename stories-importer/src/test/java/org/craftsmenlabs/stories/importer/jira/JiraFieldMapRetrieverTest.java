@@ -32,8 +32,20 @@ public class JiraFieldMapRetrieverTest {
             result = readFile("jira-fieldMap-test.json");
         }};
 
+        assertThat(jiraFieldMapRetriever.getFieldMap().size()).isEqualTo(92);
         assertThat(jiraFieldMapRetriever.getFieldMap().get("Issue Type")).isEqualTo("issuetype");
     }
+
+
+//    @Test
+//    public void getFieldMapThrowsStorynatorException() throws Exception {
+//        new Expectations() {{
+//            restTemplate.getForObject(withAny(""), withAny(String.class));
+//            result = new HttpClientErrorException("");
+//        }};
+//
+//        assertThatExceptionOfType(StoriesException.class).isThrownBy(() -> jiraFieldMapRetriever.getFieldMap());
+//    }
 
     private String readFile(String resource) throws Exception {
         URL url = this.getClass().getClassLoader().getResource(resource);
