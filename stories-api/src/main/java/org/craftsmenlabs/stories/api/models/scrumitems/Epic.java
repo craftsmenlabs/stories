@@ -15,5 +15,6 @@ public class Epic implements ScrumItem {
     private String externalURI;
 
     private String summary;
+    private String description;
     private String goal;
 }
