@@ -21,32 +21,47 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TrelloJsonParserTest {
 
     private ObjectMapper mapper = new ObjectMapper();
+
     @Tested
     private TrelloJsonParser trelloJsonParser;
 
     @Test
-    public void getIssuesTest() throws Exception {
-        Backlog backlog = trelloJsonParser.parse(mapper.readValue(readFile("trello-integration-test.json"), mapper.getTypeFactory().constructCollectionType(LinkedList.class, TrelloJsonIssue.class)));
+    public void testParseWorksOk() {
+        List<TrelloJsonIssue> trelloJsonIssues = Lists.newArrayList(
+                TrelloJsonIssue.builder().id("0").name("name").desc("story.\nacceptance criteria").build()
+        );
 
-        assertThat(backlog.getFeatures()).extracting(issue -> issue.getKey()).containsOnly("581b199ba7dfd7e8f737262c");
+        Backlog backlog = trelloJsonParser.parse(trelloJsonIssues);
+        backlog.getFeatures().sort(Comparator.comparing(Feature::getRank));
+
+        assertThat(backlog.getFeatures()).containsExactly(
+                Feature.builder().key("0").rank("0").summary("name").userstory("story.").acceptanceCriteria("acceptance criteria").estimation(0f).build()
+        );
     }
 
     @Test
-    public void getIssuesReturnsLexicographicallySortableRanks() {
+    public void testParseWithFile() throws Exception {
+        Backlog backlog = trelloJsonParser.parse(mapper.readValue(readFile("trello-integration-test.json"), mapper.getTypeFactory().constructCollectionType(LinkedList.class, TrelloJsonIssue.class)));
+
+        assertThat(backlog.getFeatures()).extracting(Feature::getKey).containsOnly("581b199ba7dfd7e8f737262c");
+    }
+
+    @Test
+    public void testParseReturnsLexicographicallySortableRanks() {
 
         List<TrelloJsonIssue> trelloJsonIssues = Lists.newArrayList(
-                TrelloJsonIssue.builder().id("0").name("").desc("").build(),
-                TrelloJsonIssue.builder().id("1").name("").desc("").build(),
-                TrelloJsonIssue.builder().id("2").name("").desc("").build(),
-                TrelloJsonIssue.builder().id("3").name("").desc("").build(),
-                TrelloJsonIssue.builder().id("4").name("").desc("").build(),
-                TrelloJsonIssue.builder().id("5").name("").desc("").build(),
-                TrelloJsonIssue.builder().id("6").name("").desc("").build(),
-                TrelloJsonIssue.builder().id("7").name("").desc("").build(),
-                TrelloJsonIssue.builder().id("8").name("").desc("").build(),
-                TrelloJsonIssue.builder().id("9").name("").desc("").build(),
-                TrelloJsonIssue.builder().id("10").name("").desc("").build(),
-                TrelloJsonIssue.builder().id("100").name("").desc("").build()
+                TrelloJsonIssue.builder().id("0").desc("").build(),
+                TrelloJsonIssue.builder().id("1").desc("").build(),
+                TrelloJsonIssue.builder().id("2").desc("").build(),
+                TrelloJsonIssue.builder().id("3").desc("").build(),
+                TrelloJsonIssue.builder().id("4").desc("").build(),
+                TrelloJsonIssue.builder().id("5").desc("").build(),
+                TrelloJsonIssue.builder().id("6").desc("").build(),
+                TrelloJsonIssue.builder().id("7").desc("").build(),
+                TrelloJsonIssue.builder().id("8").desc("").build(),
+                TrelloJsonIssue.builder().id("9").desc("").build(),
+                TrelloJsonIssue.builder().id("10").desc("").build(),
+                TrelloJsonIssue.builder().id("100").desc("").build()
 
         );
 
