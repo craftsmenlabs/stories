@@ -2,12 +2,10 @@ package org.craftmenlabs.stories.launcher.integrationtest;
 
 
 import mockit.Expectations;
-import mockit.Injectable;
 import mockit.Mocked;
 import mockit.integration.junit4.JMockit;
 import org.apache.commons.io.FileUtils;
 import org.craftsmenlabs.stories.api.models.Rating;
-import org.craftsmenlabs.stories.importer.JiraRequest;
 import org.craftsmenlabs.stories.launcher.BootApp;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,8 +23,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class RunTrelloIntegrationTest {
     @Mocked
     private RestTemplate restTemplate;
-    @Injectable
-    private JiraRequest jiraRequest;
 
     @Test
     public void trelloTest() throws Exception {

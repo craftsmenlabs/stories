@@ -21,8 +21,9 @@ public class TrelloJsonParser {
         for (int i = 0; i < trelloJsonIssues.size(); i++) {
             TrelloJsonIssue trelloJsonIssue = trelloJsonIssues.get(i);
 
-            String content = trelloJsonIssue.getDesc().length() == 0 ? trelloJsonIssue.getName() : trelloJsonIssue.getDesc();
+            String content = trelloJsonIssue.getDesc();
             Feature feature = sentenceSplitter.splitSentence(new Feature(), content);
+            feature.setSummary(trelloJsonIssue.getName());
             feature.setKey(trelloJsonIssue.getId());
             feature.setExternalURI(trelloJsonIssue.getUrl());
 

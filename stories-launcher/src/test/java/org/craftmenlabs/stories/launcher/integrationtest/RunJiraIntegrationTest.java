@@ -8,7 +8,7 @@ import mockit.Mocked;
 import mockit.integration.junit4.JMockit;
 import org.apache.commons.io.FileUtils;
 import org.craftsmenlabs.stories.api.models.Rating;
-import org.craftsmenlabs.stories.importer.JiraRequest;
+import org.craftsmenlabs.stories.importer.jira.JiraRequest;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.craftsmenlabs.stories.launcher.BootApp;
 import org.junit.Test;

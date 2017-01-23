@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class TrelloAPIImporterTest
 {
-	private TrelloAPIImporter trelloAPIImporter = new TrelloAPIImporter(new StandaloneLogger(), "http://foo.bar", "key", "authKey", "token");
+	private TrelloAPIImporter trelloAPIImporter = new TrelloAPIImporter(new StandaloneLogger(), "key", "authKey", "token");
 
 	@Mocked
 	private RestTemplate restTemplate;

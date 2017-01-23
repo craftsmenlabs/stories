@@ -26,6 +26,7 @@ public class RetrieveTestData {
 
     public static Feature getTrelloTestIssueFromResource() {
         return Feature.builder()
+                .summary("This should succeed")
                 .userstory(
                         "As a productowner " +
                                 "I want to have a good story, " +

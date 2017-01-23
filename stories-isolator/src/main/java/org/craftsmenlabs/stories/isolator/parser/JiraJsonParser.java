@@ -17,6 +17,8 @@ public class JiraJsonParser {
     private FilterConfig filterConfig;
 
     public JiraJsonParser(StorynatorLogger logger, FieldMappingConfig fieldMapping, FilterConfig filterConfig, SourceConfig sourceConfig) {
+
+
         this.filterConfig = filterConfig;
 
         this.converters = Arrays.asList(
