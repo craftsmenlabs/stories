@@ -10,6 +10,7 @@ import org.craftsmenlabs.stories.api.models.items.types.BacklogItem;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Epic extends BacklogItem {
+    private String description;
     private String summary;
     private String goal;
 
