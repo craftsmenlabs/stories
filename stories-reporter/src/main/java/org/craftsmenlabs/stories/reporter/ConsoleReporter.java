@@ -237,6 +237,7 @@ public class ConsoleReporter implements Reporter {
         log("estimation: " + validationConfig.getEstimation());
         log("bugs: " + validationConfig.getBug());
         log("epics: " + validationConfig.getEpic());
+        log("team task: " + validationConfig.getTeamTask());
     }
 
     private void log(String msg) {
