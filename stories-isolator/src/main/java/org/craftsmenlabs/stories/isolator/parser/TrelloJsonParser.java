@@ -6,8 +6,9 @@ import org.craftsmenlabs.stories.api.models.items.base.Feature;
 import org.craftsmenlabs.stories.isolator.SentenceSplitter;
 import org.craftsmenlabs.stories.isolator.model.trello.TrelloJsonIssue;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TrelloJsonParser {
 
@@ -16,7 +17,7 @@ public class TrelloJsonParser {
 
         int rankLength = String.valueOf(trelloJsonIssues.size()).length();
 
-        List<Feature> result = new ArrayList<>();
+        Map<String, Feature> result = new HashMap<>();
         for (int i = 0; i < trelloJsonIssues.size(); i++) {
             TrelloJsonIssue trelloJsonIssue = trelloJsonIssues.get(i);
 
@@ -31,7 +32,7 @@ public class TrelloJsonParser {
             feature.setRank(format2);
             feature.setEstimation(0f);
 
-            result.add(feature);
+            result.put(feature.getKey(), feature);
         }
 
         return new Backlog(result);

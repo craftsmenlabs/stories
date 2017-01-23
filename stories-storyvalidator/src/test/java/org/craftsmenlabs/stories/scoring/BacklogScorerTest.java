@@ -13,9 +13,8 @@ import org.craftsmenlabs.stories.api.models.items.validated.ValidatedBacklog;
 import org.craftsmenlabs.stories.ranking.Ranking;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -36,12 +35,10 @@ public class BacklogScorerTest {
 
     @Test
     public void testPerformScorerReturnsSuccesOnScoreExactlyOnThreshold() throws Exception {
-        List<Feature> features = Arrays.asList(
-                new Feature()
-        );
+        Map<String, Feature> features = Collections.singletonMap("1", new Feature());
 
         new Expectations() {{
-            backlog.getItems();
+            backlog.getIssues();
             result = features;
 
             ranking.createRanking(withNotNull());
@@ -60,12 +57,10 @@ public class BacklogScorerTest {
 
     @Test
     public void testPerformScorerReturnsFailonZeroBacklogScore() throws Exception {
-        List<Feature> features = Arrays.asList(
-                new Feature()
-        );
+        Map<String, Feature> features = Collections.singletonMap("1", new Feature());
 
         new Expectations() {{
-            backlog.getItems();
+            backlog.getIssues();
             result = features;
 
             ranking.createRanking(withNotNull());
@@ -84,10 +79,10 @@ public class BacklogScorerTest {
 
     @Test
     public void testBacklogAndFeatureRatingIsSameWhenOnlyFeaturesAreEnabled() {
-        List<Feature> features = Collections.singletonList(new Feature());
+        Map<String, Feature> features = Collections.singletonMap("1", new Feature());
 
         new Expectations() {{
-            backlog.getItems();
+            backlog.getIssues();
             result = features;
 
             ranking.createRanking(withNotNull());
@@ -106,10 +101,10 @@ public class BacklogScorerTest {
 
     @Test
     public void testBacklogAndBugRatingIsSameWhenOnlyBugsAreEnabled() {
-        List<Bug> bugs = Collections.singletonList(new Bug());
+        Map<String, Bug> bugs = Collections.singletonMap("1", new Bug());
 
         new Expectations() {{
-            backlog.getItems();
+            backlog.getIssues();
             result = bugs;
 
             ranking.createRanking(withNotNull());
@@ -129,10 +124,10 @@ public class BacklogScorerTest {
 
     @Test
     public void testBacklogAndEpicRatingIsSameWhenOnlyEpicsAreEnabled() {
-        List<Epic> epics = Collections.singletonList(new Epic());
+        Map<String, Epic> epics = Collections.singletonMap("1", new Epic());
 
         new Expectations() {{
-            backlog.getItems();
+            backlog.getIssues();
             result = epics;
 
             ranking.createRanking(withNotNull());

@@ -48,8 +48,8 @@ public class StorynatorPluginExecutor {
         BacklogScorer scorer = new BacklogScorer(storynatorConfig.getValidation(), new CurvedRanking());
         ValidatedBacklog validatedBacklog = scorer.validate(backlog);
 
-        if ((validatedBacklog.getItem().getItems() == null || validatedBacklog.getItem().getItems().isEmpty())) {
-            throw new StoriesException("Sorry. No items to be found in de backlog for Storynator to process. Exiting Storynator.");
+        if ((validatedBacklog.getItem().getIssues() == null || validatedBacklog.getItem().getIssues().isEmpty())) {
+            throw new StoriesException("Sorry. No issues to be found in de backlog for Storynator to process. Exiting Storynator.");
         }
 
         // Dashboard report?

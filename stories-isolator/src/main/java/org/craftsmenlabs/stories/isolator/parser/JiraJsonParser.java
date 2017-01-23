@@ -9,10 +9,7 @@ import org.craftsmenlabs.stories.api.models.logging.StorynatorLogger;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.craftsmenlabs.stories.isolator.parser.converters.jira.*;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class JiraJsonParser {
@@ -37,7 +34,7 @@ public class JiraJsonParser {
         }
 
         // Filter issues on status and convert them
-        List<BacklogItem> backlogItems = jiraBacklog.getJiraJsonIssues().stream()
+        Map<String, ? extends BacklogItem> backlogItems = jiraBacklog.getJiraJsonIssues().stream()
                 .filter(jiraJsonIssue -> jiraJsonIssue.getStatus().equals(filterConfig.getStatus()))
                 .map(jiraJsonIssue -> {
                     Optional<AbstractJiraConverter> converter = converters.stream().filter(conv ->
@@ -47,7 +44,7 @@ public class JiraJsonParser {
                     return converter.isPresent() ? converter.get().convert(jiraJsonIssue) : null;
                 })
                 .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+                .collect(Collectors.toMap(BacklogItem::getKey, c -> c));
 
         return new Backlog(backlogItems);
     }

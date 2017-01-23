@@ -33,8 +33,8 @@ public class TrelloAPIImporterTest
 		}};
 
 		Backlog backlog = trelloAPIImporter.getBacklog();
-		assertThat(backlog.getItems()).hasSize(6);
-	}
+        assertThat(backlog.getIssues()).hasSize(6);
+    }
 
 	@Test(expected = StoriesException.class)
 	public void testErrorResponse() throws Exception {

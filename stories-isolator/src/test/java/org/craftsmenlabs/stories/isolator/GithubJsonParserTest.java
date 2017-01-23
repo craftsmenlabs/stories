@@ -31,7 +31,7 @@ public class GithubJsonParserTest
     public void getIssuesTest() throws Exception {
         Backlog backlog = githubJsonParser.parse(mapper.readValue(readFile("github-integration-test.json"), mapper.getTypeFactory().constructCollectionType(LinkedList.class, GithubJsonIssue.class)));
 
-        assertThat(backlog.getItems()).extracting(issue -> issue.getKey()).containsExactly("1", "2");
+        assertThat(backlog.getIssues()).containsOnlyKeys("1", "2");
     }
 
     @Test
@@ -55,8 +55,8 @@ public class GithubJsonParserTest
 
         Backlog backlog = githubJsonParser.parse(githubJsonIssues);
 
-        assertThat(backlog.getItems().stream()
-                .map(item -> (Feature) item)
+        assertThat(backlog.getIssues().entrySet().stream()
+                .map(item -> (Feature) item.getValue())
                 .sorted(Comparator.comparing(Feature::getRank))
                 .collect(Collectors.toList())).containsExactly(
                 Feature.builder().key("0").rank("00").estimation(0f).build(),

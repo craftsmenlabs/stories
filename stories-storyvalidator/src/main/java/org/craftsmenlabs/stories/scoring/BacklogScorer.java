@@ -41,7 +41,7 @@ public class BacklogScorer extends AbstractScorer<Backlog, ValidatedBacklog> {
                 .build();
 
 
-        if (backlog == null || backlog.getItems().size() == 0) {
+        if (backlog == null || backlog.getIssues().size() == 0) {
             validatedBacklog.getViolations().add(new Violation(
                     ViolationType.BacklogEmptyViolation,
                     "The backlog is empty, or doesn't contain any issues."
@@ -52,7 +52,8 @@ public class BacklogScorer extends AbstractScorer<Backlog, ValidatedBacklog> {
             return validatedBacklog;
         }
 
-        List<ValidatedBacklogItem> validatedItems = backlog.getItems().stream()
+        List<ValidatedBacklogItem> validatedItems = backlog.getIssues().entrySet().stream()
+                .map(Map.Entry::getValue)
                 .filter(this::isIssueActive)
                 .map(item -> scorers.get(item.getClass()).validate(item))
                 .map(item -> (ValidatedBacklogItem) item)

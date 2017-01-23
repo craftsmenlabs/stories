@@ -20,7 +20,6 @@ import java.util.List;
 })
 //http://www.davismol.net/2015/03/05/jackson-json-deserialize-a-list-of-objects-of-subclasses-of-an-abstract-class/
 public abstract class ValidatedBacklogItem<T extends Rankable> extends AbstractValidatedItem<T> implements Rankable {
-
     public ValidatedBacklogItem() {
     }
 

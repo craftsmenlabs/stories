@@ -32,8 +32,8 @@ public class GithubAPIImporterTest
 		}};
 
 		Backlog backlog = githubAPIImporter.getBacklog();
-		assertThat(backlog.getItems()).hasSize(2);
-	}
+        assertThat(backlog.getIssues()).hasSize(2);
+    }
 
 	@Test(expected = StoriesException.class)
 	public void testErrorResponse() throws Exception

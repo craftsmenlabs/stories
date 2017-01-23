@@ -52,7 +52,7 @@ public class RunIntegrationTest {
 
         Backlog backlog = jiraJsonParser.parse(mapper.readValue(testData, JiraBacklog.class));
 
-        assertEquals(testResult, backlog.getItems().get(0));
+        assertEquals(testResult, backlog.getIssues().get("EPM-512"));
     }
 
     @Test
@@ -63,7 +63,7 @@ public class RunIntegrationTest {
 
         Backlog backlog = trelloJsonParser.parse(mapper.readValue(testData, mapper.getTypeFactory().constructCollectionType(List.class, TrelloJsonIssue.class)));
 
-        assertEquals(testResult, backlog.getItems().get(0));
+        assertEquals(testResult, backlog.getIssues().get("581b199ba7dfd7e8f737262c"));
     }
 
     private String readFile(String resource) throws Exception {

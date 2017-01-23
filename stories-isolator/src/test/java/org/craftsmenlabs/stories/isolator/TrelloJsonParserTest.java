@@ -6,7 +6,6 @@ import mockit.Tested;
 import org.apache.commons.io.FileUtils;
 import org.craftsmenlabs.stories.api.models.items.base.Backlog;
 import org.craftsmenlabs.stories.api.models.items.base.Feature;
-import org.craftsmenlabs.stories.api.models.items.types.BacklogItem;
 import org.craftsmenlabs.stories.isolator.model.trello.TrelloJsonIssue;
 import org.craftsmenlabs.stories.isolator.parser.TrelloJsonParser;
 import org.junit.Test;
@@ -30,7 +29,7 @@ public class TrelloJsonParserTest {
     public void getIssuesTest() throws Exception {
         Backlog backlog = trelloJsonParser.parse(mapper.readValue(readFile("trello-integration-test.json"), mapper.getTypeFactory().constructCollectionType(LinkedList.class, TrelloJsonIssue.class)));
 
-        assertThat(backlog.getItems()).extracting(BacklogItem::getKey).containsOnly("581b199ba7dfd7e8f737262c");
+        assertThat(backlog.getIssues()).containsOnlyKeys("581b199ba7dfd7e8f737262c");
     }
 
     @Test
@@ -54,8 +53,8 @@ public class TrelloJsonParserTest {
 
         Backlog backlog = trelloJsonParser.parse(trelloJsonIssues);
 
-        assertThat(backlog.getItems().stream()
-                .map(item -> (Feature) item)
+        assertThat(backlog.getIssues().entrySet().stream()
+                .map(item -> (Feature) item.getValue())
                 .sorted(Comparator.comparing(Feature::getRank))
                 .collect(Collectors.toList())).containsExactly(
                 Feature.builder().key("0").rank("00").estimation(0f).build(),

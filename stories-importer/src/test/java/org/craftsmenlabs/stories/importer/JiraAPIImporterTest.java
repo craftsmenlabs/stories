@@ -57,7 +57,7 @@ public class JiraAPIImporterTest {
         }};
 
         Backlog backlog = jiraAPIImporter.getBacklog();
-        assertThat(backlog.getItems()).hasSize(1);
+        assertThat(backlog.getIssues()).hasSize(1);
     }
 
     @Test(expected = StoriesException.class)
