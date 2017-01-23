@@ -1,7 +1,7 @@
 package org.craftsmenlabs.stories.launcher;
 
 import org.craftsmenlabs.stories.api.models.Reporter;
-import org.craftsmenlabs.stories.api.models.StoriesRun;
+import org.craftsmenlabs.stories.api.models.StoriesReport;
 import org.craftsmenlabs.stories.api.models.config.ReportConfig;
 import org.craftsmenlabs.stories.api.models.config.SourceConfig;
 import org.craftsmenlabs.stories.api.models.config.StorynatorConfig;
@@ -53,7 +53,7 @@ public class StorynatorPluginExecutor {
         }
 
         // Dashboard report?
-        StoriesRun storiesRun = StoriesRun.builder()
+        StoriesReport storiesReport = StoriesReport.builder()
                 .summary(new SummaryBuilder().build(validatedBacklog))
                 .validatedBacklog(validatedBacklog)
                 .runConfig(storynatorConfig.getValidation())
@@ -62,7 +62,7 @@ public class StorynatorPluginExecutor {
 
 
         for (Reporter reporter : this.getReporters()) {
-            reporter.report(storiesRun);
+            reporter.report(storiesReport);
         }
 
         return validatedBacklog;

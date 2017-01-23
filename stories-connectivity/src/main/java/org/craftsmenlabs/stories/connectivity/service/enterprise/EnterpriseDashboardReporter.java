@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.craftsmenlabs.stories.api.models.Reporter;
-import org.craftsmenlabs.stories.api.models.StoriesRun;
+import org.craftsmenlabs.stories.api.models.StoriesReport;
 import org.craftsmenlabs.stories.api.models.config.ReportConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
 import org.craftsmenlabs.stories.api.models.logging.StorynatorLogger;
@@ -23,11 +23,11 @@ public class EnterpriseDashboardReporter implements Reporter {
         this.logger = logger;
     }
 
-    public void report(StoriesRun storiesRun) {
+    public void report(StoriesReport storiesReport) {
         if (StringUtils.isNotEmpty(config.getUrl())) {
 
             if (StringUtils.isNotEmpty(config.getToken())) {
-                storiesRun.setProjectToken(config.getToken());
+                storiesReport.setProjectToken(config.getToken());
             }
 
             logger.info("Instantiating dashboard data submitter.");
@@ -39,11 +39,11 @@ public class EnterpriseDashboardReporter implements Reporter {
                 RestTemplate template = new RestTemplate();
                 ObjectMapper objectMapper = new ObjectMapper();
                 try {
-                    logger.error(objectMapper.writeValueAsString(storiesRun));
+                    logger.error(objectMapper.writeValueAsString(storiesReport));
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
                 }
-                template.postForEntity(url, storiesRun, String.class);
+                template.postForEntity(url, storiesReport, String.class);
             } catch (HttpClientErrorException e) {
                 logger.error("Failed to connect to "
                         + url

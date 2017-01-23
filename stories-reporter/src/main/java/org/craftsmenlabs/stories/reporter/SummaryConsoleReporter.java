@@ -1,7 +1,7 @@
 package org.craftsmenlabs.stories.reporter;
 
 import org.craftsmenlabs.stories.api.models.Reporter;
-import org.craftsmenlabs.stories.api.models.StoriesRun;
+import org.craftsmenlabs.stories.api.models.StoriesReport;
 import org.craftsmenlabs.stories.api.models.items.validated.ValidatedBacklog;
 import org.craftsmenlabs.stories.api.models.logging.StorynatorLogger;
 import org.craftsmenlabs.stories.api.models.summary.Summary;
@@ -15,8 +15,8 @@ public class SummaryConsoleReporter implements Reporter {
     }
 
     @Override
-    public void report(StoriesRun storiesRun) {
-        ValidatedBacklog validatedBacklog = storiesRun.getValidatedBacklog();
+    public void report(StoriesReport storiesReport) {
+        ValidatedBacklog validatedBacklog = storiesReport.getValidatedBacklog();
         Summary summary = new SummaryBuilder().build(validatedBacklog);
 
         logger.info(summary.toString());

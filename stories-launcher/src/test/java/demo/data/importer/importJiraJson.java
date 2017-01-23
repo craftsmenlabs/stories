@@ -3,7 +3,7 @@ package demo.data.importer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.util.Files;
-import org.craftsmenlabs.stories.api.models.StoriesRun;
+import org.craftsmenlabs.stories.api.models.StoriesReport;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.ReportConfig;
 import org.craftsmenlabs.stories.api.models.config.StorynatorConfig;
@@ -123,7 +123,7 @@ public class importJiraJson {
         BacklogScorer scorer = new BacklogScorer(validationConfig, new CurvedRanking());
         ValidatedBacklog validatedBacklog = scorer.validate(backlog);
 
-        StoriesRun storiesRun = StoriesRun.builder()
+        StoriesReport storiesReport = StoriesReport.builder()
                 .projectToken(projectToken)
                 .runDateTime(dateTime)
                 .validatedBacklog(validatedBacklog)
@@ -132,11 +132,11 @@ public class importJiraJson {
                 .build();
 
         try {
-            System.out.println(mapper.writeValueAsString(storiesRun));
+            System.out.println(mapper.writeValueAsString(storiesReport));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
         EnterpriseDashboardReporter enterpriseDashboardReporter = new EnterpriseDashboardReporter(new StandaloneLogger(), reportConfig);
-        enterpriseDashboardReporter.report(storiesRun);
+        enterpriseDashboardReporter.report(storiesReport);
     }
 }

@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class StoriesRun {
+public class StoriesReport {
     @JsonProperty("projectToken")
     private String projectToken;
 
