@@ -8,6 +8,7 @@ import org.craftsmenlabs.stories.api.models.validatorentry.EpicValidatorEntry;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,7 +21,8 @@ public class EpicScorerTest {
         config.getEpic().setEnabledFields(new LinkedList<>());
         Epic testedEpic = this.getDefaultEpic();
 
-        EpicValidatorEntry result = EpicScorer.performScorer(testedEpic, config);
+
+        EpicValidatorEntry result = (EpicValidatorEntry) new FillableFieldScorer<Epic>(config).performScorer(testedEpic);
         assertThat(result.getRating()).isEqualTo(Rating.FAIL);
         assertThat(result.getPointsValuation()).isEqualTo(0.0f);
     }
@@ -30,7 +32,7 @@ public class EpicScorerTest {
         ValidationConfig config = this.getDefaultConfig();
         Epic testedEpic = this.getDefaultEpic();
 
-        EpicValidatorEntry result = EpicScorer.performScorer(testedEpic, config);
+        EpicValidatorEntry result = (EpicValidatorEntry) new FillableFieldScorer<Epic>(config).performScorer(testedEpic);
         assertThat(result.getRating()).isEqualTo(Rating.SUCCESS);
         assertThat(result.getPointsValuation()).isEqualTo(1f);
     }
@@ -41,7 +43,7 @@ public class EpicScorerTest {
         config.getEpic().setEnabledFields(Arrays.asList("goal", "unknown_field"));
         Epic testedEpic = this.getDefaultEpic();
 
-        EpicScorer.performScorer(testedEpic, config);
+        new FillableFieldScorer<Epic>(config).performScorer(testedEpic);
     }
 
     @Test
@@ -49,7 +51,7 @@ public class EpicScorerTest {
         ValidationConfig config = this.getDefaultConfig();
         Epic testedEpic = this.getDefaultEpic();
         testedEpic.setGoal("");
-        EpicValidatorEntry result = EpicScorer.performScorer(testedEpic, config);
+        EpicValidatorEntry result = (EpicValidatorEntry) new FillableFieldScorer<Epic>(config).performScorer(testedEpic);
 
         assertThat(result.getPointsValuation()).isEqualTo(0.0f);
         assertThat(result.getViolations().size()).isEqualTo(1);
@@ -59,7 +61,7 @@ public class EpicScorerTest {
         ValidationConfig.EpicValidatorEntry config = new ValidationConfig.EpicValidatorEntry();
         config.setRatingThreshold(0.5f);
         config.setActive(true);
-        config.setEnabledFields(Arrays.asList("goal"));
+        config.setEnabledFields(Collections.singletonList("goal"));
         return ValidationConfig.builder()
                 .epic(config)
                 .build();

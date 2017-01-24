@@ -22,7 +22,6 @@ public class TeamTaskScorer {
 
     public static TeamTaskValidatorEntry performScorer(TeamTask teamTask, ValidationConfig validationConfig) {
         List<Violation> violations = new ArrayList<>();
-        float points = 0f;
         float pointsRatio = 1f / Stream.of(
                     !"summary".isEmpty(),
                     !"description".isEmpty(),
@@ -30,7 +29,7 @@ public class TeamTaskScorer {
                     validationConfig.getEstimation().isActive())
                 .filter(i->i)
                 .count();
-
+        float points = 0f;
 
         if (teamTask == null) {
             teamTask = new TeamTask("0", "0", "", "", "", "", 0f);
@@ -38,27 +37,37 @@ public class TeamTaskScorer {
 
         if (StringUtils.isEmpty(teamTask.getSummary())) {
             teamTask.setSummary("");
-            violations.add(new Violation(ViolationType.TeamTaskSummaryEmptyViolation, "No summary was given."));
-        }else{
-            points += pointsRatio;
-        }
-        if (StringUtils.isEmpty(teamTask.getDescription())) {
-            teamTask.setDescription("");
-            violations.add(new Violation(ViolationType.TeamTaskDescriptionEmptyViolation, "No description was given."));
+            violations.add(new Violation(
+                    ViolationType.TeamTaskSummaryEmptyViolation,
+                    "No summary was given.",
+                    pointsRatio));
         } else {
             points += pointsRatio;
         }
 
+        if (StringUtils.isEmpty(teamTask.getDescription())) {
+            teamTask.setDescription("");
+            violations.add(new Violation(
+                    ViolationType.TeamTaskDescriptionEmptyViolation,
+                    "No description was given.",
+                    pointsRatio));
+        } else {
+            points += pointsRatio;
+        }
+
+
         AcceptanceCriteriaValidatorEntry acceptanceCriteriaValidatorEntry = AcceptanceCriteriaScorer.performScorer(teamTask.getAcceptationCriteria(), validationConfig);
         if (teamTask.getAcceptationCriteria() != null && validationConfig.getCriteria().isActive()) {
+            acceptanceCriteriaValidatorEntry.getViolations().forEach(violation -> violation.setPoints(pointsRatio * violation.getPoints()));
             violations.addAll(acceptanceCriteriaValidatorEntry.getViolations());
-            points += pointsRatio * acceptanceCriteriaValidatorEntry.getPointsValuation();
+            points += acceptanceCriteriaValidatorEntry.getPointsValuation();
         }
 
         EstimationValidatorEntry estimationValidatorEntry = EstimationScorer.performScorer(teamTask.getEstimation(), validationConfig);
         if (teamTask.getEstimation() != null && validationConfig.getEstimation().isActive()) {
+            estimationValidatorEntry .getViolations().forEach(violation -> violation.setPoints(pointsRatio * violation.getPoints()));
             violations.addAll(estimationValidatorEntry.getViolations());
-            points += pointsRatio * estimationValidatorEntry.getPointsValuation();
+            points += estimationValidatorEntry.getPointsValuation();
         }
 
         Rating rating = points >= validationConfig.getTeamTask().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL;
@@ -73,5 +82,4 @@ public class TeamTaskScorer {
                 .estimationValidatorEntry(estimationValidatorEntry)
                 .build();
     }
-
 }

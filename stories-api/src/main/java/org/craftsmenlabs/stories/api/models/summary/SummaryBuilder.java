@@ -1,8 +1,11 @@
 package org.craftsmenlabs.stories.api.models.summary;
 
 import org.craftsmenlabs.stories.api.models.validatorentry.*;
+import org.craftsmenlabs.stories.api.models.violation.Violation;
+import org.craftsmenlabs.stories.api.models.violation.ViolationType;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.craftsmenlabs.stories.api.models.Rating.FAIL;
@@ -34,6 +37,7 @@ public class SummaryBuilder {
                 .featureUserStory(getCount(featureStories))
                 .featureCriteria(getCount(featureCriteria))
                 .featureEstimation(getCount(featureEstimations))
+                .violationCounts(getViolationCount(allEntries))
                 .build();
     }
 
@@ -45,5 +49,17 @@ public class SummaryBuilder {
                 .passed(list.stream().filter(o -> o.getRating() == SUCCESS).count())
                 .count((long) list.size())
                 .build();
+    }
+
+    public Map<ViolationType, Integer> getViolationCount(List<? extends AbstractScorable> list){
+        return list.stream()
+                .flatMap(o -> o.getViolations().stream())
+                .map(Violation::getViolationType)
+                .collect(Collectors.groupingBy(
+                        o -> o,
+                        Collectors.reducing(
+                                0,
+                                u -> 1,
+                                (u, u2) -> u + u2)));
     }
 }

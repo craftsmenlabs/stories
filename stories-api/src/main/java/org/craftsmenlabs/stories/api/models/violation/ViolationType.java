@@ -21,5 +21,7 @@ public enum ViolationType
     TeamTaskSummaryEmptyViolation,
     TeamTaskDescriptionEmptyViolation,
     TeamTaskEstimationEmptyViolation,
-    NoFillableFieldsViolation
+    NoFillableFieldsViolation,
+	FieldEmptyViolation,
+	EstimationEmptyViolation
 }

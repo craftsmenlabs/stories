@@ -3,6 +3,8 @@ package org.craftsmenlabs.stories.scoring;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
+import org.craftsmenlabs.stories.api.models.scrumitems.Bug;
+import org.craftsmenlabs.stories.api.models.scrumitems.Epic;
 import org.craftsmenlabs.stories.api.models.validatorentry.*;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 import org.craftsmenlabs.stories.api.models.violation.ViolationType;
@@ -33,11 +35,11 @@ public class BacklogScorer {
                 .violations(new ArrayList<>())
                 .build();
 
-
         if ( backlog == null || backlog.getAllItems().size()==0 ) {
             backlogValidatorEntry.getViolations().add(new Violation(
                     ViolationType.BacklogEmptyViolation,
-                    "The backlog is empty, or doesn't contain any issues."
+                    "The backlog is empty, or doesn't contain any issues.",
+                    1f
             ));
 
             backlogValidatorEntry.setPointsValuation(0f);
@@ -110,7 +112,8 @@ public class BacklogScorer {
             backlogValidatorEntry.getViolations().add(new Violation(
                     ViolationType.BacklogRatingViolation,
                     "The backlog did not score a minimum of " + validationConfig.getBacklog().getRatingThreshold()
-                            + " points and is therefore rated: " + backlogValidatorEntry.getRating()));
+                            + " points and is therefore rated: " + backlogValidatorEntry.getRating(),
+                    backlogValidatorEntry.getPointsValuation()));
         }
 
 
@@ -146,13 +149,13 @@ public class BacklogScorer {
 
     private static List<BugValidatorEntry> getValidatedBugs(Backlog backlog, ValidationConfig validationConfig) {
         return backlog.getBugs().stream()
-                .map(bug -> BugScorer.performScorer(bug, validationConfig))
+                .map(bug -> (BugValidatorEntry) new FillableFieldScorer<Bug>(validationConfig).performScorer(bug))
                 .collect(Collectors.toList());
     }
 
     private static List<EpicValidatorEntry> getValidatedEpics(Backlog backlog, ValidationConfig validationConfig) {
         return backlog.getEpics().stream()
-                .map(epic -> EpicScorer.performScorer(epic, validationConfig))
+                .map(epic -> (EpicValidatorEntry) new FillableFieldScorer<Epic>(validationConfig).performScorer(epic))
                 .collect(Collectors.toList());
     }
 

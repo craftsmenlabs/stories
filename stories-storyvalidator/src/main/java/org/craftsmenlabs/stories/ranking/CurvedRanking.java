@@ -32,6 +32,8 @@ public class CurvedRanking<T extends BacklogItem> implements Ranking
 			float curvedQuotient = curvedQuotient(i, entries2.size());
 			couldHaveScored += curvedQuotient;
 			scoredPoints += entries2.get(i).getPointsValuation() * curvedQuotient;
+			entries2.get(i).setBacklogPoints(entries2.get(i).getPointsValuation() * curvedQuotient);
+			entries2.get(i).setPotentialBacklogPoints(curvedQuotient);
 		}
 		return scoredPoints / couldHaveScored;
 	}
@@ -39,7 +41,6 @@ public class CurvedRanking<T extends BacklogItem> implements Ranking
 	public float curvedQuotient(float position, float amountOfItems)
 	{
 		float part = position / amountOfItems;
-		return 1 - (float)(Math.pow(part, SMOOTH_CURVE));
+		return 1 - (float) (Math.pow(part, SMOOTH_CURVE));
 	}
-
 }

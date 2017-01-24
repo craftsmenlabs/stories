@@ -8,7 +8,6 @@ import org.craftsmenlabs.stories.api.models.violation.ViolationType;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 public class StoryScorer {
@@ -18,47 +17,60 @@ public class StoryScorer {
 
         List<Violation> violations = new ArrayList<>();
 
+        final float STORYLENGTHCLAUSEPOINTS = 0.2f;
+        final float STORYSOCLAUSEPOINTS = 0.4f;
+        final float STORYICLAUSEPOINTS = 0.2f;
         float points = 0.0f;
 
         if (userStory == null || userStory.isEmpty())
         {
-            violations.add(new Violation(ViolationType.StoryEmptyViolation, "This story is empty."));
+            violations.add(new Violation(ViolationType.StoryEmptyViolation, "This story is empty.", points));
         }else {
             final String userStoryLower = userStory.toLowerCase();
 
 
             if (userStoryLower.length() > USERSTORY_MINIMUM_LENGTH) {
-                points += 0.2f;
+
+                points += STORYLENGTHCLAUSEPOINTS;
             } else {
-                violations.add(new Violation(ViolationType.StoryLengthClauseViolation, "The story should contain a minimum length of " + USERSTORY_MINIMUM_LENGTH + " characters. " +
-                        "It now contains " + userStory.length() + " characters."));
+                violations.add(new Violation(
+                        ViolationType.StoryLengthClauseViolation,
+                        "The story should contain a minimum length of " + USERSTORY_MINIMUM_LENGTH + " characters. " +
+                        "It now contains " + userStory.length() + " characters.", STORYLENGTHCLAUSEPOINTS, 1f));
             }
 
             List<String> asKeywords = validationConfig.getStory().getAsKeywords() != null ? validationConfig.getStory().getAsKeywords() : Collections.emptyList();
             if (asKeywords.stream().anyMatch(s -> userStoryLower.contains(s.toLowerCase()))) {
-                points += 0.2f;
+                final float STORYASISCLAUSEPOINTS = 0.2f;
+                points += STORYASISCLAUSEPOINTS;
             } else {
-                violations.add(new Violation(ViolationType.StoryAsIsClauseViolation, "<As a> section is not described properly." +
-                        "The story should contain any of the following keywords: "
-                        + String.join(", ", asKeywords)));
+                violations.add(
+                        new Violation(ViolationType.StoryAsIsClauseViolation,
+                        "<As a> section is not described properly. The story should contain any of the following keywords: "+ String.join(", ", asKeywords),
+                        STORYLENGTHCLAUSEPOINTS));
             }
 
             List<String> iKeywords = validationConfig.getStory().getIKeywords() != null ? validationConfig.getStory().getIKeywords() : Collections.emptyList();
             if (iKeywords.stream().anyMatch(s -> userStoryLower.contains(s.toLowerCase()))) {
-                points += 0.2f;
+                points += STORYICLAUSEPOINTS;
             } else {
-                violations.add(new Violation(ViolationType.StoryIClauseViolation, "<I want> section is not described properly." +
-                        "The story should contain any of the following keywords: "
-                        + String.join(", ", iKeywords)));
+                violations.add(new Violation(
+                        ViolationType.StoryIClauseViolation, "<I want> section is not described properly." +
+                            "The story should contain any of the following keywords: "
+                            + String.join(", ", iKeywords),
+                        STORYICLAUSEPOINTS));
             }
 
             List<String> soKeywords = validationConfig.getStory().getSoKeywords() != null ? validationConfig.getStory().getSoKeywords() : Collections.emptyList();
             if (soKeywords.stream().anyMatch(s -> userStoryLower.contains(s.toLowerCase()))) {
-                points += 0.4f;
+                points += STORYSOCLAUSEPOINTS;
             } else {
-                violations.add(new Violation(ViolationType.StorySoClauseViolation, "<So that> section is not described properly." +
-                        "The story should contain any of the following keywords: "
-                        + String.join(", ", iKeywords)));
+                violations.add(new Violation(
+                        ViolationType.StorySoClauseViolation,
+                        "<So that> section is not described properly." +
+                            "The story should contain any of the following keywords: "
+                            + String.join(", ", iKeywords),
+                        STORYSOCLAUSEPOINTS));
             }
         }
 

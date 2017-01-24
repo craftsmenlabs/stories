@@ -18,11 +18,29 @@ import java.util.List;
 })
 //http://www.davismol.net/2015/03/05/jackson-json-deserialize-a-list-of-objects-of-subclasses-of-an-abstract-class/
 public abstract class BacklogItem extends AbstractScorable implements Rankable {
+    float backlogPoints;
+    float potentialBacklogPoints;
 
     public BacklogItem() {
     }
 
     public BacklogItem(float pointsValuation, List<Violation> violations, Rating rating) {
         super(pointsValuation, violations, rating);
+    }
+
+    public float getBacklogPoints() {
+        return backlogPoints;
+    }
+
+    public void setBacklogPoints(float backlogPoints) {
+        this.backlogPoints = backlogPoints;
+    }
+
+    public float getPotentialBacklogPoints() {
+        return potentialBacklogPoints;
+    }
+
+    public void setPotentialBacklogPoints(float potentialBacklogPoints) {
+        this.potentialBacklogPoints = potentialBacklogPoints;
     }
 }

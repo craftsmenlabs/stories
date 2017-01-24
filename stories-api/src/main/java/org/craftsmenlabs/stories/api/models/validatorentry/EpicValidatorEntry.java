@@ -1,6 +1,5 @@
 package org.craftsmenlabs.stories.api.models.validatorentry;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +14,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EpicValidatorEntry extends BacklogItem{
-    @JsonProperty("epic")
     private Epic epic;
 
     @Builder

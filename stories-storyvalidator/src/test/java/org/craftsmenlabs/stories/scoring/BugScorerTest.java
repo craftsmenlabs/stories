@@ -20,7 +20,7 @@ public class BugScorerTest {
         config.getBug().setEnabledFields(new LinkedList<>());
         Bug testedBug = this.getDefaultBug();
 
-        BugValidatorEntry result = BugScorer.performScorer(testedBug, config);
+        BugValidatorEntry result = (BugValidatorEntry) new FillableFieldScorer<Bug>(config).performScorer(testedBug);
         assertThat(result.getRating()).isEqualTo(Rating.FAIL);
         assertThat(result.getPointsValuation()).isEqualTo(0.0f);
     }
@@ -30,7 +30,7 @@ public class BugScorerTest {
         ValidationConfig config = this.getDefaultConfig();
         Bug testedBug = this.getDefaultBug();
 
-        BugValidatorEntry result = BugScorer.performScorer(testedBug, config);
+        BugValidatorEntry result = (BugValidatorEntry) new FillableFieldScorer<Bug>(config).performScorer(testedBug);
         assertThat(result.getRating()).isEqualTo(Rating.SUCCESS);
         assertThat(result.getPointsValuation()).isEqualTo(1f);
     }
@@ -41,7 +41,7 @@ public class BugScorerTest {
         config.getBug().setEnabledFields(Arrays.asList("priority", "unknown_field"));
         Bug testedBug = this.getDefaultBug();
 
-        BugScorer.performScorer(testedBug, config);
+        new FillableFieldScorer<Bug>(config).performScorer(testedBug);
     }
 
     @Test
@@ -49,7 +49,7 @@ public class BugScorerTest {
         ValidationConfig config = this.getDefaultConfig();
         Bug testedBug = this.getDefaultBug();
         testedBug.setReproductionPath("");
-        BugValidatorEntry result = BugScorer.performScorer(testedBug, config);
+        BugValidatorEntry result = (BugValidatorEntry) new FillableFieldScorer<Bug>(config).performScorer(testedBug);
 
         assertThat(result.getPointsValuation()).isEqualTo(0.8f);
         assertThat(result.getViolations().size()).isEqualTo(1);

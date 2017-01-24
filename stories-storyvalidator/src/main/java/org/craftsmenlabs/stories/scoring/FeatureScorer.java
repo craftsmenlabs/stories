@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Assigns points to an feature, based on all
+ * Assigns points to a feature, based on all
  * underlying fields, such as user story, acceptance criteria, estimated points
  */
 public class FeatureScorer {
