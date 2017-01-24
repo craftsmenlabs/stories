@@ -20,12 +20,14 @@ public class SummaryBuilder {
         List<ValidatedAcceptanceCriteria> featureCriteria = issues.stream().map(ValidatedFeature::getValidatedAcceptanceCriteria).collect(Collectors.toList());
         List<ValidatedEstimation> featureEstimations = issues.stream().map(ValidatedFeature::getValidatedEstimation).collect(Collectors.toList());
 
+        List<? extends ValidatedBacklogItem> allEntries = entry.getItems();
         return Summary.builder()
                 .backlog(ScorableSummary.builder()
                         .pointsValuation(entry.getPointsValuation())
                         .rating(entry.getRating())
                         .build())
                 .features(getCount(issues))
+                .issues(getCount(allEntries))
                 .bugs(getCount(bugs))
                 .epics(getCount(epics))
                 .teamTasks(getCount(teamTasks))
