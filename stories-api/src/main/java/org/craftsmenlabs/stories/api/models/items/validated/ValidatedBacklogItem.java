@@ -13,10 +13,10 @@ import java.util.List;
         include = JsonTypeInfo.As.PROPERTY,
         property = "type")
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = ValidatedFeature.class),
-        @JsonSubTypes.Type(value = ValidatedBug.class),
-        @JsonSubTypes.Type(value = ValidatedEpic.class),
-        @JsonSubTypes.Type(value = ValidatedTeamTask.class)
+        @JsonSubTypes.Type(value = ValidatedFeature.class, name = "FEATURE"),
+        @JsonSubTypes.Type(value = ValidatedBug.class, name = "BUG"),
+        @JsonSubTypes.Type(value = ValidatedEpic.class, name = "EPIC"),
+        @JsonSubTypes.Type(value = ValidatedTeamTask.class, name = "TEAM_TASK")
 })
 //http://www.davismol.net/2015/03/05/jackson-json-deserialize-a-list-of-objects-of-subclasses-of-an-abstract-class/
 public abstract class ValidatedBacklogItem<T extends Rankable> extends AbstractValidatedItem<T> implements Rankable {
