@@ -1,6 +1,7 @@
 package org.craftsmenlabs.stories.api.models.items.validated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +15,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonTypeName("FEATURE")
 public class ValidatedFeature extends ValidatedBacklogItem<Feature> {
     @JsonProperty("userStoryValidatorEntry")
     private ValidatedUserStory validatedUserStory;

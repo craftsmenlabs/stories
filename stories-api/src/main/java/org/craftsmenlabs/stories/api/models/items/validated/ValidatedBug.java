@@ -1,5 +1,6 @@
 package org.craftsmenlabs.stories.api.models.items.validated;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @NoArgsConstructor
 @Data
+@JsonTypeName("BUG")
 public class ValidatedBug extends ValidatedBacklogItem<Bug> {
     @Builder
     public ValidatedBug(float pointsValuation, List<Violation> violations, Rating rating, Bug bug) {
