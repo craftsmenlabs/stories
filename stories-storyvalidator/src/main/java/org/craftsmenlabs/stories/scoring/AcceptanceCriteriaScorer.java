@@ -31,7 +31,7 @@ public class AcceptanceCriteriaScorer {
         if (criteria == null || criteria.isEmpty()) {
             criteria = "";
             violations.add(new Violation(ViolationType.CriteriaVoidViolation,
-                    "No acceptance criteria where found.",
+                    "No acceptance criteria were found.",
                     1f));
         }
 
