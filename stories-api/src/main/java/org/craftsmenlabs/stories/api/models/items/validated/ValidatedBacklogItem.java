@@ -9,7 +9,7 @@ import org.craftsmenlabs.stories.api.models.violation.Violation;
 
 import java.util.List;
 
-@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS,
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
         property = "type")
 @JsonSubTypes({
