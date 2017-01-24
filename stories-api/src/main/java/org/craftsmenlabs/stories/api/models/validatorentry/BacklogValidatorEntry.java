@@ -65,7 +65,7 @@ public class BacklogValidatorEntry extends AbstractScorable {
     }
 
     @JsonIgnore
-    public List<? extends AbstractScorable> getAllValidatorEntries() {
+    public List<? extends BacklogItem> getAllValidatorEntries() {
         return Stream.of(featureValidatorEntries.getItems(), bugValidatorEntries.getItems(), epicValidatorEntries.getItems(), teamTaskValidatorEntries.getItems())
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());

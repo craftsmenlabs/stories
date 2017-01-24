@@ -46,15 +46,14 @@ public class Summary implements Summarizable<Summary> {
         } else {
             return Summary.builder()
                     .backlog(backlog.divideBy(denominator))
+                    .issues(issues.divideBy(denominator))
                     .features(features.divideBy(denominator))
                     .bugs(bugs.divideBy(denominator))
                     .epics(epics.divideBy(denominator))
-                    .issues(issues.divideBy(denominator))
                     .teamTasks(teamTasks.divideBy(denominator))
                     .featureUserStory(featureUserStory.divideBy(denominator))
                     .featureCriteria(featureCriteria.divideBy(denominator))
                     .featureEstimation(featureEstimation.divideBy(denominator))
-//                    .violationCounts()
                     .build();
         }
     }
@@ -71,9 +70,6 @@ public class Summary implements Summarizable<Summary> {
                 .featureUserStory(featureUserStory.plus(that.getFeatureUserStory()))
                 .featureCriteria(featureCriteria.plus(that.getFeatureCriteria()))
                 .featureEstimation(featureEstimation.plus(that.getFeatureEstimation()))
-//                .violationCounts(
-//                        that.getViolationCounts().entrySet().stream()
-//                                .collect(Collectors.))
                 .build();
     }
 }

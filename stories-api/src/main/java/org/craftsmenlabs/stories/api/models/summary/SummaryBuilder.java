@@ -22,7 +22,7 @@ public class SummaryBuilder {
         List<AcceptanceCriteriaValidatorEntry> featureCriteria = entry.getFeatureValidatorEntries().getItems().stream().map(FeatureValidatorEntry::getAcceptanceCriteriaValidatorEntry).collect(Collectors.toList());
         List<EstimationValidatorEntry> featureEstimations = entry.getFeatureValidatorEntries().getItems().stream().map(FeatureValidatorEntry::getEstimationValidatorEntry).collect(Collectors.toList());
 
-        List<? extends AbstractScorable> allEntries = entry.getAllValidatorEntries();
+        List<? extends BacklogItem> allEntries = entry.getAllValidatorEntries();
 
         return Summary.builder()
                 .backlog(ScorableSummary.builder()
