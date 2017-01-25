@@ -106,7 +106,7 @@ public class JiraAPIImporter implements Importer {
                 .bug(FieldMappingConfig.BugMapping.builder()
                         .priority(getOrDefault(bugMapping.getPriority(), fieldMap))
                         .reproductionPath(getOrDefault(bugMapping.getReproductionPath(), fieldMap))
-                        .software(getOrDefault(bugMapping.getSoftware(), fieldMap))
+                        .environment(getOrDefault(bugMapping.getEnvironment(), fieldMap))
                         .expectedBehavior(getOrDefault(bugMapping.getExpectedBehavior(), fieldMap))
                         .acceptationCriteria(getOrDefault(bugMapping.getAcceptationCriteria(), fieldMap))
                         .build())

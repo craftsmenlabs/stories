@@ -44,7 +44,7 @@ storynator:
           acceptance-criteria: "customfield_11403"
       bug:
           reproduction-path: "customfield_13001"
-          software: "customfield_13002"
+          environment: "customfield_13002"
           expected-behavior: "customfield_13003"
           acceptation-criteria: "customfield_13004"
       epic:

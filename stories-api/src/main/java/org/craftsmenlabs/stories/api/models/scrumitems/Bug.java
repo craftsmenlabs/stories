@@ -17,7 +17,7 @@ public class Bug implements ScrumItem {
     private String summary;
     private String description;
     private String reproductionPath;
-    private String software;
+    private String environment;
     private String expectedBehavior;
     private String acceptationCriteria;
     private String priority;

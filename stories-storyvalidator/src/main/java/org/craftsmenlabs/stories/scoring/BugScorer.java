@@ -55,18 +55,18 @@ public class BugScorer {
         switch (field) {
             case "priority":
                 return bug.getPriority();
-            case "reproduction":
+            case "reproduction_path":
                 return bug.getReproductionPath();
-            case "software":
-                return bug.getSoftware();
-            case "expected":
+            case "environment":
+                return bug.getEnvironment();
+            case "expected_behaviour":
                 return bug.getExpectedBehavior();
-            case "acceptation":
+            case "acceptation_criteria":
                 return bug.getAcceptationCriteria();
             default:
                 throw new StoriesException("Enabled field " + field + " does not exist! Please select one or " +
                         "multiple of the following: " +
-                        "\"priority\", \"reproduction\", \"software\", \"expected\", \"acceptation\"");
+                        "\"priority\", \"reproduction_path\", \"environment\", \"expected_behaviour\", \"acceptation_criteria\"");
         }
     }
 

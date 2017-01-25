@@ -59,7 +59,7 @@ public class BugScorerTest {
         ValidationConfig.BugValidatorEntry config = new ValidationConfig.BugValidatorEntry();
         config.setRatingThreshold(0.5f);
         config.setActive(true);
-        config.setEnabledFields(Arrays.asList("expected", "priority", "software", "reproduction", "acceptation"));
+        config.setEnabledFields(Arrays.asList("expected_behaviour", "priority", "environment", "reproduction_path", "acceptation_criteria"));
         return ValidationConfig.builder()
                 .bug(config)
                 .build();
@@ -72,7 +72,7 @@ public class BugScorerTest {
                 .priority("Blocking")
                 .reproductionPath("I have no idea what I did, but I filled this in anyway")
                 .summary("Input still caught when box is disabled")
-                .software("Windows ME with Internet Explorer 5")
+                .environment("Windows ME with Internet Explorer 5")
                 .build();
     }
 }

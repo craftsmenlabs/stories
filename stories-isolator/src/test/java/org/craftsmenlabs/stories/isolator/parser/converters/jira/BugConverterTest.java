@@ -51,7 +51,7 @@ public class BugConverterTest {
                 .description("description")
                 .acceptationCriteria("AcceptationCriteria")
                 .expectedBehavior("ExpectedBehavior")
-                .software("Software")
+                .environment("Software")
                 .reproductionPath("ReproductionPath")
                 .externalURI("/projects/projectKey/issues/key")
                 .build();
@@ -66,7 +66,7 @@ public class BugConverterTest {
             config.getBug().getExpectedBehavior();
             result = "custom_field1503";
 
-            config.getBug().getSoftware();
+            config.getBug().getEnvironment();
             result = "environment";
 
             config.getBug().getReproductionPath();

@@ -28,7 +28,7 @@ public class JiraJsonParserTest {
                     .rank("customfield_11400")
                     .backlog(FieldMappingConfig.BacklogMapping.builder().build())
                     .feature(FieldMappingConfig.FeatureMapping.builder().estimation("customfield_11401").acceptanceCriteria("customfield_10502").build())
-                    .bug(FieldMappingConfig.BugMapping.builder().acceptationCriteria("customfield_11404").expectedBehavior("customfield_11405").reproductionPath("customfield_11406").software("customfield_11407").build())
+                    .bug(FieldMappingConfig.BugMapping.builder().acceptationCriteria("customfield_11404").expectedBehavior("customfield_11405").reproductionPath("customfield_11406").environment("customfield_11407").build())
                     .epic(FieldMappingConfig.EpicMapping.builder().goal("customfield_11404").build())
                     .build();
 
@@ -115,10 +115,10 @@ public class JiraJsonParserTest {
         assertNotNull(bug.getRank());
         assertNotNull(bug.getReproductionPath());
         assertNotNull(bug.getExpectedBehavior());
-        assertNotNull(bug.getSoftware());
+        assertNotNull(bug.getEnvironment());
         assertNotNull(bug.getPriority());
 
-        assertEquals("Software", bug.getSoftware());
+        assertEquals("Software", bug.getEnvironment());
         assertEquals("High", bug.getPriority());
         assertEquals("Reproduction", bug.getReproductionPath());
         assertEquals("Expected", bug.getExpectedBehavior());

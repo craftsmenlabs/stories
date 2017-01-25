@@ -46,7 +46,7 @@ public class JiraAPIImporterTest {
                             .expectedBehavior("customfield_114005")
                             .priority("priority")
                             .reproductionPath("customfield_114004")
-                            .software("customfield_11401")
+                            .environment("customfield_11401")
                             .build())
                     .epic(FieldMappingConfig.EpicMapping.builder()
                             .goal("customfield_114007").build())
@@ -122,7 +122,7 @@ public class JiraAPIImporterTest {
                 .bug(FieldMappingConfig.BugMapping.builder()
                         .priority("priority1")
                         .reproductionPath("reproductionPath1")
-                        .software("software1")
+                        .environment("software1")
                         .expectedBehavior("expectedBehavior1")
                         .acceptationCriteria("acceptanceCriteriaHuman")
                         .build())
@@ -152,7 +152,7 @@ public class JiraAPIImporterTest {
         assertThat(actual.getFeature().getAcceptanceCriteria()).isEqualTo("acceptanceCriteria1");
         assertThat(actual.getBug().getPriority()).isEqualTo("priority1");
         assertThat(actual.getBug().getReproductionPath()).isEqualTo("reproductionPath1");
-        assertThat(actual.getBug().getSoftware()).isEqualTo("software1");
+        assertThat(actual.getBug().getEnvironment()).isEqualTo("software1");
         assertThat(actual.getBug().getExpectedBehavior()).isEqualTo("expectedBehavior1");
         assertThat(actual.getBug().getAcceptationCriteria()).isEqualTo("acceptanceCriteria1");
         assertThat(actual.getEpic().getGoal()).isEqualTo("goal1");
@@ -184,7 +184,7 @@ public class JiraAPIImporterTest {
                                 .expectedBehavior("Expected behaviour")
                                 .priority("priority")
                                 .reproductionPath("customfield_114004")
-                                .software("customfield_11401")
+                                .environment("customfield_11401")
                                 .build())
                         .epic(FieldMappingConfig.EpicMapping.builder()
                                 .goal("customfield_114007").build())
@@ -202,7 +202,7 @@ public class JiraAPIImporterTest {
                 .bug(FieldMappingConfig.BugMapping.builder()
                         .priority("priority")
                         .reproductionPath("customfield_114004")
-                        .software("customfield_11401")
+                        .environment("customfield_11401")
                         .expectedBehavior("customfield_12902")
                         .acceptationCriteria("customfield_12900")
                         .build())
