@@ -4,11 +4,10 @@ import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
 import org.craftsmenlabs.stories.api.models.validatorentry.*;
+import org.craftsmenlabs.stories.api.models.violation.Violation;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Assigns points to a feature, based on all
@@ -48,18 +47,29 @@ public class FeatureScorer {
                         .average()
                         .orElse(0.0);
 
+        final List<Violation> violations = getSubViolations(entryList);
+
         Rating rating = points >= validationConfig.getFeature().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL;
 
         return FeatureValidatorEntry
                 .builder()
                 .feature(feature)
-                .violations(new ArrayList<>())
+                .violations(violations)
                 .pointsValuation(points)
                 .rating(rating)
                 .userStoryValidatorEntry(userStoryValidatorEntry)
                 .acceptanceCriteriaValidatorEntry(acceptanceCriteriaValidatorEntry)
                 .estimationValidatorEntry(estimationValidatorEntry)
                 .build();
+    }
+
+    private static List<Violation> getSubViolations(List<Map.Entry<Boolean, AbstractStoryalidatorEntryItem>> entryList) {
+        return entryList.stream()
+                    .filter(Map.Entry::getKey)
+                    .map(Map.Entry::getValue)
+                    .map(AbstractScorable::getViolations)
+                    .flatMap(Collection::stream)
+                    .collect(Collectors.toList());
     }
 
 }

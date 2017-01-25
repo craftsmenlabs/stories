@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractScorable implements Scorable{
@@ -37,6 +38,9 @@ public abstract class AbstractScorable implements Scorable{
 
     @Override
     public List<Violation> getViolations() {
+        if(violations == null || violations.isEmpty()){
+            return new ArrayList<>();
+        }
         return violations;
     }
 
