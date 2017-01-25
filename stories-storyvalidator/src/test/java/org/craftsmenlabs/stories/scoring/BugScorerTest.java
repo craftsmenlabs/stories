@@ -55,6 +55,18 @@ public class BugScorerTest {
         assertThat(result.getViolations().size()).isEqualTo(1);
     }
 
+    @Test
+    public void scorerShouldScorePrefectOnMissingEnabledField() throws Exception {
+        ValidationConfig config = this.getDefaultConfig();
+        config.getBug().setEnabledFields(Arrays.asList("expected", "priority", "software", "acceptation")); //no reproduction
+        Bug testedBug = this.getDefaultBug();
+        testedBug.setReproductionPath("");
+        BugValidatorEntry result = (BugValidatorEntry) new FillableFieldScorer<Bug>(config).performScorer(testedBug);
+
+        assertThat(result.getPointsValuation()).isEqualTo(1f);
+        assertThat(result.getViolations().size()).isEqualTo(0);
+    }
+
     private ValidationConfig getDefaultConfig() {
         ValidationConfig.BugValidatorEntry config = new ValidationConfig.BugValidatorEntry();
         config.setRatingThreshold(0.5f);

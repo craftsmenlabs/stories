@@ -64,8 +64,8 @@ public class TeamTaskScorer {
         }
 
         EstimationValidatorEntry estimationValidatorEntry = EstimationScorer.performScorer(teamTask.getEstimation(), validationConfig);
-        if (teamTask.getEstimation() != null && validationConfig.getEstimation().isActive()) {
-            estimationValidatorEntry .getViolations().forEach(violation -> violation.setPoints(pointsRatio * violation.getPoints()));
+        if (validationConfig.getEstimation().isActive()) {
+            estimationValidatorEntry.getViolations().forEach(violation -> violation.setPoints(pointsRatio * violation.getPoints()));
             violations.addAll(estimationValidatorEntry.getViolations());
             points += estimationValidatorEntry.getPointsValuation();
         }

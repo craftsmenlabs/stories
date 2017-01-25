@@ -6,7 +6,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.scrumitems.TeamTask;
 import org.craftsmenlabs.stories.api.models.validatorentry.TeamTaskValidatorEntry;
+import org.craftsmenlabs.stories.api.models.violation.Violation;
 import org.junit.Test;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -58,6 +61,32 @@ public class TeamTaskScorerTest {
 
         float score = TeamTaskScorer.performScorer(entry.getTeamTask(), validationConfig).getPointsValuation();
         assertThat(score).isEqualTo(1.0f);
+    }
+
+    @Test
+    public void testPerformScorerAddsSubViolationsToTask(@Injectable TeamTaskValidatorEntry entry, @Injectable ValidationConfig validationConfig) throws Exception {
+        TeamTask teamTask = TeamTask.builder()
+                .summary("summary")
+                .description("description")
+                .acceptationCriteria("")
+                .estimation(null)
+                .build();
+        new Expectations() {{
+            entry.getTeamTask();
+            result = teamTask;
+
+            validationConfig.getTeamTask().getRatingThreshold();
+            result = 0.7f;
+
+            validationConfig.getCriteria().isActive();
+            result = true;
+
+            validationConfig.getEstimation().isActive();
+            result = true;
+        }};
+
+        final List<Violation> violations = TeamTaskScorer.performScorer(entry.getTeamTask(), validationConfig).getViolations();
+        assertThat(violations.size()).isEqualTo(6);
     }
 
 }
