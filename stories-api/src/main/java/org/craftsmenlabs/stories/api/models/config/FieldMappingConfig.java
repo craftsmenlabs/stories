@@ -42,7 +42,7 @@ public class FieldMappingConfig {
     public static class BugMapping {
         private String priority;
         private String reproductionPath;
-        private String software;
+        private String environment;
         private String expectedBehavior;
         private String acceptationCriteria;
     }

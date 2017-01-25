@@ -13,18 +13,18 @@ public class Bug extends BacklogItem {
     private String summary;
     private String description;
     private String reproductionPath;
-    private String software;
+    private String environment;
     private String expectedBehavior;
     private String acceptationCriteria;
     private String priority;
 
     @Builder
-    public Bug(String summary, String description, String reproductionPath, String software, String expectedBehavior, String acceptationCriteria, String priority, String key, String rank, String externalURI) {
+    public Bug(String summary, String description, String reproductionPath, String environment, String expectedBehavior, String acceptationCriteria, String priority, String key, String rank, String externalURI) {
         super(key, rank, externalURI);
         this.summary = summary;
         this.description = description;
         this.reproductionPath = reproductionPath;
-        this.software = software;
+        this.environment = environment;
         this.expectedBehavior = expectedBehavior;
         this.acceptationCriteria = acceptationCriteria;
         this.priority = priority;

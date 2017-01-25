@@ -47,7 +47,7 @@ public class EpicScorer extends AbstractScorer<Epic, ValidatedEpic> {
             if (StringUtils.isNotBlank(fieldValue)) {
                 totalPoints += pointsPerField;
             } else {
-                entry.getViolations().add(new Violation(ViolationType.BugFieldEmptyViolation, "Field " + field + " was found to be empty while it should be filled."));
+                entry.getViolations().add(new Violation(ViolationType.BugFieldEmptyViolation, "Field " + field.substring(0, 1).toUpperCase() + field.replace("_", " ").substring(1) + " was found to be empty while it should be filled."));
             }
         }
 

@@ -33,7 +33,7 @@ public class BugConverter extends AbstractJiraConverter<Bug> {
         bug.setPriority(jiraJsonIssue.getFields().getPriority().getName());
         bug.setAcceptationCriteria((String) props.get(config.getBug().getAcceptationCriteria()));
         bug.setExpectedBehavior((String) props.get(config.getBug().getExpectedBehavior()));
-        bug.setSoftware((String) props.get(config.getBug().getSoftware()));
+        bug.setEnvironment((String) props.get(config.getBug().getEnvironment()));
         bug.setReproductionPath((String) props.get(config.getBug().getReproductionPath()));
 
         return bug;
