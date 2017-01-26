@@ -57,10 +57,10 @@ public class FeatureScorer extends AbstractScorer<Feature, ValidatedFeature> {
                         .orElse(0.0);
 
         List<Violation> violations = entryList.stream()
-                .filter(Map.Entry::getKey)
-                .map(Map.Entry::getValue)
-                .map(AbstractValidatedItem::getViolations)
+                .filter(entry -> entry.getKey() && entry.getValue().getViolations() != null)
+                .map(entry -> entry.getValue().getViolations())
                 .flatMap(Collection::stream)
+                .map(v -> (Violation) v)
                 .collect(Collectors.toList());
 
         Rating rating = points >= validationConfig.getFeature().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL;
