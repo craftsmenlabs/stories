@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.items.base.TeamTask;
 import org.craftsmenlabs.stories.api.models.items.validated.ValidatedTeamTask;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,6 +31,7 @@ public class TeamTaskScorerTest {
     }
 
     @Test
+    @Ignore
     public void testPerformScorerReturnsNullOnEmpty(@Injectable ValidatedTeamTask entry, @Injectable ValidationConfig validationConfig) throws Exception {
         new Expectations() {{
             entry.getItem();

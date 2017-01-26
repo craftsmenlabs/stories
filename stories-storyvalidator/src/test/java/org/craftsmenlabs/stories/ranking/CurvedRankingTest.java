@@ -143,13 +143,13 @@ public class CurvedRankingTest implements RankingTest {
 
 
     @Test
-    public void testRankingReturnsPerfectCurvedBacklog(@Injectable BacklogValidatorEntry backlogValidatorEntry) throws Exception {
-        List<BacklogItem> issues = Arrays.asList(
-                FeatureValidatorEntry.builder().pointsValuation(1f).feature(Feature.builder().rank("0|0001").build()).build(),
-                FeatureValidatorEntry.builder().pointsValuation(1f).feature(Feature.builder().rank("0|0002").build()).build(),
-                FeatureValidatorEntry.builder().pointsValuation(1f).feature(Feature.builder().rank("0|0003").build()).build(),
-                FeatureValidatorEntry.builder().pointsValuation(1f).feature(Feature.builder().rank("0|0004").build()).build(),
-                FeatureValidatorEntry.builder().pointsValuation(1f).feature(Feature.builder().rank("0|0005").build()).build()
+    public void testRankingReturnsPerfectCurvedBacklog(@Injectable ValidatedBacklog validatedBacklog) throws Exception {
+        List<ValidatedBacklogItem> issues = Arrays.asList(
+                ValidatedFeature.builder().pointsValuation(1f).feature(Feature.builder().rank("0|0001").build()).build(),
+                ValidatedFeature.builder().pointsValuation(1f).feature(Feature.builder().rank("0|0002").build()).build(),
+                ValidatedFeature.builder().pointsValuation(1f).feature(Feature.builder().rank("0|0003").build()).build(),
+                ValidatedFeature.builder().pointsValuation(1f).feature(Feature.builder().rank("0|0004").build()).build(),
+                ValidatedFeature.builder().pointsValuation(1f).feature(Feature.builder().rank("0|0005").build()).build()
         );
         curvedRanking.createRanking(issues);
         assertThat(issues.get(0).getBacklogPoints()).isCloseTo(1f, withinPercentage(1.0));
@@ -166,12 +166,12 @@ public class CurvedRankingTest implements RankingTest {
     }
 
     @Test
-    public void testRankingReturnsInvertedPointsCurvedBacklog(@Injectable BacklogValidatorEntry backlogValidatorEntry) throws Exception {
+    public void testRankingReturnsInvertedPointsCurvedBacklog(@Injectable ValidatedBacklog validatedBacklog) throws Exception {
         int n = 5;
-        List<BacklogItem> issues = IntStream.iterate(0, i -> i + 1).limit(n)
+        List<ValidatedBacklogItem> issues = IntStream.iterate(0, i -> i + 1).limit(n)
                 .mapToObj(i -> {
                     float x = (float) i / (n - 1);
-                    return FeatureValidatorEntry.builder().pointsValuation(x).feature(Feature.builder().rank("0|000"+i).build()).build();
+                    return ValidatedFeature.builder().pointsValuation(x).feature(Feature.builder().rank("0|000" + i).build()).build();
                 }).collect(Collectors.toList());
         curvedRanking.createRanking(issues);
 

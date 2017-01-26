@@ -2,166 +2,92 @@ package org.craftsmenlabs.stories.scoring;
 
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
-import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
-import org.craftsmenlabs.stories.api.models.scrumitems.Bug;
-import org.craftsmenlabs.stories.api.models.scrumitems.Epic;
-import org.craftsmenlabs.stories.api.models.validatorentry.*;
+import org.craftsmenlabs.stories.api.models.items.base.*;
+import org.craftsmenlabs.stories.api.models.items.types.BacklogItem;
+import org.craftsmenlabs.stories.api.models.items.types.Scorable;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedBacklog;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedBacklogItem;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 import org.craftsmenlabs.stories.api.models.violation.ViolationType;
 import org.craftsmenlabs.stories.ranking.Ranking;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-public class BacklogScorer {
+public class BacklogScorer extends AbstractScorer<Backlog, ValidatedBacklog> {
+    private Ranking ranking;
+    private Map<Class<? extends Scorable>, AbstractScorer> scorers = new HashMap<>();
 
-    /**
-     * Performs scoring on the backlog which was extracted from the source.
-     * It checks all features, bugs and epics on the backlog. If the scoring is good enough, we will mark it as success, otherwise we will mark it as FAIL.
-     *
-     * @param backlog          Backlog to validate
-     * @param ranking          Ranking model to use
-     * @param validationConfig Config op the validation
-     * @return Validated backlog
-     */
-    public static BacklogValidatorEntry performScorer(Backlog backlog, Ranking ranking, ValidationConfig validationConfig) {
-        BacklogValidatorEntry backlogValidatorEntry = BacklogValidatorEntry.builder()
+    public BacklogScorer(ValidationConfig validationConfig, Ranking ranking) {
+        super(validationConfig);
+        this.ranking = ranking;
+
+        scorers.put(Bug.class, new FillableFieldScorer(validationConfig));
+        scorers.put(Epic.class, new FillableFieldScorer(validationConfig));
+        scorers.put(TeamTask.class, new TeamTaskScorer(validationConfig));
+        scorers.put(Feature.class, new FeatureScorer(validationConfig));
+    }
+
+
+    @Override
+    public ValidatedBacklog validate(Backlog backlog) {
+        ValidatedBacklog validatedBacklog = ValidatedBacklog.builder()
                 .backlog(backlog)
-                .bugValidatorEntries(new BacklogItemList<>())
-                .featureValidatorEntries(new BacklogItemList<>())
-                .epicValidatorEntries(new BacklogItemList<>())
-                .teamTaskValidatorEntries(new BacklogItemList<>())
+                .items(new ArrayList<>())
                 .violations(new ArrayList<>())
                 .build();
 
-        if ( backlog == null || backlog.getAllItems().size()==0 ) {
-            backlogValidatorEntry.getViolations().add(new Violation(
+
+        if (backlog == null || backlog.getIssues().size() == 0) {
+            validatedBacklog.getViolations().add(new Violation(
                     ViolationType.BacklogEmptyViolation,
-                    "The backlog is empty, or doesn't contain any issues.",
-                    1f
+                    "The backlog is empty, or doesn't contain any issues.", 1f
             ));
 
-            backlogValidatorEntry.setPointsValuation(0f);
-            backlogValidatorEntry.setRating(Rating.FAIL);
-            return backlogValidatorEntry;
-        }
-        List<FeatureValidatorEntry> features = new ArrayList<>();
-        List<BugValidatorEntry> bugs = new ArrayList<>();
-        List<EpicValidatorEntry> epics = new ArrayList<>();
-        List<TeamTaskValidatorEntry> teamTasks = new ArrayList<>();
-
-        // Feature scores
-        if (validationConfig.getFeature().isActive() ) {
-            features = getValidatedFeatures(backlog, validationConfig);
-        }
-        backlogValidatorEntry.setFeatureValidatorEntries(
-                BacklogItemList.<FeatureValidatorEntry>builder()
-                        .items(features)
-                        .isActive(validationConfig.getFeature().isActive())
-                        .build());
-
-
-        // Bug scores
-        if (validationConfig.getBug().isActive()) {
-            bugs = getValidatedBugs(backlog, validationConfig);
-        }
-        backlogValidatorEntry.setBugValidatorEntries(
-                BacklogItemList.<BugValidatorEntry>builder()
-                        .items(bugs)
-                        .isActive(validationConfig.getBug().isActive())
-                        .build());
-
-
-        // Epic scores
-        if (validationConfig.getEpic().isActive()) {
-            epics = getValidatedEpics(backlog, validationConfig);
-        }
-        backlogValidatorEntry.setEpicValidatorEntries(
-                BacklogItemList.<EpicValidatorEntry>builder()
-                        .items(epics)
-                        .isActive(validationConfig.getEpic().isActive())
-                        .build());
-
-
-        // Team tasks scores
-        if (validationConfig.getTeamTask().isActive()) {
-            teamTasks = getValidatedTeamTasks(backlog, validationConfig);
-
-            backlogValidatorEntry.setTeamTaskValidatorEntries(
-                    BacklogItemList.<TeamTaskValidatorEntry>builder()
-                            .items(teamTasks)
-                            .isActive(validationConfig.getTeamTask().isActive())
-                            .build());
+            validatedBacklog.setPointsValuation(0f);
+            validatedBacklog.setRating(Rating.FAIL);
+            return validatedBacklog;
         }
 
-        // Backlog scores
-        List<? super BacklogItem> scoredEntries = new ArrayList<>(features);
-        scoredEntries.addAll(bugs);
-        scoredEntries.addAll(epics);
-        scoredEntries.addAll(teamTasks);
+        List<ValidatedBacklogItem> validatedItems = backlog.getIssues().entrySet().stream()
+                .map(Map.Entry::getValue)
+                .filter(this::isIssueActive)
+                .map(item -> scorers.get(item.getClass()).validate(item))
+                .map(item -> (ValidatedBacklogItem) item)
+                .collect(Collectors.toList());
 
-        float backlogPoints = ranking.createRanking(scoredEntries);
-        backlogValidatorEntry.setPointsValuation(backlogPoints);
+        float backlogPoints = ranking.createRanking(validatedItems);
+        validatedBacklog.setPointsValuation(backlogPoints);
+        validatedBacklog.setItems(validatedItems);
 
-        if (backlogValidatorEntry.getPointsValuation() * 100f >= validationConfig.getBacklog().getRatingThreshold()) {
-            backlogValidatorEntry.setRating(Rating.SUCCESS);
+        if (validatedBacklog.getPointsValuation() * 100f >= validationConfig.getBacklog().getRatingThreshold()) {
+            validatedBacklog.setRating(Rating.SUCCESS);
         } else {
             // Failed, add violation
-            backlogValidatorEntry.setRating(Rating.FAIL);
-            backlogValidatorEntry.getViolations().add(new Violation(
+            validatedBacklog.setRating(Rating.FAIL);
+            validatedBacklog.getViolations().add(new Violation(
                     ViolationType.BacklogRatingViolation,
                     "The backlog did not score a minimum of " + validationConfig.getBacklog().getRatingThreshold()
-                            + " points and is therefore rated: " + backlogValidatorEntry.getRating(),
-                    backlogValidatorEntry.getPointsValuation()));
+                            + " points and is therefore rated: " + validatedBacklog.getRating(), 1f));
+        }
+        return validatedBacklog;
+    }
+
+    private <T extends BacklogItem> boolean isIssueActive(T issue) {
+        switch (issue.getClass().getSimpleName()) {
+            case "Bug":
+                return validationConfig.getBug().isActive();
+            case "Epic":
+                return validationConfig.getEpic().isActive();
+            case "TeamTask":
+                return validationConfig.getTeamTask().isActive();
+            case "Feature":
+                return validationConfig.getFeature().isActive();
         }
 
-
-//        //TODO everytime config.getBUg?????
-//        backlogValidatorEntry.setFeatureValidatorEntries(
-//                BacklogItemList.<FeatureValidatorEntry>builder()
-//                        .items(features)
-//                        .isActive(validationConfig.getBug().isActive())
-//                        .build());
-//        backlogValidatorEntry.setBugValidatorEntries(
-//                BacklogItemList.<BugValidatorEntry>builder()
-//                        .items(bugs)
-//                        .isActive(validationConfig.getBug().isActive())
-//                        .build());
-//        backlogValidatorEntry.setEpicValidatorEntries(
-//                BacklogItemList.<EpicValidatorEntry>builder()
-//                        .items(epics)
-//                        .isActive(validationConfig.getBug().isActive())
-//                        .build());
-//        backlogValidatorEntry.setTeamTaskValidatorEntries(
-//                BacklogItemList.<TeamTaskValidatorEntry>builder()
-//                        .items(teamTasks)
-//                        .isActive(validationConfig.getTeamTask().isActive())
-//                        .build());
-        return backlogValidatorEntry;
-    }
-
-    private static List<FeatureValidatorEntry> getValidatedFeatures(Backlog backlog, ValidationConfig validationConfig) {
-        return backlog.getFeatures().stream()
-                .map(feature -> FeatureScorer.performScorer(feature, validationConfig))
-                .collect(Collectors.toList());
-    }
-
-    private static List<BugValidatorEntry> getValidatedBugs(Backlog backlog, ValidationConfig validationConfig) {
-        return backlog.getBugs().stream()
-                .map(bug -> (BugValidatorEntry) new FillableFieldScorer<Bug>(validationConfig).performScorer(bug))
-                .collect(Collectors.toList());
-    }
-
-    private static List<EpicValidatorEntry> getValidatedEpics(Backlog backlog, ValidationConfig validationConfig) {
-        return backlog.getEpics().stream()
-                .map(epic -> (EpicValidatorEntry) new FillableFieldScorer<Epic>(validationConfig).performScorer(epic))
-                .collect(Collectors.toList());
-    }
-
-    private static List<TeamTaskValidatorEntry> getValidatedTeamTasks(Backlog backlog, ValidationConfig validationConfig) {
-        return backlog.getTeamTasks().stream()
-                .map(task -> TeamTaskScorer.performScorer(task, validationConfig))
-                .collect(Collectors.toList());
+        throw new IllegalStateException("No active config flag for the class: " + issue.getClass().getSimpleName());
     }
 }

@@ -4,33 +4,37 @@ import org.apache.commons.lang3.StringUtils;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
-import org.craftsmenlabs.stories.api.models.scrumitems.Bug;
-import org.craftsmenlabs.stories.api.models.scrumitems.Epic;
-import org.craftsmenlabs.stories.api.models.scrumitems.ScrumItem;
-import org.craftsmenlabs.stories.api.models.validatorentry.BacklogItem;
-import org.craftsmenlabs.stories.api.models.validatorentry.BugValidatorEntry;
-import org.craftsmenlabs.stories.api.models.validatorentry.EpicValidatorEntry;
+import org.craftsmenlabs.stories.api.models.items.base.Bug;
+import org.craftsmenlabs.stories.api.models.items.base.Epic;
+import org.craftsmenlabs.stories.api.models.items.types.BacklogItem;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedBacklogItem;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedBug;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedEpic;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 import org.craftsmenlabs.stories.api.models.violation.ViolationType;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
  * Assigns points to a bug, based on the rate of which fields are filled
  */
-public class FillableFieldScorer<T extends ScrumItem> {
+public class FillableFieldScorer extends AbstractScorer<BacklogItem, ValidatedBacklogItem> {
 
-    List<String> enabledFields;
-    ValidationConfig validationConfig;
-    Map<String, String> fields;
+    private List<String> enabledFields;
+    private Map<String, String> fields;
 
     public FillableFieldScorer(ValidationConfig validationConfig) {
-        this.validationConfig = validationConfig;
+        super(validationConfig);
     }
 
-    public BacklogItem performScorer(T scrumItem) {
-        BacklogItem entry = validatorEntryBuilder(scrumItem);
+
+    @Override
+    public ValidatedBacklogItem validate(BacklogItem scrumItem) {
+        ValidatedBacklogItem entry = validatorEntryBuilder(scrumItem);
 
         // If no fields are type, score 0 and FAIL. (otherwise we will get /0)
         if (enabledFields == null || enabledFields.size() == 0) {
@@ -56,53 +60,54 @@ public class FillableFieldScorer<T extends ScrumItem> {
                 ).collect(Collectors.toList());
 
         entry.setViolations(violations);
-        entry.setPointsValuation((float) (1f - violations.stream().mapToDouble(violation -> (double)violation.getPotentialPoints()).sum()));
+        entry.setPointsValuation((float) (1f - violations.stream().mapToDouble(violation -> (double) violation.getPotentialPoints()).sum()));
         entry.setRating(getRating(entry));
         return entry;
     }
 
-    private Rating getRating(BacklogItem entry) {
+    private Rating getRating(ValidatedBacklogItem entry) {
         float ratingThreshold;
-        if(entry instanceof BugValidatorEntry) {
+        if (entry instanceof ValidatedBug) {
             ratingThreshold = validationConfig.getBug().getRatingThreshold();
-        }else if(entry instanceof EpicValidatorEntry){
+        } else if (entry instanceof ValidatedEpic) {
             ratingThreshold = validationConfig.getEpic().getRatingThreshold();
-        }else{
+        } else {
             ratingThreshold = 1f;
         }
         return entry.getPointsValuation() >= ratingThreshold ? Rating.SUCCESS : Rating.FAIL;
 
     }
 
-    private BacklogItem validatorEntryBuilder(T scrumItem){
-        BacklogItem entry;
-        if(scrumItem instanceof Epic){
-            Epic epic = (Epic)scrumItem;
-            entry = EpicValidatorEntry.builder()
+    private ValidatedBacklogItem validatorEntryBuilder(BacklogItem scrumItem) {
+        ValidatedBacklogItem entry;
+        if (scrumItem instanceof Epic) {
+            Epic epic = (Epic) scrumItem;
+            entry = ValidatedEpic.builder()
                     .violations(new LinkedList<>())
                     .epic(epic)
                     .build();
             enabledFields = validationConfig.getEpic().getEnabledFields();
 
-            fields = new HashMap<String, String>(){{
+            fields = new HashMap<String, String>() {{
                 put("goal", epic.getGoal());
             }};
-        }else if(scrumItem instanceof Bug){
+        } else if (scrumItem instanceof Bug) {
             Bug bug = (Bug) scrumItem;
-            entry = BugValidatorEntry.builder()
+            entry = ValidatedBug.builder()
                     .violations(new LinkedList<>())
                     .bug(bug)
                     .build();
             enabledFields = validationConfig.getBug().getEnabledFields();
-            fields = new HashMap<String, String>(){
+            fields = new HashMap<String, String>() {
                 {
                     put("priority", bug.getPriority());
-                    put("reproduction", bug.getReproductionPath());
-                    put("software", bug.getSoftware());
-                    put("expected", bug.getExpectedBehavior());
-                    put("acceptation", bug.getAcceptationCriteria());
-                }};
-        }else{
+                    put("reproduction_path", bug.getReproductionPath());
+                    put("environment", bug.getEnvironment());
+                    put("expected_behaviour", bug.getExpectedBehavior());
+                    put("acceptation_criteria", bug.getAcceptationCriteria());
+                }
+            };
+        } else {
             entry = null;
         }
 
@@ -119,11 +124,12 @@ public class FillableFieldScorer<T extends ScrumItem> {
                 .filter(enabledField -> fields.keySet().stream()
                         .noneMatch(s -> s.equals(enabledField)))
                 .collect(Collectors.toList());
-        if(!notAllowedFields.isEmpty()){
+        if (!notAllowedFields.isEmpty()) {
             throw new StoriesException("Enabled field(s) " + notAllowedFields.stream().collect(Collectors.joining(", ")) + " don't exist! Please select one or " +
                     "multiple of the following: " +
-                    "\"priority\", \"reproduction\", \"software\", \"expected\", \"acceptation\"");
+                    "\"priority\", \"reproduction_path\", \"environment\", \"expected_behaviour\", \"acceptation_criteria\"");
         }
     }
+
 
 }
