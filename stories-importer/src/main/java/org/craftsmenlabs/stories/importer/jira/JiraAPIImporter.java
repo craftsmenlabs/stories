@@ -4,8 +4,8 @@ import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.SourceConfig;
 import org.craftsmenlabs.stories.api.models.config.StorynatorConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
+import org.craftsmenlabs.stories.api.models.items.base.Backlog;
 import org.craftsmenlabs.stories.api.models.logging.StorynatorLogger;
-import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.importer.Importer;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
@@ -106,7 +106,7 @@ public class JiraAPIImporter implements Importer {
                 .bug(FieldMappingConfig.BugMapping.builder()
                         .priority(getOrDefault(bugMapping.getPriority(), fieldMap))
                         .reproductionPath(getOrDefault(bugMapping.getReproductionPath(), fieldMap))
-                        .software(getOrDefault(bugMapping.getSoftware(), fieldMap))
+                        .environment(getOrDefault(bugMapping.getEnvironment(), fieldMap))
                         .expectedBehavior(getOrDefault(bugMapping.getExpectedBehavior(), fieldMap))
                         .acceptationCriteria(getOrDefault(bugMapping.getAcceptationCriteria(), fieldMap))
                         .build())

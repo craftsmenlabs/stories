@@ -3,15 +3,15 @@ package demo.data.importer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.util.Files;
-import org.craftsmenlabs.stories.api.models.StoriesRun;
+import org.craftsmenlabs.stories.api.models.StoriesReport;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.ReportConfig;
 import org.craftsmenlabs.stories.api.models.config.StorynatorConfig;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
+import org.craftsmenlabs.stories.api.models.items.base.Backlog;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedBacklog;
 import org.craftsmenlabs.stories.api.models.logging.StandaloneLogger;
-import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.api.models.summary.SummaryBuilder;
-import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 import org.craftsmenlabs.stories.connectivity.service.enterprise.EnterpriseDashboardReporter;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
@@ -120,22 +120,23 @@ public class importJiraJson {
 
         Backlog backlog = jiraJsonParser.parse(jiraBacklog);
 
-        BacklogValidatorEntry backlogValidatorEntry = BacklogScorer.performScorer(backlog, new CurvedRanking(), validationConfig);
+        BacklogScorer scorer = new BacklogScorer(validationConfig, new CurvedRanking());
+        ValidatedBacklog validatedBacklog = scorer.validate(backlog);
 
-        StoriesRun storiesRun = StoriesRun.builder()
+        StoriesReport storiesReport = StoriesReport.builder()
                 .projectToken(projectToken)
                 .runDateTime(dateTime)
-                .backlogValidatorEntry(backlogValidatorEntry)
-                .summary(new SummaryBuilder().build(backlogValidatorEntry))
+                .validatedBacklog(validatedBacklog)
+                .summary(new SummaryBuilder().build(validatedBacklog))
                 .runConfig(validationConfig)
                 .build();
 
         try {
-            System.out.println(mapper.writeValueAsString(storiesRun));
+            System.out.println(mapper.writeValueAsString(storiesReport));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
         EnterpriseDashboardReporter enterpriseDashboardReporter = new EnterpriseDashboardReporter(new StandaloneLogger(), reportConfig);
-        enterpriseDashboardReporter.report(storiesRun);
+        enterpriseDashboardReporter.report(storiesReport);
     }
 }

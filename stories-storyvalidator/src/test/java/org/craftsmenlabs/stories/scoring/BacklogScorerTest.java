@@ -5,17 +5,16 @@ import mockit.Injectable;
 import mockit.Mocked;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
-import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
-import org.craftsmenlabs.stories.api.models.scrumitems.Bug;
-import org.craftsmenlabs.stories.api.models.scrumitems.Epic;
-import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
-import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
+import org.craftsmenlabs.stories.api.models.items.base.Backlog;
+import org.craftsmenlabs.stories.api.models.items.base.Bug;
+import org.craftsmenlabs.stories.api.models.items.base.Epic;
+import org.craftsmenlabs.stories.api.models.items.base.Feature;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedBacklog;
 import org.craftsmenlabs.stories.ranking.Ranking;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -30,17 +29,16 @@ public class BacklogScorerTest {
     @Injectable
     private Ranking ranking;
 
+    private BacklogScorer getScorer(ValidationConfig validationConfig, Ranking ranking) {
+        return new BacklogScorer(validationConfig, ranking);
+    }
+
     @Test
     public void testPerformScorerReturnsSuccesOnScoreExactlyOnThreshold() throws Exception {
-        List<Feature> features = Arrays.asList(
-                new Feature()
-        );
+        Map<String, Feature> features = Collections.singletonMap("1", new Feature());
 
         new Expectations() {{
-            backlog.getFeatures();
-            result = features;
-
-            backlog.getAllItems();
+            backlog.getIssues();
             result = features;
 
             ranking.createRanking(withNotNull());
@@ -49,28 +47,20 @@ public class BacklogScorerTest {
             validationConfig.getFeature().isActive();
             result = true;
 
-            validationConfig.getBug().isActive();
-            result = false;
-
             validationConfig.getBacklog().getRatingThreshold();
             result = 50f;
         }};
 
-        BacklogValidatorEntry result = BacklogScorer.performScorer(backlog, ranking, validationConfig);
+        ValidatedBacklog result = getScorer(validationConfig, ranking).validate(backlog);
         assertThat(result.getRating()).isEqualTo(Rating.SUCCESS);
     }
 
     @Test
     public void testPerformScorerReturnsFailonZeroBacklogScore() throws Exception {
-        List<Feature> features = Arrays.asList(
-                new Feature()
-        );
+        Map<String, Feature> features = Collections.singletonMap("1", new Feature());
 
         new Expectations() {{
-            backlog.getFeatures();
-            result = features;
-
-            backlog.getAllItems();
+            backlog.getIssues();
             result = features;
 
             ranking.createRanking(withNotNull());
@@ -83,19 +73,16 @@ public class BacklogScorerTest {
             result = 50f;
         }};
 
-        BacklogValidatorEntry result = BacklogScorer.performScorer(backlog, ranking, validationConfig);
+        ValidatedBacklog result = getScorer(validationConfig, ranking).validate(backlog);
         assertThat(result.getRating()).isEqualTo(Rating.FAIL);
     }
 
     @Test
     public void testBacklogAndFeatureRatingIsSameWhenOnlyFeaturesAreEnabled() {
-        List<Feature> features = Collections.singletonList(new Feature());
+        Map<String, Feature> features = Collections.singletonMap("1", new Feature());
 
         new Expectations() {{
-            backlog.getFeatures();
-            result = features;
-
-            backlog.getAllItems();
+            backlog.getIssues();
             result = features;
 
             ranking.createRanking(withNotNull());
@@ -104,27 +91,20 @@ public class BacklogScorerTest {
 
             validationConfig.getBacklog().getRatingThreshold();
             result = 50f;
-            validationConfig.getBug().isActive();
-            result = false;
             validationConfig.getFeature().isActive();
             result = true;
         }};
 
-
-        BacklogValidatorEntry result = BacklogScorer.performScorer(backlog, ranking, validationConfig);
+        ValidatedBacklog result = getScorer(validationConfig, ranking).validate(backlog);
         assertThat(result.getRating()).isEqualTo(Rating.FAIL);
     }
 
     @Test
     public void testBacklogAndBugRatingIsSameWhenOnlyBugsAreEnabled() {
-        List<Bug> bugs = Collections.singletonList(new Bug());
+        Map<String, Bug> bugs = Collections.singletonMap("1", new Bug());
 
         new Expectations() {{
-            backlog.getBugs();
-            result = bugs;
-
-
-            backlog.getAllItems();
+            backlog.getIssues();
             result = bugs;
 
             ranking.createRanking(withNotNull());
@@ -135,24 +115,19 @@ public class BacklogScorerTest {
             result = 50f;
             validationConfig.getBug().isActive();
             result = true;
-            validationConfig.getFeature().isActive();
-            result = false;
         }};
 
 
-        BacklogValidatorEntry result = BacklogScorer.performScorer(backlog, ranking, validationConfig);
+        ValidatedBacklog result = getScorer(validationConfig, ranking).validate(backlog);
         assertThat(result.getRating()).isEqualTo(Rating.FAIL);
     }
 
     @Test
     public void testBacklogAndEpicRatingIsSameWhenOnlyEpicsAreEnabled() {
-        List<Epic> epics = Collections.singletonList(new Epic());
+        Map<String, Epic> epics = Collections.singletonMap("1", new Epic());
 
         new Expectations() {{
-            backlog.getEpics();
-            result = epics;
-
-            backlog.getAllItems();
+            backlog.getIssues();
             result = epics;
 
             ranking.createRanking(withNotNull());
@@ -161,22 +136,18 @@ public class BacklogScorerTest {
 
             validationConfig.getBacklog().getRatingThreshold();
             result = 50f;
-            validationConfig.getBug().isActive();
-            result = false;
-            validationConfig.getFeature().isActive();
-            result = false;
             validationConfig.getEpic().isActive();
             result = true;
         }};
 
 
-        BacklogValidatorEntry result = BacklogScorer.performScorer(backlog, ranking, validationConfig);
+        ValidatedBacklog result = getScorer(validationConfig, ranking).validate(backlog);
         assertThat(result.getRating()).isEqualTo(Rating.FAIL);
     }
 
     @Test
     public void testPerformScorerFailOnEmptyBacklog(@Injectable Ranking ranking) {
-        BacklogValidatorEntry result = BacklogScorer.performScorer(null, ranking, validationConfig);
+        ValidatedBacklog result = getScorer(validationConfig, ranking).validate(null);
 
         assertThat(result.getPointsValuation()).isEqualTo(0f);
         assertThat(result.getRating()).isEqualTo(Rating.FAIL);

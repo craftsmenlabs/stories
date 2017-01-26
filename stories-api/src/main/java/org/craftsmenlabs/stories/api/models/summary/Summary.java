@@ -72,4 +72,19 @@ public class Summary implements Summarizable<Summary> {
                 .featureEstimation(featureEstimation.plus(that.getFeatureEstimation()))
                 .build();
     }
+
+    @Override
+    public Summary minus(Summary that) {
+        return Summary.builder()
+                .backlog(backlog.minus(that.getBacklog()))
+                .issues(issues.minus(that.getIssues()))
+                .features(features.minus(that.getFeatures()))
+                .bugs(bugs.minus(that.getBugs()))
+                .epics(epics.minus(that.getEpics()))
+                .teamTasks(teamTasks.minus(that.getTeamTasks()))
+                .featureUserStory(featureUserStory.minus(that.getFeatureUserStory()))
+                .featureCriteria(featureCriteria.minus(that.getFeatureCriteria()))
+                .featureEstimation(featureEstimation.minus(that.getFeatureEstimation()))
+                .build();
+    }
 }

@@ -4,8 +4,8 @@ import mockit.Expectations;
 import mockit.Mocked;
 import org.apache.commons.io.FileUtils;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
+import org.craftsmenlabs.stories.api.models.items.base.Backlog;
 import org.craftsmenlabs.stories.api.models.logging.StandaloneLogger;
-import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.junit.Test;
 import org.springframework.web.client.RestTemplate;
 
@@ -32,8 +32,8 @@ public class GithubAPIImporterTest
 		}};
 
 		Backlog backlog = githubAPIImporter.getBacklog();
-		assertThat(backlog.getFeatures()).hasSize(2);
-	}
+        assertThat(backlog.getIssues()).hasSize(2);
+    }
 
 	@Test(expected = StoriesException.class)
 	public void testErrorResponse() throws Exception

@@ -5,8 +5,8 @@ import mockit.Injectable;
 import mockit.Mock;
 import mockit.MockUp;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
-import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
-import org.craftsmenlabs.stories.api.models.validatorentry.UserStoryValidatorEntry;
+import org.craftsmenlabs.stories.api.models.items.base.Feature;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedUserStory;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -14,9 +14,13 @@ import static org.assertj.core.api.Assertions.withinPercentage;
 
 public class FeatureScorerTest {
 
+    private FeatureScorer getScorer(ValidationConfig validationConfig) {
+        return new FeatureScorer(validationConfig);
+    }
+
     @Test
     public void performScorer_ReturnsZeroOnNullIssue(@Injectable Feature feature, @Injectable ValidationConfig validationConfig) {
-        float score = FeatureScorer.performScorer(null, validationConfig).getPointsValuation();
+        float score = getScorer(validationConfig).validate(null).getPointsValuation();
         assertThat(score).isCloseTo(0f, withinPercentage(1));
     }
 
@@ -27,7 +31,7 @@ public class FeatureScorerTest {
            result = null;
 
         }};
-        float score = FeatureScorer.performScorer(feature, validationConfig).getPointsValuation();
+        float score = getScorer(validationConfig).validate(feature).getPointsValuation();
         assertThat(score).isCloseTo(0f, withinPercentage(1));
     }
 
@@ -41,7 +45,7 @@ public class FeatureScorerTest {
            result = null;
 
         }};
-        float score = FeatureScorer.performScorer(feature, validationConfig).getPointsValuation();
+        float score = getScorer(validationConfig).validate(feature).getPointsValuation();
         assertThat(score).isCloseTo(0f, withinPercentage(1));
     }
 
@@ -67,20 +71,19 @@ public class FeatureScorerTest {
             result = false;
 
         }};
-        float score = FeatureScorer.performScorer(feature, validationConfig).getPointsValuation();
+        float score = getScorer(validationConfig).validate(feature).getPointsValuation();
         assertThat(score).isCloseTo(0f, withinPercentage(1));
     }
 
-//    @Ignore(value = "TODO fix injecting expectations")
     @Test
     public void performScorer_ReturnsOneOnOnlyPerfectUerstoryActive(@Injectable Feature feature, @Injectable ValidationConfig validationConfig) {
 
         new MockUp<StoryScorer>()
         {
             @Mock
-            UserStoryValidatorEntry performScorer( String input, ValidationConfig validationConfig1 )
+            ValidatedUserStory performScorer(String input, ValidationConfig validationConfig1)
             {
-                return UserStoryValidatorEntry.builder().pointsValuation(1f).item("").build();
+                return ValidatedUserStory.builder().pointsValuation(1f).item("").build();
             }
         };
         new Expectations(){{
@@ -103,7 +106,7 @@ public class FeatureScorerTest {
             result = false;
 
         }};
-        float score = FeatureScorer.performScorer(feature, validationConfig).getPointsValuation();
+        float score = getScorer(validationConfig).validate(feature).getPointsValuation();
         assertThat(score).isCloseTo(1f, withinPercentage(1));
     }
 

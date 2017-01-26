@@ -3,7 +3,7 @@ package org.craftsmenlabs.stories.isolator.parser.converters.jira;
 
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.SourceConfig;
-import org.craftsmenlabs.stories.api.models.scrumitems.Epic;
+import org.craftsmenlabs.stories.api.models.items.base.Epic;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
 
 public class EpicConverter extends AbstractJiraConverter<Epic> {
