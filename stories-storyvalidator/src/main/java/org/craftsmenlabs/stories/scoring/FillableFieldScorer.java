@@ -120,6 +120,9 @@ public class FillableFieldScorer extends AbstractScorer<BacklogItem, ValidatedBa
      * Throws exception if not allowed fields are defined
      */
     private void checkNotAllowedFields() {
+        if (enabledFields == null) {
+            return;
+        }
         final List<String> notAllowedFields = enabledFields.stream()
                 .filter(enabledField -> fields.keySet().stream()
                         .noneMatch(s -> s.equals(enabledField)))
