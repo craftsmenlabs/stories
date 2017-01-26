@@ -8,11 +8,10 @@ import org.craftsmenlabs.stories.api.models.items.validated.ValidatedAcceptanceC
 import org.craftsmenlabs.stories.api.models.items.validated.ValidatedEstimation;
 import org.craftsmenlabs.stories.api.models.items.validated.ValidatedFeature;
 import org.craftsmenlabs.stories.api.models.items.validated.ValidatedUserStory;
+import org.craftsmenlabs.stories.api.models.violation.Violation;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Assigns points to a feature, based on all
@@ -57,12 +56,19 @@ public class FeatureScorer extends AbstractScorer<Feature, ValidatedFeature> {
                         .average()
                         .orElse(0.0);
 
+        List<Violation> violations = entryList.stream()
+                .filter(Map.Entry::getKey)
+                .map(Map.Entry::getValue)
+                .map(AbstractValidatedItem::getViolations)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+
         Rating rating = points >= validationConfig.getFeature().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL;
 
         return ValidatedFeature
                 .builder()
                 .feature(feature)
-                .violations(new ArrayList<>())
+                .violations(violations)
                 .pointsValuation(points)
                 .rating(rating)
                 .validatedUserStory(validatedUserStory)
