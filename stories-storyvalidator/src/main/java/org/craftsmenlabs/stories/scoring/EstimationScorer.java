@@ -20,7 +20,7 @@ public class EstimationScorer {
         if (estimation == null || estimation.compareTo(0f) == 0) {
             points = 0f;
             violations.add(new Violation(
-                    ViolationType.EstimationEmptyViolation,
+                    ViolationType.FieldEmptyViolation,
                     "Estimation is empty or zero",
                     1f));
         } else {

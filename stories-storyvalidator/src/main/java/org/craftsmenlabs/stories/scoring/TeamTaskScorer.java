@@ -43,7 +43,7 @@ public class TeamTaskScorer extends AbstractScorer<TeamTask, ValidatedTeamTask> 
         if (StringUtils.isEmpty(teamTask.getSummary())) {
             teamTask.setSummary("");
             violations.add(new Violation(
-                    ViolationType.TeamTaskSummaryEmptyViolation,
+                    ViolationType.FieldEmptyViolation,
                     "No summary was given.",
                     pointsRatio));
         } else {
@@ -53,7 +53,7 @@ public class TeamTaskScorer extends AbstractScorer<TeamTask, ValidatedTeamTask> 
         if (StringUtils.isEmpty(teamTask.getDescription())) {
             teamTask.setDescription("");
             violations.add(new Violation(
-                    ViolationType.TeamTaskDescriptionEmptyViolation,
+                    ViolationType.FieldEmptyViolation,
                     "No description was given.",
                     pointsRatio));
         } else {

@@ -34,7 +34,7 @@ public class StoryScorer {
                 points += STORYLENGTHCLAUSEPOINTS;
             } else {
                 violations.add(new Violation(
-                        ViolationType.StoryLengthClauseViolation,
+                        ViolationType.StoryFormatViolation,
                         "The story should contain a minimum length of " + USERSTORY_MINIMUM_LENGTH + " characters. " +
                         "It now contains " + userStory.length() + " characters.", STORYLENGTHCLAUSEPOINTS, 1f));
             }
@@ -45,7 +45,7 @@ public class StoryScorer {
                 points += STORYASISCLAUSEPOINTS;
             } else {
                 violations.add(
-                        new Violation(ViolationType.StoryAsIsClauseViolation,
+                        new Violation(ViolationType.StoryFormatViolation,
                         "<As a> section is not described properly. The story should contain any of the following keywords: "+ String.join(", ", asKeywords),
                         STORYLENGTHCLAUSEPOINTS));
             }
@@ -55,7 +55,7 @@ public class StoryScorer {
                 points += STORYICLAUSEPOINTS;
             } else {
                 violations.add(new Violation(
-                        ViolationType.StoryIClauseViolation, "<I want> section is not described properly." +
+                        ViolationType.StoryFormatViolation, "<I want> section is not described properly." +
                             "The story should contain any of the following keywords: "
                             + String.join(", ", iKeywords),
                         STORYICLAUSEPOINTS));
@@ -66,7 +66,7 @@ public class StoryScorer {
                 points += STORYSOCLAUSEPOINTS;
             } else {
                 violations.add(new Violation(
-                        ViolationType.StorySoClauseViolation,
+                        ViolationType.StoryFormatViolation,
                         "<So that> section is not described properly." +
                             "The story should contain any of the following keywords: "
                             + String.join(", ", iKeywords),
