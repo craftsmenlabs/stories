@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -77,13 +78,13 @@ public class importJiraJson {
         // then insert the old token and the new one here.
         //Do not commit this
         Map<String, String> tokenNameMapping = new HashMap<String, String>(){{
-            put("androidApp", "585a5cb28ed75e37a1433198");
-            put("examples-2", "58623cf57dcf040438669e96");
-            put("App"       , "585a5ce28ed75e37a143319b");
-            put("examples", "586387f3857aba00074cc041");
-            put("sales"     , "58623cec7dcf040438669e94");
-            put("webshop"   , "585a5cb68ed75e37a1433199");
-            put("WebshopBE" , "585be3d7fee17365ea781d02");
+            put("examples"  , "58663d71a584fa0c92e5a6cc");
+            put("examples-2", "58663d6ea584fa0c92e5a6cb");
+            put("androidApp", "58663d7ea584fa0c92e5a6cf");
+            put("App"       , "58663e10a584fa0c92e5a6d1");
+            put("sales"     , "58663d82a584fa0c92e5a6d0");
+            put("webshop"   , "58663d79a584fa0c92e5a6ce");
+            put("WebshopBE" , "58663d76a584fa0c92e5a6cd");
         }};
 
         String projectToken = tokenNameMapping.getOrDefault(split[0], split[0]);
@@ -93,9 +94,8 @@ public class importJiraJson {
         List<Integer> time = Arrays.stream(split[2].split("-"))
                 .map(Integer::parseInt).collect(Collectors.toList());
 
-        LocalDateTime dateTime = LocalDate.parse(date).atTime(time.get(0), time.get(1));
+        LocalDateTime dateTime = LocalDate.parse(date).atTime(time.get(0), time.get(1)).plus(1, ChronoUnit.MONTHS);
         System.out.println("date time: " + dateTime);
-
 
         ValidationConfig validationConfig = storynatorConfig.getValidation();
         System.out.println("validation config: " + validationConfig);

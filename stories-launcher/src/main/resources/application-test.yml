@@ -11,13 +11,14 @@ storynator:
       location: /Users/youritjang/Downloads/demo-project
 
     jira:
-        url: http://jira-url-here.net
+        url: https://jira.codecentric.de
         project-key: GAR
         auth-key: KEY
+
   report:
     dashboard:
       enabled: false
-      url: http://localhost:8090
+      url: http://test.cmidevserv.nl
       token:
     file:
       enabled: false
