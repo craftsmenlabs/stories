@@ -7,6 +7,7 @@ import org.craftsmenlabs.stories.isolator.SentenceSplitter;
 import org.craftsmenlabs.stories.isolator.model.trello.TrelloJsonIssue;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,8 +30,9 @@ public class TrelloJsonParser {
             feature.setExternalURI(trelloJsonIssue.getUrl());
 
             String rankString = String.valueOf(i);
-            feature.setUpdatedAt(LocalDateTime.parse(trelloJsonIssue.getDateLastActivity()));
-
+            if (trelloJsonIssue.getDateLastActivity() != null) {
+                feature.setUpdatedAt(LocalDateTime.parse(trelloJsonIssue.getDateLastActivity(), DateTimeFormatter.ISO_DATE_TIME));
+            }
             String format2 = StringUtils.leftPad(rankString, rankLength, '0');
             feature.setRank(format2);
             feature.setEstimation(0f);

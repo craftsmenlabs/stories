@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.craftsmenlabs.stories.api.models.items.types.BacklogItem;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,8 +18,8 @@ public class TeamTask extends BacklogItem {
     private Float estimation;
 
     @Builder
-    public TeamTask(String summary, String description, String acceptationCriteria, Float estimation, String key, String rank, String externalURI) {
-        super(key, rank, externalURI);
+    public TeamTask(String summary, String description, String acceptationCriteria, Float estimation, String key, String rank, String externalURI, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        super(key, rank, externalURI, updatedAt, createdAt);
         this.summary = summary;
         this.description = description;
         this.acceptationCriteria = acceptationCriteria;
