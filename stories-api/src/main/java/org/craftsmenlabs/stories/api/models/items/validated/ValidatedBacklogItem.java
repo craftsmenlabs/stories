@@ -22,6 +22,7 @@ import java.util.List;
 public abstract class ValidatedBacklogItem<T extends Rankable> extends AbstractValidatedItem<T> implements Rankable {
     private float backlogPoints;
     private float potentialBacklogPoints;
+    private float normalizedBacklogPoints;
 
     public ValidatedBacklogItem() {
     }
@@ -49,5 +50,13 @@ public abstract class ValidatedBacklogItem<T extends Rankable> extends AbstractV
 
     public void setPotentialBacklogPoints(float potentialBacklogPoints) {
         this.potentialBacklogPoints = potentialBacklogPoints;
+    }
+
+    public float getNormalizedBacklogPoints() {
+        return normalizedBacklogPoints;
+    }
+
+    public void setNormalizedBacklogPoints(float normalizedBacklogPoints) {
+        this.normalizedBacklogPoints = normalizedBacklogPoints;
     }
 }

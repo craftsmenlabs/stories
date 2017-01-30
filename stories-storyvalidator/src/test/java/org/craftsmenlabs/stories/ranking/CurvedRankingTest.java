@@ -163,6 +163,14 @@ public class CurvedRankingTest implements RankingTest {
         assertThat(issues.get(2).getPotentialBacklogPoints()).isCloseTo(0.84f, withinPercentage(1.0));
         assertThat(issues.get(3).getPotentialBacklogPoints()).isCloseTo(0.64f, withinPercentage(1.0));
         assertThat(issues.get(4).getPotentialBacklogPoints()).isCloseTo(0.359f, withinPercentage(1.0));
+
+        assertThat(issues.get(0).getNormalizedBacklogPoints()).isCloseTo(0.26315f, withinPercentage(1.0));
+        assertThat(issues.get(1).getNormalizedBacklogPoints()).isCloseTo(0.2526f, withinPercentage(1.0));
+        assertThat(issues.get(2).getNormalizedBacklogPoints()).isCloseTo(0.2210f, withinPercentage(1.0));
+        assertThat(issues.get(3).getNormalizedBacklogPoints()).isCloseTo(0.1684f, withinPercentage(1.0));
+        assertThat(issues.get(4).getNormalizedBacklogPoints()).isCloseTo(0.094f, withinPercentage(1.0));
+
+        assertThat(issues.stream().mapToDouble(ValidatedBacklogItem::getNormalizedBacklogPoints).sum()).isCloseTo(1.0, withinPercentage(1.0));
     }
 
     @Test
@@ -186,5 +194,24 @@ public class CurvedRankingTest implements RankingTest {
         assertThat(issues.get(2).getPotentialBacklogPoints()).isCloseTo(0.84f, withinPercentage(1.0));
         assertThat(issues.get(3).getPotentialBacklogPoints()).isCloseTo(0.64f, withinPercentage(1.0));
         assertThat(issues.get(4).getPotentialBacklogPoints()).isCloseTo(0.359f, withinPercentage(1.0));
+
+        assertThat(issues.get(0).getNormalizedBacklogPoints()).isCloseTo(0.0f, withinPercentage(1.0));
+        assertThat(issues.get(1).getNormalizedBacklogPoints()).isCloseTo(0.06315f, withinPercentage(1.0));
+        assertThat(issues.get(2).getNormalizedBacklogPoints()).isCloseTo(0.1105f, withinPercentage(1.0));
+        assertThat(issues.get(3).getNormalizedBacklogPoints()).isCloseTo(0.1263f, withinPercentage(1.0));
+        assertThat(issues.get(4).getNormalizedBacklogPoints()).isCloseTo(0.094f, withinPercentage(1.0));
+    }
+
+
+    @Test
+    public void testRankingReturnsNormalizedPoints(@Injectable ValidatedBacklog validatedBacklog) throws Exception {
+        final List<ValidatedBacklogItem> issues = Arrays.asList(
+                ValidatedFeature.builder().pointsValuation(1f).feature(Feature.builder().rank("0|0001").build()).build(),
+                ValidatedFeature.builder().pointsValuation(1f).feature(Feature.builder().rank("0|0002").build()).build()
+        );
+        curvedRanking.createRanking(issues);
+
+        assertThat(issues.get(0).getNormalizedBacklogPoints()).isCloseTo(0.5714f, withinPercentage(1.0));
+        assertThat(issues.get(1).getNormalizedBacklogPoints()).isCloseTo(0.4285f, withinPercentage(1.0));
     }
 }
