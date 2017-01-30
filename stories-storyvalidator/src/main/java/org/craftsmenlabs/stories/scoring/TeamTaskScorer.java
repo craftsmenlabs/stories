@@ -37,7 +37,7 @@ public class TeamTaskScorer extends AbstractScorer<TeamTask, ValidatedTeamTask> 
         float points = 0f;
 
         if (teamTask == null) {
-            teamTask = new TeamTask("0", "0", "", null, "", "", "");
+            teamTask = new TeamTask("0", "0", "", null, "", "", "", null, null);
         }
 
         if (StringUtils.isEmpty(teamTask.getSummary())) {
