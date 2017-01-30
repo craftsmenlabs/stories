@@ -5,6 +5,7 @@ import org.craftsmenlabs.stories.api.models.config.SourceConfig;
 import org.craftsmenlabs.stories.api.models.items.base.Bug;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 public class BugConverter extends AbstractJiraConverter<Bug> {
@@ -15,6 +16,8 @@ public class BugConverter extends AbstractJiraConverter<Bug> {
     @Override
     public Bug convert(JiraJsonIssue jiraJsonIssue) {
         Bug bug = new Bug();
+        bug.setCreatedAt(LocalDateTime.parse((String) jiraJsonIssue.getFields().getAdditionalProperties().get("created")));
+        bug.setUpdatedAt(LocalDateTime.parse((String) jiraJsonIssue.getFields().getAdditionalProperties().get("updated")));
 
         bug.setKey(jiraJsonIssue.getKey());
 

@@ -9,6 +9,7 @@ import org.craftsmenlabs.stories.api.models.logging.StorynatorLogger;
 import org.craftsmenlabs.stories.isolator.SentenceSplitter;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 public class FeatureConverter extends AbstractJiraConverter<Feature> {
@@ -23,6 +24,8 @@ public class FeatureConverter extends AbstractJiraConverter<Feature> {
 
     public Feature convert(JiraJsonIssue jiraJsonIssue) {
         Feature feature = new Feature();
+        feature.setCreatedAt(LocalDateTime.parse((String) jiraJsonIssue.getFields().getAdditionalProperties().get("created")));
+        feature.setUpdatedAt(LocalDateTime.parse((String) jiraJsonIssue.getFields().getAdditionalProperties().get("updated")));
 
         // Extract description
         if (hasValidDescription(jiraJsonIssue)) {

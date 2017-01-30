@@ -8,6 +8,7 @@ import org.craftsmenlabs.stories.api.models.items.base.TeamTask;
 import org.craftsmenlabs.stories.api.models.logging.StorynatorLogger;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 public class TeamTaskConverter extends AbstractJiraConverter<TeamTask> {
@@ -20,6 +21,8 @@ public class TeamTaskConverter extends AbstractJiraConverter<TeamTask> {
 
     public TeamTask convert(JiraJsonIssue jiraJsonIssue) {
         TeamTask teamTask = new TeamTask();
+        teamTask.setCreatedAt(LocalDateTime.parse((String) jiraJsonIssue.getFields().getAdditionalProperties().get("created")));
+        teamTask.setUpdatedAt(LocalDateTime.parse((String) jiraJsonIssue.getFields().getAdditionalProperties().get("updated")));
 
         teamTask.setKey(jiraJsonIssue.getKey());
         teamTask.setSummary(jiraJsonIssue.getFields().getSummary());

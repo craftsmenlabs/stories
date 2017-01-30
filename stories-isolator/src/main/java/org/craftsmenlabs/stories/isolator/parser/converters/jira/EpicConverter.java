@@ -6,6 +6,8 @@ import org.craftsmenlabs.stories.api.models.config.SourceConfig;
 import org.craftsmenlabs.stories.api.models.items.base.Epic;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
 
+import java.time.LocalDateTime;
+
 public class EpicConverter extends AbstractJiraConverter<Epic> {
     public EpicConverter(FieldMappingConfig config, SourceConfig sourceConfig) {
         super(config, sourceConfig);
@@ -14,6 +16,8 @@ public class EpicConverter extends AbstractJiraConverter<Epic> {
     @Override
     public Epic convert(JiraJsonIssue jiraJsonIssue) {
         Epic epic = new Epic();
+        epic.setCreatedAt(LocalDateTime.parse((String) jiraJsonIssue.getFields().getAdditionalProperties().get("created")));
+        epic.setUpdatedAt(LocalDateTime.parse((String) jiraJsonIssue.getFields().getAdditionalProperties().get("updated")));
 
         epic.setKey(jiraJsonIssue.getKey());
         epic.setSummary(jiraJsonIssue.getFields().getSummary());
