@@ -6,6 +6,8 @@ import org.craftsmenlabs.stories.api.models.items.base.Feature;
 import org.craftsmenlabs.stories.isolator.SentenceSplitter;
 import org.craftsmenlabs.stories.isolator.model.github.GithubJsonIssue;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +30,12 @@ public class GithubJsonParser
 
             String rankString = String.valueOf(i);
 
+            if (githubJsonIssue.getCreatedAt() != null) {
+                feature.setCreatedAt(LocalDateTime.parse(githubJsonIssue.getCreatedAt(), DateTimeFormatter.ISO_DATE_TIME));
+            }
+            if (githubJsonIssue.getUpdatedAt() != null) {
+                feature.setUpdatedAt(LocalDateTime.parse(githubJsonIssue.getUpdatedAt(), DateTimeFormatter.ISO_DATE_TIME));
+            }
             String format2 = StringUtils.leftPad(rankString, rankLength, '0');
             feature.setRank(format2);
             feature.setEstimation(0f);

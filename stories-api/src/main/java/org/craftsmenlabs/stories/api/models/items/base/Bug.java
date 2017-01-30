@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.craftsmenlabs.stories.api.models.items.types.BacklogItem;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,8 +21,8 @@ public class Bug extends BacklogItem {
     private String priority;
 
     @Builder
-    public Bug(String summary, String description, String reproductionPath, String environment, String expectedBehavior, String acceptationCriteria, String priority, String key, String rank, String externalURI) {
-        super(key, rank, externalURI);
+    public Bug(String summary, String description, String reproductionPath, String environment, String expectedBehavior, String acceptationCriteria, String priority, String key, String rank, String externalURI, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        super(key, rank, externalURI, updatedAt, createdAt);
         this.summary = summary;
         this.description = description;
         this.reproductionPath = reproductionPath;

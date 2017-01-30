@@ -3,7 +3,6 @@ package org.craftsmenlabs.stories.isolator.parser.converters.jira;
 import org.apache.commons.lang3.StringUtils;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.SourceConfig;
-import org.craftsmenlabs.stories.api.models.exception.StoriesException;
 import org.craftsmenlabs.stories.api.models.items.base.TeamTask;
 import org.craftsmenlabs.stories.api.models.logging.StorynatorLogger;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
@@ -20,35 +19,19 @@ public class TeamTaskConverter extends AbstractJiraConverter<TeamTask> {
 
     public TeamTask convert(JiraJsonIssue jiraJsonIssue) {
         TeamTask teamTask = new TeamTask();
-
-        teamTask.setKey(jiraJsonIssue.getKey());
         teamTask.setSummary(jiraJsonIssue.getFields().getSummary());
-
-        teamTask.setExternalURI(
-                sourceConfig.getJira().getUrl() +
-                        "/projects/" + sourceConfig.getJira().getProjectKey() +
-                        "/issues/" + jiraJsonIssue.getKey()
-        );
 
         teamTask.setDescription(jiraJsonIssue.getFields().getDescription());
         getAcceptanceCriteria(teamTask, jiraJsonIssue);
 
         Map<String, Object> additionalProps = jiraJsonIssue.getFields().getAdditionalProperties();
 
-        String rank = (String) additionalProps.get(config.getRank());
-        if (StringUtils.isEmpty(rank)) {
-            throw new StoriesException(
-                    "The rank field mapping was not defined in your application yaml or parameters. " +
-                            "Is the field mapping configured correctly?");
-        }
-        teamTask.setRank(rank);
-
         String criteria = (String) additionalProps.get(config.getTeamTask().getAcceptanceCriteria());
         teamTask.setAcceptationCriteria(criteria);
 
         teamTask.setEstimation(this.parseEstimation(additionalProps.getOrDefault(config.getTeamTask().getEstimation(), "").toString()));
 
-        return teamTask;
+        return (TeamTask) fillDefaultInfo(jiraJsonIssue, teamTask);
     }
 
     @Override
