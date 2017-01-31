@@ -167,6 +167,8 @@ public class CurvedRankingTest implements RankingTest {
                 .containsExactly(0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 
         assertThat(issues.stream().mapToDouble(ValidatedBacklogItem::getScoredPoints).sum()).isCloseTo(1.0, withinPercentage(1.0));
+        assertThat(issues.stream().mapToDouble(item -> item.getMissedPoints() + item.getScoredPoints()).sum()).isCloseTo(1.0, withinPercentage(0.01));
+
     }
 
     @Test
@@ -187,6 +189,9 @@ public class CurvedRankingTest implements RankingTest {
                 .containsExactly(0.0f, 0.06315f, 0.1105f, 0.1263f, 0.094f);
         assertThat(issues).extracting(ValidatedBacklogItem::getMissedPoints).usingElementComparator(new FloatComparator(0.001f))
                 .containsExactly(0.2631f, 0.18947f, 0.1105f, 0.0421f, 0.0f);
+
+        assertThat(issues.stream().mapToDouble(item -> item.getMissedPoints() + item.getScoredPoints()).sum()).isCloseTo(1.0, withinPercentage(0.01));
+
     }
 
     @Test
