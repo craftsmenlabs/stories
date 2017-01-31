@@ -20,9 +20,10 @@ import java.util.List;
 })
 //http://www.davismol.net/2015/03/05/jackson-json-deserialize-a-list-of-objects-of-subclasses-of-an-abstract-class/
 public abstract class ValidatedBacklogItem<T extends Rankable> extends AbstractValidatedItem<T> implements Rankable {
-    private float backlogPoints;
-    private float potentialBacklogPoints;
-    private float normalizedBacklogPoints;
+    private float scoredPercentage;
+    private float missedPercentage;
+    private float scoredPoints;
+    private float missedPoints;
 
     public ValidatedBacklogItem() {
     }
@@ -36,27 +37,35 @@ public abstract class ValidatedBacklogItem<T extends Rankable> extends AbstractV
         return this.getItem().getRank();
     }
 
-    public float getBacklogPoints() {
-        return backlogPoints;
+    public float getScoredPercentage() {
+        return scoredPercentage;
     }
 
-    public void setBacklogPoints(float backlogPoints) {
-        this.backlogPoints = backlogPoints;
+    public void setScoredPercentage(float scoredPercentage) {
+        this.scoredPercentage = scoredPercentage;
     }
 
-    public float getPotentialBacklogPoints() {
-        return potentialBacklogPoints;
+    public float getMissedPercentage() {
+        return missedPercentage;
     }
 
-    public void setPotentialBacklogPoints(float potentialBacklogPoints) {
-        this.potentialBacklogPoints = potentialBacklogPoints;
+    public void setMissedPercentage(float missedPercentage) {
+        this.missedPercentage = missedPercentage;
     }
 
-    public float getNormalizedBacklogPoints() {
-        return normalizedBacklogPoints;
+    public float getScoredPoints() {
+        return scoredPoints;
     }
 
-    public void setNormalizedBacklogPoints(float normalizedBacklogPoints) {
-        this.normalizedBacklogPoints = normalizedBacklogPoints;
+    public void setScoredPoints(float scoredPoints) {
+        this.scoredPoints = scoredPoints;
+    }
+
+    public float getMissedPoints() {
+        return missedPoints;
+    }
+
+    public void setMissedPoints(float missedPoints) {
+        this.missedPoints = missedPoints;
     }
 }

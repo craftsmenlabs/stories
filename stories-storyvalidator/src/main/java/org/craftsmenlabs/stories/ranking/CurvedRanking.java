@@ -28,12 +28,17 @@ public class CurvedRanking implements Ranking {
         float couldHaveScored = (float) IntStream.range(0, entries.size()).mapToDouble(i -> curvedQuotient(i, entriesSize)).sum();
 
         for (int i = 0; i < entries.size(); i++) {
-            float curvedQuotient = curvedQuotient(i, entries.size());
             ValidatedBacklogItem entry = entries.get(i);
-            scoredPoints += entry.getPointsValuation() * curvedQuotient;
-            entry.setBacklogPoints(entry.getPointsValuation() * curvedQuotient);
-            entry.setPotentialBacklogPoints(curvedQuotient);
-            entry.setNormalizedBacklogPoints((entry.getPointsValuation() * curvedQuotient) / couldHaveScored);
+
+            float curvedQuotient = curvedQuotient(i, entries.size());
+            final float scoredPercentage = entry.getPointsValuation() * curvedQuotient;
+            final float missedPercentage = curvedQuotient - (entry.getPointsValuation() * curvedQuotient);
+            scoredPoints += scoredPercentage;
+
+            entry.setScoredPercentage(scoredPercentage);
+            entry.setMissedPercentage(missedPercentage);
+            entry.setScoredPoints(scoredPercentage / couldHaveScored);
+            entry.setMissedPoints(missedPercentage / couldHaveScored);
         }
         return  scoredPoints / couldHaveScored;
     }

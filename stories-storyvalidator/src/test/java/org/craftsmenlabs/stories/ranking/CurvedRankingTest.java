@@ -2,6 +2,7 @@ package org.craftsmenlabs.stories.ranking;
 
 import mockit.Injectable;
 import mockit.Tested;
+import org.assertj.core.util.FloatComparator;
 import org.craftsmenlabs.stories.api.models.items.base.Feature;
 import org.craftsmenlabs.stories.api.models.items.validated.ValidatedBacklog;
 import org.craftsmenlabs.stories.api.models.items.validated.ValidatedBacklogItem;
@@ -152,25 +153,20 @@ public class CurvedRankingTest implements RankingTest {
                 ValidatedFeature.builder().pointsValuation(1f).feature(Feature.builder().rank("0|0005").build()).build()
         );
         curvedRanking.createRanking(issues);
-        assertThat(issues.get(0).getBacklogPoints()).isCloseTo(1f, withinPercentage(1.0));
-        assertThat(issues.get(1).getBacklogPoints()).isCloseTo(0.96f, withinPercentage(1.0));
-        assertThat(issues.get(2).getBacklogPoints()).isCloseTo(0.84f, withinPercentage(1.0));
-        assertThat(issues.get(3).getBacklogPoints()).isCloseTo(0.64f, withinPercentage(1.0));
-        assertThat(issues.get(4).getBacklogPoints()).isCloseTo(0.359f, withinPercentage(1.0));
 
-        assertThat(issues.get(0).getPotentialBacklogPoints()).isCloseTo(1f, withinPercentage(1.0));
-        assertThat(issues.get(1).getPotentialBacklogPoints()).isCloseTo(0.96f, withinPercentage(1.0));
-        assertThat(issues.get(2).getPotentialBacklogPoints()).isCloseTo(0.84f, withinPercentage(1.0));
-        assertThat(issues.get(3).getPotentialBacklogPoints()).isCloseTo(0.64f, withinPercentage(1.0));
-        assertThat(issues.get(4).getPotentialBacklogPoints()).isCloseTo(0.359f, withinPercentage(1.0));
+        assertThat(issues).extracting(ValidatedBacklogItem::getScoredPercentage).usingElementComparator(new FloatComparator(0.001f))
+                .containsExactly(1.0f, 0.96f, 0.84f, 0.64f, 0.359f);
 
-        assertThat(issues.get(0).getNormalizedBacklogPoints()).isCloseTo(0.26315f, withinPercentage(1.0));
-        assertThat(issues.get(1).getNormalizedBacklogPoints()).isCloseTo(0.2526f, withinPercentage(1.0));
-        assertThat(issues.get(2).getNormalizedBacklogPoints()).isCloseTo(0.2210f, withinPercentage(1.0));
-        assertThat(issues.get(3).getNormalizedBacklogPoints()).isCloseTo(0.1684f, withinPercentage(1.0));
-        assertThat(issues.get(4).getNormalizedBacklogPoints()).isCloseTo(0.094f, withinPercentage(1.0));
+        assertThat(issues).extracting(ValidatedBacklogItem::getMissedPercentage).usingElementComparator(new FloatComparator(0.001f))
+                .containsExactly(0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 
-        assertThat(issues.stream().mapToDouble(ValidatedBacklogItem::getNormalizedBacklogPoints).sum()).isCloseTo(1.0, withinPercentage(1.0));
+        assertThat(issues).extracting(ValidatedBacklogItem::getScoredPoints).usingElementComparator(new FloatComparator(0.001f))
+                .containsExactly(0.26315f, 0.2526f, 0.2210f, 0.1684f, 0.094f);
+
+        assertThat(issues).extracting(ValidatedBacklogItem::getMissedPoints).usingElementComparator(new FloatComparator(0.001f))
+                .containsExactly(0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
+        assertThat(issues.stream().mapToDouble(ValidatedBacklogItem::getScoredPoints).sum()).isCloseTo(1.0, withinPercentage(1.0));
     }
 
     @Test
@@ -183,25 +179,15 @@ public class CurvedRankingTest implements RankingTest {
                 }).collect(Collectors.toList());
         curvedRanking.createRanking(issues);
 
-        assertThat(issues.get(0).getBacklogPoints()).isCloseTo(0f, withinPercentage(1.0));
-        assertThat(issues.get(1).getBacklogPoints()).isCloseTo(0.24f, withinPercentage(1.0));
-        assertThat(issues.get(2).getBacklogPoints()).isCloseTo(0.42f, withinPercentage(1.0));
-        assertThat(issues.get(3).getBacklogPoints()).isCloseTo(0.48f, withinPercentage(1.0));
-        assertThat(issues.get(4).getBacklogPoints()).isCloseTo(0.36f, withinPercentage(1.0));
-
-        assertThat(issues.get(0).getPotentialBacklogPoints()).isCloseTo(1f, withinPercentage(1.0));
-        assertThat(issues.get(1).getPotentialBacklogPoints()).isCloseTo(0.96f, withinPercentage(1.0));
-        assertThat(issues.get(2).getPotentialBacklogPoints()).isCloseTo(0.84f, withinPercentage(1.0));
-        assertThat(issues.get(3).getPotentialBacklogPoints()).isCloseTo(0.64f, withinPercentage(1.0));
-        assertThat(issues.get(4).getPotentialBacklogPoints()).isCloseTo(0.359f, withinPercentage(1.0));
-
-        assertThat(issues.get(0).getNormalizedBacklogPoints()).isCloseTo(0.0f, withinPercentage(1.0));
-        assertThat(issues.get(1).getNormalizedBacklogPoints()).isCloseTo(0.06315f, withinPercentage(1.0));
-        assertThat(issues.get(2).getNormalizedBacklogPoints()).isCloseTo(0.1105f, withinPercentage(1.0));
-        assertThat(issues.get(3).getNormalizedBacklogPoints()).isCloseTo(0.1263f, withinPercentage(1.0));
-        assertThat(issues.get(4).getNormalizedBacklogPoints()).isCloseTo(0.094f, withinPercentage(1.0));
+        assertThat(issues).extracting(ValidatedBacklogItem::getScoredPercentage).usingElementComparator(new FloatComparator(0.001f))
+                .containsExactly(0f, 0.24f, 0.42f, 0.48f, 0.36f);
+        assertThat(issues).extracting(ValidatedBacklogItem::getMissedPercentage).usingElementComparator(new FloatComparator(0.001f))
+                .containsExactly(1f, 0.72f, 0.42f, 0.16f, 0.0f);
+        assertThat(issues).extracting(ValidatedBacklogItem::getScoredPoints).usingElementComparator(new FloatComparator(0.001f))
+                .containsExactly(0.0f, 0.06315f, 0.1105f, 0.1263f, 0.094f);
+        assertThat(issues).extracting(ValidatedBacklogItem::getMissedPoints).usingElementComparator(new FloatComparator(0.001f))
+                .containsExactly(0.2631f, 0.18947f, 0.1105f, 0.0421f, 0.0f);
     }
-
 
     @Test
     public void testRankingReturnsNormalizedPoints(@Injectable ValidatedBacklog validatedBacklog) throws Exception {
@@ -211,7 +197,10 @@ public class CurvedRankingTest implements RankingTest {
         );
         curvedRanking.createRanking(issues);
 
-        assertThat(issues.get(0).getNormalizedBacklogPoints()).isCloseTo(0.5714f, withinPercentage(1.0));
-        assertThat(issues.get(1).getNormalizedBacklogPoints()).isCloseTo(0.4285f, withinPercentage(1.0));
+        assertThat(issues.get(0).getScoredPoints()).isCloseTo(0.5714f, withinPercentage(1.0));
+        assertThat(issues.get(1).getScoredPoints()).isCloseTo(0.4285f, withinPercentage(1.0));
+
+        assertThat(issues.get(0).getMissedPoints()).isCloseTo(0f, withinPercentage(1.0));
+        assertThat(issues.get(1).getMissedPoints()).isCloseTo(0f, withinPercentage(1.0));
     }
 }
