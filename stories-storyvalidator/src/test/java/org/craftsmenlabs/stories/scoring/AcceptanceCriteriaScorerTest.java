@@ -79,7 +79,7 @@ public class AcceptanceCriteriaScorerTest {
         ValidatedAcceptanceCriteria entry1 = AcceptanceCriteriaScorer.performScorer(entry.getItem().getAcceptanceCriteria(), validationConfig);
         assertThat(entry1.getPointsValuation()).isCloseTo(1.0f - 0.25f, withinPercentage(1));
         assertThat(entry1.getViolations()).contains(new Violation(
-                ViolationType.CriteriaFormatViolation,
+                ViolationType.CriteriaGivenClauseViolation,
                 "<Given> section is not described properly. The criteria should contain any of the following keywords: gooooven ",
                 0.25f
         ));
@@ -106,7 +106,7 @@ public class AcceptanceCriteriaScorerTest {
         ValidatedAcceptanceCriteria entry1 = AcceptanceCriteriaScorer.performScorer(entry.getItem().getAcceptanceCriteria(), validationConfig);
         assertThat(entry1.getPointsValuation()).isCloseTo(1.0f - 0.25f, withinPercentage(1));
         assertThat(entry1.getViolations()).contains(new Violation(
-                ViolationType.CriteriaFormatViolation,
+                ViolationType.CriteriaWhenClauseViolation,
                 "<When> section is not described properly. The criteria should contain any of the following keywords: whooon ",
                 0.25f));
     }
@@ -132,7 +132,7 @@ public class AcceptanceCriteriaScorerTest {
         ValidatedAcceptanceCriteria entry1 = AcceptanceCriteriaScorer.performScorer(entry.getItem().getAcceptanceCriteria(), validationConfig);
         assertThat(entry1.getPointsValuation()).isCloseTo(1.0f - 0.25f, withinPercentage(1));
         assertThat(entry1.getViolations()).contains(new Violation(
-                ViolationType.CriteriaFormatViolation,
+                ViolationType.CriteriaThenClauseViolation,
                 "<Then> section is not described properly. The criteria should contain any of the following keywords: thooon ",
                 0.25f));
     }

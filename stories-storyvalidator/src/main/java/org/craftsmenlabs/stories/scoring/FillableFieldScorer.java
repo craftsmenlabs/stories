@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Assigns points to a bug, based on the rate of which fields are filled
+ * Assigns scoredPercentage to a bug, based on the rate of which fields are filled
  */
 public class FillableFieldScorer extends AbstractScorer<BacklogItem, ValidatedBacklogItem> {
 
@@ -60,7 +60,7 @@ public class FillableFieldScorer extends AbstractScorer<BacklogItem, ValidatedBa
                 ).collect(Collectors.toList());
 
         entry.setViolations(violations);
-        entry.setPointsValuation((float) (1f - violations.stream().mapToDouble(violation -> (double) violation.getPotentialPoints()).sum()));
+        entry.setPointsValuation((float) (1f - violations.stream().mapToDouble(violation -> (double) violation.getMissedPercentage()).sum()));
         entry.setRating(getRating(entry));
         return entry;
     }

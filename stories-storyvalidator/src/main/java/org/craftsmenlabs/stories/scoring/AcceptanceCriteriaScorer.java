@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Assigns points to acceptance criteria, based on the
+ * Assigns scoredPercentage to acceptance criteria, based on the
  * application of the gherkin language
  */
 public class AcceptanceCriteriaScorer {
@@ -30,7 +30,7 @@ public class AcceptanceCriteriaScorer {
 
         if (criteria == null || criteria.isEmpty()) {
             criteria = "";
-            violations.add(new Violation(ViolationType.CriteriaEmptyViolation,
+            violations.add(new Violation(ViolationType.CriteriaVoidViolation,
                     "No acceptance criteria were found.",
                     1f));
         }
@@ -41,7 +41,7 @@ public class AcceptanceCriteriaScorer {
         if (givenWords.stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
             points += GIVEN_POINTS;
         } else {
-            violations.add(new Violation(ViolationType.CriteriaFormatViolation,
+            violations.add(new Violation(ViolationType.CriteriaGivenClauseViolation,
                     "<Given> section is not described properly. " +
                             "The criteria should contain any of the following keywords: "
                             + String.join(", ", givenWords), GIVEN_POINTS));
@@ -51,7 +51,7 @@ public class AcceptanceCriteriaScorer {
         if (whenWords.stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
             points += WHEN_POINTS;
         } else {
-            violations.add(new Violation(ViolationType.CriteriaFormatViolation,
+            violations.add(new Violation(ViolationType.CriteriaWhenClauseViolation,
                     "<When> section is not described properly. " +
                             "The criteria should contain any of the following keywords: "
                             + String.join(", ", whenWords), WHEN_POINTS));
@@ -62,7 +62,7 @@ public class AcceptanceCriteriaScorer {
         if (thenWords.stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
             points += THEN_POINTS;
         } else {
-            violations.add(new Violation(ViolationType.CriteriaFormatViolation,
+            violations.add(new Violation(ViolationType.CriteriaThenClauseViolation,
                     "<Then> section is not described properly. " +
                             "The criteria should contain any of the following keywords: "
                             + String.join(", ", thenWords), THEN_POINTS));
@@ -72,7 +72,7 @@ public class AcceptanceCriteriaScorer {
             points += LENGTH_POINTS;
         }else{
             violations.add(new Violation(
-                    ViolationType.CriteriaFormatViolation,
+                    ViolationType.CriteriaLengthViolation,
                     "The criteria should contain a minimum length of " + MINIMUM_LENGTH_OF_ACC_CRITERIA + " characters. " +
                             "It now contains " + criteria.length() + " characters.",
                     LENGTH_POINTS));

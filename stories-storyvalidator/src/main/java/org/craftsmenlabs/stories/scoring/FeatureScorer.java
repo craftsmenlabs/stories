@@ -14,8 +14,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Assigns points to a feature, based on all
- * underlying fields, such as user story, acceptance criteria, estimated points
+ * Assigns scoredPercentage to a feature, based on all
+ * underlying fields, such as user story, acceptance criteria, estimated scoredPercentage
  */
 public class FeatureScorer extends AbstractScorer<Feature, ValidatedFeature> {
 
