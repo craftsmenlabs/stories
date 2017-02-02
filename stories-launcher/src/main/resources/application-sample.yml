@@ -43,6 +43,7 @@ storynator:
           estimation: "customfield_11402"
           acceptance-criteria: "customfield_11403"
       bug:
+          priority: "customfield_13001"
           reproduction-path: "customfield_13001"
           environment: "customfield_13002"
           expected-behavior: "customfield_13003"
@@ -76,7 +77,7 @@ storynator:
           so-keywords: ["so"]
       bug:
           active: true
-          fill-fields: ["priority", "reproduction", "software", "expected", "acceptation"]
+          fill-fields: ["priority", "reproduction_path", "environment", "expected_behaviour", "acceptation_criteria"]
           rating-threshold: 0.7
       epic:
           active: true

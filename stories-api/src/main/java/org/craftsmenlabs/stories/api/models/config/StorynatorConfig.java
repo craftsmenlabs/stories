@@ -53,6 +53,7 @@ public class StorynatorConfig {
                 .filter(FilterConfig.builder().status("To Do").build())
                 .build();
 
+        //quick fix because of the absence of builders/allargsconfig
         config.getValidation().getBug().setActive(true);
         config.getValidation().getBug().setRatingThreshold(0.6f);
         config.getValidation().getEpic().setActive(true);

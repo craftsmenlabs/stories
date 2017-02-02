@@ -1,6 +1,6 @@
 package org.craftsmenlabs.stories.isolator.testutil;
 
-import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
+import org.craftsmenlabs.stories.api.models.items.base.Feature;
 
 public class RetrieveTestData {
     public static Feature getJiraTestIssueFromResource() {

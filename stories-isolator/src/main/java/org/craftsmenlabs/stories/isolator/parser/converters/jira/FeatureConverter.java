@@ -3,9 +3,8 @@ package org.craftsmenlabs.stories.isolator.parser.converters.jira;
 import org.apache.commons.lang3.StringUtils;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.SourceConfig;
-import org.craftsmenlabs.stories.api.models.exception.StoriesException;
+import org.craftsmenlabs.stories.api.models.items.base.Feature;
 import org.craftsmenlabs.stories.api.models.logging.StorynatorLogger;
-import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
 import org.craftsmenlabs.stories.isolator.SentenceSplitter;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
 
@@ -23,35 +22,18 @@ public class FeatureConverter extends AbstractJiraConverter<Feature> {
 
     public Feature convert(JiraJsonIssue jiraJsonIssue) {
         Feature feature = new Feature();
-
         // Extract description
         if (hasValidDescription(jiraJsonIssue)) {
             feature = sentenceSplitter.splitSentence(feature, jiraJsonIssue.getFields().getDescription());
         }
 
         feature.setSummary(jiraJsonIssue.getFields().getSummary());
-        feature.setKey(jiraJsonIssue.getKey());
-
-        feature.setExternalURI(
-                        sourceConfig.getJira().getUrl() +
-                        "/projects/" + sourceConfig.getJira().getProjectKey() +
-                        "/issues/" + jiraJsonIssue.getKey()
-        );
         getAcceptanceCriteria(feature, jiraJsonIssue);
 
         Map<String, Object> additionalProps = jiraJsonIssue.getFields().getAdditionalProperties();
-
-        String rank = (String) additionalProps.get(config.getRank());
-        if (StringUtils.isEmpty(rank)) {
-            throw new StoriesException(
-                    "The rank field mapping was not defined in your application yaml or parameters. " +
-                            "Is the field mapping configured correctly?");
-        }
-        feature.setRank(rank);
-
         feature.setEstimation(this.parseEstimation(additionalProps.getOrDefault(config.getFeature().getEstimation(), "").toString()));
 
-        return feature;
+        return (Feature) fillDefaultInfo(jiraJsonIssue, feature);
     }
 
     @Override

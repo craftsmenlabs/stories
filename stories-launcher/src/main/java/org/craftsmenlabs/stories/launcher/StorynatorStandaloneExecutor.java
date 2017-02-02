@@ -3,9 +3,9 @@ package org.craftsmenlabs.stories.launcher;
 import lombok.RequiredArgsConstructor;
 import org.craftsmenlabs.stories.api.models.config.StorynatorConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedBacklog;
 import org.craftsmenlabs.stories.api.models.logging.StandaloneLogger;
 import org.craftsmenlabs.stories.api.models.logging.StorynatorLogger;
-import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 import org.craftsmenlabs.stories.connectivity.service.enterprise.EnterpriseDashboardConfigRetriever;
 import org.craftsmenlabs.stories.launcher.config.EnterpriseConfig;
 import org.craftsmenlabs.stories.launcher.config.SpringStorynatorConfig;
@@ -24,7 +24,7 @@ public class StorynatorStandaloneExecutor {
     private final Environment environment;
     private final StorynatorPluginExecutor storynatorPluginExecutor;
 
-    public BacklogValidatorEntry runApplication() {
+    public ValidatedBacklog runApplication() {
         StorynatorConfig config = this.resolveConfig();
         StorynatorVersion version = this.resolveVersion();
         StorynatorLogger logger = new StandaloneLogger();

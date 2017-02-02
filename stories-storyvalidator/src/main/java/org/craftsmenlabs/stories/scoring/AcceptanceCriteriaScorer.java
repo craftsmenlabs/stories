@@ -2,7 +2,7 @@ package org.craftsmenlabs.stories.scoring;
 
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
-import org.craftsmenlabs.stories.api.models.validatorentry.AcceptanceCriteriaValidatorEntry;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedAcceptanceCriteria;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 import org.craftsmenlabs.stories.api.models.violation.ViolationType;
 
@@ -17,20 +17,22 @@ import java.util.List;
 public class AcceptanceCriteriaScorer {
 
     public static final int MINIMUM_LENGTH_OF_ACC_CRITERIA = 20;
-    private static final float GIVEN_POINTS = 0.3333f;
-    private static final float WHEN_POINTS = 0.3333f;
-    private static final float THEN_POINTS = 0.3333f;
-    private static final float TOTAL_POINTS = GIVEN_POINTS + WHEN_POINTS + THEN_POINTS;
+    private static final float LENGTH_POINTS = 0.25f;
+    private static final float GIVEN_POINTS = 0.25f;
+    private static final float WHEN_POINTS = 0.25f;
+    private static final float THEN_POINTS = 0.25f;
+    private static final float TOTAL_POINTS = GIVEN_POINTS + WHEN_POINTS + THEN_POINTS + LENGTH_POINTS;
 
-    public static AcceptanceCriteriaValidatorEntry performScorer(String criteria, ValidationConfig validationConfig) {
+    public static ValidatedAcceptanceCriteria performScorer(String criteria, ValidationConfig validationConfig) {
 
         List<Violation> violations = new ArrayList<>();
         float points = 0f;
 
         if (criteria == null || criteria.isEmpty()) {
             criteria = "";
-            violations.add(new Violation(ViolationType.CriteriaVoidViolation,
-                    "No acceptance criteria where found."));
+            violations.add(new Violation(ViolationType.CriteriaEmptyViolation,
+                    "No acceptance criteria were found.",
+                    1f));
         }
 
         final String criteriaLower = criteria.toLowerCase();
@@ -39,20 +41,20 @@ public class AcceptanceCriteriaScorer {
         if (givenWords.stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
             points += GIVEN_POINTS;
         } else {
-            violations.add(new Violation(ViolationType.CriteriaGivenClauseViolation,
+            violations.add(new Violation(ViolationType.CriteriaFormatViolation,
                     "<Given> section is not described properly. " +
                             "The criteria should contain any of the following keywords: "
-                            + String.join(", ", givenWords)));
+                            + String.join(", ", givenWords), GIVEN_POINTS));
         }
 
         List<String> whenWords = validationConfig.getCriteria().getWhenKeywords() != null ? validationConfig.getCriteria().getWhenKeywords() : Collections.emptyList();
         if (whenWords.stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
             points += WHEN_POINTS;
         } else {
-            violations.add(new Violation(ViolationType.CriteriaWhenClauseViolation,
+            violations.add(new Violation(ViolationType.CriteriaFormatViolation,
                     "<When> section is not described properly. " +
                             "The criteria should contain any of the following keywords: "
-                            + String.join(", ", whenWords)));
+                            + String.join(", ", whenWords), WHEN_POINTS));
 
         }
 
@@ -60,23 +62,27 @@ public class AcceptanceCriteriaScorer {
         if (thenWords.stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
             points += THEN_POINTS;
         } else {
-            violations.add(new Violation(ViolationType.CriteriaThenClauseViolation,
+            violations.add(new Violation(ViolationType.CriteriaFormatViolation,
                     "<Then> section is not described properly. " +
                             "The criteria should contain any of the following keywords: "
-                            + String.join(", ", thenWords)));
+                            + String.join(", ", thenWords), THEN_POINTS));
         }
 
-        if (criteria.length() <= MINIMUM_LENGTH_OF_ACC_CRITERIA) {
-            violations.add(new Violation(ViolationType.CriteriaLengthViolation,
+        if (criteria.length() >= MINIMUM_LENGTH_OF_ACC_CRITERIA) {
+            points += LENGTH_POINTS;
+        }else{
+            violations.add(new Violation(
+                    ViolationType.CriteriaFormatViolation,
                     "The criteria should contain a minimum length of " + MINIMUM_LENGTH_OF_ACC_CRITERIA + " characters. " +
-                            "It now contains " + criteria.length() + " characters."));
+                            "It now contains " + criteria.length() + " characters.",
+                    LENGTH_POINTS));
 
         }
 
-        points /= TOTAL_POINTS;
+        points = points / TOTAL_POINTS;
         Rating rating = points >= validationConfig.getCriteria().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL;
 
-        return AcceptanceCriteriaValidatorEntry
+        return ValidatedAcceptanceCriteria
                 .builder()
                 .item(criteria)
                 .violations(violations)
