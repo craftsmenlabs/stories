@@ -6,4 +6,6 @@ public interface Summarizable<T extends Summarizable> {
     T plus(T that);
 
     T minus(T that);
+
+    boolean isZero();
 }
