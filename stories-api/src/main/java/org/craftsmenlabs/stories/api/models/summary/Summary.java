@@ -87,4 +87,17 @@ public class Summary implements Summarizable<Summary> {
                 .featureEstimation(featureEstimation.minus(that.getFeatureEstimation()))
                 .build();
     }
+
+    @Override
+    public boolean isZero() {
+        return this.backlog.isZero()
+                && this.issues.isZero()
+                && this.features.isZero()
+                && this.bugs.isZero()
+                && this.epics.isZero()
+                && this.teamTasks.isZero()
+                && this.featureUserStory.isZero()
+                && this.featureCriteria.isZero()
+                && this.featureEstimation.isZero();
+    }
 }

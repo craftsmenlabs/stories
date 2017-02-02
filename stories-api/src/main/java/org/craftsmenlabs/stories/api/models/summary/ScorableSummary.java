@@ -42,4 +42,11 @@ public class ScorableSummary implements Summarizable<ScorableSummary> {
                 .violationCount(this.getViolationCount() - that.getViolationCount())
                 .build();
     }
+
+    @Override
+    public boolean isZero() {
+        return pointsValuation < 0.0001
+                && pointsValuation > -0.0001
+                && violationCount == 0;
+    }
 }

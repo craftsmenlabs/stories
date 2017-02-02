@@ -47,5 +47,12 @@ public class BacklogItemListSummary implements Summarizable<BacklogItemListSumma
                 .count(this.getCount() - that.getCount())
                 .build();
     }
+
+    @Override
+    public boolean isZero() {
+        return passed == 0
+                && failed == 0
+                && count == 0;
+    }
 }
 
