@@ -19,8 +19,8 @@ public class Feature extends BacklogItem {
 
 
     @Builder
-    public Feature(String summary, String userstory, String acceptanceCriteria, Float estimation, String key, String rank, String externalURI, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        super(key, rank, externalURI, updatedAt, createdAt);
+    public Feature(String summary, String userstory, String acceptanceCriteria, Float estimation, String key, String rank, String externalURI, LocalDateTime createdAt, LocalDateTime updatedAt, float potentialPoints) {
+        super(key, rank, externalURI, updatedAt, createdAt, potentialPoints);
         this.summary = summary;
         this.userstory = userstory;
         this.acceptanceCriteria = acceptanceCriteria;

@@ -25,7 +25,7 @@ public class StoryScorerTest {
             result = 0.7f;
         }};
 
-        float score = StoryScorer.performScorer(entry.getItem().getUserstory(), validationConfig).getPointsValuation();
+        float score = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig).getPointsValuation();
         assertThat(score).isEqualTo(0.0f);
     }
 
@@ -39,7 +39,7 @@ public class StoryScorerTest {
             result = 0.7f;
         }};
 
-        float score = StoryScorer.performScorer(entry.getItem().getUserstory(), validationConfig).getPointsValuation();
+        float score = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig).getPointsValuation();
         assertThat(score).isEqualTo(0.0f);
     }
 
@@ -63,7 +63,7 @@ public class StoryScorerTest {
             result = 1f;
         }};
 
-        ValidatedUserStory entry1 = StoryScorer.performScorer(entry.getItem().getUserstory(), validationConfig);
+        ValidatedUserStory entry1 = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig);
         assertThat(entry1.getPointsValuation()).isCloseTo(1.0f, withinPercentage(0.1));
         assertThat(entry1.getRating()).isEqualTo(Rating.SUCCESS);
     }
@@ -89,8 +89,8 @@ public class StoryScorerTest {
             result = 0.7f;
         }};
 
-        float score = StoryScorer.performScorer(entry.getItem().getUserstory(), validationConfig).getPointsValuation();
-        assertThat(score).isCloseTo(0.8f, withinPercentage(0.1));
+        float score = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig).getPointsValuation();
+        assertThat(score).isCloseTo(0.75f, withinPercentage(0.1));
     }
 
     @Test
@@ -113,8 +113,8 @@ public class StoryScorerTest {
             result = 0.7f;
         }};
 
-        float score = StoryScorer.performScorer(entry.getItem().getUserstory(), validationConfig).getPointsValuation();
-        assertThat(score).isCloseTo(0.8f, withinPercentage(0.1));
+        float score = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig).getPointsValuation();
+        assertThat(score).isCloseTo(0.75f, withinPercentage(0.1));
     }
 
     @Test
@@ -137,8 +137,8 @@ public class StoryScorerTest {
             result = 0.7f;
         }};
 
-        float score = StoryScorer.performScorer(entry.getItem().getUserstory(), validationConfig).getPointsValuation();
-        assertThat(score).isCloseTo(0.6f, withinPercentage(0.1));
+        float score = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig).getPointsValuation();
+        assertThat(score).isCloseTo(0.75f, withinPercentage(0.1));
     }
 
     @Test
@@ -160,8 +160,8 @@ public class StoryScorerTest {
             result = 0.7f;
         }};
 
-        float score = StoryScorer.performScorer(entry.getItem().getUserstory(), validationConfig).getPointsValuation();
-        assertThat(score).isCloseTo(0.8f, withinPercentage(0.1));
+        float score = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig).getPointsValuation();
+        assertThat(score).isCloseTo(0.75f, withinPercentage(0.1));
     }
 
     @Test
@@ -183,8 +183,8 @@ public class StoryScorerTest {
             result = 0.7f;
         }};
 
-        float score = StoryScorer.performScorer(entry.getItem().getUserstory(), validationConfig).getPointsValuation();
-        assertThat(score).isCloseTo(0.8f, withinPercentage(0.1));
+        float score = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig).getPointsValuation();
+        assertThat(score).isCloseTo(0.75f, withinPercentage(0.1));
     }
 
     @Test
@@ -207,7 +207,7 @@ public class StoryScorerTest {
             result = 1.1f;
         }};
 
-        Rating rating = StoryScorer.performScorer(entry.getItem().getUserstory(), validationConfig).getRating();
+        Rating rating = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig).getRating();
         assertThat(rating).isEqualTo(Rating.FAIL);
     }
 }

@@ -36,6 +36,12 @@
 			<artifactId>logback-classic</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>com.codepoetics</groupId>
+			<artifactId>protonpack</artifactId>
+			<version>1.9</version>
+		</dependency>
+
 		<!-- test dependencies -->
 		<dependency>
 			<groupId>org.jmockit</groupId>

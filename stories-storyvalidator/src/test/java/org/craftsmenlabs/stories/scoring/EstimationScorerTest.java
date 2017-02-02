@@ -22,7 +22,7 @@ public class EstimationScorerTest {
             result = 0.7f;
         }};
 
-        float score = EstimationScorer.performScorer(entry.getItem().getEstimation(), validationConfig).getPointsValuation();
+        float score = EstimationScorer.performScorer(entry.getItem().getEstimation(), 1f, validationConfig).getPointsValuation();
         assertThat(score).isCloseTo(0f, withinPercentage(1));
     }
 
@@ -37,7 +37,7 @@ public class EstimationScorerTest {
             result = 0.1f;
         }};
 
-        ValidatedEstimation entry1 = EstimationScorer.performScorer(entry.getItem().getEstimation(), validationConfig);
+        ValidatedEstimation entry1 = EstimationScorer.performScorer(entry.getItem().getEstimation(), 1f, validationConfig);
         assertThat(entry1.getPointsValuation()).isCloseTo(0f, withinPercentage(1));
         assertThat(entry1.getRating()).isEqualTo(Rating.FAIL);
     }
@@ -53,7 +53,7 @@ public class EstimationScorerTest {
             result = 1f;
         }};
 
-        ValidatedEstimation entry1 = EstimationScorer.performScorer(entry.getItem().getEstimation(), validationConfig);
+        ValidatedEstimation entry1 = EstimationScorer.performScorer(entry.getItem().getEstimation(), 1f, validationConfig);
         assertThat(entry1.getPointsValuation()).isCloseTo(1f, withinPercentage(1));
     }
 
@@ -67,7 +67,7 @@ public class EstimationScorerTest {
             result = 1f;
         }};
 
-        ValidatedEstimation entry1 = EstimationScorer.performScorer(entry.getItem().getEstimation(), validationConfig);
+        ValidatedEstimation entry1 = EstimationScorer.performScorer(entry.getItem().getEstimation(), 1f, validationConfig);
         assertThat(entry1.getRating()).isEqualTo(Rating.SUCCESS);
     }
 

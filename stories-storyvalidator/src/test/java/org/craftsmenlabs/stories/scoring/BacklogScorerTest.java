@@ -13,12 +13,13 @@ import org.craftsmenlabs.stories.api.models.items.validated.ValidatedBacklog;
 import org.craftsmenlabs.stories.ranking.Ranking;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
+@SuppressWarnings("Duplicates")
 public class BacklogScorerTest {
     @Mocked
     private Backlog backlog;
@@ -41,14 +42,14 @@ public class BacklogScorerTest {
             backlog.getIssues();
             result = features;
 
-            ranking.createRanking(withNotNull());
-            result = 0.5f;
+            ranking.getRanking(anyInt);
+            result = Arrays.asList(1f);
 
             validationConfig.getFeature().isActive();
             result = true;
 
             validationConfig.getBacklog().getRatingThreshold();
-            result = 50f;
+            result = 0f;
         }};
 
         ValidatedBacklog result = getScorer(validationConfig, ranking).validate(backlog);
@@ -63,8 +64,8 @@ public class BacklogScorerTest {
             backlog.getIssues();
             result = features;
 
-            ranking.createRanking(withNotNull());
-            result = 0f;
+            ranking.getRanking(anyInt);
+            result = Arrays.asList(1f);
 
             validationConfig.getFeature().isActive();
             result = true;
@@ -85,12 +86,13 @@ public class BacklogScorerTest {
             backlog.getIssues();
             result = features;
 
-            ranking.createRanking(withNotNull());
-            result = 0.4f;
+            ranking.getRanking(anyInt);
+            result = Arrays.asList(1f);
             maxTimes = 2;
 
             validationConfig.getBacklog().getRatingThreshold();
             result = 50f;
+
             validationConfig.getFeature().isActive();
             result = true;
         }};
@@ -107,8 +109,8 @@ public class BacklogScorerTest {
             backlog.getIssues();
             result = bugs;
 
-            ranking.createRanking(withNotNull());
-            result = 0.4f;
+            ranking.getRanking(anyInt);
+            result = Arrays.asList(1f);
             maxTimes = 2;
 
             validationConfig.getBacklog().getRatingThreshold();
@@ -130,8 +132,8 @@ public class BacklogScorerTest {
             backlog.getIssues();
             result = epics;
 
-            ranking.createRanking(withNotNull());
-            result = 0.4f;
+            ranking.getRanking(anyInt);
+            result = Arrays.asList(1f);
             maxTimes = 2;
 
             validationConfig.getBacklog().getRatingThreshold();

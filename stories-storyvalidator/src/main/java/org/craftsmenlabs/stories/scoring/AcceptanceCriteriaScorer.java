@@ -17,13 +17,13 @@ import java.util.List;
 public class AcceptanceCriteriaScorer {
 
     public static final int MINIMUM_LENGTH_OF_ACC_CRITERIA = 20;
-    private static final float LENGTH_POINTS = 0.25f;
-    private static final float GIVEN_POINTS = 0.25f;
-    private static final float WHEN_POINTS = 0.25f;
-    private static final float THEN_POINTS = 0.25f;
-    private static final float TOTAL_POINTS = GIVEN_POINTS + WHEN_POINTS + THEN_POINTS + LENGTH_POINTS;
 
-    public static ValidatedAcceptanceCriteria performScorer(String criteria, ValidationConfig validationConfig) {
+    public static ValidatedAcceptanceCriteria performScorer(String criteria, float potentialPoints, ValidationConfig validationConfig) {
+
+        float LENGTH_POINTS = potentialPoints / 4f;
+        float GIVEN_POINTS = potentialPoints / 4f;
+        float WHEN_POINTS = potentialPoints / 4f;
+        float THEN_POINTS = potentialPoints / 4f;
 
         List<Violation> violations = new ArrayList<>();
         float points = 0f;
@@ -32,7 +32,7 @@ public class AcceptanceCriteriaScorer {
             criteria = "";
             violations.add(new Violation(ViolationType.CriteriaVoidViolation,
                     "No acceptance criteria were found.",
-                    1f));
+                    potentialPoints));
         }
 
         final String criteriaLower = criteria.toLowerCase();
@@ -79,7 +79,6 @@ public class AcceptanceCriteriaScorer {
 
         }
 
-        points = points / TOTAL_POINTS;
         Rating rating = points >= validationConfig.getCriteria().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL;
 
         return ValidatedAcceptanceCriteria

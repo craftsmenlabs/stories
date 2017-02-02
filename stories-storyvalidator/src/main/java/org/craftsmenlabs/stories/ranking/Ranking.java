@@ -6,4 +6,8 @@ import java.util.List;
 
 public interface Ranking {
     float createRanking(List<ValidatedBacklogItem> entries);
+
+    List<Float> getRanking();
+
+    List<Float> getRanking(int size);
 }

@@ -31,7 +31,6 @@ public class FillableFieldScorer extends AbstractScorer<BacklogItem, ValidatedBa
         super(validationConfig);
     }
 
-
     @Override
     public ValidatedBacklogItem validate(BacklogItem scrumItem) {
         ValidatedBacklogItem entry = validatorEntryBuilder(scrumItem);
@@ -43,20 +42,21 @@ public class FillableFieldScorer extends AbstractScorer<BacklogItem, ValidatedBa
             entry.getViolations().add(new Violation(
                     ViolationType.NoFillableFieldsViolation,
                     "There were no fillable fields defined!",
-                    0f,
-                    1f
+                    1f,
+                    scrumItem.getPotentialPoints()
             ));
             return entry;
         }
 
-        float pointsPerField = 1f / enabledFields.size();
+        float percentagePerField = 1f / enabledFields.size();
 
         final List<Violation> violations = enabledFields.stream()
                 .filter(field -> StringUtils.isBlank(fields.get(field)))
                 .map(field -> new Violation(
                         ViolationType.FieldEmptyViolation,
                         "Field " + field + " was found to be empty while it should be filled.",
-                        pointsPerField)
+                        percentagePerField,
+                        scrumItem.getPotentialPoints())
                 ).collect(Collectors.toList());
 
         entry.setViolations(violations);

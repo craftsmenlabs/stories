@@ -10,6 +10,15 @@ import java.util.stream.IntStream;
 
 public class CurvedRanking implements Ranking {
     public static final int SMOOTH_CURVE = 2;
+    List<ValidatedBacklogItem> entries;
+
+    public CurvedRanking(){
+
+    }
+
+    public CurvedRanking(List<ValidatedBacklogItem> entries) {
+        this.entries = entries;
+    }
 
     @Override
     public float createRanking(List<ValidatedBacklogItem> entries) {
@@ -21,16 +30,14 @@ public class CurvedRanking implements Ranking {
                 .sorted(Comparator.comparing(Rankable::getRank))
                 .collect(Collectors.toList());
 
-
-
         float scoredPoints = 0f;
-        final float entriesSize = entries.size();
-        float couldHaveScored = (float) IntStream.range(0, entries.size()).mapToDouble(i -> curvedQuotient(i, entriesSize)).sum();
+
+        float couldHaveScored = (float) IntStream.range(0, entries.size()).mapToDouble(this::curvedQuotient).sum();
 
         for (int i = 0; i < entries.size(); i++) {
             ValidatedBacklogItem entry = entries.get(i);
 
-            float curvedQuotient = curvedQuotient(i, entries.size());
+            float curvedQuotient = curvedQuotient(i);
             final float scoredPercentage = entry.getPointsValuation() * curvedQuotient;
             final float missedPercentage = curvedQuotient - (entry.getPointsValuation() * curvedQuotient);
             scoredPoints += scoredPercentage;
@@ -43,8 +50,25 @@ public class CurvedRanking implements Ranking {
         return  scoredPoints / couldHaveScored;
     }
 
-    public float curvedQuotient(float position, float amountOfItems) {
-        float part = position / amountOfItems;
-        return 1 - (float) (Math.pow(part, SMOOTH_CURVE));
+    @Override
+    public List<Float> getRanking(int size) {
+        return IntStream.range(0, size)
+                .mapToObj(this::curvedQuotient)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Float> getRanking() {
+        return getRanking(entries.size());
+    }
+
+
+    public float curvedQuotient(int position) {
+        return curvedQuotient(position, entries.size());
+    }
+
+    public float curvedQuotient(int position, int size) {
+        float part = position / size;
+        return 1f - (float)(Math.pow(part, SMOOTH_CURVE));
     }
 }

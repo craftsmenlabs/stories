@@ -12,6 +12,7 @@ import org.craftsmenlabs.stories.api.models.violation.Violation;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Assigns scoredPercentage to a feature, based on all
@@ -38,16 +39,16 @@ public class FeatureScorer extends AbstractScorer<Feature, ValidatedFeature> {
             feature.setEstimation(null);
         }
 
-        ValidatedUserStory validatedUserStory = StoryScorer.performScorer(feature.getUserstory(), validationConfig);
-        ValidatedAcceptanceCriteria validatedAcceptanceCriteria = AcceptanceCriteriaScorer.performScorer(feature.getAcceptanceCriteria(), validationConfig);
-        ValidatedEstimation validatedEstimation = EstimationScorer.performScorer(feature.getEstimation(), validationConfig);
+        final float potentialPointsPerSubItem = feature.getPotentialPoints() / Stream.of(validationConfig.getStory().isActive(), validationConfig.getCriteria().isActive(), validationConfig.getEstimation().isActive()).filter(item -> item).count();
 
+        ValidatedUserStory validatedUserStory = StoryScorer.performScorer(feature.getUserstory(), potentialPointsPerSubItem, validationConfig);
+        ValidatedAcceptanceCriteria validatedAcceptanceCriteria = AcceptanceCriteriaScorer.performScorer(feature.getAcceptanceCriteria(), potentialPointsPerSubItem, validationConfig);
+        ValidatedEstimation validatedEstimation = EstimationScorer.performScorer(feature.getEstimation(), potentialPointsPerSubItem, validationConfig);
 
         List<Map.Entry<Boolean, AbstractValidatedItem>> entryList = new ArrayList<>();
         entryList.add(new AbstractMap.SimpleEntry<>(validationConfig.getStory().isActive(), validatedUserStory));
         entryList.add(new AbstractMap.SimpleEntry<>(validationConfig.getCriteria().isActive(), validatedAcceptanceCriteria));
         entryList.add(new AbstractMap.SimpleEntry<>(validationConfig.getEstimation().isActive(), validatedEstimation));
-
 
         float points = (float)
                 entryList.stream()
@@ -59,8 +60,7 @@ public class FeatureScorer extends AbstractScorer<Feature, ValidatedFeature> {
         List<Violation> violations = entryList.stream()
                 .filter(entry -> entry.getKey() && entry.getValue().getViolations() != null)
                 .map(entry -> entry.getValue().getViolations())
-                .flatMap(Collection::stream)
-                .map(v -> (Violation) v)
+                .flatMap(Collection<Violation>::stream)
                 .collect(Collectors.toList());
 
         Rating rating = points >= validationConfig.getFeature().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL;

@@ -81,7 +81,7 @@ public class FeatureScorerTest {
         new MockUp<StoryScorer>()
         {
             @Mock
-            ValidatedUserStory performScorer(String input, ValidationConfig validationConfig1)
+            ValidatedUserStory performScorer(String input, float potentialPoints, ValidationConfig validationConfig1)
             {
                 return ValidatedUserStory.builder().pointsValuation(1f).item("").build();
             }

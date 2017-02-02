@@ -15,4 +15,5 @@ public abstract class BacklogItem implements Rankable, Scorable {
     private String externalURI;
     private LocalDateTime updatedAt;
     private LocalDateTime createdAt;
+    private float potentialPoints;
 }

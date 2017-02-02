@@ -13,7 +13,7 @@ import java.util.List;
  * Assigns scoredPercentage if a estimation is ok
  */
 public class EstimationScorer {
-    public static ValidatedEstimation performScorer(Float estimation, ValidationConfig validationConfig) {
+    public static ValidatedEstimation performScorer(Float estimation, float potentialPoints, ValidationConfig validationConfig) {
         List<Violation> violations = new ArrayList<>();
 
         float points;
@@ -22,7 +22,7 @@ public class EstimationScorer {
             violations.add(new Violation(
                     ViolationType.EstimationEmptyViolation,
                     "Estimation is empty or zero",
-                    1f));
+                    potentialPoints));
         } else {
             points = 1f;
         }

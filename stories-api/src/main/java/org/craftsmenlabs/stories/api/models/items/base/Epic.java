@@ -17,8 +17,8 @@ public class Epic extends BacklogItem {
     private String goal;
 
     @Builder
-    public Epic(String summary, String goal, String key, String rank, String externalURI, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        super(key, rank, externalURI, updatedAt, createdAt);
+    public Epic(String summary, String goal, String key, String rank, String externalURI, LocalDateTime createdAt, LocalDateTime updatedAt, float potentialPoints) {
+        super(key, rank, externalURI, updatedAt, createdAt, potentialPoints);
         this.summary = summary;
         this.goal = goal;
     }

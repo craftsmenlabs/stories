@@ -1,9 +1,11 @@
 package org.craftsmenlabs.stories.scoring;
 
+import com.codepoetics.protonpack.StreamUtils;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.items.base.*;
 import org.craftsmenlabs.stories.api.models.items.types.BacklogItem;
+import org.craftsmenlabs.stories.api.models.items.types.Rankable;
 import org.craftsmenlabs.stories.api.models.items.types.Scorable;
 import org.craftsmenlabs.stories.api.models.items.validated.ValidatedBacklog;
 import org.craftsmenlabs.stories.api.models.items.validated.ValidatedBacklogItem;
@@ -11,10 +13,7 @@ import org.craftsmenlabs.stories.api.models.violation.Violation;
 import org.craftsmenlabs.stories.api.models.violation.ViolationType;
 import org.craftsmenlabs.stories.ranking.Ranking;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class BacklogScorer extends AbstractScorer<Backlog, ValidatedBacklog> {
@@ -52,14 +51,35 @@ public class BacklogScorer extends AbstractScorer<Backlog, ValidatedBacklog> {
             return validatedBacklog;
         }
 
-        List<ValidatedBacklogItem> validatedItems = backlog.getIssues().entrySet().stream()
-                .map(Map.Entry::getValue)
-                .filter(this::isIssueActive)
+        //filter the backlog items on active and sort them
+        final List<? extends BacklogItem> activeSortedIssues =
+                backlog.getIssues().entrySet().stream()
+                        .map(Map.Entry::getValue)
+                        .filter(this::isIssueActive)
+                        .sorted(Comparator.comparing(Rankable::getRank))
+                        .collect(Collectors.toList());
+
+        //add the potential score (from for example the curved ranking) to the backlogItem
+        final List<? extends BacklogItem> backlogItems = StreamUtils.zip(
+                activeSortedIssues.stream(),
+                ranking.getRanking(activeSortedIssues.size()).stream(),
+                (item, potentialScore) -> {
+                    item.setPotentialPoints(potentialScore);
+                    return item;
+                })
+                .collect(Collectors.toList());
+
+        //validate the items
+        final List<ValidatedBacklogItem> validatedItems = backlogItems.stream()
                 .map(item -> scorers.get(item.getClass()).validate(item))
                 .map(item -> (ValidatedBacklogItem) item)
                 .collect(Collectors.toList());
 
-        float backlogPoints = ranking.createRanking(validatedItems);
+        //calculate the scored backlog points
+        final float backlogPoints = (float) validatedItems.stream().mapToDouble(item -> item.getScoredPoints()).sum();
+
+
+        //set all the values in the validated backlog
         validatedBacklog.setPointsValuation(backlogPoints);
         validatedBacklog.setItems(validatedItems);
 
