@@ -21,8 +21,8 @@ public class ValidatedBacklog extends AbstractValidatedItem<Backlog> {
     private List<? extends ValidatedBacklogItem> items = new ArrayList<>();
 
     @Builder
-    public ValidatedBacklog(float pointsValuation, List<Violation> violations, Rating rating, Backlog backlog, List<? extends ValidatedBacklogItem> items) {
-        super(pointsValuation, violations, rating, backlog);
+    public ValidatedBacklog(List<Violation> violations, Rating rating, Backlog backlog, List<? extends ValidatedBacklogItem> items, float scoredPercentage, float missedPercentage, float scoredPoints, float missedPoints) {
+        super(violations, rating, backlog, scoredPercentage, missedPercentage, scoredPoints, missedPoints);
         this.items = items;
     }
 
@@ -52,6 +52,5 @@ public class ValidatedBacklog extends AbstractValidatedItem<Backlog> {
                 .filter(cl::isInstance)
                 .map(cl::cast)
                 .collect(Collectors.toList());
-
     }
 }

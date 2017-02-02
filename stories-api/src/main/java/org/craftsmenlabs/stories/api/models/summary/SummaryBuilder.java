@@ -28,7 +28,7 @@ public class SummaryBuilder {
 
         return Summary.builder()
                 .backlog(ScorableSummary.builder()
-                        .pointsValuation(entry.getPointsValuation())
+                        .pointsValuation(entry.getScoredPoints())
                         .rating(entry.getRating())
                         .build())
                 .issues(getCount(allEntries))

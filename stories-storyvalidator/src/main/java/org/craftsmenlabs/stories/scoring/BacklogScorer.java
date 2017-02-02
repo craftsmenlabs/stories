@@ -24,12 +24,20 @@ public class BacklogScorer extends AbstractScorer<Backlog, ValidatedBacklog> {
         super(validationConfig);
         this.ranking = ranking;
 
+        this.setDefaultScorers();
+    }
+
+    public void setScorers(Map<Class<? extends Scorable>, AbstractScorer> scorers) {
+        this.scorers = scorers;
+    }
+
+    public void setDefaultScorers() {
         scorers.put(Bug.class, new FillableFieldScorer(validationConfig));
         scorers.put(Epic.class, new FillableFieldScorer(validationConfig));
         scorers.put(TeamTask.class, new TeamTaskScorer(validationConfig));
         scorers.put(Feature.class, new FeatureScorer(validationConfig));
-    }
 
+    }
 
     @Override
     public ValidatedBacklog validate(Backlog backlog) {
@@ -46,7 +54,7 @@ public class BacklogScorer extends AbstractScorer<Backlog, ValidatedBacklog> {
                     "The backlog is empty, or doesn't contain any issues.", 1f
             ));
 
-            validatedBacklog.setPointsValuation(0f);
+            validatedBacklog.setScoredPoints(0f);
             validatedBacklog.setRating(Rating.FAIL);
             return validatedBacklog;
         }
@@ -62,7 +70,7 @@ public class BacklogScorer extends AbstractScorer<Backlog, ValidatedBacklog> {
         //add the potential score (from for example the curved ranking) to the backlogItem
         final List<? extends BacklogItem> backlogItems = StreamUtils.zip(
                 activeSortedIssues.stream(),
-                ranking.getRanking(activeSortedIssues.size()).stream(),
+                ranking.getRanking(activeSortedIssues).stream(),
                 (item, potentialScore) -> {
                     item.setPotentialPoints(potentialScore);
                     return item;
@@ -76,14 +84,17 @@ public class BacklogScorer extends AbstractScorer<Backlog, ValidatedBacklog> {
                 .collect(Collectors.toList());
 
         //calculate the scored backlog points
-        final float backlogPoints = (float) validatedItems.stream().mapToDouble(item -> item.getScoredPoints()).sum();
-
+        final float backlogPoints = (float) validatedItems.stream().mapToDouble(item ->{
+                    item.getScoredPoints();
+                    return item.getScoredPoints();
+                }
+            ).sum();
 
         //set all the values in the validated backlog
-        validatedBacklog.setPointsValuation(backlogPoints);
+        validatedBacklog.setScoredPoints(backlogPoints);
         validatedBacklog.setItems(validatedItems);
 
-        if (validatedBacklog.getPointsValuation() * 100f >= validationConfig.getBacklog().getRatingThreshold()) {
+        if (validatedBacklog.getScoredPoints() * 100f >= validationConfig.getBacklog().getRatingThreshold()) {
             validatedBacklog.setRating(Rating.SUCCESS);
         } else {
             // Failed, add violation

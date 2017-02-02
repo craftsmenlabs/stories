@@ -108,7 +108,7 @@ public class ConsoleReporter implements Reporter {
 
         log("\r\n");
         log("Those three combined result in a score of "
-                + doubleDecimalFormat.format(validatedBacklog.getPointsValuation() * 100f)
+                + doubleDecimalFormat.format(validatedBacklog.getScoredPoints() * 100f)
                 + " / "
                 + MAX_SCORE);
         log("Rated: " + validatedBacklog.getRating() + "  (with threshold on: " + validationConfig.getBacklog()
@@ -122,17 +122,17 @@ public class ConsoleReporter implements Reporter {
         log("Issue "
                 + issue.getItem().getKey()
                 + " Item total ("
-                + decimalFormat.format(issue.getPointsValuation() * 100)
+                + decimalFormat.format(issue.getScoredPoints() * 100)
                 + "/"
                 + MAX_SCORE
                 + ") \t"
                 + " US ("
-                + decimalFormat.format(issue.getValidatedUserStory().getPointsValuation() * 100)
+                + decimalFormat.format(issue.getValidatedUserStory().getScoredPoints() * 100)
                 + "/"
                 + MAX_SCORE
                 + ")\t"
                 + " AC ("
-                + decimalFormat.format(issue.getValidatedAcceptanceCriteria().getPointsValuation() * 100)
+                + decimalFormat.format(issue.getValidatedAcceptanceCriteria().getScoredPoints() * 100)
                 + "/"
                 + MAX_SCORE
                 + ")\t"
@@ -153,7 +153,7 @@ public class ConsoleReporter implements Reporter {
         log("Bug "
                 + bug.getItem().getKey()
                 + " Item total ("
-                + decimalFormat.format(bug.getPointsValuation() * 100)
+                + decimalFormat.format(bug.getScoredPoints() * 100)
                 + "/"
                 + MAX_SCORE
                 + ") \t"
@@ -168,7 +168,7 @@ public class ConsoleReporter implements Reporter {
         log("Epic "
                 + epic.getItem().getKey()
                 + " Item total ("
-                + decimalFormat.format(epic.getPointsValuation() * 100)
+                + decimalFormat.format(epic.getScoredPoints() * 100)
                 + "/"
                 + MAX_SCORE
                 + ") \t"
@@ -183,7 +183,7 @@ public class ConsoleReporter implements Reporter {
         log("teamTask "
                 + teamTask.getItem().getKey()
                 + " Item total ("
-                + decimalFormat.format(teamTask.getPointsValuation() * 100)
+                + decimalFormat.format(teamTask.getScoredPoints() * 100)
                 + "/"
                 + MAX_SCORE
                 + ") \t"
@@ -200,7 +200,7 @@ public class ConsoleReporter implements Reporter {
 
 
         String userstory = entry.getItem().replace("\n", " ").replace("\r", "");
-        log("\t Userstory: (" + entry.getPointsValuation() + ") " + userstory);
+        log("\t Userstory: (" + entry.getScoredPoints() + ") " + userstory);
 
         reportOnViolations(entry.getViolations());
     }
@@ -209,7 +209,7 @@ public class ConsoleReporter implements Reporter {
         prefix = entry.getRating() == Rating.SUCCESS ? ANSI_GREEN : ANSI_RED;
 
         String criteria = entry.getItem().replace("\n", " ").replace("\r", "");
-        log("\t Criteria: (" + entry.getPointsValuation() + ") " + criteria);
+        log("\t Criteria: (" + entry.getScoredPoints() + ") " + criteria);
 
         reportOnViolations(entry.getViolations());
     }
@@ -218,7 +218,7 @@ public class ConsoleReporter implements Reporter {
         prefix = entry.getRating() == Rating.SUCCESS ? ANSI_GREEN : ANSI_RED;
 
         Float estimation = entry.getItem();
-        log("\t Estimation: (" + entry.getPointsValuation() + ")" + estimation);
+        log("\t Estimation: (" + entry.getScoredPoints() + ")" + estimation);
 
         reportOnViolations(entry.getViolations());
     }

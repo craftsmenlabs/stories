@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ValidatedAcceptanceCriteria extends AbstractValidatedItem<String> {
     @Builder
-    public ValidatedAcceptanceCriteria(float pointsValuation, List<Violation> violations, Rating rating, String item) {
-        super(pointsValuation, violations, rating, item);
+    public ValidatedAcceptanceCriteria(List<Violation> violations, Rating rating, String item, float scoredPercentage, float missedPercentage, float scoredPoints, float missedPoints) {
+        super(violations, rating, item, scoredPercentage, missedPercentage, scoredPoints, missedPoints);
     }
 }

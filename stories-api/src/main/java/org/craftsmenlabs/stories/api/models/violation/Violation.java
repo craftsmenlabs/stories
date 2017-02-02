@@ -23,24 +23,22 @@ public class Violation
 	public Violation(ViolationType violationType, String cause, float missedPercentage, float potentialPoints) {
 		this.violationType = violationType;
 		this.cause = cause;
-		this.scoredPercentage = 0;
-		this.missedPercentage = missedPercentage;
-
-		this.scoredPercentage = 1f - missedPercentage;
-		this.missedPercentage = missedPercentage;
-		this.scoredPoints = scoredPercentage * potentialPoints;
-		this.missedPoints = missedPercentage * potentialPoints;
+		setPoints(missedPercentage, potentialPoints);
 	}
 
 	//shortcut in case of missed all the points
 	public Violation(ViolationType violationType, String cause, float potentialPoints) {
 		this.violationType = violationType;
 		this.cause = cause;
-		this.scoredPercentage = 0f;
-		this.missedPercentage = 1f;
+		setPoints(1f, potentialPoints);
+	}
 
-		this.scoredPercentage = 0f;
-		this.missedPercentage = 1f;
+	public void setPoints(float missedPercentage, float potentialPoints) {
+		this.scoredPercentage = 0;
+		this.missedPercentage = missedPercentage;
+
+		this.scoredPercentage = 1f - missedPercentage;
+		this.missedPercentage = missedPercentage;
 		this.scoredPoints = scoredPercentage * potentialPoints;
 		this.missedPoints = missedPercentage * potentialPoints;
 	}

@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ValidatedUserStory extends AbstractValidatedItem<String> {
     @Builder
-    public ValidatedUserStory(float pointsValuation, List<Violation> violations, Rating rating, String item) {
-        super(pointsValuation, violations, rating, item);
+    public ValidatedUserStory(List<Violation> violations, Rating rating, String item, float scoredPercentage, float missedPercentage, float scoredPoints, float missedPoints) {
+        super(violations, rating, item, scoredPercentage, missedPercentage, scoredPoints, missedPoints);
     }
 }

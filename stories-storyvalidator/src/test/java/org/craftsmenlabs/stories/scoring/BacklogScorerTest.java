@@ -9,23 +9,27 @@ import org.craftsmenlabs.stories.api.models.items.base.Backlog;
 import org.craftsmenlabs.stories.api.models.items.base.Bug;
 import org.craftsmenlabs.stories.api.models.items.base.Epic;
 import org.craftsmenlabs.stories.api.models.items.base.Feature;
+import org.craftsmenlabs.stories.api.models.items.types.Scorable;
 import org.craftsmenlabs.stories.api.models.items.validated.ValidatedBacklog;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedFeature;
 import org.craftsmenlabs.stories.ranking.Ranking;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Map;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SuppressWarnings("Duplicates")
+@SuppressWarnings({"Duplicates", "ResultOfMethodCallIgnored"})
 public class BacklogScorerTest {
     @Mocked
     private Backlog backlog;
 
     @Mocked
     private ValidationConfig validationConfig;
+
+    @Mocked
+    private Map<Class<? extends Scorable>, AbstractScorer> scorers;
+
 
     @Injectable
     private Ranking ranking;
@@ -36,13 +40,19 @@ public class BacklogScorerTest {
 
     @Test
     public void testPerformScorerReturnsSuccesOnScoreExactlyOnThreshold() throws Exception {
-        Map<String, Feature> features = Collections.singletonMap("1", new Feature());
+
+        Feature feature = new Feature();
+        Map<String, Feature> features = Collections.singletonMap("1", feature);
+        final ValidatedFeature validatedFeature = ValidatedFeature.builder().scoredPoints(1f).build();
+        final BacklogScorer backlogScorer = getScorer(validationConfig, ranking);
+
+        backlogScorer.setScorers(scorers);
 
         new Expectations() {{
             backlog.getIssues();
             result = features;
 
-            ranking.getRanking(anyInt);
+            ranking.getRanking(new ArrayList<>(features.values()));
             result = Arrays.asList(1f);
 
             validationConfig.getFeature().isActive();
@@ -50,9 +60,13 @@ public class BacklogScorerTest {
 
             validationConfig.getBacklog().getRatingThreshold();
             result = 0f;
+
+            scorers.get(Feature.class).validate(feature);
+            result = validatedFeature;
         }};
 
-        ValidatedBacklog result = getScorer(validationConfig, ranking).validate(backlog);
+
+        ValidatedBacklog result = backlogScorer.validate(backlog);
         assertThat(result.getRating()).isEqualTo(Rating.SUCCESS);
     }
 
@@ -64,7 +78,7 @@ public class BacklogScorerTest {
             backlog.getIssues();
             result = features;
 
-            ranking.getRanking(anyInt);
+            ranking.getRanking(new ArrayList<>(features.values()));
             result = Arrays.asList(1f);
 
             validationConfig.getFeature().isActive();
@@ -76,6 +90,7 @@ public class BacklogScorerTest {
 
         ValidatedBacklog result = getScorer(validationConfig, ranking).validate(backlog);
         assertThat(result.getRating()).isEqualTo(Rating.FAIL);
+        assertThat(result.getScoredPoints()).isEqualTo(0f);
     }
 
     @Test
@@ -86,7 +101,7 @@ public class BacklogScorerTest {
             backlog.getIssues();
             result = features;
 
-            ranking.getRanking(anyInt);
+            ranking.getRanking(new ArrayList<>(features.values()));
             result = Arrays.asList(1f);
             maxTimes = 2;
 
@@ -109,7 +124,7 @@ public class BacklogScorerTest {
             backlog.getIssues();
             result = bugs;
 
-            ranking.getRanking(anyInt);
+            ranking.getRanking(new ArrayList<>(bugs.values()));
             result = Arrays.asList(1f);
             maxTimes = 2;
 
@@ -132,7 +147,7 @@ public class BacklogScorerTest {
             backlog.getIssues();
             result = epics;
 
-            ranking.getRanking(anyInt);
+            ranking.getRanking(new ArrayList<>(epics.values()));
             result = Arrays.asList(1f);
             maxTimes = 2;
 
@@ -151,7 +166,7 @@ public class BacklogScorerTest {
     public void testPerformScorerFailOnEmptyBacklog(@Injectable Ranking ranking) {
         ValidatedBacklog result = getScorer(validationConfig, ranking).validate(null);
 
-        assertThat(result.getPointsValuation()).isEqualTo(0f);
+        assertThat(result.getScoredPoints()).isEqualTo(0f);
         assertThat(result.getRating()).isEqualTo(Rating.FAIL);
 
     }

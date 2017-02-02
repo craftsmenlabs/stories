@@ -24,8 +24,8 @@ public class ValidatedTeamTask extends ValidatedBacklogItem<TeamTask> {
     private ValidatedEstimation validatedEstimation;
 
     @Builder
-    public ValidatedTeamTask(float pointsValuation, List<Violation> violations, Rating rating, TeamTask teamTask, ValidatedAcceptanceCriteria validatedAcceptanceCriteria, ValidatedEstimation validatedEstimation) {
-        super(pointsValuation, violations, rating, teamTask);
+    public ValidatedTeamTask(List<Violation> violations, Rating rating, TeamTask teamTask, ValidatedAcceptanceCriteria validatedAcceptanceCriteria, ValidatedEstimation validatedEstimation, float scoredPercentage, float missedPercentage, float scoredPoints, float missedPoints) {
+        super(violations, rating, teamTask, scoredPercentage, missedPercentage, scoredPoints, missedPoints);
         this.validatedAcceptanceCriteria = validatedAcceptanceCriteria;
         this.validatedEstimation = validatedEstimation;
     }

@@ -13,6 +13,7 @@ import java.util.Arrays;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.withinPercentage;
 
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class StoryScorerTest {
 
     @Test
@@ -25,7 +26,7 @@ public class StoryScorerTest {
             result = 0.7f;
         }};
 
-        float score = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig).getPointsValuation();
+        float score = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig).getScoredPoints();
         assertThat(score).isEqualTo(0.0f);
     }
 
@@ -39,7 +40,7 @@ public class StoryScorerTest {
             result = 0.7f;
         }};
 
-        float score = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig).getPointsValuation();
+        float score = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig).getScoredPoints();
         assertThat(score).isEqualTo(0.0f);
     }
 
@@ -64,7 +65,7 @@ public class StoryScorerTest {
         }};
 
         ValidatedUserStory entry1 = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig);
-        assertThat(entry1.getPointsValuation()).isCloseTo(1.0f, withinPercentage(0.1));
+        assertThat(entry1.getScoredPoints()).isCloseTo(1.0f, withinPercentage(0.1));
         assertThat(entry1.getRating()).isEqualTo(Rating.SUCCESS);
     }
 
@@ -89,7 +90,7 @@ public class StoryScorerTest {
             result = 0.7f;
         }};
 
-        float score = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig).getPointsValuation();
+        float score = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig).getScoredPoints();
         assertThat(score).isCloseTo(0.75f, withinPercentage(0.1));
     }
 
@@ -113,7 +114,7 @@ public class StoryScorerTest {
             result = 0.7f;
         }};
 
-        float score = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig).getPointsValuation();
+        float score = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig).getScoredPoints();
         assertThat(score).isCloseTo(0.75f, withinPercentage(0.1));
     }
 
@@ -137,7 +138,7 @@ public class StoryScorerTest {
             result = 0.7f;
         }};
 
-        float score = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig).getPointsValuation();
+        float score = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig).getScoredPoints();
         assertThat(score).isCloseTo(0.75f, withinPercentage(0.1));
     }
 
@@ -160,7 +161,7 @@ public class StoryScorerTest {
             result = 0.7f;
         }};
 
-        float score = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig).getPointsValuation();
+        float score = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig).getScoredPoints();
         assertThat(score).isCloseTo(0.75f, withinPercentage(0.1));
     }
 
@@ -183,7 +184,7 @@ public class StoryScorerTest {
             result = 0.7f;
         }};
 
-        float score = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig).getPointsValuation();
+        float score = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig).getScoredPoints();
         assertThat(score).isCloseTo(0.75f, withinPercentage(0.1));
     }
 

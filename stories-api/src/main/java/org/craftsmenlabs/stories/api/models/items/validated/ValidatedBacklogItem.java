@@ -20,52 +20,16 @@ import java.util.List;
 })
 //http://www.davismol.net/2015/03/05/jackson-json-deserialize-a-list-of-objects-of-subclasses-of-an-abstract-class/
 public abstract class ValidatedBacklogItem<T extends Rankable> extends AbstractValidatedItem<T> implements Rankable {
-    private float scoredPercentage;
-    private float missedPercentage;
-    private float scoredPoints;
-    private float missedPoints;
 
     public ValidatedBacklogItem() {
     }
 
-    public ValidatedBacklogItem(float pointsValuation, List<Violation> violations, Rating rating, T item) {
-        super(pointsValuation, violations, rating, item);
+    public ValidatedBacklogItem(List<Violation> violations, Rating rating, T item, float scoredPercentage, float missedPercentage, float scoredPoints, float missedPoints) {
+        super(violations, rating, item, scoredPercentage, missedPercentage, scoredPoints, missedPoints);
     }
 
     @Override
     public String getRank() {
         return this.getItem().getRank();
-    }
-
-    public float getScoredPercentage() {
-        return scoredPercentage;
-    }
-
-    public void setScoredPercentage(float scoredPercentage) {
-        this.scoredPercentage = scoredPercentage;
-    }
-
-    public float getMissedPercentage() {
-        return missedPercentage;
-    }
-
-    public void setMissedPercentage(float missedPercentage) {
-        this.missedPercentage = missedPercentage;
-    }
-
-    public float getScoredPoints() {
-        return scoredPoints;
-    }
-
-    public void setScoredPoints(float scoredPoints) {
-        this.scoredPoints = scoredPoints;
-    }
-
-    public float getMissedPoints() {
-        return missedPoints;
-    }
-
-    public void setMissedPoints(float missedPoints) {
-        this.missedPoints = missedPoints;
     }
 }

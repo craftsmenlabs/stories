@@ -53,7 +53,7 @@ public class FeatureScorer extends AbstractScorer<Feature, ValidatedFeature> {
         float points = (float)
                 entryList.stream()
                         .filter(Map.Entry::getKey)
-                        .mapToDouble(item -> item.getValue().getPointsValuation())
+                        .mapToDouble(item -> item.getValue().getScoredPoints())
                         .average()
                         .orElse(0.0);
 
@@ -69,11 +69,14 @@ public class FeatureScorer extends AbstractScorer<Feature, ValidatedFeature> {
                 .builder()
                 .feature(feature)
                 .violations(violations)
-                .pointsValuation(points)
                 .rating(rating)
                 .validatedUserStory(validatedUserStory)
                 .validatedAcceptanceCriteria(validatedAcceptanceCriteria)
                 .validatedEstimation(validatedEstimation)
+                .scoredPoints(points)
+                .missedPoints(feature.getPotentialPoints() - points)
+                .scoredPercentage(points / feature.getPotentialPoints())
+                .missedPercentage(1f - (points / feature.getPotentialPoints()))
                 .build();
     }
 }

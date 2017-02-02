@@ -11,7 +11,9 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TeamTaskScorerTest {
+@SuppressWarnings("ResultOfMethodCallIgnored")
+public class
+TeamTaskScorerTest {
     private TeamTaskScorer getScorer(ValidationConfig validationConfig) {
         return new TeamTaskScorer(validationConfig);
     }
@@ -26,7 +28,7 @@ public class TeamTaskScorerTest {
             result = 0.7f;
         }};
 
-        float score = getScorer(validationConfig).validate(entry.getItem()).getPointsValuation();
+        float score = getScorer(validationConfig).validate(entry.getItem()).getScoredPoints();
         assertThat(score).isEqualTo(0.0f);
     }
 
@@ -41,7 +43,7 @@ public class TeamTaskScorerTest {
             result = 0.7f;
         }};
 
-        float score = getScorer(validationConfig).validate(entry.getItem()).getPointsValuation();
+        float score = getScorer(validationConfig).validate(entry.getItem()).getScoredPoints();
         assertThat(score).isEqualTo(0.0f);
     }
 
@@ -61,8 +63,7 @@ public class TeamTaskScorerTest {
             result = 0.7f;
         }};
 
-        float score = getScorer(validationConfig).validate(entry.getItem()).getPointsValuation();
+        float score = getScorer(validationConfig).validate(entry.getItem()).getScoredPoints();
         assertThat(score).isEqualTo(1.0f);
     }
-
 }

@@ -17,6 +17,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.withinPercentage;
 
+@SuppressWarnings({"ResultOfMethodCallIgnored"})
 public class AcceptanceCriteriaScorerTest {
 
     private String goodCriteria =
@@ -25,7 +26,6 @@ public class AcceptanceCriteriaScorerTest {
                     "And the time is before close of trading\n" +
                     "When I ask to sell 20 shares of MSFT stock\n" +
                     "Then I should have 80 shares of MSFT stock";
-
 
     @Test
     public void testPerformScorer_ReturnsZeroOnEmpty(@Injectable ValidatedFeature entry, @Injectable ValidationConfig validationConfig) throws Exception {
@@ -39,7 +39,7 @@ public class AcceptanceCriteriaScorerTest {
 
         }};
 
-        float score = AcceptanceCriteriaScorer.performScorer(entry.getItem().getAcceptanceCriteria(), 1f, validationConfig).getPointsValuation();
+        float score = AcceptanceCriteriaScorer.performScorer(entry.getItem().getAcceptanceCriteria(), 1f, validationConfig).getScoredPoints();
         assertThat(score).isCloseTo(0.0f, withinPercentage(1));
     }
 
@@ -54,7 +54,7 @@ public class AcceptanceCriteriaScorerTest {
             result = 0.7f;
         }};
 
-        float score = AcceptanceCriteriaScorer.performScorer(entry.getItem().getAcceptanceCriteria(), 1f, validationConfig).getPointsValuation();
+        float score = AcceptanceCriteriaScorer.performScorer(entry.getItem().getAcceptanceCriteria(), 1f, validationConfig).getScoredPoints();
         assertThat(score).isCloseTo(0.0f, withinPercentage(1));
     }
 
@@ -77,7 +77,7 @@ public class AcceptanceCriteriaScorerTest {
         }};
 
         ValidatedAcceptanceCriteria entry1 = AcceptanceCriteriaScorer.performScorer(entry.getItem().getAcceptanceCriteria(), 1f, validationConfig);
-        assertThat(entry1.getPointsValuation()).isCloseTo(1.0f - 0.25f, withinPercentage(1));
+        assertThat(entry1.getScoredPoints()).isCloseTo(1.0f - 0.25f, withinPercentage(1));
         assertThat(entry1.getViolations()).contains(new Violation(
                 ViolationType.CriteriaGivenClauseViolation,
                 "<Given> section is not described properly. The criteria should contain any of the following keywords: gooooven ",
@@ -104,7 +104,7 @@ public class AcceptanceCriteriaScorerTest {
         }};
 
         ValidatedAcceptanceCriteria entry1 = AcceptanceCriteriaScorer.performScorer(entry.getItem().getAcceptanceCriteria(), 1f, validationConfig);
-        assertThat(entry1.getPointsValuation()).isCloseTo(1.0f - 0.25f, withinPercentage(1));
+        assertThat(entry1.getScoredPoints()).isCloseTo(1.0f - 0.25f, withinPercentage(1));
         assertThat(entry1.getViolations()).contains(new Violation(
                 ViolationType.CriteriaWhenClauseViolation,
                 "<When> section is not described properly. The criteria should contain any of the following keywords: whooon ",
@@ -130,7 +130,7 @@ public class AcceptanceCriteriaScorerTest {
         }};
 
         ValidatedAcceptanceCriteria entry1 = AcceptanceCriteriaScorer.performScorer(entry.getItem().getAcceptanceCriteria(), 1f, validationConfig);
-        assertThat(entry1.getPointsValuation()).isCloseTo(1.0f - 0.25f, withinPercentage(1));
+        assertThat(entry1.getScoredPoints()).isCloseTo(1.0f - 0.25f, withinPercentage(1));
         assertThat(entry1.getViolations()).contains(new Violation(
                 ViolationType.CriteriaThenClauseViolation,
                 "<Then> section is not described properly. The criteria should contain any of the following keywords: thooon ",
@@ -191,7 +191,7 @@ public class AcceptanceCriteriaScorerTest {
         }};
 
         ValidatedAcceptanceCriteria entry1 = AcceptanceCriteriaScorer.performScorer(entry.getItem().getAcceptanceCriteria(), 1f, validationConfig);
-        assertThat(entry1.getPointsValuation()).isCloseTo(1f, withinPercentage(0.0001));
+        assertThat(entry1.getScoredPoints()).isCloseTo(1f, withinPercentage(0.0001));
         assertThat(entry1.getRating()).isEqualTo(Rating.SUCCESS);
     }
 
@@ -215,7 +215,7 @@ public class AcceptanceCriteriaScorerTest {
         }};
 
         ValidatedAcceptanceCriteria entry1 = AcceptanceCriteriaScorer.performScorer(entry.getItem().getAcceptanceCriteria(), 1f, validationConfig);
-        assertThat(entry1.getPointsValuation()).isCloseTo(0.75f, withinPercentage(0.1));
+        assertThat(entry1.getScoredPoints()).isCloseTo(0.75f, withinPercentage(0.1));
     }
 
     @Test
@@ -237,7 +237,7 @@ public class AcceptanceCriteriaScorerTest {
         }};
 
         ValidatedAcceptanceCriteria entry1 = AcceptanceCriteriaScorer.performScorer(entry.getItem().getAcceptanceCriteria(), 1f, validationConfig);
-        assertThat(entry1.getPointsValuation()).isCloseTo(0.75f, withinPercentage(0.1));
+        assertThat(entry1.getScoredPoints()).isCloseTo(0.75f, withinPercentage(0.1));
     }
 
     @Test
@@ -259,7 +259,7 @@ public class AcceptanceCriteriaScorerTest {
         }};
 
         ValidatedAcceptanceCriteria entry1 = AcceptanceCriteriaScorer.performScorer(entry.getItem().getAcceptanceCriteria(), 1f, validationConfig);
-        assertThat(entry1.getPointsValuation()).isCloseTo(0.75f, withinPercentage(0.1));
+        assertThat(entry1.getScoredPoints()).isCloseTo(0.75f, withinPercentage(0.1));
     }
 
     @Test
@@ -273,7 +273,7 @@ public class AcceptanceCriteriaScorerTest {
         }};
 
         ValidatedAcceptanceCriteria entry1 = AcceptanceCriteriaScorer.performScorer(entry.getItem().getAcceptanceCriteria(), 1f, validationConfig);
-        assertThat(entry1.getPointsValuation()).isCloseTo(0.0f, withinPercentage(0.1));
+        assertThat(entry1.getScoredPoints()).isCloseTo(0.0f, withinPercentage(0.1));
     }
 
     @Test
@@ -294,7 +294,7 @@ public class AcceptanceCriteriaScorerTest {
         }};
 
         ValidatedAcceptanceCriteria entry1 = AcceptanceCriteriaScorer.performScorer(entry.getItem().getAcceptanceCriteria(), 1f, validationConfig);
-        assertThat(entry1.getPointsValuation()).isCloseTo(1f, withinPercentage(0.1));
+        assertThat(entry1.getScoredPoints()).isCloseTo(1f, withinPercentage(0.1));
     }
 
     @Test

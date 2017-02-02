@@ -38,7 +38,7 @@ public class FillableFieldScorer extends AbstractScorer<BacklogItem, ValidatedBa
         // If no fields are type, score 0 and FAIL. (otherwise we will get /0)
         if (enabledFields == null || enabledFields.size() == 0) {
             entry.setRating(Rating.FAIL);
-            entry.setPointsValuation(0f);
+            entry.setScoredPoints(0f);
             entry.getViolations().add(new Violation(
                     ViolationType.NoFillableFieldsViolation,
                     "There were no fillable fields defined!",
@@ -60,7 +60,10 @@ public class FillableFieldScorer extends AbstractScorer<BacklogItem, ValidatedBa
                 ).collect(Collectors.toList());
 
         entry.setViolations(violations);
-        entry.setPointsValuation((float) (1f - violations.stream().mapToDouble(violation -> (double) violation.getMissedPercentage()).sum()));
+        entry.setScoredPoints((float) (1f - violations.stream().mapToDouble(violation -> (double) violation.getMissedPercentage()).sum()));
+        entry.setMissedPoints(scrumItem.getPotentialPoints() - entry.getScoredPoints());
+        entry.setScoredPercentage(entry.getScoredPoints() / scrumItem.getPotentialPoints());
+        entry.setMissedPercentage(entry.getMissedPoints() / scrumItem.getPotentialPoints());
         entry.setRating(getRating(entry));
         return entry;
     }
@@ -74,7 +77,7 @@ public class FillableFieldScorer extends AbstractScorer<BacklogItem, ValidatedBa
         } else {
             ratingThreshold = 1f;
         }
-        return entry.getPointsValuation() >= ratingThreshold ? Rating.SUCCESS : Rating.FAIL;
+        return entry.getScoredPoints() >= ratingThreshold ? Rating.SUCCESS : Rating.FAIL;
 
     }
 

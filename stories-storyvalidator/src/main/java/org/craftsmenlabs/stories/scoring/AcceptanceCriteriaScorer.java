@@ -85,8 +85,11 @@ public class AcceptanceCriteriaScorer {
                 .builder()
                 .item(criteria)
                 .violations(violations)
-                .pointsValuation(points)
                 .rating(rating)
+                .scoredPoints(points)
+                .missedPoints(potentialPoints - points)
+                .scoredPercentage(points / potentialPoints)
+                .missedPercentage(1f - (points / potentialPoints))
                 .build();
     }
 }

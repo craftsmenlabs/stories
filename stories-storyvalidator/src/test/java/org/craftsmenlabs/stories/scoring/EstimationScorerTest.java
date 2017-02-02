@@ -11,6 +11,7 @@ import org.junit.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.withinPercentage;
 
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class EstimationScorerTest {
     @Test
     public void performScorerReturnsZeroOnNull(@Injectable ValidatedFeature entry, @Injectable ValidationConfig validationConfig) throws Exception {
@@ -22,7 +23,7 @@ public class EstimationScorerTest {
             result = 0.7f;
         }};
 
-        float score = EstimationScorer.performScorer(entry.getItem().getEstimation(), 1f, validationConfig).getPointsValuation();
+        float score = EstimationScorer.performScorer(entry.getItem().getEstimation(), 1f, validationConfig).getScoredPoints();
         assertThat(score).isCloseTo(0f, withinPercentage(1));
     }
 
@@ -38,7 +39,7 @@ public class EstimationScorerTest {
         }};
 
         ValidatedEstimation entry1 = EstimationScorer.performScorer(entry.getItem().getEstimation(), 1f, validationConfig);
-        assertThat(entry1.getPointsValuation()).isCloseTo(0f, withinPercentage(1));
+        assertThat(entry1.getScoredPoints()).isCloseTo(0f, withinPercentage(1));
         assertThat(entry1.getRating()).isEqualTo(Rating.FAIL);
     }
 
@@ -54,7 +55,7 @@ public class EstimationScorerTest {
         }};
 
         ValidatedEstimation entry1 = EstimationScorer.performScorer(entry.getItem().getEstimation(), 1f, validationConfig);
-        assertThat(entry1.getPointsValuation()).isCloseTo(1f, withinPercentage(1));
+        assertThat(entry1.getScoredPoints()).isCloseTo(1f, withinPercentage(1));
     }
 
     @Test

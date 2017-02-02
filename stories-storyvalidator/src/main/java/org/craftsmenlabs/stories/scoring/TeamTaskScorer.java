@@ -65,14 +65,14 @@ public class TeamTaskScorer extends AbstractScorer<TeamTask, ValidatedTeamTask> 
         if (teamTask.getAcceptationCriteria() != null && validationConfig.getCriteria().isActive()) {
             acceptanceCriteriaValidatorEntry.getViolations().forEach(violation -> violation.setScoredPercentage(pointsRatio * violation.getScoredPercentage()));
             violations.addAll(acceptanceCriteriaValidatorEntry.getViolations());
-            points += acceptanceCriteriaValidatorEntry.getPointsValuation();
+            points += acceptanceCriteriaValidatorEntry.getScoredPoints();
         }
 
         ValidatedEstimation estimationValidatorEntry = EstimationScorer.performScorer(teamTask.getEstimation(), pointsRatio, validationConfig);
         if (teamTask.getEstimation() != null && validationConfig.getEstimation().isActive()) {
             estimationValidatorEntry.getViolations().forEach(violation -> violation.setScoredPercentage(pointsRatio * violation.getScoredPercentage()));
             violations.addAll(estimationValidatorEntry.getViolations());
-            points += estimationValidatorEntry.getPointsValuation();
+            points += estimationValidatorEntry.getScoredPoints();
         }
 
         Rating rating = points >= validationConfig.getTeamTask().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL;
@@ -81,10 +81,13 @@ public class TeamTaskScorer extends AbstractScorer<TeamTask, ValidatedTeamTask> 
                 .builder()
                 .teamTask(teamTask)
                 .violations(violations)
-                .pointsValuation(points)
                 .rating(rating)
                 .validatedAcceptanceCriteria(acceptanceCriteriaValidatorEntry)
                 .validatedEstimation(estimationValidatorEntry)
+                .scoredPoints(points)
+                .missedPoints(teamTask.getPotentialPoints() - points)
+                .scoredPercentage(points / teamTask.getPotentialPoints())
+                .missedPercentage(1f - (points / teamTask.getPotentialPoints()))
                 .build();
     }
 }

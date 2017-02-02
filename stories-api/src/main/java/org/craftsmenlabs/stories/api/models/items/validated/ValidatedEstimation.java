@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ValidatedEstimation extends AbstractValidatedItem<Float> {
     @Builder
-    public ValidatedEstimation(float pointsValuation, List<Violation> violations, Rating rating, Float item) {
-        super(pointsValuation, violations, rating, item);
+    public ValidatedEstimation(List<Violation> violations, Rating rating, Float item, float scoredPercentage, float missedPercentage, float scoredPoints, float missedPoints) {
+        super(violations, rating, item, scoredPercentage, missedPercentage, scoredPoints, missedPoints );
     }
 }

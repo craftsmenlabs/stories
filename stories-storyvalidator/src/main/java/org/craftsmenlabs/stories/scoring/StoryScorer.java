@@ -78,9 +78,12 @@ public class StoryScorer {
         return ValidatedUserStory
                 .builder()
                 .item(userStory)
-                .pointsValuation(points)
                 .violations(violations)
                 .rating(rating)
+                .scoredPoints(points)
+                .missedPoints(potentialPoints - points)
+                .scoredPercentage(points / potentialPoints)
+                .missedPercentage(1f - (points / potentialPoints))
                 .build();
     }
 

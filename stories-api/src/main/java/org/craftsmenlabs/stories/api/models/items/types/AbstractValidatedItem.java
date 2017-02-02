@@ -8,13 +8,16 @@ import org.craftsmenlabs.stories.api.models.violation.Violation;
 
 import java.util.List;
 
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public abstract class AbstractValidatedItem<T> {
-    private float pointsValuation = 0.0f;
     private List<Violation> violations;
     private Rating rating;
-
     private T item;
+
+    private float scoredPercentage;
+    private float missedPercentage;
+    private float scoredPoints;
+    private float missedPoints;
 }

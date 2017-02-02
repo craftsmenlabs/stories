@@ -32,8 +32,11 @@ public class EstimationScorer {
                 .builder()
                 .item(estimation)
                 .violations(violations)
-                .pointsValuation(points)
                 .rating(rating)
+                .scoredPoints(points)
+                .missedPoints(potentialPoints - points)
+                .scoredPercentage(points / potentialPoints)
+                .missedPercentage(1f - (points / potentialPoints))
                 .build();
     }
 
