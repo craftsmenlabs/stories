@@ -75,6 +75,7 @@ public class BacklogScorer extends AbstractScorer<Backlog, ValidatedBacklog> {
                     item.setPotentialPoints(potentialScore);
                     return item;
                 })
+                .map(item -> (BacklogItem) item)
                 .collect(Collectors.toList());
 
         //validate the items
