@@ -64,6 +64,7 @@ public class BacklogScorer extends AbstractScorer<Backlog, ValidatedBacklog> {
                 backlog.getIssues().entrySet().stream()
                         .map(Map.Entry::getValue)
                         .filter(this::isIssueActive)
+                        .map(item -> (BacklogItem) item)
                         .sorted(Comparator.comparing(Rankable::getRank))
                         .collect(Collectors.toList());
 
