@@ -39,5 +39,4 @@ public class EstimationScorer {
                 .missedPercentage(1f - (points / potentialPoints))
                 .build();
     }
-
 }

@@ -8,8 +8,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.items.base.TeamTask;
+import org.craftsmenlabs.stories.api.models.items.types.AbstractValidatedItem;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Data
@@ -28,5 +30,10 @@ public class ValidatedTeamTask extends ValidatedBacklogItem<TeamTask> {
         super(violations, rating, teamTask, scoredPercentage, missedPercentage, scoredPoints, missedPoints);
         this.validatedAcceptanceCriteria = validatedAcceptanceCriteria;
         this.validatedEstimation = validatedEstimation;
+    }
+
+    @Override
+    public List<AbstractValidatedItem<?>> getSubItems() {
+        return Arrays.asList(validatedAcceptanceCriteria, validatedEstimation);
     }
 }

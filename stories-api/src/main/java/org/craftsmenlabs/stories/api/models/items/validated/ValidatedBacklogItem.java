@@ -7,7 +7,10 @@ import org.craftsmenlabs.stories.api.models.items.types.AbstractValidatedItem;
 import org.craftsmenlabs.stories.api.models.items.types.Rankable;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
@@ -32,4 +35,18 @@ public abstract class ValidatedBacklogItem<T extends Rankable> extends AbstractV
     public String getRank() {
         return this.getItem().getRank();
     }
+
+    public abstract List<AbstractValidatedItem<?>> getSubItems();
+
+    public List<Violation> getAllViolations(){
+        return Stream.of(getViolations(),
+                getSubItems().stream()
+                    .filter(entry -> entry.getViolations() != null)
+                    .map(AbstractValidatedItem::getViolations)
+                    .flatMap(Collection::stream)
+                    .collect(Collectors.toList()))
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+    }
+
 }

@@ -26,7 +26,6 @@ public class TeamTaskScorer extends AbstractScorer<TeamTask, ValidatedTeamTask> 
 
     @Override
     public ValidatedTeamTask validate(TeamTask teamTask) {
-        List<Violation> violations = new ArrayList<>();
         float pointsRatio = 1f / Stream.of(
                 !"summary".isEmpty(),
                 !"description".isEmpty(),
@@ -40,6 +39,7 @@ public class TeamTaskScorer extends AbstractScorer<TeamTask, ValidatedTeamTask> 
             teamTask = new TeamTask("0", "0", "", null, "", "", "", null, null, pointsRatio);
         }
 
+        List<Violation> violations = new ArrayList<>();
         if (StringUtils.isEmpty(teamTask.getSummary())) {
             teamTask.setSummary("");
             violations.add(new Violation(
@@ -64,14 +64,12 @@ public class TeamTaskScorer extends AbstractScorer<TeamTask, ValidatedTeamTask> 
         ValidatedAcceptanceCriteria acceptanceCriteriaValidatorEntry = AcceptanceCriteriaScorer.performScorer(teamTask.getAcceptationCriteria(), pointsRatio, validationConfig);
         if (teamTask.getAcceptationCriteria() != null && validationConfig.getCriteria().isActive()) {
             acceptanceCriteriaValidatorEntry.getViolations().forEach(violation -> violation.setScoredPercentage(pointsRatio * violation.getScoredPercentage()));
-            violations.addAll(acceptanceCriteriaValidatorEntry.getViolations());
             points += acceptanceCriteriaValidatorEntry.getScoredPoints();
         }
 
         ValidatedEstimation estimationValidatorEntry = EstimationScorer.performScorer(teamTask.getEstimation(), pointsRatio, validationConfig);
         if (teamTask.getEstimation() != null && validationConfig.getEstimation().isActive()) {
             estimationValidatorEntry.getViolations().forEach(violation -> violation.setScoredPercentage(pointsRatio * violation.getScoredPercentage()));
-            violations.addAll(estimationValidatorEntry.getViolations());
             points += estimationValidatorEntry.getScoredPoints();
         }
 

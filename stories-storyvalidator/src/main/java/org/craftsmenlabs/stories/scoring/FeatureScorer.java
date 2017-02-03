@@ -10,8 +10,10 @@ import org.craftsmenlabs.stories.api.models.items.validated.ValidatedFeature;
 import org.craftsmenlabs.stories.api.models.items.validated.ValidatedUserStory;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 /**
@@ -57,11 +59,7 @@ public class FeatureScorer extends AbstractScorer<Feature, ValidatedFeature> {
                         .average()
                         .orElse(0.0);
 
-        List<Violation> violations = entryList.stream()
-                .filter(entry -> entry.getKey() && entry.getValue().getViolations() != null)
-                .map(entry -> entry.getValue().getViolations())
-                .flatMap(Collection<Violation>::stream)
-                .collect(Collectors.toList());
+        List<Violation> violations = new ArrayList<>();
 
         Rating rating = points >= validationConfig.getFeature().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL;
 
