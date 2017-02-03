@@ -6,6 +6,7 @@ import mockit.Mock;
 import mockit.MockUp;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.items.base.Feature;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedFeature;
 import org.craftsmenlabs.stories.api.models.items.validated.ValidatedUserStory;
 import org.junit.Test;
 
@@ -21,8 +22,11 @@ public class FeatureScorerTest {
 
     @Test
     public void performScorer_ReturnsZeroOnNullIssue(@Injectable Feature feature, @Injectable ValidationConfig validationConfig) {
-        float score = getScorer(validationConfig).validate(null).getScoredPoints();
+        final ValidatedFeature validatedFeature = getScorer(validationConfig).validate(null);
+
+        float score = validatedFeature.getScoredPoints();
         assertThat(score).isCloseTo(0f, withinPercentage(1));
+        assertThat(validatedFeature.getAllViolations()).hasSize(7);
     }
 
     @Test
@@ -110,8 +114,4 @@ public class FeatureScorerTest {
         float score = getScorer(validationConfig).validate(feature).getScoredPoints();
         assertThat(score).isCloseTo(1f, withinPercentage(1));
     }
-
-
-
-
 }

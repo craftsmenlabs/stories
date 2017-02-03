@@ -26,8 +26,10 @@ public class StoryScorerTest {
             result = 0.7f;
         }};
 
-        float score = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig).getScoredPoints();
+        final ValidatedUserStory validatedUserStory = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig);
+        float score = validatedUserStory.getScoredPoints();
         assertThat(score).isEqualTo(0.0f);
+        assertThat(validatedUserStory.getViolations()).hasSize(1);
     }
 
     @Test
@@ -40,8 +42,11 @@ public class StoryScorerTest {
             result = 0.7f;
         }};
 
-        float score = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig).getScoredPoints();
+        final ValidatedUserStory validatedUserStory = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig);
+        float score = validatedUserStory.getScoredPoints();
         assertThat(score).isEqualTo(0.0f);
+        assertThat(validatedUserStory.getViolations()).hasSize(1);
+
     }
 
     @Test
@@ -64,9 +69,11 @@ public class StoryScorerTest {
             result = 1f;
         }};
 
-        ValidatedUserStory entry1 = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig);
-        assertThat(entry1.getScoredPoints()).isCloseTo(1.0f, withinPercentage(0.1));
-        assertThat(entry1.getRating()).isEqualTo(Rating.SUCCESS);
+        ValidatedUserStory validatedUserStory = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig);
+        assertThat(validatedUserStory.getScoredPoints()).isCloseTo(1.0f, withinPercentage(0.1));
+        assertThat(validatedUserStory.getRating()).isEqualTo(Rating.SUCCESS);
+        assertThat(validatedUserStory.getViolations()).hasSize(0);
+
     }
 
 
@@ -90,8 +97,11 @@ public class StoryScorerTest {
             result = 0.7f;
         }};
 
-        float score = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig).getScoredPoints();
+        final ValidatedUserStory validatedUserStory = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig);
+        float score = validatedUserStory.getScoredPoints();
         assertThat(score).isCloseTo(0.75f, withinPercentage(0.1));
+        assertThat(validatedUserStory.getViolations()).hasSize(1);
+
     }
 
     @Test
@@ -114,8 +124,10 @@ public class StoryScorerTest {
             result = 0.7f;
         }};
 
-        float score = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig).getScoredPoints();
+        final ValidatedUserStory validatedUserStory = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig);
+        float score = validatedUserStory.getScoredPoints();
         assertThat(score).isCloseTo(0.75f, withinPercentage(0.1));
+        assertThat(validatedUserStory.getViolations()).hasSize(1);
     }
 
     @Test
@@ -138,8 +150,10 @@ public class StoryScorerTest {
             result = 0.7f;
         }};
 
-        float score = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig).getScoredPoints();
+        final ValidatedUserStory validatedUserStory = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig);
+        float score = validatedUserStory.getScoredPoints();
         assertThat(score).isCloseTo(0.75f, withinPercentage(0.1));
+        assertThat(validatedUserStory.getViolations()).hasSize(1);
     }
 
     @Test
@@ -161,8 +175,10 @@ public class StoryScorerTest {
             result = 0.7f;
         }};
 
-        float score = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig).getScoredPoints();
+        final ValidatedUserStory validatedUserStory = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig);
+        float score = validatedUserStory.getScoredPoints();
         assertThat(score).isCloseTo(0.75f, withinPercentage(0.1));
+        assertThat(validatedUserStory.getViolations()).hasSize(1);
     }
 
     @Test
@@ -184,8 +200,10 @@ public class StoryScorerTest {
             result = 0.7f;
         }};
 
-        float score = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig).getScoredPoints();
+        final ValidatedUserStory validatedUserStory = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig);
+        float score = validatedUserStory.getScoredPoints();
         assertThat(score).isCloseTo(0.75f, withinPercentage(0.1));
+        assertThat(validatedUserStory.getViolations()).hasSize(1);
     }
 
     @Test
@@ -208,7 +226,9 @@ public class StoryScorerTest {
             result = 1.1f;
         }};
 
-        Rating rating = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig).getRating();
+        final ValidatedUserStory validatedUserStory = StoryScorer.performScorer(entry.getItem().getUserstory(), 1f, validationConfig);
+        Rating rating = validatedUserStory.getRating();
         assertThat(rating).isEqualTo(Rating.FAIL);
+        assertThat(validatedUserStory.getViolations()).hasSize(0);
     }
 }

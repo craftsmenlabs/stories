@@ -9,6 +9,8 @@ import org.craftsmenlabs.stories.api.models.items.validated.ValidatedTeamTask;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -28,8 +30,10 @@ TeamTaskScorerTest {
             result = 0.7f;
         }};
 
-        float score = getScorer(validationConfig).validate(entry.getItem()).getScoredPoints();
+        final ValidatedTeamTask validate = getScorer(validationConfig).validate(entry.getItem());
+        float score = validate.getScoredPoints();
         assertThat(score).isEqualTo(0.0f);
+        assertThat(validate.getAllViolations()).hasSize(8);
     }
 
     @Test
@@ -43,7 +47,8 @@ TeamTaskScorerTest {
             result = 0.7f;
         }};
 
-        float score = getScorer(validationConfig).validate(entry.getItem()).getScoredPoints();
+        final ValidatedTeamTask validate = getScorer(validationConfig).validate(entry.getItem());
+        float score = validate.getScoredPoints();
         assertThat(score).isEqualTo(0.0f);
     }
 
@@ -52,18 +57,29 @@ TeamTaskScorerTest {
         TeamTask teamTask = TeamTask.builder()
                 .summary("summary")
                 .description("description")
-                .acceptationCriteria(StringUtils.repeat("Given when then", 20))
+                .acceptationCriteria(StringUtils.repeat("Given when then ", 20))
                 .estimation(1f)
                 .build();
         new Expectations() {{
             entry.getItem();
             result = teamTask;
 
+            validationConfig.getCriteria().getGivenKeywords();
+            result = Arrays.asList("given ");
+            validationConfig.getCriteria().getWhenKeywords();
+            result = Arrays.asList("when ");
+
+            validationConfig.getCriteria().getThenKeywords();
+            result = Arrays.asList("then ");
+
+
             validationConfig.getTeamTask().getRatingThreshold();
             result = 0.7f;
         }};
 
-        float score = getScorer(validationConfig).validate(entry.getItem()).getScoredPoints();
+        final ValidatedTeamTask validate = getScorer(validationConfig).validate(entry.getItem());
+        float score = validate.getScoredPoints();
         assertThat(score).isEqualTo(1.0f);
+        assertThat(validate.getAllViolations()).hasSize(0);
     }
 }
