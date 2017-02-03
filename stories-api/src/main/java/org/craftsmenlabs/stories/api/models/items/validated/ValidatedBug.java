@@ -15,7 +15,7 @@ import java.util.List;
 @JsonTypeName("BUG")
 public class ValidatedBug extends ValidatedBacklogItem<Bug> {
     @Builder
-    public ValidatedBug(float pointsValuation, List<Violation> violations, Rating rating, Bug bug, float scoredPercentage, float missedPercentage, float scoredPoints, float missedPoints) {
+    public ValidatedBug(List<Violation> violations, Rating rating, Bug bug, float scoredPercentage, float missedPercentage, float scoredPoints, float missedPoints) {
         super(violations, rating, bug, scoredPercentage, missedPercentage, scoredPoints, missedPoints);
     }
 }
