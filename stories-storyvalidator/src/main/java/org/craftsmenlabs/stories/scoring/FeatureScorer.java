@@ -1,19 +1,17 @@
 package org.craftsmenlabs.stories.scoring;
 
+import com.codepoetics.protonpack.StreamUtils;
+import org.apache.commons.lang3.tuple.Triple;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.items.base.Feature;
-import org.craftsmenlabs.stories.api.models.items.types.AbstractValidatedItem;
 import org.craftsmenlabs.stories.api.models.items.validated.ValidatedAcceptanceCriteria;
 import org.craftsmenlabs.stories.api.models.items.validated.ValidatedEstimation;
 import org.craftsmenlabs.stories.api.models.items.validated.ValidatedFeature;
 import org.craftsmenlabs.stories.api.models.items.validated.ValidatedUserStory;
-import org.craftsmenlabs.stories.api.models.violation.Violation;
 
-import java.util.AbstractMap;
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.stream.Stream;
 
 /**
@@ -43,38 +41,42 @@ public class FeatureScorer extends AbstractScorer<Feature, ValidatedFeature> {
 
         final float potentialPointsPerSubItem = feature.getPotentialPoints() / Stream.of(validationConfig.getStory().isActive(), validationConfig.getCriteria().isActive(), validationConfig.getEstimation().isActive()).filter(item -> item).count();
 
-        ValidatedUserStory validatedUserStory = StoryScorer.performScorer(feature.getUserstory(), potentialPointsPerSubItem, validationConfig);
-        ValidatedAcceptanceCriteria validatedAcceptanceCriteria = AcceptanceCriteriaScorer.performScorer(feature.getAcceptanceCriteria(), potentialPointsPerSubItem, validationConfig);
-        ValidatedEstimation validatedEstimation = EstimationScorer.performScorer(feature.getEstimation(), potentialPointsPerSubItem, validationConfig);
+        final ValidatedFeature validatedFeature = ValidatedFeature
+                .builder()
+                .feature(feature)
+                .violations(new ArrayList<>())
+                .build();
 
-        List<Map.Entry<Boolean, AbstractValidatedItem>> entryList = new ArrayList<>();
-        entryList.add(new AbstractMap.SimpleEntry<>(validationConfig.getStory().isActive(), validatedUserStory));
-        entryList.add(new AbstractMap.SimpleEntry<>(validationConfig.getCriteria().isActive(), validatedAcceptanceCriteria));
-        entryList.add(new AbstractMap.SimpleEntry<>(validationConfig.getEstimation().isActive(), validatedEstimation));
+        final Stream<Boolean> actives = Stream.of(validationConfig.getStory().isActive(), validationConfig.getCriteria().isActive(), validationConfig.getEstimation().isActive());
+        final Stream<? extends Serializable> datas = Stream.of(feature.getUserstory(), feature.getAcceptanceCriteria(), feature.getEstimation());
+        final Stream<Class<?>> scorers = Stream.of(StoryScorer.class, AcceptanceCriteriaScorer.class, EstimationScorer.class);
 
-        float points = (float)
-                entryList.stream()
-                        .filter(Map.Entry::getKey)
-                        .mapToDouble(item -> item.getValue().getScoredPoints())
-                        .average()
-                        .orElse(0.0);
+        StreamUtils.zip(actives, datas, scorers, Triple::of)
+                .filter(Triple::getLeft)
+        .;
 
-        List<Violation> violations = new ArrayList<>();
+        float points = 0f;
+        if(validationConfig.getStory().isActive()){
+            ValidatedUserStory validatedUserStory = StoryScorer.validate(feature.getUserstory(), potentialPointsPerSubItem, validationConfig);
+            validatedFeature.setValidatedUserStory(validatedUserStory);
+            points += validatedUserStory.getScoredPoints();
+        }
+        if(validationConfig.getCriteria().isActive()){
+            ValidatedAcceptanceCriteria validatedAcceptanceCriteria = AcceptanceCriteriaScorer.performScorer(feature.getAcceptanceCriteria(), potentialPointsPerSubItem, validationConfig);
+            validatedFeature.setValidatedAcceptanceCriteria(validatedAcceptanceCriteria);
+            points += validatedAcceptanceCriteria.getScoredPoints();
+        }
+        if(validationConfig.getEstimation().isActive()){
+            ValidatedEstimation validatedEstimation = EstimationScorer.performScorer(feature.getEstimation(), potentialPointsPerSubItem, validationConfig);
+            validatedFeature.setValidatedEstimation(validatedEstimation);
+            points += validatedEstimation.getScoredPoints();
+        }
 
         Rating rating = points >= validationConfig.getFeature().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL;
 
-        return ValidatedFeature
-                .builder()
-                .feature(feature)
-                .violations(violations)
-                .rating(rating)
-                .validatedUserStory(validatedUserStory)
-                .validatedAcceptanceCriteria(validatedAcceptanceCriteria)
-                .validatedEstimation(validatedEstimation)
-                .scoredPoints(points)
-                .missedPoints(feature.getPotentialPoints() - points)
-                .scoredPercentage(points / feature.getPotentialPoints())
-                .missedPercentage(1f - (points / feature.getPotentialPoints()))
-                .build();
+        validatedFeature.setRating(rating);
+        validatedFeature.setPoints(points, validatedFeature.getItem().getPotentialPoints());
+
+        return validatedFeature;
     }
 }

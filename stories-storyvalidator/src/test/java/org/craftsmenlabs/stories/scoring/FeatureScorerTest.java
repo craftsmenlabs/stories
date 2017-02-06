@@ -36,8 +36,10 @@ public class FeatureScorerTest {
            result = null;
 
         }};
-        float score = getScorer(validationConfig).validate(feature).getScoredPoints();
+        final ValidatedFeature validatedFeature = getScorer(validationConfig).validate(feature);
+        float score = validatedFeature.getScoredPoints();
         assertThat(score).isCloseTo(0f, withinPercentage(1));
+        assertThat(validatedFeature.getAllViolations()).hasSize(1);
     }
 
     @Test
@@ -50,8 +52,10 @@ public class FeatureScorerTest {
            result = null;
 
         }};
-        float score = getScorer(validationConfig).validate(feature).getScoredPoints();
+        final ValidatedFeature validatedFeature = getScorer(validationConfig).validate(feature);
+        float score = validatedFeature.getScoredPoints();
         assertThat(score).isCloseTo(0f, withinPercentage(1));
+        assertThat(validatedFeature.getAllViolations()).hasSize(7);
     }
 
     @Test
@@ -76,8 +80,10 @@ public class FeatureScorerTest {
             result = false;
 
         }};
-        float score = getScorer(validationConfig).validate(feature).getScoredPoints();
+        final ValidatedFeature validatedFeature = getScorer(validationConfig).validate(feature);
+        float score = validatedFeature.getScoredPoints();
         assertThat(score).isCloseTo(0f, withinPercentage(1));
+        assertThat(validatedFeature.getAllViolations()).hasSize(7);
     }
 
     @Test
@@ -111,7 +117,9 @@ public class FeatureScorerTest {
             result = false;
 
         }};
-        float score = getScorer(validationConfig).validate(feature).getScoredPoints();
+        final ValidatedFeature validatedFeature = getScorer(validationConfig).validate(feature);
+        float score = validatedFeature.getScoredPoints();
         assertThat(score).isCloseTo(1f, withinPercentage(1));
+        assertThat(validatedFeature.getAllViolations()).hasSize(6);
     }
 }

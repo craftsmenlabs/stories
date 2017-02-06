@@ -10,10 +10,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class StoryScorer {
+public class StoryScorer extends AbstractScorer<String, ValidatedUserStory >{
     public final static int USERSTORY_MINIMUM_LENGTH = 50;
+    float potentialPoints;
 
-    public static ValidatedUserStory performScorer(String userStory, float potentialPoints, ValidationConfig validationConfig) {
+    public StoryScorer(float potentialPoints, ValidationConfig validationConfig) {
+        this.potentialPoints = potentialPoints;
+        super(validationConfig);
+    }
+
+    public ValidatedUserStory validate(String userStory) {
 
         List<Violation> violations = new ArrayList<>();
 

@@ -18,7 +18,7 @@ public class AcceptanceCriteriaScorer {
 
     public static final int MINIMUM_LENGTH_OF_ACC_CRITERIA = 20;
 
-    public static ValidatedAcceptanceCriteria performScorer(String criteria, float potentialPoints, ValidationConfig validationConfig) {
+    public ValidatedAcceptanceCriteria performScorer(String criteria, float potentialPoints, ValidationConfig validationConfig) {
 
         float LENGTH_POINTS = potentialPoints / 4f;
         float GIVEN_POINTS = potentialPoints / 4f;

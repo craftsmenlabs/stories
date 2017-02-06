@@ -13,7 +13,7 @@ import java.util.List;
  * Assigns scoredPercentage if a estimation is ok
  */
 public class EstimationScorer {
-    public static ValidatedEstimation performScorer(Float estimation, float potentialPoints, ValidationConfig validationConfig) {
+    public ValidatedEstimation performScorer(Float estimation, float potentialPoints, ValidationConfig validationConfig) {
         List<Violation> violations = new ArrayList<>();
 
         float points;

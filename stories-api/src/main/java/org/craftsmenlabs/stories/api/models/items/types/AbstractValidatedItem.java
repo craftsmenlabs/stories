@@ -20,4 +20,11 @@ public abstract class AbstractValidatedItem<T> {
     private float missedPercentage;
     private float scoredPoints;
     private float missedPoints;
+
+    public void setPoints(float scoredPoints, float potentialPoints) {
+        this.scoredPoints = scoredPoints;
+        this.missedPoints = potentialPoints - scoredPoints;
+        this.scoredPercentage = scoredPoints / potentialPoints;
+        this.missedPercentage = missedPoints / potentialPoints;
+    }
 }
