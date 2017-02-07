@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.withinPercentage;
 @SuppressWarnings({"ResultOfMethodCallIgnored", "Duplicates"})
 public class EstimationScorerTest {
     @Test
-    public void performScorerReturnsZeroOnNull(@Injectable ValidatedFeature entry, @Injectable ValidationConfig validationConfig) throws Exception {
+    public void validateReturnsZeroOnNull(@Injectable ValidatedFeature entry, @Injectable ValidationConfig validationConfig) throws Exception {
         new Expectations() {{
             entry.getItem().getEstimation();
             result = null;
@@ -23,14 +23,14 @@ public class EstimationScorerTest {
             result = 0.7f;
         }};
 
-        final ValidatedEstimation validatedEstimation = EstimationScorer.performScorer(entry.getItem().getEstimation(), 1f, validationConfig);
+        final ValidatedEstimation validatedEstimation = new EstimationScorer(1f, validationConfig).validate(entry.getItem().getEstimation());
         float score = validatedEstimation.getScoredPoints();
         assertThat(score).isCloseTo(0f, withinPercentage(1));
         assertThat(validatedEstimation.getViolations()).hasSize(1);
     }
 
     @Test
-    public void testPerformScorerReturnsZeroOnZero(@Injectable ValidatedFeature entry, @Injectable ValidationConfig validationConfig) throws Exception {
+    public void testvalidateReturnsZeroOnZero(@Injectable ValidatedFeature entry, @Injectable ValidationConfig validationConfig) throws Exception {
         new Expectations() {{
             entry.getItem().getEstimation();
             result = 0f;
@@ -40,14 +40,14 @@ public class EstimationScorerTest {
             result = 0.1f;
         }};
 
-        ValidatedEstimation entry1 = EstimationScorer.performScorer(entry.getItem().getEstimation(), 1f, validationConfig);
+        ValidatedEstimation entry1 = new EstimationScorer(1f, validationConfig).validate(entry.getItem().getEstimation());
         assertThat(entry1.getScoredPoints()).isCloseTo(0f, withinPercentage(1));
         assertThat(entry1.getRating()).isEqualTo(Rating.FAIL);
         assertThat(entry1.getViolations()).hasSize(1);
     }
 
     @Test
-    public void testPerformScorerReturnsOneOnValidEstimation(@Injectable ValidatedFeature entry, @Injectable ValidationConfig validationConfig) throws Exception {
+    public void testvalidateReturnsOneOnValidEstimation(@Injectable ValidatedFeature entry, @Injectable ValidationConfig validationConfig) throws Exception {
         new Expectations() {{
             entry.getItem().getEstimation();
             result = 1f;
@@ -57,13 +57,13 @@ public class EstimationScorerTest {
             result = 1f;
         }};
 
-        ValidatedEstimation entry1 = EstimationScorer.performScorer(entry.getItem().getEstimation(), 1f, validationConfig);
+        ValidatedEstimation entry1 = new EstimationScorer(1f, validationConfig).validate(entry.getItem().getEstimation());
         assertThat(entry1.getScoredPoints()).isCloseTo(1f, withinPercentage(1));
         assertThat(entry1.getViolations()).hasSize(0);
     }
 
     @Test
-    public void testPerformScorerReturnsSuccesOnHighScore(@Injectable ValidatedFeature entry, @Injectable ValidationConfig validationConfig) throws Exception {
+    public void testvalidateReturnsSuccesOnHighScore(@Injectable ValidatedFeature entry, @Injectable ValidationConfig validationConfig) throws Exception {
         new Expectations() {{
             entry.getItem().getEstimation();
             result = 1f;
@@ -72,7 +72,7 @@ public class EstimationScorerTest {
             result = 1f;
         }};
 
-        ValidatedEstimation entry1 = EstimationScorer.performScorer(entry.getItem().getEstimation(), 1f, validationConfig);
+        ValidatedEstimation entry1 = new EstimationScorer(1f, validationConfig).validate(entry.getItem().getEstimation());
         assertThat(entry1.getRating()).isEqualTo(Rating.SUCCESS);
         assertThat(entry1.getViolations()).hasSize(0);
     }

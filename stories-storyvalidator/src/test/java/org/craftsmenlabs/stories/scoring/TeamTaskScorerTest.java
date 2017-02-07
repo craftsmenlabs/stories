@@ -4,6 +4,8 @@ import mockit.Expectations;
 import mockit.Injectable;
 import org.apache.commons.lang3.StringUtils;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
+import org.craftsmenlabs.stories.api.models.items.base.Criteria;
+import org.craftsmenlabs.stories.api.models.items.base.Estimation;
 import org.craftsmenlabs.stories.api.models.items.base.TeamTask;
 import org.craftsmenlabs.stories.api.models.items.validated.ValidatedTeamTask;
 import org.junit.Ignore;
@@ -57,8 +59,8 @@ TeamTaskScorerTest {
         TeamTask teamTask = TeamTask.builder()
                 .summary("summary")
                 .description("description")
-                .acceptationCriteria(StringUtils.repeat("Given when then ", 20))
-                .estimation(1f)
+                .acceptationCriteria(new Criteria(StringUtils.repeat("Given when then ", 20)))
+                .estimation(new Estimation(1f))
                 .build();
         new Expectations() {{
             entry.getItem();

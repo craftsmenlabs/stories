@@ -24,7 +24,7 @@ public class TrelloJsonParser {
             TrelloJsonIssue trelloJsonIssue = trelloJsonIssues.get(i);
 
             String content = trelloJsonIssue.getDesc();
-            Feature feature = sentenceSplitter.splitSentence(new Feature(), content);
+            Feature feature = sentenceSplitter.splitSentence(Feature.empty(), content);
             feature.setSummary(trelloJsonIssue.getName());
             feature.setKey(trelloJsonIssue.getId());
             feature.setExternalURI(trelloJsonIssue.getUrl());
@@ -35,7 +35,7 @@ public class TrelloJsonParser {
             }
             String format2 = StringUtils.leftPad(rankString, rankLength, '0');
             feature.setRank(format2);
-            feature.setEstimation(0f);
+            feature.getEstimation().setEstimation(0f);
 
             result.put(feature.getKey(), feature);
         }

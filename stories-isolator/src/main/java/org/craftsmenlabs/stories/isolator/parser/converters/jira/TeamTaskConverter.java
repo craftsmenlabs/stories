@@ -18,7 +18,7 @@ public class TeamTaskConverter extends AbstractJiraConverter<TeamTask> {
     }
 
     public TeamTask convert(JiraJsonIssue jiraJsonIssue) {
-        TeamTask teamTask = new TeamTask();
+        TeamTask teamTask = TeamTask.empty();
         teamTask.setSummary(jiraJsonIssue.getFields().getSummary());
 
         teamTask.setDescription(jiraJsonIssue.getFields().getDescription());
@@ -27,9 +27,9 @@ public class TeamTaskConverter extends AbstractJiraConverter<TeamTask> {
         Map<String, Object> additionalProps = jiraJsonIssue.getFields().getAdditionalProperties();
 
         String criteria = (String) additionalProps.get(config.getTeamTask().getAcceptanceCriteria());
-        teamTask.setAcceptationCriteria(criteria);
+        teamTask.getAcceptationCriteria().setCriteria(criteria);
 
-        teamTask.setEstimation(this.parseEstimation(additionalProps.getOrDefault(config.getTeamTask().getEstimation(), "").toString()));
+        teamTask.getEstimation().setEstimation(this.parseEstimation(additionalProps.getOrDefault(config.getTeamTask().getEstimation(), "").toString()));
 
         return (TeamTask) fillDefaultInfo(jiraJsonIssue, teamTask);
     }
@@ -45,7 +45,7 @@ public class TeamTaskConverter extends AbstractJiraConverter<TeamTask> {
                 && jiraJsonIssue.getFields().getAdditionalProperties().containsKey(criteriaKey)
                 && StringUtils.isNotEmpty((String) jiraJsonIssue.getFields().getAdditionalProperties().get(criteriaKey))) {
             // We should get the acceptance Criteria from this field
-            teamTask.setAcceptationCriteria((String) jiraJsonIssue.getFields().getAdditionalProperties().get(criteriaKey));
+            teamTask.getAcceptationCriteria().setCriteria((String) jiraJsonIssue.getFields().getAdditionalProperties().get(criteriaKey));
         }
     }
 

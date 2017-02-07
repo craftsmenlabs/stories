@@ -41,7 +41,7 @@ public abstract class ValidatedBacklogItem<T extends Rankable> extends AbstractV
     public List<Violation> getAllViolations(){
         return Stream.of(getViolations(),
                 getSubItems().stream()
-                    .filter(entry -> entry.getViolations() != null)
+                    .filter(entry -> entry != null && entry.getViolations() != null)
                     .map(AbstractValidatedItem::getViolations)
                     .flatMap(Collection::stream)
                     .collect(Collectors.toList()))

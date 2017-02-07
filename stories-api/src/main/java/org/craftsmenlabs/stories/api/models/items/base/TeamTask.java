@@ -14,12 +14,16 @@ import java.time.LocalDateTime;
 public class TeamTask extends BacklogItem {
     private String summary;
     private String description;
-    private String acceptationCriteria;
-    private Float estimation;
+    private Criteria acceptationCriteria;
+    private Estimation estimation;
+
+    public static TeamTask empty(){
+        return TeamTask.builder().summary("").description("").acceptationCriteria(new Criteria()).estimation(new Estimation()).build();
+    }
 
     @Builder
-    public TeamTask(String summary, String description, String acceptationCriteria, Float estimation, String key, String rank, String externalURI, LocalDateTime createdAt, LocalDateTime updatedAt, float potentialPoints) {
-        super(key, rank, externalURI, updatedAt, createdAt, potentialPoints);
+    public TeamTask(String summary, String description, Criteria acceptationCriteria, Estimation estimation, String key, String rank, String externalURI, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        super(key, rank, externalURI, updatedAt, createdAt);
         this.summary = summary;
         this.description = description;
         this.acceptationCriteria = acceptationCriteria;

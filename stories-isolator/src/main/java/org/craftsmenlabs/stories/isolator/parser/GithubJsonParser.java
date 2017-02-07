@@ -25,7 +25,7 @@ public class GithubJsonParser
             GithubJsonIssue githubJsonIssue = githubJsonIssues.get(i);
 
             String content = githubJsonIssue.getBody().length() == 0 ? githubJsonIssue.getTitle() : githubJsonIssue.getBody();
-            Feature feature = sentenceSplitter.splitSentence(new Feature(), content);
+            Feature feature = sentenceSplitter.splitSentence(Feature.empty(), content);
             feature.setKey(Integer.toString(githubJsonIssue.getId()));
 
             String rankString = String.valueOf(i);
@@ -38,7 +38,7 @@ public class GithubJsonParser
             }
             String format2 = StringUtils.leftPad(rankString, rankLength, '0');
             feature.setRank(format2);
-            feature.setEstimation(0f);
+            feature.getEstimation().setEstimation(0f);
 
             result.put(feature.getKey(), feature);
         }

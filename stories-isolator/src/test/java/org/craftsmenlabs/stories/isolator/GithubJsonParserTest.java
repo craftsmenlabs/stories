@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import mockit.Tested;
 import org.apache.commons.io.FileUtils;
 import org.craftsmenlabs.stories.api.models.items.base.Backlog;
+import org.craftsmenlabs.stories.api.models.items.base.Estimation;
 import org.craftsmenlabs.stories.api.models.items.base.Feature;
 import org.craftsmenlabs.stories.isolator.model.github.GithubJsonIssue;
 import org.craftsmenlabs.stories.isolator.parser.GithubJsonParser;
@@ -59,18 +60,18 @@ public class GithubJsonParserTest
                 .map(item -> (Feature) item.getValue())
                 .sorted(Comparator.comparing(Feature::getRank))
                 .collect(Collectors.toList())).containsExactly(
-                Feature.builder().key("0").rank("00").estimation(0f).build(),
-                Feature.builder().key("1").rank("01").estimation(0f).build(),
-                Feature.builder().key("2").rank("02").estimation(0f).build(),
-                Feature.builder().key("3").rank("03").estimation(0f).build(),
-                Feature.builder().key("4").rank("04").estimation(0f).build(),
-                Feature.builder().key("5").rank("05").estimation(0f).build(),
-                Feature.builder().key("6").rank("06").estimation(0f).build(),
-                Feature.builder().key("7").rank("07").estimation(0f).build(),
-                Feature.builder().key("8").rank("08").estimation(0f).build(),
-                Feature.builder().key("9").rank("09").estimation(0f).build(),
-                Feature.builder().key("10").rank("10").estimation(0f).build(),
-                Feature.builder().key("100").rank("11").estimation(0f).build()
+                Feature.builder().key("0").rank("00").estimation(new Estimation(0f)).build(),
+                Feature.builder().key("1").rank("01").estimation(new Estimation(0f)).build(),
+                Feature.builder().key("2").rank("02").estimation(new Estimation(0f)).build(),
+                Feature.builder().key("3").rank("03").estimation(new Estimation(0f)).build(),
+                Feature.builder().key("4").rank("04").estimation(new Estimation(0f)).build(),
+                Feature.builder().key("5").rank("05").estimation(new Estimation(0f)).build(),
+                Feature.builder().key("6").rank("06").estimation(new Estimation(0f)).build(),
+                Feature.builder().key("7").rank("07").estimation(new Estimation(0f)).build(),
+                Feature.builder().key("8").rank("08").estimation(new Estimation(0f)).build(),
+                Feature.builder().key("9").rank("09").estimation(new Estimation(0f)).build(),
+                Feature.builder().key("10").rank("10").estimation(new Estimation(0f)).build(),
+                Feature.builder().key("100").rank("11").estimation(new Estimation(0f)).build()
 
         );
     }

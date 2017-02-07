@@ -4,6 +4,8 @@ import mockit.Expectations;
 import mockit.Mocked;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.SourceConfig;
+import org.craftsmenlabs.stories.api.models.items.base.Criteria;
+import org.craftsmenlabs.stories.api.models.items.base.Estimation;
 import org.craftsmenlabs.stories.api.models.items.base.TeamTask;
 import org.craftsmenlabs.stories.api.models.logging.StandaloneLogger;
 import org.craftsmenlabs.stories.isolator.model.jira.Fields;
@@ -48,8 +50,8 @@ public class TeamTaskConverterTest {
                 .rank("1")
                 .summary("summary")
                 .description("description")
-                .acceptationCriteria("AcceptationCriteria")
-                .estimation(0f)
+                .acceptationCriteria(new Criteria("AcceptationCriteria"))
+                .estimation(new Estimation(0f))
                 .externalURI("/projects/projectKey/issues/key")
                 .build();
 

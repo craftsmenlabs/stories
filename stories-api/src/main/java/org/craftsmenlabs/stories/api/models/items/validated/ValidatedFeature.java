@@ -9,6 +9,7 @@ import org.craftsmenlabs.stories.api.models.items.types.AbstractValidatedItem;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Data
@@ -26,6 +27,39 @@ public class ValidatedFeature extends ValidatedBacklogItem<Feature> {
     @JsonProperty("estimationValidatorEntry")
     private ValidatedEstimation validatedEstimation;
 
+    public ValidatedUserStory getValidatedUserStory() {
+        if(validatedUserStory == null){
+            return ValidatedUserStory.empty();
+        }
+        return validatedUserStory;
+    }
+
+    public void setValidatedUserStory(ValidatedUserStory validatedUserStory) {
+        this.validatedUserStory = validatedUserStory;
+    }
+
+    public ValidatedAcceptanceCriteria getValidatedAcceptanceCriteria() {
+        if(validatedAcceptanceCriteria == null){
+            return ValidatedAcceptanceCriteria.empty();
+        }
+
+        return validatedAcceptanceCriteria;
+    }
+
+    public void setValidatedAcceptanceCriteria(ValidatedAcceptanceCriteria validatedAcceptanceCriteria) {
+        this.validatedAcceptanceCriteria = validatedAcceptanceCriteria;
+    }
+
+    public ValidatedEstimation getValidatedEstimation() {
+        if(validatedEstimation == null){
+            return ValidatedEstimation.empty();
+        }
+        return validatedEstimation;
+    }
+
+    public void setValidatedEstimation(ValidatedEstimation validatedEstimation) {
+        this.validatedEstimation = validatedEstimation;
+    }
 
     @Builder
     public ValidatedFeature(List<Violation> violations, Rating rating, ValidatedUserStory validatedUserStory, Feature feature, ValidatedAcceptanceCriteria validatedAcceptanceCriteria, ValidatedEstimation validatedEstimation, float scoredPercentage, float missedPercentage, float scoredPoints, float missedPoints) {
@@ -38,5 +72,9 @@ public class ValidatedFeature extends ValidatedBacklogItem<Feature> {
     @Override
     public List<AbstractValidatedItem<?>> getSubItems() {
         return Arrays.asList(validatedUserStory, validatedAcceptanceCriteria, validatedEstimation);
+    }
+
+    public ValidatedFeature empty(){
+        return new ValidatedFeature(Collections.emptyList(), Rating.FAIL, ValidatedUserStory.empty(), Feature.empty(), ValidatedAcceptanceCriteria.empty(), ValidatedEstimation.empty(), 0f, 0f, 0f, 0f);
     }
 }

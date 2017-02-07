@@ -7,7 +7,17 @@ import org.craftsmenlabs.stories.api.models.items.types.Scorable;
 
 @AllArgsConstructor
 public abstract class AbstractScorer<T extends Scorable, R extends AbstractValidatedItem> {
+    protected float potentialPoints;
     protected ValidationConfig validationConfig;
 
     public abstract R validate(T item);
+
+
+    public float getPotentialPoints() {
+        return potentialPoints;
+    }
+
+    public void setPotentialPoints(float potentialPoints) {
+        this.potentialPoints = potentialPoints;
+    }
 }

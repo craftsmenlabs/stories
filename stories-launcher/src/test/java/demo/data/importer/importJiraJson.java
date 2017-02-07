@@ -18,6 +18,7 @@ import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
 import org.craftsmenlabs.stories.launcher.BootApp;
 import org.craftsmenlabs.stories.ranking.CurvedRanking;
 import org.craftsmenlabs.stories.scoring.BacklogScorer;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,7 @@ public class importJiraJson {
     private StorynatorConfig storynatorConfig;
 
 
-//    @Ignore
+    @Ignore
     @Test
     public void importData() {
         Files.fileNamesIn(storynatorConfig.getSource().getFile().getLocation(), false).stream()

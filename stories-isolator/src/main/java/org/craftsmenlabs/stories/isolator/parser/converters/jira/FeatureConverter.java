@@ -21,7 +21,7 @@ public class FeatureConverter extends AbstractJiraConverter<Feature> {
     }
 
     public Feature convert(JiraJsonIssue jiraJsonIssue) {
-        Feature feature = new Feature();
+        Feature feature = Feature.empty();
         // Extract description
         if (hasValidDescription(jiraJsonIssue)) {
             feature = sentenceSplitter.splitSentence(feature, jiraJsonIssue.getFields().getDescription());
@@ -31,7 +31,7 @@ public class FeatureConverter extends AbstractJiraConverter<Feature> {
         getAcceptanceCriteria(feature, jiraJsonIssue);
 
         Map<String, Object> additionalProps = jiraJsonIssue.getFields().getAdditionalProperties();
-        feature.setEstimation(this.parseEstimation(additionalProps.getOrDefault(config.getFeature().getEstimation(), "").toString()));
+        feature.getEstimation().setEstimation(this.parseEstimation(additionalProps.getOrDefault(config.getFeature().getEstimation(), "").toString()));
 
         return (Feature) fillDefaultInfo(jiraJsonIssue, feature);
     }
@@ -51,7 +51,7 @@ public class FeatureConverter extends AbstractJiraConverter<Feature> {
                 && jiraJsonIssue.getFields().getAdditionalProperties().containsKey(criteriaKey)
                 && StringUtils.isNotEmpty((String) jiraJsonIssue.getFields().getAdditionalProperties().get(criteriaKey))) {
             // We should get the acceptance Criteria from this field
-            feature.setAcceptanceCriteria((String) jiraJsonIssue.getFields().getAdditionalProperties().get(criteriaKey));
+            feature.getAcceptanceCriteria().setCriteria((String) jiraJsonIssue.getFields().getAdditionalProperties().get(criteriaKey));
         }
     }
 

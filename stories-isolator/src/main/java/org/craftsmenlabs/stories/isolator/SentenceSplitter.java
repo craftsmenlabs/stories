@@ -51,8 +51,7 @@ public class SentenceSplitter
 		}
 	}
 
-	public Feature splitSentence(Feature feature, String input)
-	{
+	public Feature splitSentence(Feature feature, String input) {
 	    if(input == null || input.length() == 0){
 	        return feature;
         }else {
@@ -63,14 +62,14 @@ public class SentenceSplitter
             // - second sentence => acceptance criteria
             // by convention
             if(sentences.length > 0) {
-                feature.setUserstory(sentences[0]);
+                feature.getUserstory().setStory(sentences[0]);
             }else{
-				feature.setUserstory("");
+				feature.getUserstory().setStory("");
 			}
             if(sentences.length > 1){
-                feature.setAcceptanceCriteria(sentences[1]);
+                feature.getAcceptanceCriteria().setCriteria(sentences[1]);
             }else{
-				feature.setAcceptanceCriteria("");
+				feature.getAcceptanceCriteria().setCriteria("");
 			}
 
             return feature;

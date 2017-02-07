@@ -21,8 +21,8 @@ public class Bug extends BacklogItem {
     private String priority;
 
     @Builder
-    public Bug(String summary, String description, String reproductionPath, String environment, String expectedBehavior, String acceptationCriteria, String priority, String key, String rank, String externalURI, LocalDateTime createdAt, LocalDateTime updatedAt, float potentialPoints) {
-        super(key, rank, externalURI, updatedAt, createdAt, potentialPoints);
+    public Bug(String summary, String description, String reproductionPath, String environment, String expectedBehavior, String acceptationCriteria, String priority, String key, String rank, String externalURI, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        super(key, rank, externalURI, updatedAt, createdAt);
         this.summary = summary;
         this.description = description;
         this.reproductionPath = reproductionPath;
@@ -30,5 +30,9 @@ public class Bug extends BacklogItem {
         this.expectedBehavior = expectedBehavior;
         this.acceptationCriteria = acceptationCriteria;
         this.priority = priority;
+    }
+
+    public static Bug empty(){
+        return new Bug("", "", "","","","","");
     }
 }

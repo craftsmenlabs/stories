@@ -28,8 +28,14 @@ public class FillableFieldScorer extends AbstractScorer<BacklogItem, ValidatedBa
     private Map<String, String> fields;
 
     public FillableFieldScorer(ValidationConfig validationConfig) {
-        super(validationConfig);
+        super(1f, validationConfig);
     }
+
+    public FillableFieldScorer(float potentialPoints, ValidationConfig validationConfig) {
+        super(potentialPoints, validationConfig);
+    }
+
+
 
     @Override
     public ValidatedBacklogItem validate(BacklogItem scrumItem) {
@@ -43,7 +49,7 @@ public class FillableFieldScorer extends AbstractScorer<BacklogItem, ValidatedBa
                     ViolationType.NoFillableFieldsViolation,
                     "There were no fillable fields defined!",
                     1f,
-                    scrumItem.getPotentialPoints()
+                    potentialPoints
             ));
             return entry;
         }
@@ -56,14 +62,12 @@ public class FillableFieldScorer extends AbstractScorer<BacklogItem, ValidatedBa
                         ViolationType.FieldEmptyViolation,
                         "Field " + field + " was found to be empty while it should be filled.",
                         percentagePerField,
-                        scrumItem.getPotentialPoints())
+                        potentialPoints)
                 ).collect(Collectors.toList());
 
         entry.setViolations(violations);
-        entry.setScoredPoints((float) (1f - violations.stream().mapToDouble(violation -> (double) violation.getMissedPercentage()).sum()));
-        entry.setMissedPoints(scrumItem.getPotentialPoints() - entry.getScoredPoints());
-        entry.setScoredPercentage(entry.getScoredPoints() / scrumItem.getPotentialPoints());
-        entry.setMissedPercentage(entry.getMissedPoints() / scrumItem.getPotentialPoints());
+        entry.setPoints((float) (1f - violations.stream().mapToDouble(violation -> (double) violation.getMissedPercentage()).sum()), potentialPoints);
+
         entry.setRating(getRating(entry));
         return entry;
     }

@@ -1,6 +1,8 @@
 package org.craftsmenlabs.stories;
 
+import org.craftsmenlabs.stories.api.models.items.base.Criteria;
 import org.craftsmenlabs.stories.api.models.items.base.Feature;
+import org.craftsmenlabs.stories.api.models.items.base.Story;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,8 +24,8 @@ public class TestDataGenerator
 		for (int i = 0; i < stories.size(); i++)
 		{
 			testData.add(Feature.builder()
-					.userstory(stories.get(i))
-					.acceptanceCriteria(accCrits.get(i))
+					.userstory(new Story(stories.get(i)))
+					.acceptanceCriteria(new Criteria(accCrits.get(i)))
                     .build());
 		}
 		return testData;
@@ -60,7 +62,7 @@ public class TestDataGenerator
 
 		for (int i = 0; i < amount; i++)
 		{
-			testData.add(Feature.builder().userstory("TEST").acceptanceCriteria("TEST").build());
+			testData.add(Feature.builder().userstory(new Story("TEST")).acceptanceCriteria(new Criteria("TEST")).build());
 		}
 		return testData;
 	}
