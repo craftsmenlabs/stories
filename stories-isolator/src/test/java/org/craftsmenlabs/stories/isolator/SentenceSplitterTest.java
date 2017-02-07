@@ -4,9 +4,7 @@ import mockit.Expectations;
 import mockit.Mocked;
 import mockit.Tested;
 import opennlp.tools.sentdetect.SentenceDetectorME;
-import org.craftsmenlabs.stories.api.models.items.base.Criteria;
 import org.craftsmenlabs.stories.api.models.items.base.Feature;
-import org.craftsmenlabs.stories.api.models.items.base.Story;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,7 +28,7 @@ public class SentenceSplitterTest{
 		}};
 
 		Feature feature = sentenceSplitter.splitSentence(Feature.empty(), input);
-		assertThat(feature.getUserstory()).isEqualTo(new Story("As a"));
-		assertThat(feature.getAcceptanceCriteria()).isEqualTo(new Criteria("Given that"));
+		assertThat(feature.getUserstory()).isEqualTo("As a");
+		assertThat(feature.getAcceptanceCriteria()).isEqualTo("Given that");
 	}
 }

@@ -16,14 +16,11 @@ public class EstimationScorerTest {
     @Test
     public void validateReturnsZeroOnNull(@Injectable ValidatedFeature entry, @Injectable ValidationConfig validationConfig) throws Exception {
         new Expectations() {{
-            entry.getItem().getEstimation();
-            result = null;
-
             validationConfig.getEstimation().getRatingThreshold();
             result = 0.7f;
         }};
 
-        final ValidatedEstimation validatedEstimation = new EstimationScorer(1f, validationConfig).validate(entry.getItem().getEstimation());
+        final ValidatedEstimation validatedEstimation = new EstimationScorer(1f, validationConfig).validate(null);
         float score = validatedEstimation.getScoredPoints();
         assertThat(score).isCloseTo(0f, withinPercentage(1));
         assertThat(validatedEstimation.getViolations()).hasSize(1);

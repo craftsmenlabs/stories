@@ -191,7 +191,7 @@ public class ConsoleReporter implements Reporter {
         log("Summary: " + teamTask.getItem().getSummary());
         log("Description: " + teamTask.getItem().getDescription());
         log("Criteria: " + teamTask.getItem().getAcceptationCriteria());
-        log("Estimation: " + Float.toString(teamTask.getItem().getEstimation().getEstimation()));
+        log("Estimation: " + Float.toString(teamTask.getItem().getEstimation()));
         reportOnViolations(teamTask.getViolations());
     }
 
@@ -199,7 +199,7 @@ public class ConsoleReporter implements Reporter {
         prefix = entry.getRating() == Rating.SUCCESS ? ANSI_GREEN : ANSI_RED;
 
 
-        String userstory = entry.getItem().getStory().replace("\n", " ").replace("\r", "");
+        String userstory = entry.getItem().replace("\n", " ").replace("\r", "");
         log("\t Userstory: (" + entry.getScoredPoints() + ") " + userstory);
 
         reportOnViolations(entry.getViolations());
@@ -208,7 +208,7 @@ public class ConsoleReporter implements Reporter {
     public void reportOnAcceptanceCriteria(ValidatedAcceptanceCriteria entry) {
         prefix = entry.getRating() == Rating.SUCCESS ? ANSI_GREEN : ANSI_RED;
 
-        String criteria = entry.getItem().getCriteria().replace("\n", " ").replace("\r", "");
+        String criteria = entry.getItem().replace("\n", " ").replace("\r", "");
         log("\t Criteria: (" + entry.getScoredPoints() + ") " + criteria);
 
         reportOnViolations(entry.getViolations());
@@ -217,7 +217,7 @@ public class ConsoleReporter implements Reporter {
     public void reportOnEstimation(ValidatedEstimation entry) {
         prefix = entry.getRating() == Rating.SUCCESS ? ANSI_GREEN : ANSI_RED;
 
-        Float estimation = entry.getItem().getEstimation();
+        Float estimation = entry.getItem();
         log("\t Estimation: (" + entry.getScoredPoints() + ")" + estimation);
 
         reportOnViolations(entry.getViolations());

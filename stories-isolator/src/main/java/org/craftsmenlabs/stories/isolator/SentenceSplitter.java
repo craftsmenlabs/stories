@@ -62,14 +62,14 @@ public class SentenceSplitter
             // - second sentence => acceptance criteria
             // by convention
             if(sentences.length > 0) {
-                feature.getUserstory().setStory(sentences[0]);
+                feature.setUserstory(sentences[0]);
             }else{
-				feature.getUserstory().setStory("");
+				feature.setUserstory("");
 			}
             if(sentences.length > 1){
-                feature.getAcceptanceCriteria().setCriteria(sentences[1]);
+                feature.setAcceptanceCriteria(sentences[1]);
             }else{
-				feature.getAcceptanceCriteria().setCriteria("");
+				feature.setAcceptanceCriteria("");
 			}
 
             return feature;

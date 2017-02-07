@@ -3,7 +3,6 @@ package org.craftsmenlabs.stories.scoring;
 import org.apache.commons.lang3.StringUtils;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
-import org.craftsmenlabs.stories.api.models.items.base.Story;
 import org.craftsmenlabs.stories.api.models.items.validated.ValidatedUserStory;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 import org.craftsmenlabs.stories.api.models.violation.ViolationType;
@@ -12,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class StoryScorer extends AbstractScorer<Story, ValidatedUserStory >{
+public class StoryScorer extends AbstractScorer<String, ValidatedUserStory >{
     public final static int USERSTORY_MINIMUM_LENGTH = 50;
     private final float potentialPoints;
 
@@ -22,7 +21,7 @@ public class StoryScorer extends AbstractScorer<Story, ValidatedUserStory >{
     }
 
     @Override
-    public ValidatedUserStory validate(Story userStory) {
+    public ValidatedUserStory validate(String userStory) {
         List<Violation> violations = new ArrayList<>();
 
         final float STORY_LENGTH_CLAUSE_POINTS = potentialPoints/ 4f;
@@ -32,11 +31,11 @@ public class StoryScorer extends AbstractScorer<Story, ValidatedUserStory >{
 
         float points = 0.0f;
 
-        if (userStory == null || StringUtils.isEmpty(userStory.getStory()))
+        if (userStory == null || StringUtils.isEmpty(userStory))
         {
             violations.add(new Violation(ViolationType.StoryEmptyViolation, "This story is empty.", 1f, 1f));
         } else {
-            final String userStoryLower = userStory.getStory().toLowerCase();
+            final String userStoryLower = userStory.toLowerCase();
 
             if (userStoryLower.length() > USERSTORY_MINIMUM_LENGTH) {
                 points += STORY_LENGTH_CLAUSE_POINTS;
@@ -44,7 +43,7 @@ public class StoryScorer extends AbstractScorer<Story, ValidatedUserStory >{
                 violations.add(new Violation(
                         ViolationType.StoryLengthClauseViolation,
                         "The story should contain a minimum length of " + USERSTORY_MINIMUM_LENGTH + " characters. " +
-                        "It now contains " + userStory.getStory().length() + " characters.", STORY_LENGTH_CLAUSE_POINTS));
+                        "It now contains " + userStory.length() + " characters.", STORY_LENGTH_CLAUSE_POINTS));
             }
 
             List<String> asKeywords = validationConfig.getStory().getAsKeywords() != null ? validationConfig.getStory().getAsKeywords() : Collections.emptyList();

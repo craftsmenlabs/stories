@@ -2,7 +2,6 @@ package org.craftsmenlabs.stories.scoring;
 
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
-import org.craftsmenlabs.stories.api.models.items.base.Estimation;
 import org.craftsmenlabs.stories.api.models.items.validated.ValidatedEstimation;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 import org.craftsmenlabs.stories.api.models.violation.ViolationType;
@@ -13,7 +12,7 @@ import java.util.List;
 /**
  * Assigns scoredPercentage if a estimation is ok
  */
-public class EstimationScorer  extends AbstractScorer<Estimation, ValidatedEstimation>{
+public class EstimationScorer  extends AbstractScorer<Float, ValidatedEstimation>{
     float potentialPoints;
 
     public EstimationScorer(float potentialPoints, ValidationConfig validationConfig) {
@@ -21,11 +20,11 @@ public class EstimationScorer  extends AbstractScorer<Estimation, ValidatedEstim
         this.potentialPoints = potentialPoints;
     }
 
-    public ValidatedEstimation validate(Estimation estimation) {
+    public ValidatedEstimation validate(Float estimation) {
         List<Violation> violations = new ArrayList<>();
 
         float points;
-        if (estimation == null || estimation.getEstimation() == 0f) {
+        if (estimation == null || estimation == 0f) {
             points = 0f;
             violations.add(new Violation(
                     ViolationType.EstimationEmptyViolation,

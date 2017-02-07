@@ -68,7 +68,7 @@ public class TeamTaskScorer extends AbstractScorer<TeamTask, ValidatedTeamTask> 
         }
 
         ValidatedEstimation estimationValidatorEntry = new EstimationScorer(pointsRatio, validationConfig).validate(teamTask.getEstimation());
-        if (teamTask.getEstimation() != null && validationConfig.getEstimation().isActive()) {
+        if (validationConfig.getEstimation().isActive()) {
             estimationValidatorEntry.getViolations().forEach(violation -> violation.setScoredPercentage(pointsRatio * violation.getScoredPercentage()));
             points += estimationValidatorEntry.getScoredPoints();
         }

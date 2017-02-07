@@ -61,9 +61,9 @@ public class JiraJsonParserTest {
         Backlog backlog = jiraJsonParser.parse(mapper.readValue(json, JiraBacklog.class));
         assertEquals(backlog.getIssues().size(), 1);
         assertNotNull(((Feature) backlog.getIssues().get("DIU-726")).getAcceptanceCriteria());
-        assertThat(((Feature) backlog.getIssues().get("DIU-726")).getAcceptanceCriteria()).isEqualTo(new Criteria("Given I want to configure a profiling rule involving systems\r\n" +
+        assertThat(((Feature) backlog.getIssues().get("DIU-726")).getAcceptanceCriteria()).isEqualTo("Given I want to configure a profiling rule involving systems\r\n" +
                 "When I start typing and stop for 100 ms\r\n" +
-                "Then the system provides me with results that match my search string"));
+                "Then the system provides me with results that match my search string");
     }
 
     @Test
@@ -74,7 +74,7 @@ public class JiraJsonParserTest {
         assertEquals(backlog.getIssues().size(), 1);
         Feature feature = (Feature) backlog.getIssues().get("DIU-726");
         assertNotNull(feature.getEstimation());
-        assertThat(feature.getEstimation().getEstimation()).isCloseTo(4.56f, withinPercentage(1.0));
+        assertThat(feature.getEstimation()).isCloseTo(4.56f, withinPercentage(1.0));
     }
 
     @Test
@@ -83,7 +83,7 @@ public class JiraJsonParserTest {
         String json = readFile("jira-one-story-with-invalid-estimation-test.json");
         Backlog backlog = jiraJsonParser.parse(mapper.readValue(json, JiraBacklog.class));
         assertEquals(backlog.getIssues().size(), 1);
-        assertThat(((Feature) backlog.getIssues().get("DIU-726")).getEstimation().getEstimation()).isEqualTo(0.0f);
+        assertThat(((Feature) backlog.getIssues().get("DIU-726")).getEstimation()).isEqualTo(0.0f);
     }
 
     @Test
@@ -131,13 +131,13 @@ public class JiraJsonParserTest {
         assertThat(backlog.getIssues()).hasSize(1);
         assertThat(backlog.getIssues().get("DIU-726").getRank()).isEqualTo("0|zgby24:");
         assertThat(((Feature) backlog.getIssues().get("DIU-726")).getUserstory()).isEqualTo(
-                new Story("As a system administrator I want an auto-complete function that provide me with matching system results so that I can handle large datacenters\n" +
+                "As a system administrator I want an auto-complete function that provide me with matching system results so that I can handle large datacenters\n" +
                         "\n" +
                         "*scope*\n" +
                         "* A reusable UI component that can be used in all locations where we want a system administrator to manage datacenters\n" +
                         "* The component should have an input box, and dropdown box that shows when you type at least 2 characters\n" +
                         "* The dropdown box shows all the systems for which the description starts with the entered characters (case insensitive)"
-                        ));
+                        );
 
     }
 

@@ -2,7 +2,6 @@ package org.craftsmenlabs.stories.scoring;
 
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
-import org.craftsmenlabs.stories.api.models.items.base.Criteria;
 import org.craftsmenlabs.stories.api.models.items.validated.ValidatedAcceptanceCriteria;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 import org.craftsmenlabs.stories.api.models.violation.ViolationType;
@@ -15,7 +14,7 @@ import java.util.List;
  * Assigns scoredPercentage to acceptance criteria, based on the
  * application of the gherkin language
  */
-public class AcceptanceCriteriaScorer extends AbstractScorer<Criteria, ValidatedAcceptanceCriteria> {
+public class AcceptanceCriteriaScorer extends AbstractScorer<String, ValidatedAcceptanceCriteria> {
 
     public static final int MINIMUM_LENGTH_OF_ACC_CRITERIA = 20;
 
@@ -24,9 +23,9 @@ public class AcceptanceCriteriaScorer extends AbstractScorer<Criteria, Validated
     }
 
     @Override
-    public ValidatedAcceptanceCriteria validate(Criteria criteria) {
+    public ValidatedAcceptanceCriteria validate(String criteria) {
         if(criteria == null){
-            criteria = Criteria.empty();
+            criteria = "";
         }
         float LENGTH_POINTS = potentialPoints / 4f;
         float GIVEN_POINTS = potentialPoints / 4f;
@@ -36,15 +35,15 @@ public class AcceptanceCriteriaScorer extends AbstractScorer<Criteria, Validated
         List<Violation> violations = new ArrayList<>();
         float points = 0f;
 
-        if (criteria.getCriteria() == null || criteria.getCriteria().isEmpty()) {
+        if (criteria == null || criteria.isEmpty()) {
             violations.add(new Violation(ViolationType.CriteriaVoidViolation,
                     "No acceptance criteria were found.",
                     potentialPoints));
 
-            criteria.setCriteria("");
+            criteria = "";
         }
 
-        final String criteriaLower = criteria.getCriteria().toLowerCase();
+        final String criteriaLower = criteria.toLowerCase();
 
         List<String> givenWords = validationConfig.getCriteria().getGivenKeywords() != null ? validationConfig.getCriteria().getGivenKeywords() : Collections.emptyList();
         if (givenWords.stream().anyMatch(s -> criteriaLower.contains(s.toLowerCase()))) {
