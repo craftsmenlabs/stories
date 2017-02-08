@@ -48,25 +48,24 @@ public class FillableFieldScorer extends AbstractScorer<BacklogItem, ValidatedBa
             entry.getViolations().add(new Violation(
                     ViolationType.NoFillableFieldsViolation,
                     "There were no fillable fields defined!",
-                    1f,
                     potentialPoints
             ));
             return entry;
         }
 
-        float percentagePerField = 1f / enabledFields.size();
+        float scorePerField = potentialPoints / enabledFields.size();
 
         final List<Violation> violations = enabledFields.stream()
                 .filter(field -> StringUtils.isBlank(fields.get(field)))
                 .map(field -> new Violation(
                         ViolationType.FieldEmptyViolation,
                         "Field " + field + " was found to be empty while it should be filled.",
-                        percentagePerField,
+                        scorePerField,
                         potentialPoints)
                 ).collect(Collectors.toList());
 
         entry.setViolations(violations);
-        entry.setPoints((float) (1f - violations.stream().mapToDouble(violation -> (double) violation.getMissedPercentage()).sum()), potentialPoints);
+        entry.setPoints((float) (potentialPoints - violations.stream().mapToDouble(violation -> (double) violation.getMissedPercentage()).sum()), potentialPoints);
 
         entry.setRating(getRating(entry));
         return entry;

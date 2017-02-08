@@ -31,7 +31,7 @@ public class EstimationScorer  extends AbstractScorer<Float, ValidatedEstimation
                     "Estimation is empty or empty",
                     potentialPoints));
         } else {
-            points = 1f;
+            points = potentialPoints;
         }
         Rating rating = points >= validationConfig.getEstimation().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL;
 

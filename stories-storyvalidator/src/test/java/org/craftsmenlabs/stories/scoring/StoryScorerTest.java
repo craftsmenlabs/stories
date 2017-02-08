@@ -6,6 +6,8 @@ import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.items.validated.ValidatedFeature;
 import org.craftsmenlabs.stories.api.models.items.validated.ValidatedUserStory;
+import org.craftsmenlabs.stories.api.models.violation.Violation;
+import org.craftsmenlabs.stories.api.models.violation.ViolationType;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -28,8 +30,19 @@ public class StoryScorerTest {
 
         final ValidatedUserStory validatedUserStory = new StoryScorer(1f, validationConfig).validate(entry.getItem().getUserstory());
         float score = validatedUserStory.getScoredPoints();
+
         assertThat(score).isEqualTo(0.0f);
         assertThat(validatedUserStory.getViolations()).hasSize(1);
+
+        Violation expectedViolation = Violation.builder()
+                .violationType(ViolationType.StoryEmptyViolation)
+                .cause("This story is empty.")
+                .missedPercentage(1f)
+                .scoredPercentage(0f)
+                .missedPoints(1f)
+                .scoredPoints(0f)
+                .build();
+        assertThat(validatedUserStory.getViolations().get(0)).isEqualTo(expectedViolation);
     }
 
     @Test
@@ -47,6 +60,15 @@ public class StoryScorerTest {
         assertThat(score).isEqualTo(0.0f);
         assertThat(validatedUserStory.getViolations()).hasSize(1);
 
+        Violation expectedViolation = Violation.builder()
+                .violationType(ViolationType.StoryEmptyViolation)
+                .cause("This story is empty.")
+                .missedPercentage(1f)
+                .scoredPercentage(0f)
+                .missedPoints(1f)
+                .scoredPoints(0f)
+                .build();
+        assertThat(validatedUserStory.getViolations().get(0)).isEqualTo(expectedViolation);
     }
 
     @Test
@@ -102,6 +124,16 @@ public class StoryScorerTest {
         assertThat(score).isCloseTo(0.75f, withinPercentage(0.1));
         assertThat(validatedUserStory.getViolations()).hasSize(1);
 
+        Violation expectedViolation = Violation.builder()
+                .violationType(ViolationType.StoryAsIsClauseViolation)
+                .cause("<As a> section is not described properly. The story should contain any of the following keywords: As a ")
+                .missedPercentage(1f)
+                .scoredPercentage(0f)
+                .missedPoints(0.25f)
+                .scoredPoints(0f)
+                .build();
+        assertThat(validatedUserStory.getViolations().get(0)).isEqualTo(expectedViolation);
+
     }
 
     @Test
@@ -154,6 +186,16 @@ public class StoryScorerTest {
         float score = validatedUserStory.getScoredPoints();
         assertThat(score).isCloseTo(0.75f, withinPercentage(0.1));
         assertThat(validatedUserStory.getViolations()).hasSize(1);
+
+        Violation expectedViolation = Violation.builder()
+                .violationType(ViolationType.StorySoClauseViolation)
+                .cause("<So that> section is not described properly. The story should contain any of the following keywords: So I can")
+                .missedPercentage(1f)
+                .scoredPercentage(0f)
+                .missedPoints(0.25f)
+                .scoredPoints(0f)
+                .build();
+        assertThat(validatedUserStory.getViolations().get(0)).isEqualTo(expectedViolation);
     }
 
     @Test
@@ -179,6 +221,17 @@ public class StoryScorerTest {
         float score = validatedUserStory.getScoredPoints();
         assertThat(score).isCloseTo(0.75f, withinPercentage(0.1));
         assertThat(validatedUserStory.getViolations()).hasSize(1);
+
+
+        Violation expectedViolation = Violation.builder()
+                .violationType(ViolationType.StoryLengthClauseViolation)
+                .cause("The story should contain a minimum length of 50 characters. It now contains 49 characters.")
+                .missedPercentage(1f)
+                .scoredPercentage(0f)
+                .missedPoints(0.25f)
+                .scoredPoints(0f)
+                .build();
+        assertThat(validatedUserStory.getViolations().get(0)).isEqualTo(expectedViolation);
     }
 
     @Test
@@ -202,8 +255,8 @@ public class StoryScorerTest {
 
         final ValidatedUserStory validatedUserStory = new StoryScorer(1f, validationConfig).validate(entry.getItem().getUserstory());
         float score = validatedUserStory.getScoredPoints();
-        assertThat(score).isCloseTo(0.75f, withinPercentage(0.1));
-        assertThat(validatedUserStory.getViolations()).hasSize(1);
+        assertThat(score).isCloseTo(1f, withinPercentage(0.1));
+        assertThat(validatedUserStory.getViolations()).hasSize(0);
     }
 
     @Test

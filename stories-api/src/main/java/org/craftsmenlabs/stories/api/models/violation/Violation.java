@@ -34,7 +34,7 @@ public class Violation
 	}
 
 	public void setPoints(float missedPercentage, float potentialPoints) {
-		this.scoredPercentage = 0;
+		this.scoredPercentage = 0f;
 		this.missedPercentage = missedPercentage;
 
 		this.scoredPercentage = 1f - missedPercentage;

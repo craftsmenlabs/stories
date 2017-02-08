@@ -24,20 +24,20 @@ public class StoryScorer extends AbstractScorer<String, ValidatedUserStory >{
     public ValidatedUserStory validate(String userStory) {
         List<Violation> violations = new ArrayList<>();
 
-        final float STORY_LENGTH_CLAUSE_POINTS = potentialPoints/ 4f;
-        final float STORY_AS_A_CLAUSE_POINTS = potentialPoints/ 4f;
-        final float STORY_SO_CLAUSE_POINTS = potentialPoints/ 4f;
-        final float STORY_I_CLAUSE_POINTS = potentialPoints/ 4f;
+        final float STORY_LENGTH_CLAUSE_POINTS = potentialPoints / 4f;
+        final float STORY_AS_A_CLAUSE_POINTS = potentialPoints / 4f;
+        final float STORY_SO_CLAUSE_POINTS = potentialPoints / 4f;
+        final float STORY_I_CLAUSE_POINTS = potentialPoints / 4f;
 
         float points = 0.0f;
 
         if (userStory == null || StringUtils.isEmpty(userStory))
         {
-            violations.add(new Violation(ViolationType.StoryEmptyViolation, "This story is empty.", 1f, 1f));
+            violations.add(new Violation(ViolationType.StoryEmptyViolation, "This story is empty.", potentialPoints));
         } else {
             final String userStoryLower = userStory.toLowerCase();
 
-            if (userStoryLower.length() > USERSTORY_MINIMUM_LENGTH) {
+            if (userStoryLower.length() >= USERSTORY_MINIMUM_LENGTH) {
                 points += STORY_LENGTH_CLAUSE_POINTS;
             } else {
                 violations.add(new Violation(
@@ -73,25 +73,25 @@ public class StoryScorer extends AbstractScorer<String, ValidatedUserStory >{
             } else {
                 violations.add(new Violation(
                         ViolationType.StorySoClauseViolation,
-                        "<So that> section is not described properly." +
+                        "<So that> section is not described properly. " +
                             "The story should contain any of the following keywords: "
-                            + String.join(", ", iKeywords),
+                            + String.join(", ", soKeywords),
                         STORY_SO_CLAUSE_POINTS));
             }
         }
 
         Rating rating = points >= validationConfig.getStory().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL;
 
-        return ValidatedUserStory
+        final ValidatedUserStory validatedUserStory = ValidatedUserStory
                 .builder()
                 .item(userStory)
                 .violations(violations)
                 .rating(rating)
-                .scoredPoints(points)
-                .missedPoints(potentialPoints - points)
-                .scoredPercentage(points / potentialPoints)
-                .missedPercentage(1f - (points / potentialPoints))
                 .build();
+
+        validatedUserStory.setPoints(points, potentialPoints);
+
+        return validatedUserStory;
     }
 
 }
