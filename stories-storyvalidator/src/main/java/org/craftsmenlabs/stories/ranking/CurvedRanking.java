@@ -11,12 +11,21 @@ public class CurvedRanking implements Ranking {
     private List<? extends BacklogItem> entries;
 
 
+    /**
+     * Returns a normalised range of points associated with the position.
+     *
+     * @param entries
+     * @return
+     */
     @Override
     public List<Float> getRanking(List<? extends BacklogItem> entries) {
         this.entries = entries;
-        return IntStream.range(0, entries.size())
-            .mapToObj(this::curvedQuotient)
-            .collect(Collectors.toList());
+        final List<Float> absoluteCurve = IntStream.range(0, entries.size())
+                .mapToObj(this::curvedQuotient)
+                .collect(Collectors.toList());
+        final double sum = absoluteCurve.stream().mapToDouble(f -> f).sum();
+
+        return absoluteCurve.stream().map(f -> (float) (f / sum)).collect(Collectors.toList());
     }
 
     private float curvedQuotient(int position) {
