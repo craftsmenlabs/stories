@@ -2,6 +2,7 @@ package org.craftsmenlabs.stories.api.models.items.validated;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import lombok.EqualsAndHashCode;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.items.types.AbstractValidatedItem;
 import org.craftsmenlabs.stories.api.models.items.types.Rankable;
@@ -21,6 +22,7 @@ import java.util.stream.Stream;
         @JsonSubTypes.Type(value = ValidatedEpic.class, name = "EPIC"),
         @JsonSubTypes.Type(value = ValidatedTeamTask.class, name = "TEAM_TASK")
 })
+@EqualsAndHashCode(callSuper = true)
 //http://www.davismol.net/2015/03/05/jackson-json-deserialize-a-list-of-objects-of-subclasses-of-an-abstract-class/
 public abstract class ValidatedBacklogItem<T extends Rankable> extends AbstractValidatedItem<T> implements Rankable {
 
