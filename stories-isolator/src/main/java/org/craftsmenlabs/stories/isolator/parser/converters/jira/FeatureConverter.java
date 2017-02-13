@@ -31,7 +31,7 @@ public class FeatureConverter extends AbstractJiraConverter<Feature> {
         getAcceptanceCriteria(feature, jiraJsonIssue);
 
         Map<String, Object> additionalProps = jiraJsonIssue.getFields().getAdditionalProperties();
-        feature.setEstimation(this.parseEstimation(additionalProps.getOrDefault(config.getFeature().getEstimation(), "").toString()));
+        feature.setEstimation(this.parseEstimation((String)additionalProps.getOrDefault(config.getFeature().getEstimation(), "")));
 
         return (Feature) fillDefaultInfo(jiraJsonIssue, feature);
     }
