@@ -50,6 +50,7 @@ public class FillableFieldScorer extends AbstractScorer<BacklogItem, ValidatedBa
                     "There were no fillable fields defined!",
                     potentialPoints
             ));
+            entry.setPoints(0f, potentialPoints);
             return entry;
         }
 
@@ -139,6 +140,4 @@ public class FillableFieldScorer extends AbstractScorer<BacklogItem, ValidatedBa
                     "\"priority\", \"reproduction_path\", \"environment\", \"expected_behaviour\", \"acceptation_criteria\"");
         }
     }
-
-
 }
