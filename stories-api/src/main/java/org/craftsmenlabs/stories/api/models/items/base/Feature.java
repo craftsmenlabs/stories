@@ -15,7 +15,7 @@ public class Feature extends BacklogItem {
     private String summary;
     private String userstory;
     private String acceptanceCriteria;
-    private float estimation;
+    private Float estimation;
 
     public static Feature empty(){
         return Feature.builder().summary("").userstory("").acceptanceCriteria("").estimation(0f).build();

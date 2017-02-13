@@ -15,7 +15,7 @@ public class TeamTask extends BacklogItem {
     private String summary;
     private String description;
     private String acceptationCriteria;
-    private float estimation;
+    private Float estimation;
 
     public static TeamTask empty(){
         return TeamTask.builder().summary("").description("").acceptationCriteria("").estimation(0f).build();
