@@ -57,10 +57,10 @@ public class FeatureScorer extends AbstractScorer<Feature, ValidatedFeature> {
             points += validatedEstimation.getScoredPoints();
         }
 
-        Rating rating = points >= validationConfig.getFeature().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL;
 
-        validatedFeature.setRating(rating);
         validatedFeature.setPoints(points, potentialPoints);
+        Rating rating = validatedFeature.getScoredPercentage() >= validationConfig.getFeature().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL;
+        validatedFeature.setRating(rating);
 
         return validatedFeature;
     }

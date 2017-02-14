@@ -74,17 +74,18 @@ public class TeamTaskScorer extends AbstractScorer<TeamTask, ValidatedTeamTask> 
             points += estimationValidatorEntry.getScoredPoints();
         }
 
-        Rating rating = points >= validationConfig.getTeamTask().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL;
 
         ValidatedTeamTask validatedTeamTask = ValidatedTeamTask
                 .builder()
                 .teamTask(teamTask)
                 .violations(violations)
-                .rating(rating)
                 .validatedAcceptanceCriteria(acceptanceCriteriaValidatorEntry)
                 .validatedEstimation(estimationValidatorEntry)
                 .build();
+
         validatedTeamTask.setPoints(points, potentialPoints);
+        Rating rating = validatedTeamTask.getScoredPercentage() >= validationConfig.getTeamTask().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL;
+        validatedTeamTask.setRating(rating);
 
         return validatedTeamTask;
     }

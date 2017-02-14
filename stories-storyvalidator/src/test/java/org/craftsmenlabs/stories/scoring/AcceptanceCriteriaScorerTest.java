@@ -190,8 +190,8 @@ public class AcceptanceCriteriaScorerTest {
             result = 0.9999;
         }};
 
-        ValidatedAcceptanceCriteria entry1 = new AcceptanceCriteriaScorer(1.0, validationConfig).validate(entry.getItem().getAcceptanceCriteria());
-        assertThat(entry1.getScoredPoints()).isCloseTo(1.0, withinPercentage(0.0001));
+        ValidatedAcceptanceCriteria entry1 = new AcceptanceCriteriaScorer(0.05, validationConfig).validate(entry.getItem().getAcceptanceCriteria());
+        assertThat(entry1.getScoredPoints()).isCloseTo(0.05, withinPercentage(0.0001));
         assertThat(entry1.getRating()).isEqualTo(Rating.SUCCESS);
     }
 
@@ -214,8 +214,9 @@ public class AcceptanceCriteriaScorerTest {
             result = 0.6;
         }};
 
-        ValidatedAcceptanceCriteria entry1 = new AcceptanceCriteriaScorer(1.0, validationConfig).validate(entry.getItem().getAcceptanceCriteria());
-        assertThat(entry1.getScoredPoints()).isCloseTo(0.75, withinPercentage(0.1));
+        ValidatedAcceptanceCriteria entry1 = new AcceptanceCriteriaScorer(0.05, validationConfig).validate(entry.getItem().getAcceptanceCriteria());
+        assertThat(entry1.getScoredPoints()).isCloseTo(0.0375, withinPercentage(0.1));
+        assertThat(entry1.getRating()).isEqualTo(Rating.SUCCESS);
     }
 
     @Test
@@ -315,7 +316,7 @@ public class AcceptanceCriteriaScorerTest {
             result = 1.1;
         }};
 
-        Rating rating = new AcceptanceCriteriaScorer(1.0, validationConfig).validate(entry.getItem().getAcceptanceCriteria()).getRating();
+        Rating rating = new AcceptanceCriteriaScorer(0.01, validationConfig).validate(entry.getItem().getAcceptanceCriteria()).getRating();
         assertThat(rating).isEqualTo(Rating.FAIL);
     }
 

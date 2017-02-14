@@ -2,6 +2,7 @@ package org.craftsmenlabs.stories.scoring;
 
 import mockit.Expectations;
 import mockit.Injectable;
+import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
 import org.craftsmenlabs.stories.api.models.items.base.Bug;
@@ -52,6 +53,7 @@ public class FillableFieldScorerTest {
 
         assertThat(score).isCloseTo(1.0, withinPercentage(1));
         assertThat(validatedBug.getAllViolations()).hasSize(0);
+        assertThat(validatedBug.getRating()).isEqualTo(Rating.SUCCESS);
     }
 
     @Test

@@ -253,10 +253,12 @@ public class StoryScorerTest {
             result = 0.7;
         }};
 
-        final ValidatedUserStory validatedUserStory = new StoryScorer(1.0, validationConfig).validate(entry.getItem().getUserstory());
-        double score = validatedUserStory.getScoredPoints();
+        final ValidatedUserStory validatedUserStory = new StoryScorer(0.01, validationConfig).validate(entry.getItem().getUserstory());
+        double score = validatedUserStory.getScoredPercentage();
         assertThat(score).isCloseTo(1.0, withinPercentage(0.1));
         assertThat(validatedUserStory.getViolations()).hasSize(0);
+        assertThat(validatedUserStory.getRating()).isEqualTo(Rating.SUCCESS);
+
     }
 
     @Test

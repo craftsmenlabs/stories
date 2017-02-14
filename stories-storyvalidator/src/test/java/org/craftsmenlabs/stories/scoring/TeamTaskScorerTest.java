@@ -3,6 +3,7 @@ package org.craftsmenlabs.stories.scoring;
 import mockit.Expectations;
 import mockit.Injectable;
 import org.apache.commons.lang3.StringUtils;
+import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.items.base.TeamTask;
 import org.craftsmenlabs.stories.api.models.items.validated.ValidatedTeamTask;
@@ -53,7 +54,7 @@ TeamTaskScorerTest {
     }
 
     @Test
-    public void testPerformScorerReturnsOneOnPerfect(@Injectable ValidatedTeamTask entry, @Injectable ValidationConfig validationConfig) throws Exception {
+    public void testPerformScorerReturnsHundredPercentOnPerfect(@Injectable ValidatedTeamTask entry, @Injectable ValidationConfig validationConfig) throws Exception {
         TeamTask teamTask = TeamTask.builder()
                 .summary("summary")
                 .description("description")
@@ -78,8 +79,9 @@ TeamTaskScorerTest {
         }};
 
         final ValidatedTeamTask validate = getScorer(validationConfig).validate(entry.getItem());
-        double score = validate.getScoredPoints();
+        double score = validate.getScoredPercentage();
         assertThat(score).isEqualTo(1.0);
         assertThat(validate.getAllViolations()).hasSize(0);
+        assertThat(validate.getRating()).isEqualTo(Rating.SUCCESS);
     }
 }

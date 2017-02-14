@@ -85,14 +85,14 @@ public class AcceptanceCriteriaScorer extends AbstractScorer<String, ValidatedAc
 
         }
 
-        Rating rating = points >= validationConfig.getCriteria().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL;
         ValidatedAcceptanceCriteria validatedAcceptanceCriteria = ValidatedAcceptanceCriteria
                 .builder()
                 .item(criteria)
                 .violations(violations)
-                .rating(rating)
                 .build();
         validatedAcceptanceCriteria.setPoints(points, potentialPoints);
+        Rating rating = validatedAcceptanceCriteria.getScoredPercentage() >= validationConfig.getCriteria().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL;
+        validatedAcceptanceCriteria.setRating(rating);
 
         return validatedAcceptanceCriteria;
     }

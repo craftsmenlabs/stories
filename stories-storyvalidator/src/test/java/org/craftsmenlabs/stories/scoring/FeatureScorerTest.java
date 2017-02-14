@@ -2,6 +2,7 @@ package org.craftsmenlabs.stories.scoring;
 
 import mockit.Expectations;
 import mockit.Injectable;
+import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
 import org.craftsmenlabs.stories.api.models.items.base.Feature;
 import org.craftsmenlabs.stories.api.models.items.validated.ValidatedFeature;
@@ -139,5 +140,6 @@ public class FeatureScorerTest {
         double score = validatedFeature.getScoredPoints();
         assertThat(score).isCloseTo(1.0, withinPercentage(1));
         assertThat(validatedFeature.getAllViolations()).hasSize(0);
+        assertThat(validatedFeature.getRating()).isEqualTo(Rating.SUCCESS);
     }
 }

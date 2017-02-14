@@ -80,16 +80,16 @@ public class StoryScorer extends AbstractScorer<String, ValidatedUserStory >{
             }
         }
 
-        Rating rating = points >= validationConfig.getStory().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL;
 
         final ValidatedUserStory validatedUserStory = ValidatedUserStory
                 .builder()
                 .item(userStory)
                 .violations(violations)
-                .rating(rating)
                 .build();
 
         validatedUserStory.setPoints(points, potentialPoints);
+        Rating rating = validatedUserStory.getScoredPercentage() >= validationConfig.getStory().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL;
+        validatedUserStory.setRating(rating);
 
         return validatedUserStory;
     }

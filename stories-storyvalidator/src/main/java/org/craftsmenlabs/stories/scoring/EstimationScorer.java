@@ -33,16 +33,15 @@ public class EstimationScorer extends AbstractScorer<Double, ValidatedEstimation
         } else {
             points = potentialPoints;
         }
-        Rating rating = points >= validationConfig.getEstimation().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL;
 
         ValidatedEstimation validatedEstimation = ValidatedEstimation
                 .builder()
                 .item(estimation)
                 .violations(violations)
-                .rating(rating)
                 .build();
         validatedEstimation.setPoints(points, potentialPoints);
-
+        Rating rating = validatedEstimation.getScoredPercentage() >= validationConfig.getEstimation().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL;
+        validatedEstimation.setRating(rating);
         return validatedEstimation;
     }
 }

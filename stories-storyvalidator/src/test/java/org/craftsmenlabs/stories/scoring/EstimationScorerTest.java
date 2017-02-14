@@ -68,7 +68,7 @@ public class EstimationScorerTest {
             result = 1;
         }};
 
-        ValidatedEstimation entry1 = new EstimationScorer(1, validationConfig).validate(entry.getItem().getEstimation());
+        ValidatedEstimation entry1 = new EstimationScorer(0.1, validationConfig).validate(entry.getItem().getEstimation());
         assertThat(entry1.getRating()).isEqualTo(Rating.SUCCESS);
         assertThat(entry1.getViolations()).hasSize(0);
     }

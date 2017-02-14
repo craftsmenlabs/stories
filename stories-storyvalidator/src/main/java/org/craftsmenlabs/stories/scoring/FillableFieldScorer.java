@@ -81,7 +81,7 @@ public class FillableFieldScorer extends AbstractScorer<BacklogItem, ValidatedBa
         } else {
             ratingThreshold = 1.0;
         }
-        return entry.getScoredPoints() >= ratingThreshold ? Rating.SUCCESS : Rating.FAIL;
+        return entry.getScoredPercentage() >= ratingThreshold ? Rating.SUCCESS : Rating.FAIL;
 
     }
 
