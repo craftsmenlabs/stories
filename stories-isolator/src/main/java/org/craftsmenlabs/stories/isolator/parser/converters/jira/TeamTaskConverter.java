@@ -29,8 +29,12 @@ public class TeamTaskConverter extends AbstractJiraConverter<TeamTask> {
         String criteria = (String) additionalProps.get(config.getTeamTask().getAcceptanceCriteria());
         teamTask.setAcceptationCriteria(criteria);
 
-        teamTask.setEstimation(this.parseEstimation(additionalProps.getOrDefault(config.getTeamTask().getEstimation(), "").toString()));
-
+        Object estimation = additionalProps.getOrDefault(config.getFeature().getEstimation(), "");
+        if (estimation instanceof String) {
+            teamTask.setEstimation(this.parseEstimation((String) estimation));
+        } else {
+            teamTask.setEstimation((Float) estimation);
+        }
         return (TeamTask) fillDefaultInfo(jiraJsonIssue, teamTask);
     }
 
