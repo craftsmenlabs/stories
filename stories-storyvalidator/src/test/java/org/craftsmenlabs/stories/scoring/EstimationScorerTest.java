@@ -27,7 +27,7 @@ public class EstimationScorerTest {
     }
 
     @Test
-    public void testvalidateReturnsZeroOnZero(@Injectable ValidatedFeature entry, @Injectable ValidationConfig validationConfig) throws Exception {
+    public void testPerformScorerReturnsOneOnZero(@Injectable ValidatedFeature entry, @Injectable ValidationConfig validationConfig) throws Exception {
         new Expectations() {{
             entry.getItem().getEstimation();
             result = 0f;
@@ -36,7 +36,6 @@ public class EstimationScorerTest {
             validationConfig.getEstimation().getRatingThreshold();
             result = 0.1f;
         }};
-
         ValidatedEstimation entry1 = new EstimationScorer(1f, validationConfig).validate(entry.getItem().getEstimation());
         assertThat(entry1.getScoredPoints()).isCloseTo(0f, withinPercentage(1));
         assertThat(entry1.getRating()).isEqualTo(Rating.FAIL);

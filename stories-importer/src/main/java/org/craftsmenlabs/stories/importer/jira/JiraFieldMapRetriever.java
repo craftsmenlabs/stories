@@ -60,7 +60,7 @@ public class JiraFieldMapRetriever {
         List<JiraFieldMap> jiraFieldMaps = objectMapper.readValue(responseEntity, valueType);
 
         return jiraFieldMaps.stream().collect(Collectors.toMap(JiraFieldMap::getName, JiraFieldMap::getId, (m1, m2) -> {
-            logger.error(String.format("Duplicate name found in jira field mapping, with keys %s and %s. Please ask your Jira admin to remove this ambiguity. I will default to %s", m1, m2, m2));
+            logger.warn(String.format("Duplicate name found in jira field mapping, with keys %s and %s. Please ask your Jira admin to remove this ambiguity. I will default to %s", m1, m2, m2));
             return m2;
         }));
     }
