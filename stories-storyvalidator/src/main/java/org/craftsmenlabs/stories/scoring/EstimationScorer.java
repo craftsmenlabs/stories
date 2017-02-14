@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Assigns scoredPercentage if a estimation is ok
+ * Assigns points if a estimation is ok
  */
 public class EstimationScorer  extends AbstractScorer<Float, ValidatedEstimation>{
     float potentialPoints;
