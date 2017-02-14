@@ -17,11 +17,11 @@ public class EstimationScorer {
         List<Violation> violations = new ArrayList<>();
 
         float points;
-        if (estimation == null || estimation.compareTo(0f) == 0) {
+        if (estimation == null) {
             points = 0f;
             violations.add(new Violation(
                     ViolationType.FieldEmptyViolation,
-                    "Estimation is empty or zero",
+                    "Estimation field is empty!",
                     1f));
         } else {
             points = 1f;
