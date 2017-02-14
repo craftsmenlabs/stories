@@ -8,7 +8,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -35,6 +34,13 @@ public class JiraFieldMapRetriever {
      * @throws IOException
      */
     public Map<String, String> getFieldMap() throws IOException {
+        return retrieveFieldList().stream().collect(Collectors.toMap(JiraFieldMap::getName, JiraFieldMap::getId, (m1, m2) -> {
+            logger.warn(String.format("Duplicate name found in jira field mapping, with keys %s and %s. Please ask your Jira admin to remove this ambiguity. I will default to %s", m1, m2, m2));
+            return m2;
+        }));
+    }
+
+    public List<JiraFieldMap> retrieveFieldList() throws IOException {
         // build URL params
         String url = urlResource + "/rest/api/2/field";
         logger.info("Retrieving field mapping from: " + url);
@@ -51,17 +57,12 @@ public class JiraFieldMapRetriever {
 
         //if retrieving fails, continue with an empty fieldMapper
         if (responseEntity == null) {
-            return new HashMap<>();
+            return Collections.emptyList();
         }
 
         ObjectMapper objectMapper = new ObjectMapper();
 
         final CollectionType valueType = objectMapper.getTypeFactory().constructCollectionType(List.class, JiraFieldMap.class);
-        List<JiraFieldMap> jiraFieldMaps = objectMapper.readValue(responseEntity, valueType);
-
-        return jiraFieldMaps.stream().collect(Collectors.toMap(JiraFieldMap::getName, JiraFieldMap::getId, (m1, m2) -> {
-            logger.warn(String.format("Duplicate name found in jira field mapping, with keys %s and %s. Please ask your Jira admin to remove this ambiguity. I will default to %s", m1, m2, m2));
-            return m2;
-        }));
+        return objectMapper.readValue(responseEntity, valueType);
     }
 }
