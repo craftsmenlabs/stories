@@ -191,7 +191,7 @@ public class ConsoleReporter implements Reporter {
         log("Summary: " + teamTask.getItem().getSummary());
         log("Description: " + teamTask.getItem().getDescription());
         log("Criteria: " + teamTask.getItem().getAcceptationCriteria());
-        log("Estimation: " + Double.toString(teamTask.getItem().getEstimation()));
+        log("Estimation: " + teamTask.getItem().getEstimation());
         reportOnViolations(teamTask.getViolations());
     }
 
