@@ -13,17 +13,17 @@ import org.craftsmenlabs.stories.api.models.items.types.AbstractValidatedItem;
  */
 @AllArgsConstructor
 public abstract class AbstractScorer<T, R extends AbstractValidatedItem> {
-    protected float potentialPoints;
+    protected double potentialPoints;
     protected ValidationConfig validationConfig;
 
     public abstract R validate(T item);
 
 
-    public float getPotentialPoints() {
+    public double getPotentialPoints() {
         return potentialPoints;
     }
 
-    public void setPotentialPoints(float potentialPoints) {
+    public void setPotentialPoints(double potentialPoints) {
         this.potentialPoints = potentialPoints;
     }
 }

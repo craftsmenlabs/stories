@@ -26,12 +26,12 @@ public class TeamTaskConverterTest {
 
     @Test
     public void testConvertWithNonCustomFields() throws Exception {
-        Map<String, Object> fieldMap = new HashMap<String, Object>(){{
-            put("rank", "1" );
-            put("summary", "summary" );
-            put("description", "description" );
-            put("custom_field1503", "estimation" );
-            put("priority", new Priority() );
+        Map<String, Object> fieldMap = new HashMap<String, Object>() {{
+            put("rank", "1");
+            put("summary", "summary");
+            put("description", "description");
+            put("custom_field1503", "estimation");
+            put("priority", new Priority());
             put("custom_field1502", "AcceptationCriteria");
         }};
 
@@ -49,19 +49,16 @@ public class TeamTaskConverterTest {
                 .summary("summary")
                 .description("description")
                 .acceptationCriteria("AcceptationCriteria")
-                .estimation(0f)
+                .estimation(null)
                 .externalURI("/projects/projectKey/issues/key")
                 .build();
 
-        new Expectations(){{
-           config.getRank();
-           result = "rank";
+        new Expectations() {{
+            config.getRank();
+            result = "rank";
 
             config.getTeamTask().getAcceptanceCriteria();
             result = "custom_field1502";
-
-            config.getTeamTask().getEstimation();
-            result = "custom_field1503";
 
             sourceConfig.getJira().getUrl();
             result = "";

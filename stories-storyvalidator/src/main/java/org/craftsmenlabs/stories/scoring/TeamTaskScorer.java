@@ -20,23 +20,23 @@ import java.util.stream.Stream;
  */
 public class TeamTaskScorer extends AbstractScorer<TeamTask, ValidatedTeamTask> {
     public TeamTaskScorer(ValidationConfig validationConfig) {
-        super(1f, validationConfig);
+        super(1, validationConfig);
     }
 
-    public TeamTaskScorer(float potentialPoints, ValidationConfig validationConfig) {
+    public TeamTaskScorer(double potentialPoints, ValidationConfig validationConfig) {
         super(potentialPoints, validationConfig);
     }
 
     @Override
     public ValidatedTeamTask validate(TeamTask teamTask) {
-        float pointsPerSubItem = potentialPoints / Stream.of(
+        double pointsPerSubItem = potentialPoints / Stream.of(
                 !"summary".isEmpty(),
                 !"description".isEmpty(),
                 validationConfig.getCriteria().isActive(),
                 validationConfig.getEstimation().isActive())
                 .filter(i -> i)
                 .count();
-        float points = 0f;
+        double points = 0.0;
 
         if (teamTask == null) {
             teamTask = TeamTask.empty();
@@ -64,13 +64,13 @@ public class TeamTaskScorer extends AbstractScorer<TeamTask, ValidatedTeamTask> 
 
         ValidatedAcceptanceCriteria acceptanceCriteriaValidatorEntry = new AcceptanceCriteriaScorer(pointsPerSubItem, validationConfig).validate(teamTask.getAcceptationCriteria());
         if (teamTask.getAcceptationCriteria() != null && validationConfig.getCriteria().isActive()) {
-//            acceptanceCriteriaValidatorEntry.getViolations().forEach(violation -> violation.setPoints(1f, pointsPerSubItem));
+//            acceptanceCriteriaValidatorEntry.getViolations().forEach(violation -> violation.setPoints(1.0, pointsPerSubItem));
             points += acceptanceCriteriaValidatorEntry.getScoredPoints();
         }
 
         ValidatedEstimation estimationValidatorEntry = new EstimationScorer(pointsPerSubItem, validationConfig).validate(teamTask.getEstimation());
         if (validationConfig.getEstimation().isActive()) {
-//            estimationValidatorEntry.getViolations().forEach(violation -> violation.setPoints(1f, pointsPerSubItem));
+//            estimationValidatorEntry.getViolations().forEach(violation -> violation.setPoints(1.0, pointsPerSubItem));
             points += estimationValidatorEntry.getScoredPoints();
         }
 

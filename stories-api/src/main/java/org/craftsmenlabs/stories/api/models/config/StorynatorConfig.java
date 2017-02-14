@@ -32,13 +32,13 @@ public class StorynatorConfig {
                 .validation(
                         ValidationConfig.builder()
                                 .backlog(new ValidationConfig.ValidatorEntry(60, true))
-                                .feature(new ValidationConfig.ValidatorEntry(0.6f, true))
+                                .feature(new ValidationConfig.ValidatorEntry(0.6, true))
                                 .bug(new ValidationConfig.BugValidatorEntry())
                                 .criteria(new ValidationConfig.CriteriaValidatorEntry())
-                                .estimation(new ValidationConfig.ValidatorEntry(0.6f, true))
+                                .estimation(new ValidationConfig.ValidatorEntry(0.6, true))
                                 .epic(new ValidationConfig.EpicValidatorEntry())
                                 .story(new ValidationConfig.StoryValidatorEntry())
-                                .teamTask(new ValidationConfig.ValidatorEntry(0.6f, true))
+                                .teamTask(new ValidationConfig.ValidatorEntry(0.6, true))
                                 .build()
 
                 )
@@ -55,13 +55,13 @@ public class StorynatorConfig {
 
         //quick fix because of the absence of builders/allargsconfig
         config.getValidation().getBug().setActive(true);
-        config.getValidation().getBug().setRatingThreshold(0.6f);
+        config.getValidation().getBug().setRatingThreshold(0.6);
         config.getValidation().getEpic().setActive(true);
-        config.getValidation().getEpic().setRatingThreshold(0.6f);
+        config.getValidation().getEpic().setRatingThreshold(0.6);
         config.getValidation().getCriteria().setActive(true);
-        config.getValidation().getCriteria().setRatingThreshold(0.6f);
+        config.getValidation().getCriteria().setRatingThreshold(0.6);
         config.getValidation().getStory().setActive(true);
-        config.getValidation().getStory().setRatingThreshold(0.6f);
+        config.getValidation().getStory().setRatingThreshold(0.6);
 
         return config;
     }

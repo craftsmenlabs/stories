@@ -15,10 +15,10 @@ public class Feature extends BacklogItem {
     private String summary;
     private String userstory;
     private String acceptanceCriteria;
-    private Float estimation;
+    private Double estimation;
 
     public static Feature empty(){
-        return Feature.builder().summary("").userstory("").acceptanceCriteria("").estimation(0f).build();
+        return Feature.builder().summary("").userstory("").acceptanceCriteria("").estimation(null).build();
     }
 
     public String getSummary() {
@@ -33,7 +33,7 @@ public class Feature extends BacklogItem {
     }
 
     @Builder
-    public Feature(String summary, String userstory, String acceptanceCriteria, float estimation, String key, String rank, String externalURI, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Feature(String summary, String userstory, String acceptanceCriteria, Double estimation, String key, String rank, String externalURI, LocalDateTime createdAt, LocalDateTime updatedAt) {
         super(key, rank, externalURI, updatedAt, createdAt);
         this.summary = summary;
         this.userstory = userstory;

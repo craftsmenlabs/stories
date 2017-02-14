@@ -39,7 +39,7 @@ public class ValidationConfig {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ValidatorEntry {
-        private float ratingThreshold;
+        private double ratingThreshold;
         private boolean active;
 
         @Override

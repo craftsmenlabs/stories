@@ -35,7 +35,7 @@ public class TrelloJsonParser {
             }
             String format2 = StringUtils.leftPad(rankString, rankLength, '0');
             feature.setRank(format2);
-            feature.setEstimation(0f);
+            feature.setEstimation(0.0);
 
             result.put(feature.getKey(), feature);
         }

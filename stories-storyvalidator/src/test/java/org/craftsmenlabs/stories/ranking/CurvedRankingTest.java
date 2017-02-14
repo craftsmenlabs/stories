@@ -1,7 +1,7 @@
 package org.craftsmenlabs.stories.ranking;
 
 import mockit.Tested;
-import org.assertj.core.util.FloatComparator;
+import org.assertj.core.util.DoubleComparator;
 import org.craftsmenlabs.stories.api.models.items.base.Feature;
 import org.junit.Test;
 
@@ -16,17 +16,17 @@ public class CurvedRankingTest {
 
 
     @Test
-    public void testGetRankingReturnsCurve(){
+    public void testGetRankingReturnsCurve() {
         curvedRanking = new CurvedRanking();
-        final List<Float> ranking = curvedRanking.getRanking(Arrays.asList(new Feature(), new Feature(), new Feature(), new Feature()));
+        final List<Double> ranking = curvedRanking.getRanking(Arrays.asList(new Feature(), new Feature(), new Feature(), new Feature()));
 
-        assertThat(ranking).usingElementComparator(new FloatComparator(0.0001f)).containsExactly(0.32f, 0.3f, 0.24f, 0.14f);
+        assertThat(ranking).usingElementComparator(new DoubleComparator(0.0001)).containsExactly(0.32, 0.3, 0.24, 0.14);
     }
 
     @Test
-    public void testGetRankingReturnsEmptyList(){
+    public void testGetRankingReturnsEmptyList() {
         curvedRanking = new CurvedRanking();
-        final List<Float> ranking = curvedRanking.getRanking(Arrays.asList());
+        final List<Double> ranking = curvedRanking.getRanking(Arrays.asList());
 
         assertThat(ranking.size()).isEqualTo(0);
     }

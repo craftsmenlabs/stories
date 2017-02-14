@@ -12,20 +12,20 @@ import java.util.List;
 /**
  * Assigns points if a estimation is ok
  */
-public class EstimationScorer  extends AbstractScorer<Float, ValidatedEstimation>{
-    float potentialPoints;
+public class EstimationScorer extends AbstractScorer<Double, ValidatedEstimation> {
+    double potentialPoints;
 
-    public EstimationScorer(float potentialPoints, ValidationConfig validationConfig) {
+    public EstimationScorer(double potentialPoints, ValidationConfig validationConfig) {
         super(potentialPoints, validationConfig);
         this.potentialPoints = potentialPoints;
     }
 
-    public ValidatedEstimation validate(Float estimation) {
+    public ValidatedEstimation validate(Double estimation) {
         List<Violation> violations = new ArrayList<>();
 
-        float points;
-        if (estimation == null || estimation == 0f) {
-            points = 0f;
+        double points;
+        if (estimation == null) {
+            points = 0.0;
             violations.add(new Violation(
                     ViolationType.EstimationEmptyViolation,
                     "Estimation is empty or empty",

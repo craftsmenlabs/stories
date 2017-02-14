@@ -10,9 +10,9 @@ import java.util.Collections;
 import java.util.List;
 
 @NoArgsConstructor
-public class ValidatedEstimation extends AbstractValidatedItem<Float> {
+public class ValidatedEstimation extends AbstractValidatedItem<Double> {
     @Builder
-    public ValidatedEstimation(List<Violation> violations, Rating rating, Float item, float scoredPercentage, float missedPercentage, float scoredPoints, float missedPoints) {
+    public ValidatedEstimation(List<Violation> violations, Rating rating, Double item, double scoredPercentage, double missedPercentage, double scoredPoints, double missedPoints) {
         super(violations, rating, item, scoredPercentage, missedPercentage, scoredPoints, missedPoints );
     }
 
@@ -20,7 +20,7 @@ public class ValidatedEstimation extends AbstractValidatedItem<Float> {
         return ValidatedEstimation.builder()
                 .violations(Collections.emptyList())
                 .rating(Rating.FAIL)
-                .item(0f)
+                .item(0.0)
                 .build();
     }
 }

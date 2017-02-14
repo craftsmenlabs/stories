@@ -25,22 +25,22 @@ public class StoryScorerTest {
             result = "";
 
             validationConfig.getStory().getRatingThreshold();
-            result = 0.7f;
+            result = 0.7;
         }};
 
-        final ValidatedUserStory validatedUserStory = new StoryScorer(1f, validationConfig).validate(entry.getItem().getUserstory());
-        float score = validatedUserStory.getScoredPoints();
+        final ValidatedUserStory validatedUserStory = new StoryScorer(1.0, validationConfig).validate(entry.getItem().getUserstory());
+        double score = validatedUserStory.getScoredPoints();
 
-        assertThat(score).isEqualTo(0.0f);
+        assertThat(score).isEqualTo(0.0);
         assertThat(validatedUserStory.getViolations()).hasSize(1);
 
         Violation expectedViolation = Violation.builder()
                 .violationType(ViolationType.StoryEmptyViolation)
                 .cause("This story is empty.")
-                .missedPercentage(1f)
-                .scoredPercentage(0f)
-                .missedPoints(1f)
-                .scoredPoints(0f)
+                .missedPercentage(1.0)
+                .scoredPercentage(0.0)
+                .missedPoints(1.0)
+                .scoredPoints(0.0)
                 .build();
         assertThat(validatedUserStory.getViolations().get(0)).isEqualTo(expectedViolation);
     }
@@ -52,21 +52,21 @@ public class StoryScorerTest {
             result = null;
 
             validationConfig.getStory().getRatingThreshold();
-            result = 0.7f;
+            result = 0.7;
         }};
 
-        final ValidatedUserStory validatedUserStory = new StoryScorer(1f, validationConfig).validate(entry.getItem().getUserstory());
-        float score = validatedUserStory.getScoredPoints();
-        assertThat(score).isEqualTo(0.0f);
+        final ValidatedUserStory validatedUserStory = new StoryScorer(1.0, validationConfig).validate(entry.getItem().getUserstory());
+        double score = validatedUserStory.getScoredPoints();
+        assertThat(score).isEqualTo(0.0);
         assertThat(validatedUserStory.getViolations()).hasSize(1);
 
         Violation expectedViolation = Violation.builder()
                 .violationType(ViolationType.StoryEmptyViolation)
                 .cause("This story is empty.")
-                .missedPercentage(1f)
-                .scoredPercentage(0f)
-                .missedPoints(1f)
-                .scoredPoints(0f)
+                .missedPercentage(1.0)
+                .scoredPercentage(0.0)
+                .missedPoints(1.0)
+                .scoredPoints(0.0)
                 .build();
         assertThat(validatedUserStory.getViolations().get(0)).isEqualTo(expectedViolation);
     }
@@ -88,11 +88,11 @@ public class StoryScorerTest {
                     + "so I can have the most preferred alarm on top.";
 
             validationConfig.getStory().getRatingThreshold();
-            result = 1f;
+            result = 1.0;
         }};
 
-        ValidatedUserStory validatedUserStory = new StoryScorer(1f, validationConfig).validate(entry.getItem().getUserstory());
-        assertThat(validatedUserStory.getScoredPoints()).isCloseTo(1.0f, withinPercentage(0.1));
+        ValidatedUserStory validatedUserStory = new StoryScorer(1.0, validationConfig).validate(entry.getItem().getUserstory());
+        assertThat(validatedUserStory.getScoredPoints()).isCloseTo(1.0, withinPercentage(0.1));
         assertThat(validatedUserStory.getRating()).isEqualTo(Rating.SUCCESS);
         assertThat(validatedUserStory.getViolations()).hasSize(0);
 
@@ -116,21 +116,21 @@ public class StoryScorerTest {
                     + "so I can have the most preferred alarm on top.";
 
             validationConfig.getStory().getRatingThreshold();
-            result = 0.7f;
+            result = 0.7;
         }};
 
-        final ValidatedUserStory validatedUserStory = new StoryScorer(1f, validationConfig).validate(entry.getItem().getUserstory());
-        float score = validatedUserStory.getScoredPoints();
-        assertThat(score).isCloseTo(0.75f, withinPercentage(0.1));
+        final ValidatedUserStory validatedUserStory = new StoryScorer(1.0, validationConfig).validate(entry.getItem().getUserstory());
+        double score = validatedUserStory.getScoredPoints();
+        assertThat(score).isCloseTo(0.75, withinPercentage(0.1));
         assertThat(validatedUserStory.getViolations()).hasSize(1);
 
         Violation expectedViolation = Violation.builder()
                 .violationType(ViolationType.StoryAsIsClauseViolation)
                 .cause("<As a> section is not described properly. The story should contain any of the following keywords: As a ")
-                .missedPercentage(1f)
-                .scoredPercentage(0f)
-                .missedPoints(0.25f)
-                .scoredPoints(0f)
+                .missedPercentage(1.0)
+                .scoredPercentage(0.0)
+                .missedPoints(0.25)
+                .scoredPoints(0.0)
                 .build();
         assertThat(validatedUserStory.getViolations().get(0)).isEqualTo(expectedViolation);
 
@@ -153,12 +153,12 @@ public class StoryScorerTest {
                     + "so I can have the most preferred alarm on top.";
 
             validationConfig.getStory().getRatingThreshold();
-            result = 0.7f;
+            result = 0.7;
         }};
 
-        final ValidatedUserStory validatedUserStory = new StoryScorer(1f, validationConfig).validate(entry.getItem().getUserstory());
-        float score = validatedUserStory.getScoredPoints();
-        assertThat(score).isCloseTo(0.75f, withinPercentage(0.1));
+        final ValidatedUserStory validatedUserStory = new StoryScorer(1.0, validationConfig).validate(entry.getItem().getUserstory());
+        double score = validatedUserStory.getScoredPoints();
+        assertThat(score).isCloseTo(0.75, withinPercentage(0.1));
         assertThat(validatedUserStory.getViolations()).hasSize(1);
     }
 
@@ -179,21 +179,21 @@ public class StoryScorerTest {
                     + "so I have the most preferred alarm on top.";
 
             validationConfig.getStory().getRatingThreshold();
-            result = 0.7f;
+            result = 0.7;
         }};
 
-        final ValidatedUserStory validatedUserStory = new StoryScorer(1f, validationConfig).validate(entry.getItem().getUserstory());
-        float score = validatedUserStory.getScoredPoints();
-        assertThat(score).isCloseTo(0.75f, withinPercentage(0.1));
+        final ValidatedUserStory validatedUserStory = new StoryScorer(1.0, validationConfig).validate(entry.getItem().getUserstory());
+        double score = validatedUserStory.getScoredPoints();
+        assertThat(score).isCloseTo(0.75, withinPercentage(0.1));
         assertThat(validatedUserStory.getViolations()).hasSize(1);
 
         Violation expectedViolation = Violation.builder()
                 .violationType(ViolationType.StorySoClauseViolation)
                 .cause("<So that> section is not described properly. The story should contain any of the following keywords: So I can")
-                .missedPercentage(1f)
-                .scoredPercentage(0f)
-                .missedPoints(0.25f)
-                .scoredPoints(0f)
+                .missedPercentage(1.0)
+                .scoredPercentage(0.0)
+                .missedPoints(0.25)
+                .scoredPoints(0.0)
                 .build();
         assertThat(validatedUserStory.getViolations().get(0)).isEqualTo(expectedViolation);
     }
@@ -214,22 +214,22 @@ public class StoryScorerTest {
                     .substring(0, StoryScorer.USERSTORY_MINIMUM_LENGTH - 1);
 
             validationConfig.getStory().getRatingThreshold();
-            result = 0.7f;
+            result = 0.7;
         }};
 
-        final ValidatedUserStory validatedUserStory = new StoryScorer(1f, validationConfig).validate(entry.getItem().getUserstory());
-        float score = validatedUserStory.getScoredPoints();
-        assertThat(score).isCloseTo(0.75f, withinPercentage(0.1));
+        final ValidatedUserStory validatedUserStory = new StoryScorer(1.0, validationConfig).validate(entry.getItem().getUserstory());
+        double score = validatedUserStory.getScoredPoints();
+        assertThat(score).isCloseTo(0.75, withinPercentage(0.1));
         assertThat(validatedUserStory.getViolations()).hasSize(1);
 
 
         Violation expectedViolation = Violation.builder()
                 .violationType(ViolationType.StoryLengthClauseViolation)
                 .cause("The story should contain a minimum length of 50 characters. It now contains 49 characters.")
-                .missedPercentage(1f)
-                .scoredPercentage(0f)
-                .missedPoints(0.25f)
-                .scoredPoints(0f)
+                .missedPercentage(1.0)
+                .scoredPercentage(0.0)
+                .missedPoints(0.25)
+                .scoredPoints(0.0)
                 .build();
         assertThat(validatedUserStory.getViolations().get(0)).isEqualTo(expectedViolation);
     }
@@ -250,12 +250,12 @@ public class StoryScorerTest {
                     .substring(0, StoryScorer.USERSTORY_MINIMUM_LENGTH);
 
             validationConfig.getStory().getRatingThreshold();
-            result = 0.7f;
+            result = 0.7;
         }};
 
-        final ValidatedUserStory validatedUserStory = new StoryScorer(1f, validationConfig).validate(entry.getItem().getUserstory());
-        float score = validatedUserStory.getScoredPoints();
-        assertThat(score).isCloseTo(1f, withinPercentage(0.1));
+        final ValidatedUserStory validatedUserStory = new StoryScorer(1.0, validationConfig).validate(entry.getItem().getUserstory());
+        double score = validatedUserStory.getScoredPoints();
+        assertThat(score).isCloseTo(1.0, withinPercentage(0.1));
         assertThat(validatedUserStory.getViolations()).hasSize(0);
     }
 
@@ -276,10 +276,10 @@ public class StoryScorerTest {
                     + "so I can have the most preferred alarm on top.";
 
             validationConfig.getStory().getRatingThreshold();
-            result = 1.1f;
+            result = 1.1;
         }};
 
-        final ValidatedUserStory validatedUserStory = new StoryScorer(1f, validationConfig).validate(entry.getItem().getUserstory());
+        final ValidatedUserStory validatedUserStory = new StoryScorer(1.0, validationConfig).validate(entry.getItem().getUserstory());
         Rating rating = validatedUserStory.getRating();
         assertThat(rating).isEqualTo(Rating.FAIL);
         assertThat(validatedUserStory.getViolations()).hasSize(0);

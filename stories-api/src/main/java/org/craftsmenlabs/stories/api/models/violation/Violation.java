@@ -15,31 +15,31 @@ public class Violation
 
 	private String cause;
 
-	private float scoredPercentage;
-	private float missedPercentage;
-	private float scoredPoints;
-	private float missedPoints;
+    private double scoredPercentage;
+    private double missedPercentage;
+    private double scoredPoints;
+    private double missedPoints;
 
-	public Violation(ViolationType violationType, String cause, float missedPercentage, float potentialPoints) {
-		this.violationType = violationType;
-		this.cause = cause;
+    public Violation(ViolationType violationType, String cause, double missedPercentage, double potentialPoints) {
+        this.violationType = violationType;
+        this.cause = cause;
 		setPoints(missedPercentage, potentialPoints);
 	}
 
 	//shortcut in case of missed all the points
-	public Violation(ViolationType violationType, String cause, float potentialPoints) {
-		this.violationType = violationType;
-		this.cause = cause;
-		setPoints(1f, potentialPoints);
-	}
+    public Violation(ViolationType violationType, String cause, double potentialPoints) {
+        this.violationType = violationType;
+        this.cause = cause;
+        setPoints(1, potentialPoints);
+    }
 
-	public void setPoints(float missedPercentage, float potentialPoints) {
-		this.scoredPercentage = 0f;
-		this.missedPercentage = missedPercentage;
+    public void setPoints(double missedPercentage, double potentialPoints) {
+        this.scoredPercentage = 0;
+        this.missedPercentage = missedPercentage;
 
-		this.scoredPercentage = 1f - missedPercentage;
-		this.missedPercentage = missedPercentage;
-		this.scoredPoints = scoredPercentage * potentialPoints;
+        this.scoredPercentage = 1 - missedPercentage;
+        this.missedPercentage = missedPercentage;
+        this.scoredPoints = scoredPercentage * potentialPoints;
 		this.missedPoints = missedPercentage * potentialPoints;
 	}
 

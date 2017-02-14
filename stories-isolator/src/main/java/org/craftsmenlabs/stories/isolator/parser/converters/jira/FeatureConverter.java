@@ -35,7 +35,7 @@ public class FeatureConverter extends AbstractJiraConverter<Feature> {
         if (estimation instanceof String) {
             feature.setEstimation(this.parseEstimation((String) estimation));
         } else {
-            feature.setEstimation((Float) estimation);
+            feature.setEstimation((Double) estimation);
         }
         return (Feature) fillDefaultInfo(jiraJsonIssue, feature);
     }
@@ -57,16 +57,5 @@ public class FeatureConverter extends AbstractJiraConverter<Feature> {
             // We should get the acceptance Criteria from this field
             feature.setAcceptanceCriteria((String) jiraJsonIssue.getFields().getAdditionalProperties().get(criteriaKey));
         }
-    }
-
-    private float parseEstimation(String estimationString) {
-        try {
-            if (StringUtils.isNotBlank(estimationString)) {
-                return Float.parseFloat(estimationString);
-            }
-        } catch (NumberFormatException nfe) {
-            logger.warn("Parsing of estimation to float failed. By default set to 0.0");
-        }
-        return 0f;
     }
 }

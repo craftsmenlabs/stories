@@ -15,14 +15,14 @@ public class TeamTask extends BacklogItem {
     private String summary;
     private String description;
     private String acceptationCriteria;
-    private Float estimation;
+    private Double estimation;
 
     public static TeamTask empty(){
-        return TeamTask.builder().summary("").description("").acceptationCriteria("").estimation(0f).build();
+        return TeamTask.builder().summary("").description("").acceptationCriteria("").estimation(0.0).build();
     }
 
     @Builder
-    public TeamTask(String summary, String description, String acceptationCriteria, Float estimation, String key, String rank, String externalURI, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public TeamTask(String summary, String description, String acceptationCriteria, Double estimation, String key, String rank, String externalURI, LocalDateTime createdAt, LocalDateTime updatedAt) {
         super(key, rank, externalURI, updatedAt, createdAt);
         this.summary = summary;
         this.description = description;

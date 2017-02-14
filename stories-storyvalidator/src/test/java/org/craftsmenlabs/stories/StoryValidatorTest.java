@@ -30,7 +30,7 @@ public class StoryValidatorTest
 //		storyValidator.scoreStories(entries);
 //
 //		assertThat(entries.get(0).getViolations().size()).isEqualTo(0);
-//		assertThat(entries.get(0).getPointsValuation()).isEqualTo(1.0f);
+//		assertThat(entries.get(0).getPointsValuation()).isEqualTo(1.0);
 //		assertThat(entries.get(1).getViolations().size()).isEqualTo(1);
 //		assertThat(entries.get(1).getPointsValuation()).isEqualTo(0.6f);
 //		assertThat(entries.get(2).getViolations().size()).isEqualTo(4);
@@ -45,7 +45,7 @@ public class StoryValidatorTest
 //			entries.size();
 //			result = 10;
 //		}};
-//		assertThat(storyValidator.rankStories(entries)).isEqualTo(0.0f);
+//		assertThat(storyValidator.rankStories(entries)).isEqualTo(0.0);
 //
 //	}
 //

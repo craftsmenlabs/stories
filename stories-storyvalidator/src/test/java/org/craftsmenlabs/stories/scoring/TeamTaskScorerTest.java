@@ -27,12 +27,12 @@ TeamTaskScorerTest {
             result = new TeamTask();
 
             validationConfig.getTeamTask().getRatingThreshold();
-            result = 0.7f;
+            result = 0.7;
         }};
 
         final ValidatedTeamTask validate = getScorer(validationConfig).validate(entry.getItem());
-        float score = validate.getScoredPoints();
-        assertThat(score).isEqualTo(0.0f);
+        double score = validate.getScoredPoints();
+        assertThat(score).isEqualTo(0.0);
         assertThat(validate.getAllViolations()).hasSize(8);
     }
 
@@ -44,12 +44,12 @@ TeamTaskScorerTest {
             result = null;
 
             validationConfig.getTeamTask().getRatingThreshold();
-            result = 0.7f;
+            result = 0.7;
         }};
 
         final ValidatedTeamTask validate = getScorer(validationConfig).validate(entry.getItem());
-        float score = validate.getScoredPoints();
-        assertThat(score).isEqualTo(0.0f);
+        double score = validate.getScoredPoints();
+        assertThat(score).isEqualTo(0.0);
     }
 
     @Test
@@ -58,7 +58,7 @@ TeamTaskScorerTest {
                 .summary("summary")
                 .description("description")
                 .acceptationCriteria(StringUtils.repeat("Given when then ", 20))
-                .estimation(1f)
+                .estimation(1.)
                 .build();
         new Expectations() {{
             entry.getItem();
@@ -74,12 +74,12 @@ TeamTaskScorerTest {
 
 
             validationConfig.getTeamTask().getRatingThreshold();
-            result = 0.7f;
+            result = 0.7;
         }};
 
         final ValidatedTeamTask validate = getScorer(validationConfig).validate(entry.getItem());
-        float score = validate.getScoredPoints();
-        assertThat(score).isEqualTo(1.0f);
+        double score = validate.getScoredPoints();
+        assertThat(score).isEqualTo(1.0);
         assertThat(validate.getAllViolations()).hasSize(0);
     }
 }

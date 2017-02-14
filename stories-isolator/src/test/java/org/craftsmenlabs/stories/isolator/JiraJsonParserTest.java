@@ -6,7 +6,10 @@ import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.FilterConfig;
 import org.craftsmenlabs.stories.api.models.config.SourceConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
-import org.craftsmenlabs.stories.api.models.items.base.*;
+import org.craftsmenlabs.stories.api.models.items.base.Backlog;
+import org.craftsmenlabs.stories.api.models.items.base.Bug;
+import org.craftsmenlabs.stories.api.models.items.base.Epic;
+import org.craftsmenlabs.stories.api.models.items.base.Feature;
 import org.craftsmenlabs.stories.api.models.logging.StandaloneLogger;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraBacklog;
 import org.craftsmenlabs.stories.isolator.parser.JiraJsonParser;
@@ -74,7 +77,7 @@ public class JiraJsonParserTest {
         assertEquals(backlog.getIssues().size(), 1);
         Feature feature = (Feature) backlog.getIssues().get("DIU-726");
         assertNotNull(feature.getEstimation());
-        assertThat(feature.getEstimation()).isCloseTo(4.56f, withinPercentage(1.0));
+        assertThat(feature.getEstimation()).isCloseTo(4.56, withinPercentage(1.0));
     }
 
     @Test
@@ -83,7 +86,7 @@ public class JiraJsonParserTest {
         String json = readFile("jira-one-story-with-invalid-estimation-test.json");
         Backlog backlog = jiraJsonParser.parse(mapper.readValue(json, JiraBacklog.class));
         assertEquals(backlog.getIssues().size(), 1);
-        assertThat(((Feature) backlog.getIssues().get("DIU-726")).getEstimation()).isEqualTo(0.0f);
+        assertThat(((Feature) backlog.getIssues().get("DIU-726")).getEstimation()).isNull();
     }
 
     @Test

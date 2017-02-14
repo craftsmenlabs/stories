@@ -18,22 +18,21 @@ public class CurvedRanking implements Ranking {
      * @return
      */
     @Override
-    public List<Float> getRanking(List<? extends BacklogItem> entries) {
+    public List<Double> getRanking(List<? extends BacklogItem> entries) {
         this.entries = entries;
-        final List<Float> absoluteCurve = IntStream.range(0, entries.size())
+        final List<Double> absoluteCurve = IntStream.range(0, entries.size())
                 .mapToObj(this::curvedQuotient)
                 .collect(Collectors.toList());
         final double sum = absoluteCurve.stream().mapToDouble(f -> f).sum();
 
-        return absoluteCurve.stream().map(f -> (float) (f / sum)).collect(Collectors.toList());
+        return absoluteCurve.stream().map(f -> f / sum).collect(Collectors.toList());
     }
 
-    private float curvedQuotient(int position) {
+    private double curvedQuotient(int position) {
         return curvedQuotient(position, entries.size());
     }
 
-    private float curvedQuotient(int position, int size) {
-        float part = ((float)position) / size;
-        return 1f - (float)(Math.pow(part, SMOOTH_CURVE));
+    private double curvedQuotient(int position, int size) {
+        return 1.0 - Math.pow(((double) position) / size, SMOOTH_CURVE);
     }
 }

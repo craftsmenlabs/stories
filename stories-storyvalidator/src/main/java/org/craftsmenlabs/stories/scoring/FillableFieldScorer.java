@@ -28,10 +28,10 @@ public class FillableFieldScorer extends AbstractScorer<BacklogItem, ValidatedBa
     private Map<String, String> fields;
 
     public FillableFieldScorer(ValidationConfig validationConfig) {
-        super(1f, validationConfig);
+        super(1.0, validationConfig);
     }
 
-    public FillableFieldScorer(float potentialPoints, ValidationConfig validationConfig) {
+    public FillableFieldScorer(double potentialPoints, ValidationConfig validationConfig) {
         super(potentialPoints, validationConfig);
     }
 
@@ -44,17 +44,17 @@ public class FillableFieldScorer extends AbstractScorer<BacklogItem, ValidatedBa
         // If no fields are type, score 0 and FAIL. (otherwise we will get /0)
         if (enabledFields == null || enabledFields.size() == 0) {
             entry.setRating(Rating.FAIL);
-            entry.setScoredPoints(0f);
+            entry.setScoredPoints(0.0);
             entry.getViolations().add(new Violation(
                     ViolationType.NoFillableFieldsViolation,
                     "There were no fillable fields defined!",
                     potentialPoints
             ));
-            entry.setPoints(0f, potentialPoints);
+            entry.setPoints(0.0, potentialPoints);
             return entry;
         }
 
-        float scorePerField = potentialPoints / enabledFields.size();
+        double scorePerField = potentialPoints / enabledFields.size();
 
         final List<Violation> violations = enabledFields.stream()
                 .filter(field -> StringUtils.isBlank(fields.get(field)))
@@ -66,20 +66,20 @@ public class FillableFieldScorer extends AbstractScorer<BacklogItem, ValidatedBa
                 ).collect(Collectors.toList());
 
         entry.setViolations(violations);
-        entry.setPoints((float) (potentialPoints - violations.stream().mapToDouble(violation -> (double) violation.getMissedPercentage()).sum()), potentialPoints);
+        entry.setPoints((double) (potentialPoints - violations.stream().mapToDouble(violation -> (double) violation.getMissedPercentage()).sum()), potentialPoints);
 
         entry.setRating(getRating(entry));
         return entry;
     }
 
     private Rating getRating(ValidatedBacklogItem entry) {
-        float ratingThreshold;
+        double ratingThreshold;
         if (entry instanceof ValidatedBug) {
             ratingThreshold = validationConfig.getBug().getRatingThreshold();
         } else if (entry instanceof ValidatedEpic) {
             ratingThreshold = validationConfig.getEpic().getRatingThreshold();
         } else {
-            ratingThreshold = 1f;
+            ratingThreshold = 1.0;
         }
         return entry.getScoredPoints() >= ratingThreshold ? Rating.SUCCESS : Rating.FAIL;
 

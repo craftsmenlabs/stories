@@ -33,8 +33,9 @@ public class TeamTaskConverter extends AbstractJiraConverter<TeamTask> {
         if (estimation instanceof String) {
             teamTask.setEstimation(this.parseEstimation((String) estimation));
         } else {
-            teamTask.setEstimation((Float) estimation);
+            teamTask.setEstimation((Double) estimation);
         }
+
         return (TeamTask) fillDefaultInfo(jiraJsonIssue, teamTask);
     }
 
@@ -53,14 +54,5 @@ public class TeamTaskConverter extends AbstractJiraConverter<TeamTask> {
         }
     }
 
-    private float parseEstimation(String estimationString) {
-        try {
-            if (StringUtils.isNotBlank(estimationString)) {
-                return Float.parseFloat(estimationString);
-            }
-        } catch (NumberFormatException nfe) {
-            logger.warn("Parsing of estimation to float failed. By default set to 0.0");
-        }
-        return 0f;
-    }
+
 }

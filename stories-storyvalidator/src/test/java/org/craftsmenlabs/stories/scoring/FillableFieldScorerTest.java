@@ -24,16 +24,16 @@ public class FillableFieldScorerTest {
             result = Arrays.asList("priority");
 
             validationConfig.getBug().getRatingThreshold();
-            result = 0.5f;
+            result = 0.5;
         }};
 
-        final ValidatedBug validatedBug = (ValidatedBug) new FillableFieldScorer(1f, validationConfig).validate(Bug.empty());
-        float score = validatedBug.getScoredPoints();
+        final ValidatedBug validatedBug = (ValidatedBug) new FillableFieldScorer(1.0, validationConfig).validate(Bug.empty());
+        double score = validatedBug.getScoredPoints();
 
-        assertThat(score).isCloseTo(0f, withinPercentage(1));
+        assertThat(score).isCloseTo(0.0, withinPercentage(1));
         assertThat(validatedBug.getAllViolations()).hasSize(1);
         assertThat(validatedBug.getAllViolations().get(0))
-                .isEqualTo(new Violation(ViolationType.FieldEmptyViolation, "Field priority was found to be empty while it should be filled.", 1f));
+                .isEqualTo(new Violation(ViolationType.FieldEmptyViolation, "Field priority was found to be empty while it should be filled.", 1.0));
     }
 
     @Test
@@ -43,14 +43,14 @@ public class FillableFieldScorerTest {
             result = Arrays.asList("priority", "reproduction_path", "environment", "expected_behaviour", "acceptation_criteria");
 
             validationConfig.getBug().getRatingThreshold();
-            result = 0.5f;
+            result = 0.5;
         }};
 
         final Bug bug = new Bug("summary", "description", "repro", "env", "expBehav", "accept", "prio", "1", "1", "1", null, null);
-        final ValidatedBug validatedBug = (ValidatedBug) new FillableFieldScorer(1f, validationConfig).validate(bug);
-        float score = validatedBug.getScoredPoints();
+        final ValidatedBug validatedBug = (ValidatedBug) new FillableFieldScorer(1.0, validationConfig).validate(bug);
+        double score = validatedBug.getScoredPoints();
 
-        assertThat(score).isCloseTo(1f, withinPercentage(1));
+        assertThat(score).isCloseTo(1.0, withinPercentage(1));
         assertThat(validatedBug.getAllViolations()).hasSize(0);
     }
 
@@ -62,7 +62,7 @@ public class FillableFieldScorerTest {
         }};
 
         assertThatExceptionOfType(StoriesException.class).isThrownBy(
-                () -> new FillableFieldScorer(1f, validationConfig).validate(Bug.empty()));
+                () -> new FillableFieldScorer(1.0, validationConfig).validate(Bug.empty()));
     }
 
 }

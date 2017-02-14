@@ -108,7 +108,7 @@ public class ConsoleReporter implements Reporter {
 
         log("\r\n");
         log("Those three combined result in a score of "
-                + doubleDecimalFormat.format(validatedBacklog.getScoredPoints() * 100f)
+                + doubleDecimalFormat.format(validatedBacklog.getScoredPoints() * 100.0)
                 + " / "
                 + MAX_SCORE);
         log("Rated: " + validatedBacklog.getRating() + "  (with threshold on: " + validationConfig.getBacklog()
@@ -191,7 +191,7 @@ public class ConsoleReporter implements Reporter {
         log("Summary: " + teamTask.getItem().getSummary());
         log("Description: " + teamTask.getItem().getDescription());
         log("Criteria: " + teamTask.getItem().getAcceptationCriteria());
-        log("Estimation: " + Float.toString(teamTask.getItem().getEstimation()));
+        log("Estimation: " + Double.toString(teamTask.getItem().getEstimation()));
         reportOnViolations(teamTask.getViolations());
     }
 
@@ -217,7 +217,7 @@ public class ConsoleReporter implements Reporter {
     public void reportOnEstimation(ValidatedEstimation entry) {
         prefix = entry.getRating() == Rating.SUCCESS ? ANSI_GREEN : ANSI_RED;
 
-        Float estimation = entry.getItem();
+        Double estimation = entry.getItem();
         log("\t Estimation: (" + entry.getScoredPoints() + ")" + estimation);
 
         reportOnViolations(entry.getViolations());

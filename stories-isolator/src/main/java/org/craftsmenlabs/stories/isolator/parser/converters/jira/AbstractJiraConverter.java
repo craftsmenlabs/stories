@@ -62,4 +62,14 @@ public abstract class AbstractJiraConverter<T extends BacklogItem> {
 
         return item;
     }
+
+    protected Double parseEstimation(String estimationString) {
+        try {
+            if (StringUtils.isNotBlank(estimationString)) {
+                return Double.parseDouble(estimationString);
+            }
+        } catch (NumberFormatException ignored) {
+        }
+        return null;
+    }
 }

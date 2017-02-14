@@ -62,7 +62,7 @@ public class ValidatedFeature extends ValidatedBacklogItem<Feature> {
     }
 
     @Builder
-    public ValidatedFeature(List<Violation> violations, Rating rating, ValidatedUserStory validatedUserStory, Feature feature, ValidatedAcceptanceCriteria validatedAcceptanceCriteria, ValidatedEstimation validatedEstimation, float scoredPercentage, float missedPercentage, float scoredPoints, float missedPoints) {
+    public ValidatedFeature(List<Violation> violations, Rating rating, ValidatedUserStory validatedUserStory, Feature feature, ValidatedAcceptanceCriteria validatedAcceptanceCriteria, ValidatedEstimation validatedEstimation, double scoredPercentage, double missedPercentage, double scoredPoints, double missedPoints) {
         super(violations, rating, feature, scoredPercentage, missedPercentage, scoredPoints, missedPoints);
         this.validatedUserStory = validatedUserStory;
         this.validatedAcceptanceCriteria = validatedAcceptanceCriteria;
@@ -75,6 +75,6 @@ public class ValidatedFeature extends ValidatedBacklogItem<Feature> {
     }
 
     public ValidatedFeature empty(){
-        return new ValidatedFeature(Collections.emptyList(), Rating.FAIL, ValidatedUserStory.empty(), Feature.empty(), ValidatedAcceptanceCriteria.empty(), ValidatedEstimation.empty(), 0f, 0f, 0f, 0f);
+        return new ValidatedFeature(Collections.emptyList(), Rating.FAIL, ValidatedUserStory.empty(), Feature.empty(), ValidatedAcceptanceCriteria.empty(), ValidatedEstimation.empty(), 0, 0, 0, 0);
     }
 }

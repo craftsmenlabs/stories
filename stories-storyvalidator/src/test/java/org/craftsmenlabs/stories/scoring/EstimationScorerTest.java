@@ -17,12 +17,12 @@ public class EstimationScorerTest {
     public void validateReturnsZeroOnNull(@Injectable ValidatedFeature entry, @Injectable ValidationConfig validationConfig) throws Exception {
         new Expectations() {{
             validationConfig.getEstimation().getRatingThreshold();
-            result = 0.7f;
+            result = 0.7;
         }};
 
-        final ValidatedEstimation validatedEstimation = new EstimationScorer(1f, validationConfig).validate(null);
-        float score = validatedEstimation.getScoredPoints();
-        assertThat(score).isCloseTo(0f, withinPercentage(1));
+        final ValidatedEstimation validatedEstimation = new EstimationScorer(1.0, validationConfig).validate(null);
+        double score = validatedEstimation.getScoredPoints();
+        assertThat(score).isCloseTo(0.0, withinPercentage(1));
         assertThat(validatedEstimation.getViolations()).hasSize(1);
     }
 
@@ -30,31 +30,31 @@ public class EstimationScorerTest {
     public void testPerformScorerReturnsOneOnZero(@Injectable ValidatedFeature entry, @Injectable ValidationConfig validationConfig) throws Exception {
         new Expectations() {{
             entry.getItem().getEstimation();
-            result = 0f;
+            result = 0;
 
 
             validationConfig.getEstimation().getRatingThreshold();
-            result = 0.1f;
+            result = 0.1;
         }};
-        ValidatedEstimation entry1 = new EstimationScorer(1f, validationConfig).validate(entry.getItem().getEstimation());
-        assertThat(entry1.getScoredPoints()).isCloseTo(0f, withinPercentage(1));
-        assertThat(entry1.getRating()).isEqualTo(Rating.FAIL);
-        assertThat(entry1.getViolations()).hasSize(1);
+        ValidatedEstimation entry1 = new EstimationScorer(1, validationConfig).validate(entry.getItem().getEstimation());
+        assertThat(entry1.getScoredPoints()).isCloseTo(1, withinPercentage(1));
+        assertThat(entry1.getRating()).isEqualTo(Rating.SUCCESS);
+        assertThat(entry1.getViolations()).hasSize(0);
     }
 
     @Test
     public void testvalidateReturnsOneOnValidEstimation(@Injectable ValidatedFeature entry, @Injectable ValidationConfig validationConfig) throws Exception {
         new Expectations() {{
             entry.getItem().getEstimation();
-            result = 1f;
+            result = 1;
 
 
             validationConfig.getEstimation().getRatingThreshold();
-            result = 1f;
+            result = 1;
         }};
 
-        ValidatedEstimation entry1 = new EstimationScorer(1f, validationConfig).validate(entry.getItem().getEstimation());
-        assertThat(entry1.getScoredPoints()).isCloseTo(1f, withinPercentage(1));
+        ValidatedEstimation entry1 = new EstimationScorer(1, validationConfig).validate(entry.getItem().getEstimation());
+        assertThat(entry1.getScoredPoints()).isCloseTo(1, withinPercentage(1));
         assertThat(entry1.getViolations()).hasSize(0);
     }
 
@@ -62,13 +62,13 @@ public class EstimationScorerTest {
     public void testvalidateReturnsSuccesOnHighScore(@Injectable ValidatedFeature entry, @Injectable ValidationConfig validationConfig) throws Exception {
         new Expectations() {{
             entry.getItem().getEstimation();
-            result = 1f;
+            result = 1;
 
             validationConfig.getEstimation().getRatingThreshold();
-            result = 1f;
+            result = 1;
         }};
 
-        ValidatedEstimation entry1 = new EstimationScorer(1f, validationConfig).validate(entry.getItem().getEstimation());
+        ValidatedEstimation entry1 = new EstimationScorer(1, validationConfig).validate(entry.getItem().getEstimation());
         assertThat(entry1.getRating()).isEqualTo(Rating.SUCCESS);
         assertThat(entry1.getViolations()).hasSize(0);
     }

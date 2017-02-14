@@ -71,7 +71,7 @@ public class TestDataGenerator
 //                    .map(issue ->
 //                            ValidatedFeature.builder()
 //                                    .feature(issue)
-//                                    .pointsValuation(0f)
+//                                    .pointsValuation(0.0)
 //                                    .violations(new ArrayList<>())
 //                                    .build())
 //                    .collect(Collectors.toList())
@@ -84,7 +84,7 @@ public class TestDataGenerator
 //                        .map(issue ->
 //                                ValidatedFeature.builder()
 //                                        .feature(issue)
-//                                        .pointsValuation(0f)
+//                                        .pointsValuation(0.0)
 //                                        .violations(new ArrayList<>())
 //                                        .build())
 //                        .collect(Collectors.toList())

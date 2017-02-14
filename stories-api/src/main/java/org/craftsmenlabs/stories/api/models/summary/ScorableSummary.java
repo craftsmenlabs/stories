@@ -9,7 +9,7 @@ import org.craftsmenlabs.stories.api.models.Rating;
 @Builder
 @AllArgsConstructor
 public class ScorableSummary implements Summarizable<ScorableSummary> {
-    private float pointsValuation;
+    private double pointsValuation;
     private Rating rating;
     private long violationCount;
 

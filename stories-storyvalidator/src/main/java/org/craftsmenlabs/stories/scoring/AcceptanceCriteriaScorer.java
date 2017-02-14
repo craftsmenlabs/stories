@@ -18,7 +18,7 @@ public class AcceptanceCriteriaScorer extends AbstractScorer<String, ValidatedAc
 
     public static final int MINIMUM_LENGTH_OF_ACC_CRITERIA = 20;
 
-    public AcceptanceCriteriaScorer(float potentialPoints, ValidationConfig validationConfig) {
+    public AcceptanceCriteriaScorer(double potentialPoints, ValidationConfig validationConfig) {
         super(potentialPoints, validationConfig);
     }
 
@@ -27,20 +27,18 @@ public class AcceptanceCriteriaScorer extends AbstractScorer<String, ValidatedAc
         if(criteria == null){
             criteria = "";
         }
-        float LENGTH_POINTS = potentialPoints / 4f;
-        float GIVEN_POINTS = potentialPoints / 4f;
-        float WHEN_POINTS = potentialPoints / 4f;
-        float THEN_POINTS = potentialPoints / 4f;
+        double LENGTH_POINTS = potentialPoints / 4;
+        double GIVEN_POINTS = potentialPoints / 4;
+        double WHEN_POINTS = potentialPoints / 4;
+        double THEN_POINTS = potentialPoints / 4;
 
         List<Violation> violations = new ArrayList<>();
-        float points = 0f;
+        double points = 0;
 
-        if (criteria == null || criteria.isEmpty()) {
+        if (criteria.isEmpty()) {
             violations.add(new Violation(ViolationType.CriteriaVoidViolation,
                     "No acceptance criteria were found.",
                     potentialPoints));
-
-            criteria = "";
         }
 
         final String criteriaLower = criteria.toLowerCase();

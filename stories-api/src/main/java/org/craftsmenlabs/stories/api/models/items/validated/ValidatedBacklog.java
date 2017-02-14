@@ -21,7 +21,7 @@ public class ValidatedBacklog extends AbstractValidatedItem<Backlog> {
     private List<? extends ValidatedBacklogItem> items = new ArrayList<>();
 
     @Builder
-    public ValidatedBacklog(List<Violation> violations, Rating rating, Backlog backlog, List<? extends ValidatedBacklogItem> items, float scoredPercentage, float missedPercentage, float scoredPoints, float missedPoints) {
+    public ValidatedBacklog(List<Violation> violations, Rating rating, Backlog backlog, List<? extends ValidatedBacklogItem> items, double scoredPercentage, double missedPercentage, double scoredPoints, double missedPoints) {
         super(violations, rating, backlog, scoredPercentage, missedPercentage, scoredPoints, missedPoints);
         this.items = items;
     }

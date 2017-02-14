@@ -21,7 +21,7 @@ public class BacklogScorer extends AbstractScorer<Backlog, ValidatedBacklog> {
     private Map<Class<? extends Scorable>, AbstractScorer> scorers = new HashMap<>();
 
     public BacklogScorer(ValidationConfig validationConfig, Ranking ranking) {
-        super(1f, validationConfig);
+        super(1, validationConfig);
         this.ranking = ranking;
 
         this.setDefaultScorers();
@@ -52,10 +52,10 @@ public class BacklogScorer extends AbstractScorer<Backlog, ValidatedBacklog> {
         if (backlog == null || backlog.getIssues().size() == 0) {
             validatedBacklog.getViolations().add(new Violation(
                     ViolationType.BacklogEmptyViolation,
-                    "The backlog is empty, or doesn't contain any issues.", 1f
+                    "The backlog is empty, or doesn't contain any issues.", 1
             ));
 
-            validatedBacklog.setScoredPoints(0f);
+            validatedBacklog.setScoredPoints(0.0);
             validatedBacklog.setRating(Rating.FAIL);
             return validatedBacklog;
         }
@@ -82,7 +82,7 @@ public class BacklogScorer extends AbstractScorer<Backlog, ValidatedBacklog> {
                 .collect(Collectors.toList());
 
         //calculate the scored backlog points
-        final float backlogPoints = (float) backlogItems.stream().mapToDouble(item ->{
+        final double backlogPoints = backlogItems.stream().mapToDouble(item -> {
                     item.getScoredPoints();
                     return item.getScoredPoints();
                 }
@@ -92,7 +92,7 @@ public class BacklogScorer extends AbstractScorer<Backlog, ValidatedBacklog> {
         validatedBacklog.setScoredPoints(backlogPoints);
         validatedBacklog.setItems(backlogItems);
 
-        if (validatedBacklog.getScoredPoints() * 100f >= validationConfig.getBacklog().getRatingThreshold()) {
+        if (validatedBacklog.getScoredPoints() * 100.0 >= validationConfig.getBacklog().getRatingThreshold()) {
             validatedBacklog.setRating(Rating.SUCCESS);
         } else {
             // Failed, add violation
@@ -100,7 +100,7 @@ public class BacklogScorer extends AbstractScorer<Backlog, ValidatedBacklog> {
             validatedBacklog.getViolations().add(new Violation(
                     ViolationType.BacklogRatingViolation,
                     "The backlog did not score a minimum of " + validationConfig.getBacklog().getRatingThreshold()
-                            + " points and is therefore rated: " + validatedBacklog.getRating(), 1f));
+                            + " points and is therefore rated: " + validatedBacklog.getRating(), 1.0));
         }
         return validatedBacklog;
     }

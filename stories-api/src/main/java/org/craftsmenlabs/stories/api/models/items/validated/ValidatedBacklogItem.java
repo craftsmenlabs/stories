@@ -29,7 +29,7 @@ public abstract class ValidatedBacklogItem<T extends Rankable> extends AbstractV
     public ValidatedBacklogItem() {
     }
 
-    public ValidatedBacklogItem(List<Violation> violations, Rating rating, T item, float scoredPercentage, float missedPercentage, float scoredPoints, float missedPoints) {
+    public ValidatedBacklogItem(List<Violation> violations, Rating rating, T item, double scoredPercentage, double missedPercentage, double scoredPoints, double missedPoints) {
         super(violations, rating, item, scoredPercentage, missedPercentage, scoredPoints, missedPoints);
     }
 

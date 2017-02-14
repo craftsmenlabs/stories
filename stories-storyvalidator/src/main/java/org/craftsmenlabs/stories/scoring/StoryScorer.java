@@ -13,9 +13,9 @@ import java.util.List;
 
 public class StoryScorer extends AbstractScorer<String, ValidatedUserStory >{
     public final static int USERSTORY_MINIMUM_LENGTH = 50;
-    private final float potentialPoints;
+    private final double potentialPoints;
 
-    public StoryScorer(float potentialPoints, ValidationConfig validationConfig) {
+    public StoryScorer(double potentialPoints, ValidationConfig validationConfig) {
         super(potentialPoints, validationConfig);
         this.potentialPoints = potentialPoints;
     }
@@ -24,12 +24,12 @@ public class StoryScorer extends AbstractScorer<String, ValidatedUserStory >{
     public ValidatedUserStory validate(String userStory) {
         List<Violation> violations = new ArrayList<>();
 
-        final float STORY_LENGTH_CLAUSE_POINTS = potentialPoints / 4f;
-        final float STORY_AS_A_CLAUSE_POINTS = potentialPoints / 4f;
-        final float STORY_SO_CLAUSE_POINTS = potentialPoints / 4f;
-        final float STORY_I_CLAUSE_POINTS = potentialPoints / 4f;
+        final double STORY_LENGTH_CLAUSE_POINTS = potentialPoints / 4;
+        final double STORY_AS_A_CLAUSE_POINTS = potentialPoints / 4;
+        final double STORY_SO_CLAUSE_POINTS = potentialPoints / 4;
+        final double STORY_I_CLAUSE_POINTS = potentialPoints / 4;
 
-        float points = 0.0f;
+        double points = 0.0;
 
         if (userStory == null || StringUtils.isEmpty(userStory))
         {

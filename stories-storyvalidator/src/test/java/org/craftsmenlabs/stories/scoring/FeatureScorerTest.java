@@ -15,12 +15,12 @@ import static org.assertj.core.api.Assertions.withinPercentage;
 public class FeatureScorerTest {
 
     private FeatureScorer getScorer(ValidationConfig validationConfig) {
-        return new FeatureScorer(1f, validationConfig);
+        return new FeatureScorer(1.0, validationConfig);
     }
 
     @Test
     public void performScorer_ReturnsZeroOnNullIssue(@Injectable ValidationConfig validationConfig) {
-        new Expectations(){{
+        new Expectations() {{
             validationConfig.getStory().isActive();
             result = true;
 
@@ -32,16 +32,16 @@ public class FeatureScorerTest {
         }};
 
         final ValidatedFeature validatedFeature = getScorer(validationConfig).validate(null);
-        float score = validatedFeature.getScoredPoints();
-        assertThat(score).isCloseTo(0f, withinPercentage(1));
+        double score = validatedFeature.getScoredPoints();
+        assertThat(score).isCloseTo(0.0, withinPercentage(1));
         assertThat(validatedFeature.getAllViolations()).hasSize(7);
     }
 
     @Test
     public void performScorer_ReturnsZeroOnNullUserStory(@Injectable Feature feature, @Injectable ValidationConfig validationConfig) {
-        new Expectations(){{
-           feature.getUserstory();
-           result = null;
+        new Expectations() {{
+            feature.getUserstory();
+            result = null;
 
             validationConfig.getStory().isActive();
             result = true;
@@ -54,19 +54,22 @@ public class FeatureScorerTest {
         }};
 
         final ValidatedFeature validatedFeature = getScorer(validationConfig).validate(feature);
-        float score = validatedFeature.getScoredPoints();
-        assertThat(score).isCloseTo(0f, withinPercentage(1));
+        double score = validatedFeature.getScoredPoints();
+        assertThat(score).isCloseTo(0.0, withinPercentage(1));
         assertThat(validatedFeature.getAllViolations()).hasSize(1);
     }
 
     @Test
     public void performScorer_ReturnsZeroOnNullCriteria(@Injectable Feature feature, @Injectable ValidationConfig validationConfig) {
-        new Expectations(){{
+        new Expectations() {{
             feature.getUserstory();
             result = "";
 
             feature.getAcceptanceCriteria();
-           result = null;
+            result = null;
+
+            feature.getEstimation();
+            result = null;
 
 
             validationConfig.getStory().isActive();
@@ -80,14 +83,14 @@ public class FeatureScorerTest {
         }};
 
         final ValidatedFeature validatedFeature = getScorer(validationConfig).validate(feature);
-        float score = validatedFeature.getScoredPoints();
-        assertThat(score).isCloseTo(0f, withinPercentage(1));
+        double score = validatedFeature.getScoredPoints();
+        assertThat(score).isCloseTo(0.0, withinPercentage(1));
         assertThat(validatedFeature.getAllViolations()).hasSize(7);
     }
 
     @Test
     public void performScorer_ReturnsZeroOnAllNotActive(@Injectable Feature feature, @Injectable ValidationConfig validationConfig) {
-        new Expectations(){{
+        new Expectations() {{
             validationConfig.getStory().isActive();
             result = false;
 
@@ -99,17 +102,17 @@ public class FeatureScorerTest {
 
         }};
         final ValidatedFeature validatedFeature = getScorer(validationConfig).validate(feature);
-        float score = validatedFeature.getScoredPoints();
-        assertThat(score).isCloseTo(0f, withinPercentage(1));
+        double score = validatedFeature.getScoredPoints();
+        assertThat(score).isCloseTo(0.0, withinPercentage(1));
         assertThat(validatedFeature.getAllViolations()).hasSize(0);
     }
 
     @Test
     public void performScorer_ReturnsOneOnOnlyPerfectUerstoryActive(@Injectable Feature feature, @Injectable ValidationConfig validationConfig) {
 
-        ValidatedUserStory validatedUserStory1 = ValidatedUserStory.builder().scoredPoints(1f).build();
+        ValidatedUserStory validatedUserStory1 = ValidatedUserStory.builder().scoredPoints(1.0).build();
 
-        new Expectations(){{
+        new Expectations() {{
             feature.getUserstory();
             result = "as a i want so that as a i want so that as a i want so that as a i want so that ";
 
@@ -133,8 +136,8 @@ public class FeatureScorerTest {
         }};
 
         final ValidatedFeature validatedFeature = getScorer(validationConfig).validate(feature);
-        float score = validatedFeature.getScoredPoints();
-        assertThat(score).isCloseTo(1f, withinPercentage(1));
+        double score = validatedFeature.getScoredPoints();
+        assertThat(score).isCloseTo(1.0, withinPercentage(1));
         assertThat(validatedFeature.getAllViolations()).hasSize(0);
     }
 }

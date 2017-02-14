@@ -16,12 +16,12 @@ public abstract class AbstractValidatedItem<T> {
     private Rating rating;
     private T item;
 
-    private float scoredPercentage;
-    private float missedPercentage;
-    private float scoredPoints;
-    private float missedPoints;
+    private double scoredPercentage;
+    private double missedPercentage;
+    private double scoredPoints;
+    private double missedPoints;
 
-    public void setPoints(float scoredPoints, float potentialPoints) {
+    public void setPoints(double scoredPoints, double potentialPoints) {
         this.scoredPoints = scoredPoints;
         this.missedPoints = potentialPoints - scoredPoints;
         this.scoredPercentage = scoredPoints / potentialPoints;

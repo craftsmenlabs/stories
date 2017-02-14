@@ -59,18 +59,18 @@ public class GithubJsonParserTest
                 .map(item -> (Feature) item.getValue())
                 .sorted(Comparator.comparing(Feature::getRank))
                 .collect(Collectors.toList())).containsExactly(
-                Feature.builder().key("0").rank("00").userstory("").acceptanceCriteria("").estimation(0f).build(),
-                Feature.builder().key("1").rank("01").userstory("").acceptanceCriteria("").estimation(0f).build(),
-                Feature.builder().key("2").rank("02").userstory("").acceptanceCriteria("").estimation(0f).build(),
-                Feature.builder().key("3").rank("03").userstory("").acceptanceCriteria("").estimation(0f).build(),
-                Feature.builder().key("4").rank("04").userstory("").acceptanceCriteria("").estimation(0f).build(),
-                Feature.builder().key("5").rank("05").userstory("").acceptanceCriteria("").estimation(0f).build(),
-                Feature.builder().key("6").rank("06").userstory("").acceptanceCriteria("").estimation(0f).build(),
-                Feature.builder().key("7").rank("07").userstory("").acceptanceCriteria("").estimation(0f).build(),
-                Feature.builder().key("8").rank("08").userstory("").acceptanceCriteria("").estimation(0f).build(),
-                Feature.builder().key("9").rank("09").userstory("").acceptanceCriteria("").estimation(0f).build(),
-                Feature.builder().key("10").rank("10").userstory("").acceptanceCriteria("").estimation(0f).build(),
-                Feature.builder().key("100").rank("11").userstory("").acceptanceCriteria("").estimation(0f).build()
+                Feature.builder().key("0").rank("00").userstory("").acceptanceCriteria("").estimation(0.0).build(),
+                Feature.builder().key("1").rank("01").userstory("").acceptanceCriteria("").estimation(0.0).build(),
+                Feature.builder().key("2").rank("02").userstory("").acceptanceCriteria("").estimation(0.0).build(),
+                Feature.builder().key("3").rank("03").userstory("").acceptanceCriteria("").estimation(0.0).build(),
+                Feature.builder().key("4").rank("04").userstory("").acceptanceCriteria("").estimation(0.0).build(),
+                Feature.builder().key("5").rank("05").userstory("").acceptanceCriteria("").estimation(0.0).build(),
+                Feature.builder().key("6").rank("06").userstory("").acceptanceCriteria("").estimation(0.0).build(),
+                Feature.builder().key("7").rank("07").userstory("").acceptanceCriteria("").estimation(0.0).build(),
+                Feature.builder().key("8").rank("08").userstory("").acceptanceCriteria("").estimation(0.0).build(),
+                Feature.builder().key("9").rank("09").userstory("").acceptanceCriteria("").estimation(0.0).build(),
+                Feature.builder().key("10").rank("10").userstory("").acceptanceCriteria("").estimation(0.0).build(),
+                Feature.builder().key("100").rank("11").userstory("").acceptanceCriteria("").estimation(0.0).build()
 
         );
     }

@@ -18,10 +18,10 @@ import java.util.stream.Stream;
 public class FeatureScorer extends AbstractScorer<Feature, ValidatedFeature> {
 
     public FeatureScorer(ValidationConfig validationConfig) {
-        super(1f, validationConfig);
+        super(1.0, validationConfig);
     }
 
-    public FeatureScorer(float potentialPoints, ValidationConfig validationConfig) {
+    public FeatureScorer(double potentialPoints, ValidationConfig validationConfig) {
         super(potentialPoints, validationConfig);
     }
 
@@ -32,7 +32,7 @@ public class FeatureScorer extends AbstractScorer<Feature, ValidatedFeature> {
         }
 
         final long count = Stream.of(validationConfig.getStory().isActive(), validationConfig.getCriteria().isActive(), validationConfig.getEstimation().isActive()).filter(item -> item).count();
-        final float potentialPointsPerSubItem = count == 0 ? 0 : potentialPoints / count;
+        final double potentialPointsPerSubItem = count == 0 ? 0 : potentialPoints / count;
 
         final ValidatedFeature validatedFeature = ValidatedFeature
                 .builder()
@@ -40,7 +40,7 @@ public class FeatureScorer extends AbstractScorer<Feature, ValidatedFeature> {
                 .violations(new ArrayList<>())
                 .build();
 
-        float points = 0f;
+        double points = 0.0;
         if(validationConfig.getStory().isActive()){
             ValidatedUserStory validatedUserStory = new StoryScorer(potentialPointsPerSubItem, validationConfig).validate(feature.getUserstory());
             validatedFeature.setValidatedUserStory(validatedUserStory);
