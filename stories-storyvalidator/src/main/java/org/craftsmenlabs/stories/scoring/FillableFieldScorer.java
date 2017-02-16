@@ -61,8 +61,7 @@ public class FillableFieldScorer extends AbstractScorer<BacklogItem, ValidatedBa
                 .map(field -> new Violation(
                         ViolationType.FieldEmptyViolation,
                         "Field " + field + " was found to be empty while it should be filled.",
-                        scorePerField,
-                        potentialPoints)
+                        scorePerField)
                 ).collect(Collectors.toList());
 
         entry.setViolations(violations);

@@ -57,6 +57,25 @@ public class FillableFieldScorerTest {
     }
 
     @Test
+    public void testValidateScoresHalfPoints(@Injectable ValidationConfig validationConfig) throws Exception {
+        new Expectations(){{
+            validationConfig.getBug().getEnabledFields();
+            result = Arrays.asList("priority", "reproduction_path", "environment", "expected_behaviour", "acceptation_criteria");
+
+            validationConfig.getBug().getRatingThreshold();
+            result = 0.5;
+        }};
+
+        final Bug bug = new Bug("summary", "description", "repro", "env", "expBehav", null, null, "1", "1", "1", null, null);
+        final ValidatedBug validatedBug = (ValidatedBug) new FillableFieldScorer(0.2, validationConfig).validate(bug);
+        double score = validatedBug.getScoredPoints();
+
+        assertThat(score).isCloseTo(0.2 * 0.6, withinPercentage(1));
+        assertThat(validatedBug.getAllViolations()).hasSize(2);
+        assertThat(validatedBug.getRating()).isEqualTo(Rating.SUCCESS);
+    }
+
+    @Test
     public void testValidateWrongField(@Injectable ValidationConfig validationConfig) throws Exception {
         new Expectations(){{
             validationConfig.getBug().getEnabledFields();
