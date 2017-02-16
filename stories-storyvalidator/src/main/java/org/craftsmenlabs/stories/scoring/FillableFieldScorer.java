@@ -66,7 +66,7 @@ public class FillableFieldScorer extends AbstractScorer<BacklogItem, ValidatedBa
                 ).collect(Collectors.toList());
 
         entry.setViolations(violations);
-        entry.setPoints((double) (potentialPoints - violations.stream().mapToDouble(violation -> (double) violation.getMissedPercentage()).sum()), potentialPoints);
+        entry.setPoints(potentialPoints - violations.stream().mapToDouble(violation -> violation.getMissedPoints()).sum(), potentialPoints);
 
         entry.setRating(getRating(entry));
         return entry;
