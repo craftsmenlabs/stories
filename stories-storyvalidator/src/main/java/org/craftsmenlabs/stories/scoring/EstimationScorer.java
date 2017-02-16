@@ -28,7 +28,7 @@ public class EstimationScorer extends AbstractScorer<Double, ValidatedEstimation
             points = 0.0;
             violations.add(new Violation(
                     ViolationType.EstimationEmptyViolation,
-                    "Estimation is empty or empty",
+                    "Estimation is empty",
                     potentialPoints));
         } else {
             points = potentialPoints;
