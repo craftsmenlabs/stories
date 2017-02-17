@@ -53,10 +53,10 @@ storynator:
     ## JIRA Agile uses custom fields to store some information it needs.
     ## To use the Storynator to it's full potential, you should create additional fields that represent the different data of the issue.
     field-mapping:
-        rank: "customfield_11400"
+        rank: "Rank"
                                       # The rank field present in all issue types. Used for the curved ranking
         feature:
-            estimation: "customfield_11402"
+            estimation: "Story points"
             acceptance-criteria: "customfield_11403"
         bug:
             reproduction-path: "customfield_13001"
@@ -65,6 +65,10 @@ storynator:
             acceptation-criteria: "customfield_13004"
         epic:
             goal: "customfield_13005"
+        team-task:
+            estimation: "Story points"
+            acceptance-criteria: "customfield_11403"
+            
     
     ## Defines what parts of the validation are active. General ones are:
     ##
@@ -94,6 +98,9 @@ storynator:
         epic:
             active: true
             fill-fields: ["goal"]
+        team-task:
+            active: true
+            fill-fields: ["goal"]
         criteria:
             rating-threshold: 0.7
             active: false
@@ -107,6 +114,10 @@ storynator:
             active: false
 
 ```
+
+As you can see in the field-mapping fields, you can use the names of Jira's input elements. 
+However Jira can be configured with ambiguity in the field names.
+If this is the case, please use customfields, which can be found in Jira's JSON export.  
 
 ## Reference
 If you want to use the command-line arguments for various reasons, here is the full reference of all arguments. Note that those are exactly the same as when you would provide an application.properties file!
@@ -160,5 +171,7 @@ If you want to use the command-line arguments for various reasons, here is the f
 | storynator.validation.epic.active | true | Whether to enable validation of epics in your backlog | true / false |
 | storynator.validation.epic.fill-fields | [See sample] | What fields to be filled for a maximum score on epics | Array of strings |
 | storynator.validation.epic.rating-threshold | 0.7 | Minimal score for an epic to be marked success | 0-1 (float) |
+| storynator.validation.team-task.active | true | Whether to enable validation of team tasks in your backlog | true / false |
+| storynator.validation.team-task.rating-threshold | 0.7 | Minimal score for a team task to be marked success | 0-1 (float) |
 
 
