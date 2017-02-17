@@ -1,5 +1,6 @@
 package org.craftsmenlabs.stories.api.models.items.base;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonTypeName("TEAM_TASK")
 public class TeamTask extends BacklogItem {
     private String summary;
     private String description;
