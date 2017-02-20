@@ -20,7 +20,7 @@ public class CurvedRankingTest {
         curvedRanking = new CurvedRanking();
         final List<Double> ranking = curvedRanking.getRanking(Arrays.asList(new Feature(), new Feature(), new Feature(), new Feature()));
 
-        assertThat(ranking).usingElementComparator(new DoubleComparator(0.0001)).containsExactly(0.32, 0.3, 0.24, 0.14);
+        assertThat(ranking).usingElementComparator(new DoubleComparator(0.0001)).containsExactly(32.0, 30.0, 24.0, 14.0);
     }
 
     @Test

@@ -25,7 +25,7 @@ public class CurvedRanking implements Ranking {
                 .collect(Collectors.toList());
         final double sum = absoluteCurve.stream().mapToDouble(f -> f).sum();
 
-        return absoluteCurve.stream().map(f -> f / sum).collect(Collectors.toList());
+        return absoluteCurve.stream().map(f -> 100.0 * f / sum).collect(Collectors.toList());
     }
 
     private double curvedQuotient(int position) {

@@ -35,11 +35,11 @@ public class AcceptanceCriteriaScorerTest {
             result = "";
 
             validationConfig.getCriteria().getRatingThreshold();
-            result = 0.7;
+            result = 70;
 
         }};
 
-        double score = new AcceptanceCriteriaScorer(1.0, validationConfig).validate(entry.getItem().getAcceptanceCriteria()).getScoredPoints();
+        double score = new AcceptanceCriteriaScorer(10.0, validationConfig).validate(entry.getItem().getAcceptanceCriteria()).getScoredPoints();
         assertThat(score).isCloseTo(0.0, withinPercentage(1));
     }
 
@@ -51,10 +51,10 @@ public class AcceptanceCriteriaScorerTest {
 
 
             validationConfig.getCriteria().getRatingThreshold();
-            result = 0.7;
+            result = 70;
         }};
 
-        double score = new AcceptanceCriteriaScorer(1.0, validationConfig).validate(entry.getItem().getAcceptanceCriteria()).getScoredPoints();
+        double score = new AcceptanceCriteriaScorer(10.0, validationConfig).validate(entry.getItem().getAcceptanceCriteria()).getScoredPoints();
         assertThat(score).isCloseTo(0.0, withinPercentage(1));
     }
 
@@ -73,7 +73,7 @@ public class AcceptanceCriteriaScorerTest {
             result = goodCriteria;
 
             validationConfig.getCriteria().getRatingThreshold();
-            result = 0.9999;
+            result = 99.99;
         }};
 
         ValidatedAcceptanceCriteria entry1 = new AcceptanceCriteriaScorer(1.0, validationConfig).validate(entry.getItem().getAcceptanceCriteria());
@@ -100,15 +100,15 @@ public class AcceptanceCriteriaScorerTest {
             result = goodCriteria;
 
             validationConfig.getCriteria().getRatingThreshold();
-            result = 0.9999;
+            result = 99.99;
         }};
 
-        ValidatedAcceptanceCriteria entry1 = new AcceptanceCriteriaScorer(1.0, validationConfig).validate(entry.getItem().getAcceptanceCriteria());
-        assertThat(entry1.getScoredPoints()).isCloseTo(1.0 - 0.25, withinPercentage(1));
+        ValidatedAcceptanceCriteria entry1 = new AcceptanceCriteriaScorer(2.0, validationConfig).validate(entry.getItem().getAcceptanceCriteria());
+        assertThat(entry1.getScoredPoints()).isCloseTo(2.0 - 0.5, withinPercentage(1));
         assertThat(entry1.getViolations()).contains(new Violation(
                 ViolationType.CriteriaWhenClauseViolation,
                 "<When> section is not described properly. The criteria should contain any of the following keywords: whooon ",
-                0.25));
+                0.50));
     }
 
     @Test
@@ -126,15 +126,15 @@ public class AcceptanceCriteriaScorerTest {
             result = goodCriteria;
 
             validationConfig.getCriteria().getRatingThreshold();
-            result = 0.9999;
+            result = 99.99;
         }};
 
-        ValidatedAcceptanceCriteria entry1 = new AcceptanceCriteriaScorer(1.0, validationConfig).validate(entry.getItem().getAcceptanceCriteria());
-        assertThat(entry1.getScoredPoints()).isCloseTo(1.0 - 0.25, withinPercentage(1));
+        ValidatedAcceptanceCriteria entry1 = new AcceptanceCriteriaScorer(2.0, validationConfig).validate(entry.getItem().getAcceptanceCriteria());
+        assertThat(entry1.getScoredPoints()).isCloseTo(2.0 - 0.5, withinPercentage(1));
         assertThat(entry1.getViolations()).contains(new Violation(
                 ViolationType.CriteriaThenClauseViolation,
                 "<Then> section is not described properly. The criteria should contain any of the following keywords: thooon ",
-                0.25));
+                0.5));
     }
 
     @Test
@@ -147,7 +147,7 @@ public class AcceptanceCriteriaScorerTest {
             result = goodCriteria;
 
             validationConfig.getCriteria().getRatingThreshold();
-            result = 0.75;
+            result = 75.0;
         }};
 
         ValidatedAcceptanceCriteria ae = new AcceptanceCriteriaScorer(1.0, validationConfig).validate(entry.getItem().getAcceptanceCriteria());
@@ -164,7 +164,7 @@ public class AcceptanceCriteriaScorerTest {
             result = goodCriteria;
 
             validationConfig.getCriteria().getRatingThreshold();
-            result = 0.3333;
+            result = 33.33;
 
         }};
 
@@ -187,7 +187,7 @@ public class AcceptanceCriteriaScorerTest {
             result = goodCriteria;
 
             validationConfig.getCriteria().getRatingThreshold();
-            result = 0.9999;
+            result = 99.99;
         }};
 
         ValidatedAcceptanceCriteria entry1 = new AcceptanceCriteriaScorer(0.05, validationConfig).validate(entry.getItem().getAcceptanceCriteria());
@@ -211,7 +211,7 @@ public class AcceptanceCriteriaScorerTest {
             result = goodCriteria;
 
             validationConfig.getCriteria().getRatingThreshold();
-            result = 0.6;
+            result = 60.;
         }};
 
         ValidatedAcceptanceCriteria entry1 = new AcceptanceCriteriaScorer(0.05, validationConfig).validate(entry.getItem().getAcceptanceCriteria());
@@ -234,7 +234,7 @@ public class AcceptanceCriteriaScorerTest {
             result = goodCriteria;
 
             validationConfig.getCriteria().getRatingThreshold();
-            result = 0.7;
+            result = 70.0;
         }};
 
         ValidatedAcceptanceCriteria entry1 = new AcceptanceCriteriaScorer(1.0, validationConfig).validate(entry.getItem().getAcceptanceCriteria());
@@ -256,7 +256,7 @@ public class AcceptanceCriteriaScorerTest {
             result = goodCriteria;
 
             validationConfig.getCriteria().getRatingThreshold();
-            result = 0.7;
+            result = 70.0;
         }};
 
         ValidatedAcceptanceCriteria entry1 = new AcceptanceCriteriaScorer(1.0, validationConfig).validate(entry.getItem().getAcceptanceCriteria());
@@ -270,7 +270,7 @@ public class AcceptanceCriteriaScorerTest {
             result = "given when then given when then given when then ".substring(0, AcceptanceCriteriaScorer.MINIMUM_LENGTH_OF_ACC_CRITERIA - 1);
 
             validationConfig.getCriteria().getRatingThreshold();
-            result = 0.7;
+            result = 70.0;
         }};
 
         ValidatedAcceptanceCriteria entry1 = new AcceptanceCriteriaScorer(1.0, validationConfig).validate(entry.getItem().getAcceptanceCriteria());
@@ -291,7 +291,7 @@ public class AcceptanceCriteriaScorerTest {
             result = "given when then given when then given when then ".substring(0, AcceptanceCriteriaScorer.MINIMUM_LENGTH_OF_ACC_CRITERIA);
 
             validationConfig.getCriteria().getRatingThreshold();
-            result = 0.7;
+            result = 70.0;
         }};
 
         ValidatedAcceptanceCriteria entry1 = new AcceptanceCriteriaScorer(1.0, validationConfig).validate(entry.getItem().getAcceptanceCriteria());
@@ -313,7 +313,7 @@ public class AcceptanceCriteriaScorerTest {
             result = goodCriteria;
 
             validationConfig.getCriteria().getRatingThreshold();
-            result = 1.1;
+            result = 100.1;
         }};
 
         Rating rating = new AcceptanceCriteriaScorer(0.01, validationConfig).validate(entry.getItem().getAcceptanceCriteria()).getRating();

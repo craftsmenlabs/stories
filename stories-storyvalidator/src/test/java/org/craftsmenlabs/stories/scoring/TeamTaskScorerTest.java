@@ -28,7 +28,7 @@ TeamTaskScorerTest {
             result = new TeamTask();
 
             validationConfig.getTeamTask().getRatingThreshold();
-            result = 0.7;
+            result = 70.0;
         }};
 
         final ValidatedTeamTask validate = getScorer(validationConfig).validate(entry.getItem());
@@ -45,7 +45,7 @@ TeamTaskScorerTest {
             result = null;
 
             validationConfig.getTeamTask().getRatingThreshold();
-            result = 0.7;
+            result = 70.0;
         }};
 
         final ValidatedTeamTask validate = getScorer(validationConfig).validate(entry.getItem());
@@ -75,12 +75,12 @@ TeamTaskScorerTest {
 
 
             validationConfig.getTeamTask().getRatingThreshold();
-            result = 0.7;
+            result = 70.0;
         }};
 
         final ValidatedTeamTask validate = getScorer(validationConfig).validate(entry.getItem());
         double score = validate.getScoredPercentage();
-        assertThat(score).isEqualTo(1.0);
+        assertThat(score).isEqualTo(100.0);
         assertThat(validate.getAllViolations()).hasSize(0);
         assertThat(validate.getRating()).isEqualTo(Rating.SUCCESS);
     }

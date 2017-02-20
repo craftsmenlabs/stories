@@ -17,7 +17,7 @@ public class EstimationScorerTest {
     public void validateReturnsZeroOnNull(@Injectable ValidatedFeature entry, @Injectable ValidationConfig validationConfig) throws Exception {
         new Expectations() {{
             validationConfig.getEstimation().getRatingThreshold();
-            result = 0.7;
+            result = 70;
         }};
 
         final ValidatedEstimation validatedEstimation = new EstimationScorer(1.0, validationConfig).validate(null);
@@ -34,7 +34,7 @@ public class EstimationScorerTest {
 
 
             validationConfig.getEstimation().getRatingThreshold();
-            result = 0.1;
+            result = 10;
         }};
         ValidatedEstimation entry1 = new EstimationScorer(1, validationConfig).validate(entry.getItem().getEstimation());
         assertThat(entry1.getScoredPoints()).isCloseTo(1, withinPercentage(1));
@@ -50,7 +50,7 @@ public class EstimationScorerTest {
 
 
             validationConfig.getEstimation().getRatingThreshold();
-            result = 1;
+            result = 100;
         }};
 
         ValidatedEstimation entry1 = new EstimationScorer(1, validationConfig).validate(entry.getItem().getEstimation());
@@ -65,7 +65,7 @@ public class EstimationScorerTest {
             result = 1;
 
             validationConfig.getEstimation().getRatingThreshold();
-            result = 1;
+            result = 100;
         }};
 
         ValidatedEstimation entry1 = new EstimationScorer(0.1, validationConfig).validate(entry.getItem().getEstimation());

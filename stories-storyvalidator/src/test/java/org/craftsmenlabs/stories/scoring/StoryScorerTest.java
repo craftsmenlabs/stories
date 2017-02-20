@@ -116,12 +116,12 @@ public class StoryScorerTest {
                     + "so I can have the most preferred alarm on top.";
 
             validationConfig.getStory().getRatingThreshold();
-            result = 0.7;
+            result = 70.0;
         }};
 
-        final ValidatedUserStory validatedUserStory = new StoryScorer(1.0, validationConfig).validate(entry.getItem().getUserstory());
+        final ValidatedUserStory validatedUserStory = new StoryScorer(100.0, validationConfig).validate(entry.getItem().getUserstory());
         double score = validatedUserStory.getScoredPoints();
-        assertThat(score).isCloseTo(0.75, withinPercentage(0.1));
+        assertThat(score).isCloseTo(75.0, withinPercentage(0.1));
         assertThat(validatedUserStory.getViolations()).hasSize(1);
 
         Violation expectedViolation = Violation.builder()
@@ -129,7 +129,7 @@ public class StoryScorerTest {
                 .cause("<As a> section is not described properly. The story should contain any of the following keywords: As a ")
                 .missedPercentage(1.0)
                 .scoredPercentage(0.0)
-                .missedPoints(0.25)
+                .missedPoints(25.0)
                 .scoredPoints(0.0)
                 .build();
         assertThat(validatedUserStory.getViolations().get(0)).isEqualTo(expectedViolation);
@@ -153,12 +153,12 @@ public class StoryScorerTest {
                     + "so I can have the most preferred alarm on top.";
 
             validationConfig.getStory().getRatingThreshold();
-            result = 0.7;
+            result = 70.;
         }};
 
-        final ValidatedUserStory validatedUserStory = new StoryScorer(1.0, validationConfig).validate(entry.getItem().getUserstory());
+        final ValidatedUserStory validatedUserStory = new StoryScorer(90.0, validationConfig).validate(entry.getItem().getUserstory());
         double score = validatedUserStory.getScoredPoints();
-        assertThat(score).isCloseTo(0.75, withinPercentage(0.1));
+        assertThat(score).isCloseTo(67.5, withinPercentage(0.1));
         assertThat(validatedUserStory.getViolations()).hasSize(1);
     }
 
@@ -179,12 +179,12 @@ public class StoryScorerTest {
                     + "so I have the most preferred alarm on top.";
 
             validationConfig.getStory().getRatingThreshold();
-            result = 0.7;
+            result = 70.;
         }};
 
-        final ValidatedUserStory validatedUserStory = new StoryScorer(1.0, validationConfig).validate(entry.getItem().getUserstory());
+        final ValidatedUserStory validatedUserStory = new StoryScorer(80.0, validationConfig).validate(entry.getItem().getUserstory());
         double score = validatedUserStory.getScoredPoints();
-        assertThat(score).isCloseTo(0.75, withinPercentage(0.1));
+        assertThat(score).isCloseTo(60., withinPercentage(0.1));
         assertThat(validatedUserStory.getViolations()).hasSize(1);
 
         Violation expectedViolation = Violation.builder()
@@ -192,7 +192,7 @@ public class StoryScorerTest {
                 .cause("<So that> section is not described properly. The story should contain any of the following keywords: So I can")
                 .missedPercentage(1.0)
                 .scoredPercentage(0.0)
-                .missedPoints(0.25)
+                .missedPoints(20.0)
                 .scoredPoints(0.0)
                 .build();
         assertThat(validatedUserStory.getViolations().get(0)).isEqualTo(expectedViolation);
@@ -214,12 +214,12 @@ public class StoryScorerTest {
                     .substring(0, StoryScorer.USERSTORY_MINIMUM_LENGTH - 1);
 
             validationConfig.getStory().getRatingThreshold();
-            result = 0.7;
+            result = 70.;
         }};
 
-        final ValidatedUserStory validatedUserStory = new StoryScorer(1.0, validationConfig).validate(entry.getItem().getUserstory());
+        final ValidatedUserStory validatedUserStory = new StoryScorer(100.0, validationConfig).validate(entry.getItem().getUserstory());
         double score = validatedUserStory.getScoredPoints();
-        assertThat(score).isCloseTo(0.75, withinPercentage(0.1));
+        assertThat(score).isCloseTo(75., withinPercentage(0.1));
         assertThat(validatedUserStory.getViolations()).hasSize(1);
 
 
@@ -228,7 +228,7 @@ public class StoryScorerTest {
                 .cause("The story should contain a minimum length of 50 characters. It now contains 49 characters.")
                 .missedPercentage(1.0)
                 .scoredPercentage(0.0)
-                .missedPoints(0.25)
+                .missedPoints(25.0)
                 .scoredPoints(0.0)
                 .build();
         assertThat(validatedUserStory.getViolations().get(0)).isEqualTo(expectedViolation);
@@ -250,12 +250,14 @@ public class StoryScorerTest {
                     .substring(0, StoryScorer.USERSTORY_MINIMUM_LENGTH);
 
             validationConfig.getStory().getRatingThreshold();
-            result = 0.7;
+            result = 70;
         }};
 
-        final ValidatedUserStory validatedUserStory = new StoryScorer(0.01, validationConfig).validate(entry.getItem().getUserstory());
-        double score = validatedUserStory.getScoredPercentage();
-        assertThat(score).isCloseTo(1.0, withinPercentage(0.1));
+        final ValidatedUserStory validatedUserStory = new StoryScorer(3.00, validationConfig).validate(entry.getItem().getUserstory());
+        assertThat(validatedUserStory.getScoredPoints()).isCloseTo(3.0, withinPercentage(0.1));
+        assertThat(validatedUserStory.getMissedPoints()).isCloseTo(0.0, withinPercentage(0.1));
+        assertThat(validatedUserStory.getMissedPercentage()).isCloseTo(0.0, withinPercentage(0.1));
+        assertThat(validatedUserStory.getScoredPercentage()).isCloseTo(100.0, withinPercentage(0.1));
         assertThat(validatedUserStory.getViolations()).hasSize(0);
         assertThat(validatedUserStory.getRating()).isEqualTo(Rating.SUCCESS);
 
@@ -278,7 +280,7 @@ public class StoryScorerTest {
                     + "so I can have the most preferred alarm on top.";
 
             validationConfig.getStory().getRatingThreshold();
-            result = 1.1;
+            result = 100.1;
         }};
 
         final ValidatedUserStory validatedUserStory = new StoryScorer(1.0, validationConfig).validate(entry.getItem().getUserstory());

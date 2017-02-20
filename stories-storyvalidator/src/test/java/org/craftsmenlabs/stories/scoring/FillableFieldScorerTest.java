@@ -25,7 +25,7 @@ public class FillableFieldScorerTest {
             result = Arrays.asList("priority");
 
             validationConfig.getBug().getRatingThreshold();
-            result = 0.5;
+            result = 50;
         }};
 
         final ValidatedBug validatedBug = (ValidatedBug) new FillableFieldScorer(1.0, validationConfig).validate(Bug.empty());
@@ -44,7 +44,7 @@ public class FillableFieldScorerTest {
             result = Arrays.asList("priority", "reproduction_path", "environment", "expected_behaviour", "acceptation_criteria");
 
             validationConfig.getBug().getRatingThreshold();
-            result = 0.5;
+            result = 50;
         }};
 
         final Bug bug = new Bug("summary", "description", "repro", "env", "expBehav", "accept", "prio", "1", "1", "1", null, null);
@@ -63,7 +63,7 @@ public class FillableFieldScorerTest {
             result = Arrays.asList("priority", "reproduction_path", "environment", "expected_behaviour", "acceptation_criteria");
 
             validationConfig.getBug().getRatingThreshold();
-            result = 0.5;
+            result = 50;
         }};
 
         final Bug bug = new Bug("summary", "description", "repro", "env", "expBehav", null, null, "1", "1", "1", null, null);

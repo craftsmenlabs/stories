@@ -78,7 +78,7 @@ public class FillableFieldScorer extends AbstractScorer<BacklogItem, ValidatedBa
         } else if (entry instanceof ValidatedEpic) {
             ratingThreshold = validationConfig.getEpic().getRatingThreshold();
         } else {
-            ratingThreshold = 1.0;
+            ratingThreshold = 100.0;
         }
         return entry.getScoredPercentage() >= ratingThreshold ? Rating.SUCCESS : Rating.FAIL;
 

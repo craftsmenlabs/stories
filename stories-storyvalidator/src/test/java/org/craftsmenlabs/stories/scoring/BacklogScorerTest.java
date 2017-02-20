@@ -46,7 +46,7 @@ public class BacklogScorerTest {
 
         Feature feature = new Feature();
         Map<String, Feature> features = Collections.singletonMap("1", feature);
-        final ValidatedFeature validatedFeature = ValidatedFeature.builder().scoredPoints(1).build();
+        final ValidatedFeature validatedFeature = ValidatedFeature.builder().scoredPoints(100).build();
         final BacklogScorer backlogScorer = getScorer(validationConfig, ranking);
 
         backlogScorer.setScorers(scorers);
@@ -56,7 +56,7 @@ public class BacklogScorerTest {
             result = features;
 
             ranking.getRanking(new ArrayList<>(features.values()));
-            result = Arrays.asList(1.0);
+            result = Arrays.asList(100.0);
 
             validationConfig.getFeature().isActive();
             result = true;
@@ -82,7 +82,7 @@ public class BacklogScorerTest {
             result = features;
 
             ranking.getRanking(new ArrayList<>(features.values()));
-            result = Arrays.asList(1.0);
+            result = Arrays.asList(100.0);
 
             validationConfig.getFeature().isActive();
             result = true;
@@ -93,7 +93,7 @@ public class BacklogScorerTest {
 
         ValidatedBacklog result = getScorer(validationConfig, ranking).validate(backlog);
         assertThat(result.getRating()).isEqualTo(Rating.FAIL);
-        assertThat(result.getScoredPoints()).isEqualTo(0);
+        assertThat(result.getScoredPoints()).isEqualTo(0.0);
     }
 
     @Test
@@ -105,7 +105,7 @@ public class BacklogScorerTest {
             result = features;
 
             ranking.getRanking(new ArrayList<>(features.values()));
-            result = Arrays.asList(1.0);
+            result = Arrays.asList(100.0);
             maxTimes = 2;
 
             validationConfig.getBacklog().getRatingThreshold();
@@ -128,7 +128,7 @@ public class BacklogScorerTest {
             result = bugs;
 
             ranking.getRanking(new ArrayList<>(bugs.values()));
-            result = Arrays.asList(1.0);
+            result = Arrays.asList(100.0);
             maxTimes = 2;
 
             validationConfig.getBacklog().getRatingThreshold();
@@ -151,7 +151,7 @@ public class BacklogScorerTest {
             result = epics;
 
             ranking.getRanking(new ArrayList<>(epics.values()));
-            result = Arrays.asList(1.0);
+            result = Arrays.asList(100.0);
             maxTimes = 2;
 
             validationConfig.getBacklog().getRatingThreshold();

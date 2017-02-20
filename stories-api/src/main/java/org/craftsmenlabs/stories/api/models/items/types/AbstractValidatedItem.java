@@ -24,7 +24,7 @@ public abstract class AbstractValidatedItem<T> {
     public void setPoints(double scoredPoints, double potentialPoints) {
         this.scoredPoints = scoredPoints;
         this.missedPoints = potentialPoints - scoredPoints;
-        this.scoredPercentage = scoredPoints / potentialPoints;
-        this.missedPercentage = missedPoints / potentialPoints;
+        this.scoredPercentage = (100.0 * scoredPoints) / potentialPoints;
+        this.missedPercentage = (100.0 * missedPoints) / potentialPoints;
     }
 }
