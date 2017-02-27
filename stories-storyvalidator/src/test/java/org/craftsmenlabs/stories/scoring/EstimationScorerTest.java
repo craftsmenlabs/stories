@@ -15,11 +15,6 @@ import static org.assertj.core.api.Assertions.withinPercentage;
 public class EstimationScorerTest {
     @Test
     public void validateReturnsZeroOnNull(@Injectable ValidatedFeature entry, @Injectable ValidationConfig validationConfig) throws Exception {
-        new Expectations() {{
-            validationConfig.getEstimation().getRatingThreshold();
-            result = 70;
-        }};
-
         final ValidatedEstimation validatedEstimation = new EstimationScorer(1.0, validationConfig).validate(null);
         double score = validatedEstimation.getScoredPoints();
         assertThat(score).isCloseTo(0.0, withinPercentage(1));
@@ -31,10 +26,6 @@ public class EstimationScorerTest {
         new Expectations() {{
             entry.getItem().getEstimation();
             result = 0;
-
-
-            validationConfig.getEstimation().getRatingThreshold();
-            result = 10;
         }};
         ValidatedEstimation entry1 = new EstimationScorer(1, validationConfig).validate(entry.getItem().getEstimation());
         assertThat(entry1.getScoredPoints()).isCloseTo(1, withinPercentage(1));
@@ -47,10 +38,6 @@ public class EstimationScorerTest {
         new Expectations() {{
             entry.getItem().getEstimation();
             result = 1;
-
-
-            validationConfig.getEstimation().getRatingThreshold();
-            result = 100;
         }};
 
         ValidatedEstimation entry1 = new EstimationScorer(1, validationConfig).validate(entry.getItem().getEstimation());
@@ -63,9 +50,6 @@ public class EstimationScorerTest {
         new Expectations() {{
             entry.getItem().getEstimation();
             result = 1;
-
-            validationConfig.getEstimation().getRatingThreshold();
-            result = 100;
         }};
 
         ValidatedEstimation entry1 = new EstimationScorer(0.1, validationConfig).validate(entry.getItem().getEstimation());

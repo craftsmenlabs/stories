@@ -6,8 +6,7 @@ import org.craftsmenlabs.stories.api.models.items.validated.ValidatedEstimation;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 import org.craftsmenlabs.stories.api.models.violation.ViolationType;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
 
 /**
  * Assigns points if a estimation is ok
@@ -21,27 +20,26 @@ public class EstimationScorer extends AbstractScorer<Double, ValidatedEstimation
     }
 
     public ValidatedEstimation validate(Double estimation) {
-        List<Violation> violations = new ArrayList<>();
+        ValidatedEstimation validatedEstimation = ValidatedEstimation
+                .builder()
+                .item(estimation)
+                .build();
 
         double points;
         if (estimation == null) {
             points = 0.0;
-            violations.add(new Violation(
+            validatedEstimation.setViolations(Collections.singletonList(new Violation(
                     ViolationType.EstimationEmptyViolation,
                     "Estimation is empty",
-                    potentialPoints));
+                    potentialPoints)));
+            validatedEstimation.setRating(Rating.FAIL);
         } else {
             points = potentialPoints;
+            validatedEstimation.setRating(Rating.SUCCESS);
+            validatedEstimation.setViolations(Collections.emptyList());
         }
 
-        ValidatedEstimation validatedEstimation = ValidatedEstimation
-                .builder()
-                .item(estimation)
-                .violations(violations)
-                .build();
         validatedEstimation.setPoints(points, potentialPoints);
-        Rating rating = validatedEstimation.getScoredPercentage() >= validationConfig.getEstimation().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL;
-        validatedEstimation.setRating(rating);
         return validatedEstimation;
     }
 }
