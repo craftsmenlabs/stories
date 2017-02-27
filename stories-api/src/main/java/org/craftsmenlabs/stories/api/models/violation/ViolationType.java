@@ -4,6 +4,7 @@ public enum ViolationType
 {
 	BacklogEmptyViolation,
 	BacklogRatingViolation,
+	BacklogHugeViolation,
 	StoryEmptyViolation,
 	StoryMultipleLinesClauseViolation,
 	StoryLengthClauseViolation,
