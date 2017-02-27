@@ -62,15 +62,15 @@ public class TeamTaskScorer extends AbstractScorer<TeamTask, ValidatedTeamTask> 
             points += pointsPerSubItem;
         }
 
-        ValidatedAcceptanceCriteria acceptanceCriteriaValidatorEntry = new AcceptanceCriteriaScorer(pointsPerSubItem, validationConfig).validate(teamTask.getAcceptationCriteria());
+        ValidatedAcceptanceCriteria acceptanceCriteriaValidatorEntry = ValidatedAcceptanceCriteria.empty();
         if (teamTask.getAcceptationCriteria() != null && validationConfig.getCriteria().isActive()) {
-//            acceptanceCriteriaValidatorEntry.getViolations().forEach(violation -> violation.setPoints(1.0, pointsPerSubItem));
+            acceptanceCriteriaValidatorEntry = new AcceptanceCriteriaScorer(pointsPerSubItem, validationConfig).validate(teamTask.getAcceptationCriteria());
             points += acceptanceCriteriaValidatorEntry.getScoredPoints();
         }
 
-        ValidatedEstimation estimationValidatorEntry = new EstimationScorer(pointsPerSubItem, validationConfig).validate(teamTask.getEstimation());
+        ValidatedEstimation estimationValidatorEntry = ValidatedEstimation.empty();
         if (validationConfig.getEstimation().isActive()) {
-//            estimationValidatorEntry.getViolations().forEach(violation -> violation.setPoints(1.0, pointsPerSubItem));
+            estimationValidatorEntry = new EstimationScorer(pointsPerSubItem, validationConfig).validate(teamTask.getEstimation());
             points += estimationValidatorEntry.getScoredPoints();
         }
 
