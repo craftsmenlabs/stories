@@ -134,9 +134,11 @@ public class FillableFieldScorer extends AbstractScorer<BacklogItem, ValidatedBa
                         .noneMatch(s -> s.equals(enabledField)))
                 .collect(Collectors.toList());
         if (!notAllowedFields.isEmpty()) {
-            throw new StoriesException("Enabled field(s) " + notAllowedFields.stream().collect(Collectors.joining(", ")) + " don't exist! Please select one or " +
+            throw new StoriesException("Enabled field(s) " + notAllowedFields.stream().collect(Collectors.joining(", ")) + " don't exist! Please only select one or " +
                     "multiple of the following: " +
-                    "\"priority\", \"reproduction_path\", \"environment\", \"expected_behaviour\", \"acceptation_criteria\"");
+                    fields.entrySet().stream()
+                            .map(Map.Entry::getKey)
+                            .collect(Collectors.joining(",")));
         }
     }
 }

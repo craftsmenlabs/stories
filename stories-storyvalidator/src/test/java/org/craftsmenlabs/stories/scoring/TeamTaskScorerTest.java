@@ -34,7 +34,7 @@ TeamTaskScorerTest {
         final ValidatedTeamTask validate = getScorer(validationConfig).validate(entry.getItem());
         double score = validate.getScoredPoints();
         assertThat(score).isEqualTo(0.0);
-        assertThat(validate.getAllViolations()).hasSize(8);
+        assertThat(validate.getAllViolations()).hasSize(2);
     }
 
     @Test
@@ -59,20 +59,23 @@ TeamTaskScorerTest {
                 .summary("summary")
                 .description("description")
                 .acceptationCriteria(StringUtils.repeat("Given when then ", 20))
-                .estimation(1.)
+                .estimation(1.0)
                 .build();
         new Expectations() {{
             entry.getItem();
             result = teamTask;
 
+            validationConfig.getCriteria().isActive();
+            result = true;
             validationConfig.getCriteria().getGivenKeywords();
             result = Arrays.asList("given ");
             validationConfig.getCriteria().getWhenKeywords();
             result = Arrays.asList("when ");
-
             validationConfig.getCriteria().getThenKeywords();
             result = Arrays.asList("then ");
 
+            validationConfig.getEstimation().isActive();
+            result = true;
 
             validationConfig.getTeamTask().getRatingThreshold();
             result = 70.0;
