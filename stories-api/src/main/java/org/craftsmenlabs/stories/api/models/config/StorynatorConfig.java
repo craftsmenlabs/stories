@@ -58,18 +58,18 @@ public class StorynatorConfig {
 
         //quick fix because of the absence of builders/allargsconfig
         config.getValidation().getBug().setActive(true);
-        config.getValidation().getBug().setRatingThreshold(0.6);
+        config.getValidation().getBug().setRatingThreshold(60.0);
         config.getValidation().getBug().setEnabledFields(Arrays.asList("priority", "reproduction_path", "environment", "expected_behaviour", "acceptation_criteria"));
         config.getValidation().getEpic().setActive(true);
-        config.getValidation().getEpic().setRatingThreshold(0.6);
+        config.getValidation().getEpic().setRatingThreshold(60.0);
         config.getValidation().getEpic().setEnabledFields(Collections.singletonList("goal"));
         config.getValidation().getCriteria().setActive(true);
-        config.getValidation().getCriteria().setRatingThreshold(0.6);
+        config.getValidation().getCriteria().setRatingThreshold(60.0);
         config.getValidation().getCriteria().setGivenKeywords(Collections.singletonList("given"));
         config.getValidation().getCriteria().setWhenKeywords(Collections.singletonList("when"));
         config.getValidation().getCriteria().setThenKeywords(Collections.singletonList("then"));
         config.getValidation().getStory().setActive(true);
-        config.getValidation().getStory().setRatingThreshold(0.6);
+        config.getValidation().getStory().setRatingThreshold(60.0);
         config.getValidation().getStory().setAsKeywords(Collections.singletonList("As a"));
         config.getValidation().getStory().setIKeywords(Collections.singletonList("I want"));
         config.getValidation().getStory().setSoKeywords(Collections.singletonList("So that"));
