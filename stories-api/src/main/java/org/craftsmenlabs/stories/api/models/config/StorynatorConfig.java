@@ -34,14 +34,14 @@ public class StorynatorConfig {
                 )
                 .validation(
                         ValidationConfig.builder()
-                                .backlog(new ValidationConfig.ValidatorEntry(60, true))
-                                .feature(new ValidationConfig.ValidatorEntry(0.6, true))
+                                .backlog(new ValidationConfig.ValidatorEntry(60.0, true))
+                                .feature(new ValidationConfig.ValidatorEntry(60.0, true))
                                 .bug(new ValidationConfig.BugValidatorEntry())
                                 .criteria(new ValidationConfig.CriteriaValidatorEntry())
-                                .estimation(new ValidationConfig.ValidatorEntry(0.6, true))
+                                .estimation(new ValidationConfig.ValidatorEntry(60.0, true))
                                 .epic(new ValidationConfig.EpicValidatorEntry())
                                 .story(new ValidationConfig.StoryValidatorEntry())
-                                .teamTask(new ValidationConfig.ValidatorEntry(0.6, true))
+                                .teamTask(new ValidationConfig.ValidatorEntry(60.0, true))
                                 .build()
 
                 )
