@@ -27,6 +27,14 @@ public class ValidatedFeature extends ValidatedBacklogItem<Feature> {
     @JsonProperty("estimationValidatorEntry")
     private ValidatedEstimation validatedEstimation;
 
+    @Builder
+    public ValidatedFeature(List<Violation> violations, Rating rating, ValidatedUserStory validatedUserStory, Feature feature, ValidatedAcceptanceCriteria validatedAcceptanceCriteria, ValidatedEstimation validatedEstimation, double scoredPercentage, double missedPercentage, double scoredPoints, double missedPoints) {
+        super(violations, rating, feature, scoredPercentage, missedPercentage, scoredPoints, missedPoints);
+        this.validatedUserStory = validatedUserStory;
+        this.validatedAcceptanceCriteria = validatedAcceptanceCriteria;
+        this.validatedEstimation = validatedEstimation;
+    }
+
     public ValidatedUserStory getValidatedUserStory() {
         if(validatedUserStory == null){
             return ValidatedUserStory.empty();
@@ -58,14 +66,6 @@ public class ValidatedFeature extends ValidatedBacklogItem<Feature> {
     }
 
     public void setValidatedEstimation(ValidatedEstimation validatedEstimation) {
-        this.validatedEstimation = validatedEstimation;
-    }
-
-    @Builder
-    public ValidatedFeature(List<Violation> violations, Rating rating, ValidatedUserStory validatedUserStory, Feature feature, ValidatedAcceptanceCriteria validatedAcceptanceCriteria, ValidatedEstimation validatedEstimation, double scoredPercentage, double missedPercentage, double scoredPoints, double missedPoints) {
-        super(violations, rating, feature, scoredPercentage, missedPercentage, scoredPoints, missedPoints);
-        this.validatedUserStory = validatedUserStory;
-        this.validatedAcceptanceCriteria = validatedAcceptanceCriteria;
         this.validatedEstimation = validatedEstimation;
     }
 

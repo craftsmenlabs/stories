@@ -1,5 +1,6 @@
 package org.craftsmenlabs.stories.api.models.items.validated;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.EqualsAndHashCode;
@@ -38,15 +39,17 @@ public abstract class ValidatedBacklogItem<T extends Rankable> extends AbstractV
         return this.getItem().getRank();
     }
 
+    @JsonIgnore
     public abstract List<AbstractValidatedItem<?>> getSubItems();
 
+    @JsonIgnore
     public List<Violation> getAllViolations(){
         return Stream.of(getViolations(),
                 getSubItems().stream()
-                    .filter(entry -> entry != null && entry.getViolations() != null)
-                    .map(AbstractValidatedItem::getViolations)
-                    .flatMap(Collection::stream)
-                    .collect(Collectors.toList()))
+                        .filter(entry -> entry != null && entry.getViolations() != null)
+                        .map(AbstractValidatedItem::getViolations)
+                        .flatMap(Collection::stream)
+                        .collect(Collectors.toList()))
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
     }
