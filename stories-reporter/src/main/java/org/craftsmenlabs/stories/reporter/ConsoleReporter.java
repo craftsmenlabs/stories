@@ -108,7 +108,7 @@ public class ConsoleReporter implements Reporter {
 
         log("\r\n");
         log("Those three combined result in a score of "
-                + doubleDecimalFormat.format(validatedBacklog.getScoredPoints() * 100.0)
+                + doubleDecimalFormat.format(validatedBacklog.getScoredPoints())
                 + " / "
                 + MAX_SCORE);
         log("Rated: " + validatedBacklog.getRating() + "  (with threshold on: " + validationConfig.getBacklog()
@@ -122,17 +122,17 @@ public class ConsoleReporter implements Reporter {
         log("Issue "
                 + issue.getItem().getKey()
                 + " Item total ("
-                + decimalFormat.format(issue.getScoredPoints() * 100)
+                + decimalFormat.format(issue.getScoredPoints())
                 + "/"
                 + MAX_SCORE
                 + ") \t"
                 + " US ("
-                + decimalFormat.format(issue.getValidatedUserStory().getScoredPoints() * 100)
+                + decimalFormat.format(issue.getValidatedUserStory().getScoredPoints())
                 + "/"
                 + MAX_SCORE
                 + ")\t"
                 + " AC ("
-                + decimalFormat.format(issue.getValidatedAcceptanceCriteria().getScoredPoints() * 100)
+                + decimalFormat.format(issue.getValidatedAcceptanceCriteria().getScoredPoints())
                 + "/"
                 + MAX_SCORE
                 + ")\t"
@@ -153,7 +153,7 @@ public class ConsoleReporter implements Reporter {
         log("Bug "
                 + bug.getItem().getKey()
                 + " Item total ("
-                + decimalFormat.format(bug.getScoredPoints() * 100)
+                + decimalFormat.format(bug.getScoredPoints())
                 + "/"
                 + MAX_SCORE
                 + ") \t"
@@ -168,7 +168,7 @@ public class ConsoleReporter implements Reporter {
         log("Epic "
                 + epic.getItem().getKey()
                 + " Item total ("
-                + decimalFormat.format(epic.getScoredPoints() * 100)
+                + decimalFormat.format(epic.getScoredPoints())
                 + "/"
                 + MAX_SCORE
                 + ") \t"
@@ -183,7 +183,7 @@ public class ConsoleReporter implements Reporter {
         log("teamTask "
                 + teamTask.getItem().getKey()
                 + " Item total ("
-                + decimalFormat.format(teamTask.getScoredPoints() * 100)
+                + decimalFormat.format(teamTask.getScoredPoints())
                 + "/"
                 + MAX_SCORE
                 + ") \t"
