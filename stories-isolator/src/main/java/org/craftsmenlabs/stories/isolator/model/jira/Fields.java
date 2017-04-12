@@ -25,6 +25,10 @@ public class Fields {
         return this.additionalProperties;
     }
 
+    public void setAdditionalProperties(Map<String, Object> additionalProperties) {
+        this.additionalProperties = additionalProperties;
+    }
+
     @JsonIgnore
     public Map<String, String> getAdditionalPropertiesAsString() {
         return this.additionalProperties.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry ->
@@ -39,158 +43,154 @@ public class Fields {
 
     public Object getTimespent() {return this.additionalProperties.get("imespent"); }
 
-    public Object getTimeoriginalestimate() {
-        return (Object) this.additionalProperties.get("timeoriginalestimate");
-    }
-
-    public String getDescription() {
-        return (String) this.additionalProperties.get("description");
-    }
-
-    public Object getAggregatetimespent() {
-        return (Object) this.additionalProperties.get("aggregatetimespent");
-    }
-
-    public Object getResolution() {
-        return (Object) this.additionalProperties.get("resolution");
-    }
-
-    public Object getAggregatetimeestimate() {
-        return (Object) this.additionalProperties.get("aggregatetimeestimate");
-    }
-
-    public Object getResolutiondate() {
-        return (Object) this.additionalProperties.get("resolutiondate");
-    }
-
-    public Integer getWorkratio() {
-        return (Integer) this.additionalProperties.get("workratio");
-    }
-
-    public String getSummary() {
-        return (String) this.additionalProperties.get("summary");
-    }
-
-    public String getLastViewed() {
-        return (String) this.additionalProperties.get("lastViewed");
-    }
-
-    public List<Object> getLabels() {
-        return (List<Object>) this.additionalProperties.get("labels");
-    }
-
-    public Object getEnvironment() {
-        return (Object) this.additionalProperties.get("environment");
-    }
-
-    public Object getTimeestimate() {
-        return (Object) this.additionalProperties.get("timeestimate");
-    }
-
-    public Object getAggregatetimeoriginalestimate() {
-        return (Object) this.additionalProperties.get("aggregatetimeoriginalestimate");
-    }
-
-    public List<Object> getVersions() {
-        return (List<Object>) this.additionalProperties.get("versions");
-    }
-
-    public Object getDuedate() {
-        return (Object) this.additionalProperties.get("duedate");
-    }
-
-    public Issuetype getIssuetype() {
-        return (Issuetype) this.additionalProperties.get("issuetype");
-    }
-
-    public Status getStatus() {
-        return (Status) this.additionalProperties.get("status");
-    }
-
-    public Priority getPriority() {
-        return (Priority) this.additionalProperties.get("priority");
-    }
-
 /////////////////
 //    SETTERS
     public void setTimespent(Object timespent) {
         this.getAdditionalProperties().put("timespent", timespent);
     }
 
+    public Object getTimeoriginalestimate() {
+        return (Object) this.additionalProperties.get("timeoriginalestimate");
+    }
+
     public void setTimeoriginalestimate(Object timeoriginalestimate) {
         this.getAdditionalProperties().put("timeoriginalestimate", timeoriginalestimate);
+    }
+
+    public String getDescription() {
+        return (String) this.additionalProperties.get("description");
     }
 
     public void setDescription(String description) {
         this.getAdditionalProperties().put("description", description);
     }
 
+    public Object getAggregatetimespent() {
+        return (Object) this.additionalProperties.get("aggregatetimespent");
+    }
+
     public void setAggregatetimespent(Object aggregatetimespent) {
         this.getAdditionalProperties().put("aggregatetimespent", aggregatetimespent);
+    }
+
+    public Object getResolution() {
+        return (Object) this.additionalProperties.get("resolution");
     }
 
     public void setResolution(Object resolution) {
         this.getAdditionalProperties().put("resolution", resolution);
     }
 
+    public Object getAggregatetimeestimate() {
+        return (Object) this.additionalProperties.get("aggregatetimeestimate");
+    }
+
     public void setAggregatetimeestimate(Object aggregatetimeestimate) {
         this.getAdditionalProperties().put("aggregatetimeestimate", aggregatetimeestimate);
+    }
+
+    public Object getResolutiondate() {
+        return (Object) this.additionalProperties.get("resolutiondate");
     }
 
     public void setResolutiondate(Object resolutiondate) {
         this.getAdditionalProperties().put("resolutiondate", resolutiondate);
     }
 
-    public void setWorkratio(Integer workratio) {
+    public Long getWorkratio() {
+        return (Long) this.additionalProperties.get("workratio");
+    }
+
+    public void setWorkratio(Long workratio) {
         this.getAdditionalProperties().put("workratio", workratio);
+    }
+
+    public String getSummary() {
+        return (String) this.additionalProperties.get("summary");
     }
 
     public void setSummary(String summary) {
         this.getAdditionalProperties().put("summary", summary);
     }
 
+    public String getLastViewed() {
+        return (String) this.additionalProperties.get("lastViewed");
+    }
+
     public void setLastViewed(String lastViewed) {
         this.getAdditionalProperties().put("lastViewed", lastViewed);
+    }
+
+    public List<Object> getLabels() {
+        return (List<Object>) this.additionalProperties.get("labels");
     }
 
     public void setLabels(List<Object> labels) {
         this.getAdditionalProperties().put("labels", labels);
     }
 
+    public Object getEnvironment() {
+        return (Object) this.additionalProperties.get("environment");
+    }
+
     public void setEnvironment(Object environment) {
         this.getAdditionalProperties().put("environment", environment);
+    }
+
+    public Object getTimeestimate() {
+        return (Object) this.additionalProperties.get("timeestimate");
     }
 
     public void setTimeestimate(Object timeestimate) {
         this.getAdditionalProperties().put("timeestimate", timeestimate);
     }
 
+    public Object getAggregatetimeoriginalestimate() {
+        return (Object) this.additionalProperties.get("aggregatetimeoriginalestimate");
+    }
+
     public void setAggregatetimeoriginalestimate(Object aggregatetimeoriginalestimate) {
         this.getAdditionalProperties().put("aggregatetimeoriginalestimate", aggregatetimeoriginalestimate);
+    }
+
+    public List<Object> getVersions() {
+        return (List<Object>) this.additionalProperties.get("versions");
     }
 
     public void setVersions(List<Object> versions) {
         this.getAdditionalProperties().put("versions", versions);
     }
 
+    public Object getDuedate() {
+        return (Object) this.additionalProperties.get("duedate");
+    }
+
     public void setDuedate(Object duedate) {
         this.getAdditionalProperties().put("duedate", duedate);
+    }
+
+    public Issuetype getIssuetype() {
+        return (Issuetype) this.additionalProperties.get("issuetype");
     }
 
     public void setIssuetype(Issuetype issuetype) {
         this.getAdditionalProperties().put("issuetype", issuetype);
     }
 
+    public Status getStatus() {
+        return (Status) this.additionalProperties.get("status");
+    }
+
     public void setStatus(Status status) {
         this.getAdditionalProperties().put("status", status);
     }
 
-    public void setPriority(Priority priority) {
-        this.getAdditionalProperties().put("priority", priority);
+    public Priority getPriority() {
+        return (Priority) this.additionalProperties.get("priority");
     }
 
-    public void setAdditionalProperties(Map<String, Object> additionalProperties) {
-        this.additionalProperties = additionalProperties;
+    public void setPriority(Priority priority) {
+        this.getAdditionalProperties().put("priority", priority);
     }
 
     public boolean equals(Object o) {
