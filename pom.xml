@@ -4,7 +4,7 @@
 
 	<groupId>org.craftsmenlabs.stories</groupId>
 	<artifactId>stories</artifactId>
-    <version>1.6-SNAPSHOT</version>
+	<version>1.7-SNAPSHOT</version>
 	<modules>
         <module>stories-launcher</module>
         <module>stories-importer</module>
