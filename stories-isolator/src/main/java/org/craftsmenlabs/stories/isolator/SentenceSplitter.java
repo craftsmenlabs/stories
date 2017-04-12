@@ -2,7 +2,7 @@ package org.craftsmenlabs.stories.isolator;
 
 import opennlp.tools.sentdetect.SentenceDetectorME;
 import opennlp.tools.sentdetect.SentenceModel;
-import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
+import org.craftsmenlabs.stories.api.models.items.base.Feature;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,8 +51,7 @@ public class SentenceSplitter
 		}
 	}
 
-	public Feature splitSentence(Feature feature, String input)
-	{
+	public Feature splitSentence(Feature feature, String input) {
 	    if(input == null || input.length() == 0){
 	        return feature;
         }else {

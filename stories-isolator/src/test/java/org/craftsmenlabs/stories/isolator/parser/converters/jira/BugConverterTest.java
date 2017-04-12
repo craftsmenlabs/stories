@@ -4,7 +4,7 @@ import mockit.Expectations;
 import mockit.Mocked;
 import org.craftsmenlabs.stories.api.models.config.FieldMappingConfig;
 import org.craftsmenlabs.stories.api.models.config.SourceConfig;
-import org.craftsmenlabs.stories.api.models.scrumitems.Bug;
+import org.craftsmenlabs.stories.api.models.items.base.Bug;
 import org.craftsmenlabs.stories.isolator.model.jira.Fields;
 import org.craftsmenlabs.stories.isolator.model.jira.JiraJsonIssue;
 import org.craftsmenlabs.stories.isolator.model.jira.Priority;
@@ -51,7 +51,7 @@ public class BugConverterTest {
                 .description("description")
                 .acceptationCriteria("AcceptationCriteria")
                 .expectedBehavior("ExpectedBehavior")
-                .software("Software")
+                .environment("Software")
                 .reproductionPath("ReproductionPath")
                 .externalURI("/projects/projectKey/issues/key")
                 .build();
@@ -66,7 +66,7 @@ public class BugConverterTest {
             config.getBug().getExpectedBehavior();
             result = "custom_field1503";
 
-            config.getBug().getSoftware();
+            config.getBug().getEnvironment();
             result = "environment";
 
             config.getBug().getReproductionPath();

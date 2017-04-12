@@ -8,8 +8,8 @@ import org.craftsmenlabs.stories.api.models.Rating;
 @Data
 @Builder
 @AllArgsConstructor
-public class ScorableSummary implements Summarizable<ScorableSummary>{
-    private float pointsValuation;
+public class ScorableSummary implements Summarizable<ScorableSummary> {
+    private double pointsValuation;
     private Rating rating;
     private long violationCount;
 
@@ -22,8 +22,8 @@ public class ScorableSummary implements Summarizable<ScorableSummary>{
     @Override
     public ScorableSummary divideBy(int denominator) {
         return ScorableSummary.builder()
-                .pointsValuation(  denominator > 0 ? this.getPointsValuation()/ denominator : 0 )
-                .violationCount(  denominator > 0 ? this.getViolationCount() / denominator : 0 )
+                .pointsValuation(denominator > 0 ? this.getPointsValuation() / denominator : 0)
+                .violationCount(denominator > 0 ? this.getViolationCount() / denominator : 0)
                 .build();
     }
 
@@ -31,7 +31,22 @@ public class ScorableSummary implements Summarizable<ScorableSummary>{
     public ScorableSummary plus(ScorableSummary that) {
         return ScorableSummary.builder()
                 .pointsValuation(this.getPointsValuation() + that.getPointsValuation())
-                .violationCount( this.getViolationCount()  + that.getViolationCount() )
+                .violationCount(this.getViolationCount() + that.getViolationCount())
                 .build();
+    }
+
+    @Override
+    public ScorableSummary minus(ScorableSummary that) {
+        return ScorableSummary.builder()
+                .pointsValuation(this.getPointsValuation() - that.getPointsValuation())
+                .violationCount(this.getViolationCount() - that.getViolationCount())
+                .build();
+    }
+
+    @Override
+    public boolean isZero() {
+        return pointsValuation < 0.0001
+                && pointsValuation > -0.0001
+                && violationCount == 0;
     }
 }

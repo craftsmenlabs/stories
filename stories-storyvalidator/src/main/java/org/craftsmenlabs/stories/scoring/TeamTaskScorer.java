@@ -3,10 +3,10 @@ package org.craftsmenlabs.stories.scoring;
 import org.apache.commons.lang3.StringUtils;
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
-import org.craftsmenlabs.stories.api.models.scrumitems.TeamTask;
-import org.craftsmenlabs.stories.api.models.validatorentry.AcceptanceCriteriaValidatorEntry;
-import org.craftsmenlabs.stories.api.models.validatorentry.EstimationValidatorEntry;
-import org.craftsmenlabs.stories.api.models.validatorentry.TeamTaskValidatorEntry;
+import org.craftsmenlabs.stories.api.models.items.base.TeamTask;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedAcceptanceCriteria;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedEstimation;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedTeamTask;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 import org.craftsmenlabs.stories.api.models.violation.ViolationType;
 
@@ -15,63 +15,78 @@ import java.util.List;
 import java.util.stream.Stream;
 
 /**
- * Assigns points to a teamTask, based on all
- * underlying fields, such as user story, acceptance criteria, estimated points
+ * Assigns scoredPercentage to a teamTask, based on all
+ * underlying fields, such as user story, acceptance criteria, estimated scoredPercentage
  */
-public class TeamTaskScorer {
+public class TeamTaskScorer extends AbstractScorer<TeamTask, ValidatedTeamTask> {
+    public TeamTaskScorer(ValidationConfig validationConfig) {
+        super(1, validationConfig);
+    }
 
-    public static TeamTaskValidatorEntry performScorer(TeamTask teamTask, ValidationConfig validationConfig) {
-        List<Violation> violations = new ArrayList<>();
-        float points = 0f;
-        float pointsRatio = 1f / Stream.of(
-                    !"summary".isEmpty(),
-                    !"description".isEmpty(),
-                    validationConfig.getCriteria().isActive(),
-                    validationConfig.getEstimation().isActive())
-                .filter(i->i)
+    public TeamTaskScorer(double potentialPoints, ValidationConfig validationConfig) {
+        super(potentialPoints, validationConfig);
+    }
+
+    @Override
+    public ValidatedTeamTask validate(TeamTask teamTask) {
+        double pointsPerSubItem = potentialPoints / Stream.of(
+                !"summary".isEmpty(),
+                !"description".isEmpty(),
+                validationConfig.getCriteria().isActive(),
+                validationConfig.getEstimation().isActive())
+                .filter(i -> i)
                 .count();
-
+        double points = 0.0;
 
         if (teamTask == null) {
-            teamTask = new TeamTask("0", "0", "", "", "", "", 0f);
+            teamTask = TeamTask.empty();
         }
 
+        List<Violation> violations = new ArrayList<>();
         if (StringUtils.isEmpty(teamTask.getSummary())) {
-            teamTask.setSummary("");
-            violations.add(new Violation(ViolationType.TeamTaskSummaryEmptyViolation, "No summary was given."));
-        }else{
-            points += pointsRatio;
+            violations.add(new Violation(
+                    ViolationType.TeamTaskSummaryEmptyViolation,
+                    "No summary was given.",
+                    pointsPerSubItem));
+        } else {
+            points += pointsPerSubItem;
         }
+
         if (StringUtils.isEmpty(teamTask.getDescription())) {
             teamTask.setDescription("");
-            violations.add(new Violation(ViolationType.TeamTaskDescriptionEmptyViolation, "No description was given."));
+            violations.add(new Violation(
+                    ViolationType.TeamTaskDescriptionEmptyViolation,
+                    "No description was given.",
+                    pointsPerSubItem));
         } else {
-            points += pointsRatio;
+            points += pointsPerSubItem;
         }
 
-        AcceptanceCriteriaValidatorEntry acceptanceCriteriaValidatorEntry = AcceptanceCriteriaScorer.performScorer(teamTask.getAcceptationCriteria(), validationConfig);
+        ValidatedAcceptanceCriteria acceptanceCriteriaValidatorEntry = ValidatedAcceptanceCriteria.empty();
         if (teamTask.getAcceptationCriteria() != null && validationConfig.getCriteria().isActive()) {
-            violations.addAll(acceptanceCriteriaValidatorEntry.getViolations());
-            points += pointsRatio * acceptanceCriteriaValidatorEntry.getPointsValuation();
+            acceptanceCriteriaValidatorEntry = new AcceptanceCriteriaScorer(pointsPerSubItem, validationConfig).validate(teamTask.getAcceptationCriteria());
+            points += acceptanceCriteriaValidatorEntry.getScoredPoints();
         }
 
-        EstimationValidatorEntry estimationValidatorEntry = EstimationScorer.performScorer(teamTask.getEstimation(), validationConfig);
-        if (teamTask.getEstimation() != null && validationConfig.getEstimation().isActive()) {
-            violations.addAll(estimationValidatorEntry.getViolations());
-            points += pointsRatio * estimationValidatorEntry.getPointsValuation();
+        ValidatedEstimation estimationValidatorEntry = ValidatedEstimation.empty();
+        if (validationConfig.getEstimation().isActive()) {
+            estimationValidatorEntry = new EstimationScorer(pointsPerSubItem, validationConfig).validate(teamTask.getEstimation());
+            points += estimationValidatorEntry.getScoredPoints();
         }
 
-        Rating rating = points >= validationConfig.getTeamTask().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL;
 
-        return TeamTaskValidatorEntry
+        ValidatedTeamTask validatedTeamTask = ValidatedTeamTask
                 .builder()
                 .teamTask(teamTask)
                 .violations(violations)
-                .pointsValuation(points)
-                .rating(rating)
-                .acceptanceCriteriaValidatorEntry(acceptanceCriteriaValidatorEntry)
-                .estimationValidatorEntry(estimationValidatorEntry)
+                .validatedAcceptanceCriteria(acceptanceCriteriaValidatorEntry)
+                .validatedEstimation(estimationValidatorEntry)
                 .build();
-    }
 
+        validatedTeamTask.setPoints(points, potentialPoints);
+        Rating rating = validatedTeamTask.getScoredPercentage() >= validationConfig.getTeamTask().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL;
+        validatedTeamTask.setRating(rating);
+
+        return validatedTeamTask;
+    }
 }

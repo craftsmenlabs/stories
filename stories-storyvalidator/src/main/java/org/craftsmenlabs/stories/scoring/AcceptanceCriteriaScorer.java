@@ -2,7 +2,7 @@ package org.craftsmenlabs.stories.scoring;
 
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
-import org.craftsmenlabs.stories.api.models.validatorentry.AcceptanceCriteriaValidatorEntry;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedAcceptanceCriteria;
 import org.craftsmenlabs.stories.api.models.violation.Violation;
 import org.craftsmenlabs.stories.api.models.violation.ViolationType;
 
@@ -11,26 +11,34 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Assigns points to acceptance criteria, based on the
+ * Assigns scoredPercentage to acceptance criteria, based on the
  * application of the gherkin language
  */
-public class AcceptanceCriteriaScorer {
+public class AcceptanceCriteriaScorer extends AbstractScorer<String, ValidatedAcceptanceCriteria> {
 
     public static final int MINIMUM_LENGTH_OF_ACC_CRITERIA = 20;
-    private static final float GIVEN_POINTS = 0.3333f;
-    private static final float WHEN_POINTS = 0.3333f;
-    private static final float THEN_POINTS = 0.3333f;
-    private static final float TOTAL_POINTS = GIVEN_POINTS + WHEN_POINTS + THEN_POINTS;
 
-    public static AcceptanceCriteriaValidatorEntry performScorer(String criteria, ValidationConfig validationConfig) {
+    public AcceptanceCriteriaScorer(double potentialPoints, ValidationConfig validationConfig) {
+        super(potentialPoints, validationConfig);
+    }
+
+    @Override
+    public ValidatedAcceptanceCriteria validate(String criteria) {
+        if(criteria == null){
+            criteria = "";
+        }
+        double LENGTH_POINTS = potentialPoints / 4;
+        double GIVEN_POINTS = potentialPoints / 4;
+        double WHEN_POINTS = potentialPoints / 4;
+        double THEN_POINTS = potentialPoints / 4;
 
         List<Violation> violations = new ArrayList<>();
-        float points = 0f;
+        double points = 0;
 
-        if (criteria == null || criteria.isEmpty()) {
-            criteria = "";
+        if (criteria.isEmpty()) {
             violations.add(new Violation(ViolationType.CriteriaVoidViolation,
-                    "No acceptance criteria where found."));
+                    "No acceptance criteria were found.",
+                    potentialPoints));
         }
 
         final String criteriaLower = criteria.toLowerCase();
@@ -42,7 +50,7 @@ public class AcceptanceCriteriaScorer {
             violations.add(new Violation(ViolationType.CriteriaGivenClauseViolation,
                     "<Given> section is not described properly. " +
                             "The criteria should contain any of the following keywords: "
-                            + String.join(", ", validationConfig.getCriteria().getGivenKeywords())));
+                            + String.join(", ", givenWords), GIVEN_POINTS));
         }
 
         List<String> whenWords = validationConfig.getCriteria().getWhenKeywords() != null ? validationConfig.getCriteria().getWhenKeywords() : Collections.emptyList();
@@ -52,7 +60,7 @@ public class AcceptanceCriteriaScorer {
             violations.add(new Violation(ViolationType.CriteriaWhenClauseViolation,
                     "<When> section is not described properly. " +
                             "The criteria should contain any of the following keywords: "
-                            + String.join(", ", validationConfig.getCriteria().getWhenKeywords())));
+                            + String.join(", ", whenWords), WHEN_POINTS));
 
         }
 
@@ -63,25 +71,30 @@ public class AcceptanceCriteriaScorer {
             violations.add(new Violation(ViolationType.CriteriaThenClauseViolation,
                     "<Then> section is not described properly. " +
                             "The criteria should contain any of the following keywords: "
-                            + String.join(", ", validationConfig.getCriteria().getThenKeywords())));
+                            + String.join(", ", thenWords), THEN_POINTS));
         }
 
-        if (criteria.length() <= MINIMUM_LENGTH_OF_ACC_CRITERIA) {
-            violations.add(new Violation(ViolationType.CriteriaLengthViolation,
+        if (criteriaLower.length() >= MINIMUM_LENGTH_OF_ACC_CRITERIA) {
+            points += LENGTH_POINTS;
+        }else{
+            violations.add(new Violation(
+                    ViolationType.CriteriaLengthViolation,
                     "The criteria should contain a minimum length of " + MINIMUM_LENGTH_OF_ACC_CRITERIA + " characters. " +
-                            "It now contains " + criteria.length() + " characters."));
+                            "It now contains " + criteriaLower.length() + " characters.",
+                    LENGTH_POINTS));
 
         }
 
-        points /= TOTAL_POINTS;
-        Rating rating = points >= validationConfig.getCriteria().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL;
-
-        return AcceptanceCriteriaValidatorEntry
+        ValidatedAcceptanceCriteria validatedAcceptanceCriteria = ValidatedAcceptanceCriteria
                 .builder()
                 .item(criteria)
                 .violations(violations)
-                .pointsValuation(points)
-                .rating(rating)
                 .build();
+        validatedAcceptanceCriteria.setPoints(points, potentialPoints);
+        Rating rating = validatedAcceptanceCriteria.getScoredPercentage() >= validationConfig.getCriteria().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL;
+        validatedAcceptanceCriteria.setRating(rating);
+
+        return validatedAcceptanceCriteria;
     }
+
 }

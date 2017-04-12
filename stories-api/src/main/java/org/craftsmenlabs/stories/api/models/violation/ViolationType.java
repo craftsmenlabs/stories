@@ -4,6 +4,7 @@ public enum ViolationType
 {
 	BacklogEmptyViolation,
 	BacklogRatingViolation,
+	BacklogHugeViolation,
 	StoryEmptyViolation,
 	StoryMultipleLinesClauseViolation,
 	StoryLengthClauseViolation,
@@ -21,5 +22,7 @@ public enum ViolationType
     TeamTaskSummaryEmptyViolation,
     TeamTaskDescriptionEmptyViolation,
     TeamTaskEstimationEmptyViolation,
-    NoFillableFieldsViolation
+    NoFillableFieldsViolation,
+	FieldEmptyViolation,
+	EstimationEmptyViolation
 }

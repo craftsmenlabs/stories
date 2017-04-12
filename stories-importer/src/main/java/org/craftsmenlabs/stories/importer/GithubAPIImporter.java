@@ -2,8 +2,8 @@ package org.craftsmenlabs.stories.importer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
+import org.craftsmenlabs.stories.api.models.items.base.Backlog;
 import org.craftsmenlabs.stories.api.models.logging.StorynatorLogger;
-import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.isolator.model.github.GithubJsonIssue;
 import org.craftsmenlabs.stories.isolator.parser.GithubJsonParser;
 import org.springframework.http.HttpHeaders;
@@ -28,16 +28,14 @@ public class GithubAPIImporter implements Importer {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    private String urlResource;
     private String projectKey;
     private String authKey;
     private String token;
 
     private GithubJsonParser parser;
 
-    public GithubAPIImporter(StorynatorLogger logger, String urlResource, String projectKey, String authKey, String token) {
+    public GithubAPIImporter(StorynatorLogger logger, String projectKey, String authKey, String token) {
         this.logger = logger;
-        this.urlResource = urlResource;
         this.projectKey = projectKey;
         this.authKey = authKey;
         this.token = token;
@@ -48,7 +46,7 @@ public class GithubAPIImporter implements Importer {
     @Override
     public Backlog getBacklog() {
         try {
-            String url = urlResource + "/repos/" + httpEncode(authKey) + "/" + httpEncode(projectKey) + "/issues?filter=all";
+            String url = "http://github.com/repos/" + httpEncode(authKey) + "/" + httpEncode(projectKey) + "/issues?filter=all";
             logger.info("Retrieving data from:" + url);
 
             try {

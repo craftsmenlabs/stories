@@ -11,13 +11,14 @@ storynator:
       location: /Users/youritjang/Downloads/demo-project
 
     jira:
-        url: http://jira-url-here.net
+        url: https://jira.codecentric.de
         project-key: GAR
         auth-key: KEY
+
   report:
     dashboard:
       enabled: false
-      url: http://localhost:8090
+      url: http://test.cmidevserv.nl
       token:
     file:
       enabled: false
@@ -33,7 +34,7 @@ storynator:
           acceptance-criteria: "customfield_10502"
       bug:
           reproduction-path: "customfield_13001"
-          software: "customfield_13002"
+          environment: "customfield_13002"
           expected-behavior: "customfield_13003"
           acceptation-criteria: "customfield_13004"
       epic:

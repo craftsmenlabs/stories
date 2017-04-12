@@ -2,112 +2,144 @@ package org.craftsmenlabs.stories.scoring;
 
 import mockit.Expectations;
 import mockit.Injectable;
-import mockit.Mock;
-import mockit.MockUp;
+import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
-import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
-import org.craftsmenlabs.stories.api.models.validatorentry.UserStoryValidatorEntry;
+import org.craftsmenlabs.stories.api.models.items.base.Feature;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedFeature;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedUserStory;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.withinPercentage;
 
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class FeatureScorerTest {
 
+    private FeatureScorer getScorer(ValidationConfig validationConfig) {
+        return new FeatureScorer(1.0, validationConfig);
+    }
+
     @Test
-    public void performScorer_ReturnsZeroOnNullIssue(@Injectable Feature feature, @Injectable ValidationConfig validationConfig) {
-        float score = FeatureScorer.performScorer(null, validationConfig).getPointsValuation();
-        assertThat(score).isCloseTo(0f, withinPercentage(1));
+    public void performScorer_ReturnsZeroOnNullIssue(@Injectable ValidationConfig validationConfig) {
+        new Expectations() {{
+            validationConfig.getStory().isActive();
+            result = true;
+
+            validationConfig.getCriteria().isActive();
+            result = true;
+
+            validationConfig.getEstimation().isActive();
+            result = true;
+        }};
+
+        final ValidatedFeature validatedFeature = getScorer(validationConfig).validate(null);
+        double score = validatedFeature.getScoredPoints();
+        assertThat(score).isCloseTo(0.0, withinPercentage(1));
+        assertThat(validatedFeature.getAllViolations()).hasSize(7);
     }
 
     @Test
     public void performScorer_ReturnsZeroOnNullUserStory(@Injectable Feature feature, @Injectable ValidationConfig validationConfig) {
-        new Expectations(){{
-           feature.getUserstory();
-           result = null;
-
-        }};
-        float score = FeatureScorer.performScorer(feature, validationConfig).getPointsValuation();
-        assertThat(score).isCloseTo(0f, withinPercentage(1));
-    }
-
-    @Test
-    public void performScorer_ReturnsZeroOnNullCriteria(@Injectable Feature feature, @Injectable ValidationConfig validationConfig) {
-        new Expectations(){{
+        new Expectations() {{
             feature.getUserstory();
-            result = "";
-
-            feature.getAcceptanceCriteria();
-           result = null;
-
-        }};
-        float score = FeatureScorer.performScorer(feature, validationConfig).getPointsValuation();
-        assertThat(score).isCloseTo(0f, withinPercentage(1));
-    }
-
-    @Test
-    public void performScorer_ReturnsZeroOnAllNotActive(@Injectable Feature feature, @Injectable ValidationConfig validationConfig) {
-        new Expectations(){{
-            feature.getUserstory();
-            result = "";
+            result = null;
 
             validationConfig.getStory().isActive();
-            result = false;
-
-            feature.getAcceptanceCriteria();
-            result = "";
+            result = true;
 
             validationConfig.getCriteria().isActive();
             result = false;
 
+            validationConfig.getEstimation().isActive();
+            result = false;
+        }};
+
+        final ValidatedFeature validatedFeature = getScorer(validationConfig).validate(feature);
+        double score = validatedFeature.getScoredPoints();
+        assertThat(score).isCloseTo(0.0, withinPercentage(1));
+        assertThat(validatedFeature.getAllViolations()).hasSize(1);
+    }
+
+    @Test
+    public void performScorer_ReturnsZeroOnNullCriteria(@Injectable Feature feature, @Injectable ValidationConfig validationConfig) {
+        new Expectations() {{
+            feature.getUserstory();
+            result = "";
+
+            feature.getAcceptanceCriteria();
+            result = null;
 
             feature.getEstimation();
             result = null;
+
+
+            validationConfig.getStory().isActive();
+            result = true;
+
+            validationConfig.getCriteria().isActive();
+            result = true;
+
+            validationConfig.getEstimation().isActive();
+            result = true;
+        }};
+
+        final ValidatedFeature validatedFeature = getScorer(validationConfig).validate(feature);
+        double score = validatedFeature.getScoredPoints();
+        assertThat(score).isCloseTo(0.0, withinPercentage(1));
+        assertThat(validatedFeature.getAllViolations()).hasSize(7);
+    }
+
+    @Test
+    public void performScorer_ReturnsZeroOnAllNotActive(@Injectable Feature feature, @Injectable ValidationConfig validationConfig) {
+        new Expectations() {{
+            validationConfig.getStory().isActive();
+            result = false;
+
+            validationConfig.getCriteria().isActive();
+            result = false;
+
             validationConfig.getEstimation().isActive();
             result = false;
 
         }};
-        float score = FeatureScorer.performScorer(feature, validationConfig).getPointsValuation();
-        assertThat(score).isCloseTo(0f, withinPercentage(1));
+        final ValidatedFeature validatedFeature = getScorer(validationConfig).validate(feature);
+        double score = validatedFeature.getScoredPoints();
+        assertThat(score).isCloseTo(0.0, withinPercentage(1));
+        assertThat(validatedFeature.getAllViolations()).hasSize(0);
     }
 
-//    @Ignore(value = "TODO fix injecting expectations")
     @Test
     public void performScorer_ReturnsOneOnOnlyPerfectUerstoryActive(@Injectable Feature feature, @Injectable ValidationConfig validationConfig) {
 
-        new MockUp<StoryScorer>()
-        {
-            @Mock
-            UserStoryValidatorEntry performScorer( String input, ValidationConfig validationConfig1 )
-            {
-                return UserStoryValidatorEntry.builder().pointsValuation(1f).item("").build();
-            }
-        };
-        new Expectations(){{
+        ValidatedUserStory validatedUserStory1 = ValidatedUserStory.builder().scoredPoints(1.0).build();
+
+        new Expectations() {{
             feature.getUserstory();
             result = "as a i want so that as a i want so that as a i want so that as a i want so that ";
 
             validationConfig.getStory().isActive();
             result = true;
 
-            feature.getAcceptanceCriteria();
-            result = "";
-
             validationConfig.getCriteria().isActive();
             result = false;
-
-            feature.getEstimation();
-            result = null;
 
             validationConfig.getEstimation().isActive();
             result = false;
 
+            validationConfig.getStory().getAsKeywords();
+            result = "as a";
+
+            validationConfig.getStory().getSoKeywords();
+            result = "so";
+
+            validationConfig.getStory().getIKeywords();
+            result = "i";
         }};
-        float score = FeatureScorer.performScorer(feature, validationConfig).getPointsValuation();
-        assertThat(score).isCloseTo(1f, withinPercentage(1));
+
+        final ValidatedFeature validatedFeature = getScorer(validationConfig).validate(feature);
+        double score = validatedFeature.getScoredPoints();
+        assertThat(score).isCloseTo(1.0, withinPercentage(1));
+        assertThat(validatedFeature.getAllViolations()).hasSize(0);
+        assertThat(validatedFeature.getRating()).isEqualTo(Rating.SUCCESS);
     }
-
-
-
-
 }

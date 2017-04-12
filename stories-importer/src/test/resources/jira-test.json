@@ -47,7 +47,7 @@
         "customfield_10308": null,
         "resolutiondate": null,
         "customfield_10309": null,
-        "workratio": -1,
+        "workratio": 9223372036854775807,
         "summary": "Support of Arabic language in Validator",
         "lastViewed": "2016-10-13T15:47:39.369+0200",
         "watches": {

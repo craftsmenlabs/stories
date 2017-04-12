@@ -1,21 +1,21 @@
 package org.craftsmenlabs.stories.launcher;
 
 import org.craftsmenlabs.stories.api.models.Reporter;
-import org.craftsmenlabs.stories.api.models.StoriesRun;
+import org.craftsmenlabs.stories.api.models.StoriesReport;
 import org.craftsmenlabs.stories.api.models.config.ReportConfig;
 import org.craftsmenlabs.stories.api.models.config.SourceConfig;
 import org.craftsmenlabs.stories.api.models.config.StorynatorConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
+import org.craftsmenlabs.stories.api.models.items.base.Backlog;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedBacklog;
 import org.craftsmenlabs.stories.api.models.logging.StorynatorLogger;
-import org.craftsmenlabs.stories.api.models.scrumitems.Backlog;
 import org.craftsmenlabs.stories.api.models.summary.SummaryBuilder;
-import org.craftsmenlabs.stories.api.models.validatorentry.BacklogValidatorEntry;
 import org.craftsmenlabs.stories.connectivity.service.community.CommunityDashboardReporter;
 import org.craftsmenlabs.stories.connectivity.service.enterprise.EnterpriseDashboardReporter;
 import org.craftsmenlabs.stories.importer.GithubAPIImporter;
 import org.craftsmenlabs.stories.importer.Importer;
-import org.craftsmenlabs.stories.importer.JiraAPIImporter;
 import org.craftsmenlabs.stories.importer.TrelloAPIImporter;
+import org.craftsmenlabs.stories.importer.jira.JiraAPIImporter;
 import org.craftsmenlabs.stories.ranking.CurvedRanking;
 import org.craftsmenlabs.stories.reporter.ConsoleReporter;
 import org.craftsmenlabs.stories.reporter.JsonFileReporter;
@@ -34,7 +34,7 @@ public class StorynatorPluginExecutor {
     private StorynatorVersion storynatorVersion;
     private StorynatorLogger logger;
 
-    public BacklogValidatorEntry runApplication(StorynatorConfig config, StorynatorVersion version, StorynatorLogger logger) {
+    public ValidatedBacklog runApplication(StorynatorConfig config, StorynatorVersion version, StorynatorLogger logger) {
         this.logger = logger;
         this.storynatorConfig = config;
         this.storynatorVersion = version;
@@ -45,27 +45,27 @@ public class StorynatorPluginExecutor {
         Backlog backlog = importer.getBacklog();
 
         // Perform the backlog validation
-        BacklogValidatorEntry backlogValidatorEntry = BacklogScorer.performScorer(backlog, new CurvedRanking(), storynatorConfig.getValidation());
+        BacklogScorer scorer = new BacklogScorer(storynatorConfig.getValidation(), new CurvedRanking());
+        ValidatedBacklog validatedBacklog = scorer.validate(backlog);
 
-        if ((backlogValidatorEntry.getBacklog().getBugs() == null || backlogValidatorEntry.getBacklog().getBugs().size() == 0)
-                && (backlogValidatorEntry.getBacklog().getFeatures() == null || backlogValidatorEntry.getBacklog().getFeatures().size() == 0)) {
-            throw new StoriesException("Sorry. No items to be found in de backlog for Storynator to process. Exiting Storynator.");
+        if ((validatedBacklog.getItem().getIssues() == null || validatedBacklog.getItem().getIssues().isEmpty())) {
+            throw new StoriesException("Sorry. No issues to be found in de backlog for Storynator to process. Exiting Storynator.");
         }
 
         // Dashboard report?
-        StoriesRun storiesRun = StoriesRun.builder()
-                .summary(new SummaryBuilder().build(backlogValidatorEntry))
-                .backlogValidatorEntry(backlogValidatorEntry)
+        StoriesReport storiesReport = StoriesReport.builder()
+                .summary(new SummaryBuilder().build(validatedBacklog))
+                .validatedBacklog(validatedBacklog)
                 .runConfig(storynatorConfig.getValidation())
                 .runDateTime(LocalDateTime.now())
                 .build();
 
 
         for (Reporter reporter : this.getReporters()) {
-            reporter.report(storiesRun);
+            reporter.report(storiesReport);
         }
 
-        return backlogValidatorEntry;
+        return validatedBacklog;
     }
 
     /**
@@ -83,11 +83,11 @@ public class StorynatorPluginExecutor {
             case "trello":
                 logger.info("Using TrelloAPIImporter for import.");
                 SourceConfig.TrelloConfig trelloConfig = storynatorConfig.getSource().getTrello();
-                return new TrelloAPIImporter(logger, trelloConfig.getUrl(), trelloConfig.getProjectKey(), trelloConfig.getAuthKey(), trelloConfig.getToken());
+                return new TrelloAPIImporter(logger, trelloConfig.getProjectKey(), trelloConfig.getAuthKey(), trelloConfig.getToken());
             case "github":
                 logger.info("Using GithubAPIImporter for import.");
                 SourceConfig.GithubConfig githubConfig = storynatorConfig.getSource().getGithub();
-                return new GithubAPIImporter(logger, githubConfig.getUrl(), githubConfig.getProject(), githubConfig.getOwner(), githubConfig.getToken());
+                return new GithubAPIImporter(logger, githubConfig.getProject(), githubConfig.getOwner(), githubConfig.getToken());
             default:
                 throw new StoriesException(StoriesException.ERR_SOURCE_ENABLED_MISSING);
         }

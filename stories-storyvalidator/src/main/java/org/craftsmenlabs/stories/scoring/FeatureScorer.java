@@ -2,64 +2,66 @@ package org.craftsmenlabs.stories.scoring;
 
 import org.craftsmenlabs.stories.api.models.Rating;
 import org.craftsmenlabs.stories.api.models.config.ValidationConfig;
-import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
-import org.craftsmenlabs.stories.api.models.validatorentry.*;
+import org.craftsmenlabs.stories.api.models.items.base.Feature;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedAcceptanceCriteria;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedEstimation;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedFeature;
+import org.craftsmenlabs.stories.api.models.items.validated.ValidatedUserStory;
 
-import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.stream.Stream;
 
 /**
- * Assigns points to an feature, based on all
- * underlying fields, such as user story, acceptance criteria, estimated points
+ * Assigns scoredPercentage to a feature, based on all
+ * underlying fields, such as user story, acceptance criteria, estimated scoredPercentage
  */
-public class FeatureScorer {
+public class FeatureScorer extends AbstractScorer<Feature, ValidatedFeature> {
 
-    public static FeatureValidatorEntry performScorer(Feature feature, ValidationConfig validationConfig) {
-        if (feature == null) {
-            feature = Feature.builder().rank("0").summary("").userstory("").acceptanceCriteria("").key("0").build();
+    public FeatureScorer(ValidationConfig validationConfig) {
+        super(1.0, validationConfig);
+    }
+
+    public FeatureScorer(double potentialPoints, ValidationConfig validationConfig) {
+        super(potentialPoints, validationConfig);
+    }
+
+    @Override
+    public ValidatedFeature validate(Feature feature) {
+        if(feature == null){
+            feature = Feature.empty();
         }
-        if (feature.getUserstory() == null) {
-            feature.setUserstory("");
-        }
-        if (feature.getAcceptanceCriteria() == null) {
-            feature.setAcceptanceCriteria("");
-        }
-        if (feature.getEstimation() == null) {
-            feature.setEstimation(null);
-        }
 
-        UserStoryValidatorEntry userStoryValidatorEntry = StoryScorer.performScorer(feature.getUserstory(), validationConfig);
-        AcceptanceCriteriaValidatorEntry acceptanceCriteriaValidatorEntry = AcceptanceCriteriaScorer.performScorer(feature.getAcceptanceCriteria(), validationConfig);
-        EstimationValidatorEntry estimationValidatorEntry = EstimationScorer.performScorer(feature.getEstimation(), validationConfig);
+        final long count = Stream.of(validationConfig.getStory().isActive(), validationConfig.getCriteria().isActive(), validationConfig.getEstimation().isActive()).filter(item -> item).count();
+        final double potentialPointsPerSubItem = count == 0 ? 0 : potentialPoints / count;
 
-
-        List<Map.Entry<Boolean, AbstractStoryalidatorEntryItem>> entryList = new ArrayList<>();
-        entryList.add(new AbstractMap.SimpleEntry<>(validationConfig.getStory().isActive(),  userStoryValidatorEntry));
-        entryList.add(new AbstractMap.SimpleEntry<>(validationConfig.getCriteria().isActive(),  acceptanceCriteriaValidatorEntry));
-        entryList.add(new AbstractMap.SimpleEntry<>(validationConfig.getEstimation().isActive(),  estimationValidatorEntry));
-
-
-        float points = (float)
-                entryList.stream()
-                        .filter(Map.Entry::getKey)
-                        .mapToDouble(item -> item.getValue().getPointsValuation())
-                        .average()
-                        .orElse(0.0);
-
-        Rating rating = points >= validationConfig.getFeature().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL;
-
-        return FeatureValidatorEntry
+        final ValidatedFeature validatedFeature = ValidatedFeature
                 .builder()
                 .feature(feature)
                 .violations(new ArrayList<>())
-                .pointsValuation(points)
-                .rating(rating)
-                .userStoryValidatorEntry(userStoryValidatorEntry)
-                .acceptanceCriteriaValidatorEntry(acceptanceCriteriaValidatorEntry)
-                .estimationValidatorEntry(estimationValidatorEntry)
                 .build();
-    }
 
+        double points = 0.0;
+        if(validationConfig.getStory().isActive()){
+            ValidatedUserStory validatedUserStory = new StoryScorer(potentialPointsPerSubItem, validationConfig).validate(feature.getUserstory());
+            validatedFeature.setValidatedUserStory(validatedUserStory);
+            points += validatedUserStory.getScoredPoints();
+        }
+        if(validationConfig.getCriteria().isActive()){
+            ValidatedAcceptanceCriteria validatedAcceptanceCriteria = new AcceptanceCriteriaScorer(potentialPointsPerSubItem, validationConfig).validate(feature.getAcceptanceCriteria());
+            validatedFeature.setValidatedAcceptanceCriteria(validatedAcceptanceCriteria);
+            points += validatedAcceptanceCriteria.getScoredPoints();
+        }
+        if(validationConfig.getEstimation().isActive()){
+            ValidatedEstimation validatedEstimation = new EstimationScorer(potentialPointsPerSubItem, validationConfig).validate(feature.getEstimation());
+            validatedFeature.setValidatedEstimation(validatedEstimation);
+            points += validatedEstimation.getScoredPoints();
+        }
+
+
+        validatedFeature.setPoints(points, potentialPoints);
+        Rating rating = validatedFeature.getScoredPercentage() >= validationConfig.getFeature().getRatingThreshold() ? Rating.SUCCESS : Rating.FAIL;
+        validatedFeature.setRating(rating);
+
+        return validatedFeature;
+    }
 }

@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class BacklogItemListSummary implements Summarizable<BacklogItemListSummary>{
+public class BacklogItemListSummary implements Summarizable<BacklogItemListSummary> {
     private long passed;
     private long failed;
     private long count;
@@ -20,23 +20,39 @@ public class BacklogItemListSummary implements Summarizable<BacklogItemListSumma
 
     @Override
     public BacklogItemListSummary divideBy(int denominator) {
-        if(denominator == 0){
+        if (denominator == 0) {
             return new BacklogItemListSummary();
         }
         return BacklogItemListSummary.builder()
                 .failed(this.getFailed() / denominator)
                 .passed(this.getPassed() / denominator)
-                .count( this.getCount() / denominator)
+                .count(this.getCount() / denominator)
                 .build();
     }
 
     @Override
     public BacklogItemListSummary plus(BacklogItemListSummary that) {
         return BacklogItemListSummary.builder()
-                .failed(this.getFailed() + that.getFailed() )
-                .passed(this.getPassed() + that.getPassed() )
-                .count( this.getCount()  + that.getCount() )
+                .failed(this.getFailed() + that.getFailed())
+                .passed(this.getPassed() + that.getPassed())
+                .count(this.getCount() + that.getCount())
                 .build();
+    }
+
+    @Override
+    public BacklogItemListSummary minus(BacklogItemListSummary that) {
+        return BacklogItemListSummary.builder()
+                .failed(this.getFailed() - that.getFailed())
+                .passed(this.getPassed() - that.getPassed())
+                .count(this.getCount() - that.getCount())
+                .build();
+    }
+
+    @Override
+    public boolean isZero() {
+        return passed == 0
+                && failed == 0
+                && count == 0;
     }
 }
 

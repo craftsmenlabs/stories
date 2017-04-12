@@ -1,45 +1,38 @@
 package org.craftsmenlabs.stories.ranking;
 
-import org.craftsmenlabs.stories.api.models.validatorentry.BacklogItem;
-import org.craftsmenlabs.stories.api.models.validatorentry.Rankable;
+import org.craftsmenlabs.stories.api.models.items.types.BacklogItem;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-public class CurvedRanking<T extends BacklogItem> implements Ranking
-{
-	public static final int SMOOTH_CURVE = 2;
+public class CurvedRanking implements Ranking {
+    public static final int SMOOTH_CURVE = 2;
+    private List<? extends BacklogItem> entries;
 
+
+    /**
+     * Returns a normalised range of points associated with the position.
+     *
+     * @param entries
+     * @return
+     */
     @Override
-    public float createRanking(List entries) {
-        return createRankingConcrete(entries);
+    public List<Double> getRanking(List<? extends BacklogItem> entries) {
+        this.entries = entries;
+        final List<Double> absoluteCurve = IntStream.range(0, entries.size())
+                .mapToObj(this::curvedQuotient)
+                .collect(Collectors.toList());
+        final double sum = absoluteCurve.stream().mapToDouble(f -> f).sum();
+
+        return absoluteCurve.stream().map(f -> 100.0 * f / sum).collect(Collectors.toList());
     }
 
-    public float createRankingConcrete(List<T> entries) {
-        if (entries == null || entries.size() == 0) {
-			return 0.0f;
-		}
+    private double curvedQuotient(int position) {
+        return curvedQuotient(position, entries.size());
+    }
 
-        List<T> entries2 = entries.stream()
-                .sorted(Comparator.comparing(Rankable::getRank))
-                .collect(Collectors.toList());
-
-		float scoredPoints = 0f;
-		float couldHaveScored = 0f;
-		for (int i = 0; i < entries2.size(); i++)
-		{
-			float curvedQuotient = curvedQuotient(i, entries2.size());
-			couldHaveScored += curvedQuotient;
-			scoredPoints += entries2.get(i).getPointsValuation() * curvedQuotient;
-		}
-		return scoredPoints / couldHaveScored;
-	}
-
-	public float curvedQuotient(float position, float amountOfItems)
-	{
-		float part = position / amountOfItems;
-		return 1 - (float)(Math.pow(part, SMOOTH_CURVE));
-	}
-
+    private double curvedQuotient(int position, int size) {
+        return 1.0 - Math.pow(((double) position) / size, SMOOTH_CURVE);
+    }
 }

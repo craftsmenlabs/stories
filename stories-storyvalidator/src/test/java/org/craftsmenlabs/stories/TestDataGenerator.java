@@ -1,6 +1,6 @@
 package org.craftsmenlabs.stories;
 
-import org.craftsmenlabs.stories.api.models.scrumitems.Feature;
+import org.craftsmenlabs.stories.api.models.items.base.Feature;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -69,9 +69,9 @@ public class TestDataGenerator
 //        return BacklogValidatorEntry.builder().featureValidatorEntries(
 //            getGoodIssues(amount).stream()
 //                    .map(issue ->
-//                            FeatureValidatorEntry.builder()
+//                            ValidatedFeature.builder()
 //                                    .feature(issue)
-//                                    .pointsValuation(0f)
+//                                    .pointsValuation(0.0)
 //                                    .violations(new ArrayList<>())
 //                                    .build())
 //                    .collect(Collectors.toList())
@@ -82,9 +82,9 @@ public class TestDataGenerator
 //        return BacklogValidatorEntry.builder().featureValidatorEntries(
 //                getMixedValidatorItems(amount).stream()
 //                        .map(issue ->
-//                                FeatureValidatorEntry.builder()
+//                                ValidatedFeature.builder()
 //                                        .feature(issue)
-//                                        .pointsValuation(0f)
+//                                        .pointsValuation(0.0)
 //                                        .violations(new ArrayList<>())
 //                                        .build())
 //                        .collect(Collectors.toList())
