@@ -24,27 +24,19 @@ public class TrelloAPIImporter implements Importer {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    private String projectKey;
-    private String authKey;
-    private String token;
-
     private TrelloJsonParser parser;
 
-    public TrelloAPIImporter(StorynatorLogger logger, StorynatorConfig config) {
+    public TrelloAPIImporter(StorynatorLogger logger) {
         this.logger = logger;
-        SourceConfig.TrelloConfig trelloConfig = config.getSource().getTrello();
-        this.projectKey = trelloConfig.getProjectKey();
-        this.authKey = trelloConfig.getAuthKey();
-        this.token = trelloConfig.getToken();
-
         this.parser = new TrelloJsonParser();
     }
 
     @Override
-    public Backlog getBacklog() {
+    public Backlog getBacklog(StorynatorConfig config) {
+        SourceConfig.TrelloConfig trelloConfig = config.getSource().getTrello();
         try {
 
-            String url = "https://api.trello.com/1/boards/" + httpEncode(projectKey) + "/cards?" + "key=" + httpEncode(authKey) + "&" + "token=" + httpEncode(token);
+            String url = "https://api.trello.com/1/boards/" + httpEncode(trelloConfig.getProjectKey()) + "/cards?" + "key=" + httpEncode(trelloConfig.getAuthKey()) + "&" + "token=" + httpEncode(trelloConfig.getToken());
             logger.info("Retrieving data from:" + url);
 
             try {

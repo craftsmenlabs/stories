@@ -41,7 +41,7 @@ public class StorynatorPluginExecutor {
 
         // Import the data
         Importer importer = getImporter(storynatorConfig.getSource().getType());
-        Backlog backlog = importer.getBacklog();
+        Backlog backlog = importer.getBacklog(storynatorConfig);
 
         // Perform the backlog validation
         BacklogScorer scorer = new BacklogScorer(storynatorConfig.getValidation(), new CurvedRanking());
@@ -77,13 +77,13 @@ public class StorynatorPluginExecutor {
         switch (enabled) {
             case "jira":
                 logger.info("Using JiraAPIImporter for import.");
-                return new JiraAPIImporter(logger, storynatorConfig);
+                return new JiraAPIImporter(logger);
             case "trello":
                 logger.info("Using TrelloAPIImporter for import.");
-                return new TrelloAPIImporter(logger, storynatorConfig);
+                return new TrelloAPIImporter(logger);
             case "github":
                 logger.info("Using GithubAPIImporter for import.");
-                return new GithubAPIImporter(logger, storynatorConfig);
+                return new GithubAPIImporter(logger);
             default:
                 throw new StoriesException(StoriesException.ERR_SOURCE_ENABLED_MISSING);
         }

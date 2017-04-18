@@ -30,31 +30,23 @@ public class GithubAPIImporter implements Importer {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    private String projectKey;
-    private String authKey;
-    private String token;
-
     private GithubJsonParser parser;
 
-    public GithubAPIImporter(StorynatorLogger logger, StorynatorConfig config) {
+    public GithubAPIImporter(StorynatorLogger logger) {
         this.logger = logger;
-        SourceConfig.GithubConfig githubConfig = config.getSource().getGithub();
-        this.projectKey = githubConfig.getProject();
-        this.authKey = githubConfig.getOwner();
-        this.token = githubConfig.getToken();
-
         this.parser = new GithubJsonParser();
     }
 
     @Override
-    public Backlog getBacklog() {
+    public Backlog getBacklog(StorynatorConfig config) {
+        SourceConfig.GithubConfig githubConfig = config.getSource().getGithub();
         try {
-            String url = "http://github.com/repos/" + httpEncode(authKey) + "/" + httpEncode(projectKey) + "/issues?filter=all";
+            String url = "http://github.com/repos/" + httpEncode(githubConfig.getOwner()) + "/" + httpEncode(githubConfig.getProject()) + "/issues?filter=all";
             logger.info("Retrieving data from:" + url);
 
             try {
                 RestTemplate restTemplate = new RestTemplate();
-                AuthorizationInterceptor authorizationInterceptor = new AuthorizationInterceptor("token " + httpEncode(token));
+                AuthorizationInterceptor authorizationInterceptor = new AuthorizationInterceptor("token " + httpEncode(githubConfig.getToken()));
                 restTemplate.setInterceptors(Collections.singletonList(authorizationInterceptor));
                 String responseEntity = restTemplate.getForObject(url, String.class);
                 List<GithubJsonIssue> issues = objectMapper.readValue(responseEntity, objectMapper.getTypeFactory().constructCollectionType(List.class, GithubJsonIssue.class));

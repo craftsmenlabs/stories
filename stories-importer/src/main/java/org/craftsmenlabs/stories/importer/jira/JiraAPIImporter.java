@@ -22,52 +22,39 @@ import java.util.Map;
  */
 public class JiraAPIImporter implements Importer {
     private final StorynatorLogger logger;
-
-    private String urlResource;
-    private String projectKey;
-    private String username;
-    private String password;
-
-    private StorynatorConfig storynatorConfig;
     private JiraFieldMapRetriever jiraFieldMapRetriever;
 
     private RestTemplate restTemplate = new RestTemplate();
 
-    public JiraAPIImporter(StorynatorLogger logger, StorynatorConfig storynatorConfig) {
+    public JiraAPIImporter(StorynatorLogger logger) {
         this.logger = logger;
-        SourceConfig.JiraConfig jiraConfig = storynatorConfig.getSource().getJira();
-        this.urlResource = jiraConfig.getUrl();
-        this.projectKey = jiraConfig.getProjectKey();
-        this.username = jiraConfig.getUsername();
-        this.password = jiraConfig.getPassword();
-
-        this.storynatorConfig = storynatorConfig;
 
         jiraFieldMapRetriever = new JiraFieldMapRetriever(logger);
     }
 
     @Override
-    public Backlog getBacklog() {
+    public Backlog getBacklog(StorynatorConfig storynatorConfig) {
 
+        SourceConfig.JiraConfig jiraConfig = storynatorConfig.getSource().getJira();
         // build URL params
-        String url = urlResource + "/rest/api/2/search";
+        String url = jiraConfig.getUrl() + "/rest/api/2/search";
         logger.info("Retrieving data from: " + url);
 
         JiraRequest jiraRequest = JiraRequest.builder()
-                .jql("project=" + projectKey)
+                .jql("project=" + jiraConfig.getProjectKey())
                 .maxResults(10000)
                 .build();
         try {
             // Add auth token
             restTemplate.setInterceptors(Collections.singletonList((request, body, execution) -> {
-                request.getHeaders().add("Authorization", "Basic " + Base64Utils.encodeToString((this.username + ":" + this.password).getBytes()));
+                request.getHeaders().add("Authorization", "Basic " + Base64Utils.encodeToString((jiraConfig.getUsername() + ":" + jiraConfig.getPassword()).getBytes()));
                 return execution.execute(request, body);
             }));
             //get the jira backlog
             JiraBacklog backlog = restTemplate.postForObject(url, jiraRequest, JiraBacklog.class);
 
             //retrieve the human readable fieldmap
-            final Map<String, String> fieldMap = jiraFieldMapRetriever.getFieldMap(username, password, urlResource);
+            final Map<String, String> fieldMap = jiraFieldMapRetriever.getFieldMap(jiraConfig.getUsername(), jiraConfig.getPassword(), jiraConfig.getUrl());
             final FieldMappingConfig fieldMappingConfig = this.mapToJiraIds(storynatorConfig.getFieldMapping(), fieldMap);
 
             //init the parser
@@ -81,7 +68,7 @@ public class JiraAPIImporter implements Importer {
             //parse the jira backlog to a storynator backlog
             return parser.parse(backlog);
         } catch (HttpClientErrorException e) {
-            logger.error("Jira call went wrong with url: " + urlResource + " and body: " + jiraRequest);
+            logger.error("Jira call went wrong with url: " + jiraConfig.getUrl() + " and body: " + jiraRequest);
             throw new StoriesException("Failed to connect to " + url + " Error message was: " + e.getMessage() + "body: \r\n" + e.getResponseBodyAsString());
         } catch (IOException e) {
             e.printStackTrace();

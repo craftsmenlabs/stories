@@ -18,7 +18,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class GithubAPIImporterTest
 {
-	private GithubAPIImporter githubAPIImporter = new GithubAPIImporter(new StandaloneLogger(), StorynatorConfig.builder().source(SourceConfig.builder().github(SourceConfig.GithubConfig.builder().owner("key").token("token").project("key").build()).build()).build());
+	private GithubAPIImporter githubAPIImporter = new GithubAPIImporter(new StandaloneLogger());
+	private StorynatorConfig config = StorynatorConfig.builder().source(SourceConfig.builder().github(SourceConfig.GithubConfig.builder().owner("key").token("token").project("key").build()).build()).build();
 
 	@Mocked
 	private RestTemplate restTemplate;
@@ -33,7 +34,7 @@ public class GithubAPIImporterTest
 
 		}};
 
-		Backlog backlog = githubAPIImporter.getBacklog();
+		Backlog backlog = githubAPIImporter.getBacklog(config);
         assertThat(backlog.getIssues()).hasSize(2);
     }
 
@@ -47,7 +48,7 @@ public class GithubAPIImporterTest
 
 		}};
 
-		githubAPIImporter.getBacklog();
+		githubAPIImporter.getBacklog(config);
 	}
 
 	private String readFile(String resource) throws Exception

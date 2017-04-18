@@ -20,7 +20,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  */
 public class TrelloAPIImporterTest {
-    private TrelloAPIImporter trelloAPIImporter = new TrelloAPIImporter(new StandaloneLogger(), StorynatorConfig.builder().source(SourceConfig.builder().trello(SourceConfig.TrelloConfig.builder().authKey("key").token("token").projectKey("key").build()).build()).build());
+    private TrelloAPIImporter trelloAPIImporter = new TrelloAPIImporter(new StandaloneLogger());
+    private StorynatorConfig config = StorynatorConfig.builder().source(SourceConfig.builder().trello(SourceConfig.TrelloConfig.builder().authKey("key").token("token").projectKey("key").build()).build()).build();
 
     @Mocked
     private RestTemplate restTemplate;
@@ -33,7 +34,7 @@ public class TrelloAPIImporterTest {
 
         }};
 
-        Backlog backlog = trelloAPIImporter.getBacklog();
+        Backlog backlog = trelloAPIImporter.getBacklog(config);
         assertThat(backlog.getIssues()).hasSize(6);
     }
 
@@ -45,7 +46,7 @@ public class TrelloAPIImporterTest {
 
         }};
 
-        trelloAPIImporter.getBacklog();
+        trelloAPIImporter.getBacklog(config);
     }
 
     private String readFile(String resource) throws Exception {

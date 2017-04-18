@@ -62,7 +62,7 @@ public class JiraAPIImporterTest {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    private JiraAPIImporter jiraAPIImporter = new JiraAPIImporter(new StandaloneLogger(), StorynatorConfig.builder().fieldMapping(fieldMappingConfigCopy).filter(filterConfig).source(SourceConfig.builder().jira(SourceConfig.JiraConfig.builder().url("http://jira.com").password("").username("").projectKey("HAR").build()).build()).build());
+    private JiraAPIImporter jiraAPIImporter = new JiraAPIImporter(new StandaloneLogger());
 
     @Mocked
     private RestTemplate restTemplate;
@@ -83,15 +83,13 @@ public class JiraAPIImporterTest {
             }};
         }};
 
-        jiraAPIImporter = new JiraAPIImporter(
-                new StandaloneLogger(),
-                StorynatorConfig.builder()
-                        .fieldMapping(fieldMappingConfigCopy)
-                        .filter(filterConfig)
-                        .source(SourceConfig.builder()
-                                .jira(SourceConfig.JiraConfig.builder().url("http://jira.com").password("").username("").projectKey("HAR").build())
-                                .build()).build());
-        Backlog backlog = jiraAPIImporter.getBacklog();
+        jiraAPIImporter = new JiraAPIImporter(new StandaloneLogger());
+        Backlog backlog = jiraAPIImporter.getBacklog(StorynatorConfig.builder()
+                .fieldMapping(fieldMappingConfigCopy)
+                .filter(filterConfig)
+                .source(SourceConfig.builder()
+                        .jira(SourceConfig.JiraConfig.builder().url("http://jira.com").password("").username("").projectKey("HAR").build())
+                        .build()).build());
         assertThat(backlog.getIssues()).hasSize(1);
     }
 
@@ -103,7 +101,7 @@ public class JiraAPIImporterTest {
         }};
 
 
-        jiraAPIImporter.getBacklog();
+        jiraAPIImporter.getBacklog(StorynatorConfig.builder().fieldMapping(fieldMappingConfigCopy).filter(filterConfig).source(SourceConfig.builder().jira(SourceConfig.JiraConfig.builder().url("http://jira.com").password("").username("").projectKey("HAR").build()).build()).build());
     }
 
 
