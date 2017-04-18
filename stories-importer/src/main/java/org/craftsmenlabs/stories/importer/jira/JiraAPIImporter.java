@@ -31,6 +31,8 @@ public class JiraAPIImporter implements Importer {
     private StorynatorConfig storynatorConfig;
     private JiraFieldMapRetriever jiraFieldMapRetriever;
 
+    private RestTemplate restTemplate = new RestTemplate();
+
     public JiraAPIImporter(StorynatorLogger logger, StorynatorConfig storynatorConfig) {
         this.logger = logger;
         SourceConfig.JiraConfig jiraConfig = storynatorConfig.getSource().getJira();
@@ -41,7 +43,7 @@ public class JiraAPIImporter implements Importer {
 
         this.storynatorConfig = storynatorConfig;
 
-        jiraFieldMapRetriever = new JiraFieldMapRetriever(username, password, urlResource, logger);
+        jiraFieldMapRetriever = new JiraFieldMapRetriever(logger);
     }
 
     @Override
@@ -50,8 +52,6 @@ public class JiraAPIImporter implements Importer {
         // build URL params
         String url = urlResource + "/rest/api/2/search";
         logger.info("Retrieving data from: " + url);
-
-        RestTemplate restTemplate = new RestTemplate();
 
         JiraRequest jiraRequest = JiraRequest.builder()
                 .jql("project=" + projectKey)
@@ -67,7 +67,7 @@ public class JiraAPIImporter implements Importer {
             JiraBacklog backlog = restTemplate.postForObject(url, jiraRequest, JiraBacklog.class);
 
             //retrieve the human readable fieldmap
-            final Map<String, String> fieldMap = jiraFieldMapRetriever.getFieldMap();
+            final Map<String, String> fieldMap = jiraFieldMapRetriever.getFieldMap(username, password, urlResource);
             final FieldMappingConfig fieldMappingConfig = this.mapToJiraIds(storynatorConfig.getFieldMapping(), fieldMap);
 
             //init the parser

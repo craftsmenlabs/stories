@@ -3,6 +3,8 @@ package org.craftsmenlabs.stories.importer;
 import mockit.Expectations;
 import mockit.Mocked;
 import org.apache.commons.io.FileUtils;
+import org.craftsmenlabs.stories.api.models.config.SourceConfig;
+import org.craftsmenlabs.stories.api.models.config.StorynatorConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
 import org.craftsmenlabs.stories.api.models.items.base.Backlog;
 import org.craftsmenlabs.stories.api.models.logging.StandaloneLogger;
@@ -17,38 +19,37 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  *
  */
-public class TrelloAPIImporterTest
-{
-	private TrelloAPIImporter trelloAPIImporter = new TrelloAPIImporter(new StandaloneLogger(), "key", "authKey", "token");
+public class TrelloAPIImporterTest {
+    private TrelloAPIImporter trelloAPIImporter = new TrelloAPIImporter(new StandaloneLogger(), StorynatorConfig.builder().source(SourceConfig.builder().trello(SourceConfig.TrelloConfig.builder().authKey("key").token("token").projectKey("key").build()).build()).build());
 
-	@Mocked
-	private RestTemplate restTemplate;
+    @Mocked
+    private RestTemplate restTemplate;
 
-	@Test
-	public void testSuccessResponse() throws Exception {
-		new Expectations(){{
-			restTemplate.getForObject(withAny(""), withAny(String.class));
-			result = readFile("trello-test.json");
+    @Test
+    public void testSuccessResponse() throws Exception {
+        new Expectations() {{
+            restTemplate.getForObject(withAny(""), withAny(String.class));
+            result = readFile("trello-test.json");
 
-		}};
+        }};
 
-		Backlog backlog = trelloAPIImporter.getBacklog();
+        Backlog backlog = trelloAPIImporter.getBacklog();
         assertThat(backlog.getIssues()).hasSize(6);
     }
 
-	@Test(expected = StoriesException.class)
-	public void testErrorResponse() throws Exception {
-		new Expectations(){{
-			restTemplate.getForObject(withAny(""), withAny(String.class));
-			result = new StoriesException("");
+    @Test(expected = StoriesException.class)
+    public void testErrorResponse() throws Exception {
+        new Expectations() {{
+            restTemplate.getForObject(withAny(""), withAny(String.class));
+            result = new StoriesException("");
 
-		}};
+        }};
 
-		trelloAPIImporter.getBacklog();
-	}
+        trelloAPIImporter.getBacklog();
+    }
 
-	private String readFile(String resource) throws Exception {
-		URL url = this.getClass().getClassLoader().getResource(resource);
+    private String readFile(String resource) throws Exception {
+        URL url = this.getClass().getClassLoader().getResource(resource);
         return FileUtils.readFileToString(new File(url.toURI()), "UTF-8");
     }
 }

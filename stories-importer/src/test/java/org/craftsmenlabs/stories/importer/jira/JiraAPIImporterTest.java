@@ -77,7 +77,7 @@ public class JiraAPIImporterTest {
             restTemplate.postForObject(withAny(""), withAny(jiraRequest), withAny(JiraBacklog.class));
             result = objectMapper.readValue(readFile("jira-test.json"), JiraBacklog.class);
 
-            jiraFieldMapRetriever.getFieldMap();
+            jiraFieldMapRetriever.getFieldMap(anyString, anyString, anyString);
             result = new HashMap<String, String>(){{
                 put("Rank","customfield_10401");
             }};

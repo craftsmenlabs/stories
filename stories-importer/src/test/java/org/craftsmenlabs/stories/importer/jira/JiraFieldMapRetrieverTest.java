@@ -22,7 +22,7 @@ public class JiraFieldMapRetrieverTest {
 
     @Before
     public void setUp() throws Exception {
-        jiraFieldMapRetriever = new JiraFieldMapRetriever("username", "password", "http://jira.com", new StandaloneLogger());
+        jiraFieldMapRetriever = new JiraFieldMapRetriever(new StandaloneLogger());
     }
 
     @Test
@@ -32,8 +32,8 @@ public class JiraFieldMapRetrieverTest {
             result = readFile("jira-fieldMap-test.json");
         }};
 
-        assertThat(jiraFieldMapRetriever.getFieldMap().size()).isEqualTo(92);
-        assertThat(jiraFieldMapRetriever.getFieldMap().get("Issue Type")).isEqualTo("issuetype");
+        assertThat(jiraFieldMapRetriever.getFieldMap("username", "password", "http://jira.com").size()).isEqualTo(92);
+        assertThat(jiraFieldMapRetriever.getFieldMap("username", "password", "http://jira.com").get("Issue Type")).isEqualTo("issuetype");
     }
 
 

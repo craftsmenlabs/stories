@@ -1,6 +1,8 @@
 package org.craftsmenlabs.stories.importer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.craftsmenlabs.stories.api.models.config.SourceConfig;
+import org.craftsmenlabs.stories.api.models.config.StorynatorConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
 import org.craftsmenlabs.stories.api.models.items.base.Backlog;
 import org.craftsmenlabs.stories.api.models.logging.StorynatorLogger;
@@ -34,11 +36,12 @@ public class GithubAPIImporter implements Importer {
 
     private GithubJsonParser parser;
 
-    public GithubAPIImporter(StorynatorLogger logger, String projectKey, String authKey, String token) {
+    public GithubAPIImporter(StorynatorLogger logger, StorynatorConfig config) {
         this.logger = logger;
-        this.projectKey = projectKey;
-        this.authKey = authKey;
-        this.token = token;
+        SourceConfig.GithubConfig githubConfig = config.getSource().getGithub();
+        this.projectKey = githubConfig.getProject();
+        this.authKey = githubConfig.getOwner();
+        this.token = githubConfig.getToken();
 
         this.parser = new GithubJsonParser();
     }

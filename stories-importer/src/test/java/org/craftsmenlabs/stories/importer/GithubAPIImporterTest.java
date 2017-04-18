@@ -3,6 +3,8 @@ package org.craftsmenlabs.stories.importer;
 import mockit.Expectations;
 import mockit.Mocked;
 import org.apache.commons.io.FileUtils;
+import org.craftsmenlabs.stories.api.models.config.SourceConfig;
+import org.craftsmenlabs.stories.api.models.config.StorynatorConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
 import org.craftsmenlabs.stories.api.models.items.base.Backlog;
 import org.craftsmenlabs.stories.api.models.logging.StandaloneLogger;
@@ -16,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class GithubAPIImporterTest
 {
-	private GithubAPIImporter githubAPIImporter = new GithubAPIImporter(new StandaloneLogger(), "key", "authKey", "token");
+	private GithubAPIImporter githubAPIImporter = new GithubAPIImporter(new StandaloneLogger(), StorynatorConfig.builder().source(SourceConfig.builder().github(SourceConfig.GithubConfig.builder().owner("key").token("token").project("key").build()).build()).build());
 
 	@Mocked
 	private RestTemplate restTemplate;

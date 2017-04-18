@@ -13,17 +13,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class JiraFieldMapRetriever {
-
-    private String username;
-    private String password;
-    private String urlResource;
     private final StorynatorLogger logger;
+    private RestTemplate restTemplate;
 
-    public JiraFieldMapRetriever(String username, String password, String urlResource, StorynatorLogger logger) {
-        this.username = username;
-        this.password = password;
-        this.urlResource = urlResource;
+    public JiraFieldMapRetriever(StorynatorLogger logger) {
         this.logger = logger;
+        this.restTemplate = new RestTemplate();
     }
 
     /**
@@ -33,23 +28,21 @@ public class JiraFieldMapRetriever {
      * @return
      * @throws IOException
      */
-    public Map<String, String> getFieldMap() throws IOException {
-        return retrieveFieldList().stream().collect(Collectors.toMap(JiraFieldMap::getName, JiraFieldMap::getId, (m1, m2) -> {
+    public Map<String, String> getFieldMap(String username, String password, String urlResource) throws IOException {
+        return retrieveFieldList(username, password, urlResource).stream().collect(Collectors.toMap(JiraFieldMap::getName, JiraFieldMap::getId, (m1, m2) -> {
             logger.warn(String.format("Duplicate name found in jira field mapping, with keys %s and %s. Please ask your Jira admin to remove this ambiguity. I will default to %s", m1, m2, m2));
             return m2;
         }));
     }
 
-    public List<JiraFieldMap> retrieveFieldList() throws IOException {
+    public List<JiraFieldMap> retrieveFieldList(String username, String password, String urlResource) throws IOException {
         // build URL params
         String url = urlResource + "/rest/api/2/field";
         logger.info("Retrieving field mapping from: " + url);
 
-        RestTemplate restTemplate = new RestTemplate();
-
         // Add auth token
         restTemplate.setInterceptors(Collections.singletonList((request, body, execution) -> {
-            request.getHeaders().add("Authorization", "Basic " + Base64Utils.encodeToString((this.username + ":" + this.password).getBytes()));
+            request.getHeaders().add("Authorization", "Basic " + Base64Utils.encodeToString((username + ":" + password).getBytes()));
             return execution.execute(request, body);
         }));
 

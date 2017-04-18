@@ -3,7 +3,6 @@ package org.craftsmenlabs.stories.launcher;
 import org.craftsmenlabs.stories.api.models.Reporter;
 import org.craftsmenlabs.stories.api.models.StoriesReport;
 import org.craftsmenlabs.stories.api.models.config.ReportConfig;
-import org.craftsmenlabs.stories.api.models.config.SourceConfig;
 import org.craftsmenlabs.stories.api.models.config.StorynatorConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
 import org.craftsmenlabs.stories.api.models.items.base.Backlog;
@@ -77,17 +76,14 @@ public class StorynatorPluginExecutor {
     private Importer getImporter(String enabled) {
         switch (enabled) {
             case "jira":
-                SourceConfig.JiraConfig jiraConfig = storynatorConfig.getSource().getJira();
-                logger.info("Using JiraAPIImporter for import." + jiraConfig.getUrl());
+                logger.info("Using JiraAPIImporter for import.");
                 return new JiraAPIImporter(logger, storynatorConfig);
             case "trello":
                 logger.info("Using TrelloAPIImporter for import.");
-                SourceConfig.TrelloConfig trelloConfig = storynatorConfig.getSource().getTrello();
-                return new TrelloAPIImporter(logger, trelloConfig.getProjectKey(), trelloConfig.getAuthKey(), trelloConfig.getToken());
+                return new TrelloAPIImporter(logger, storynatorConfig);
             case "github":
                 logger.info("Using GithubAPIImporter for import.");
-                SourceConfig.GithubConfig githubConfig = storynatorConfig.getSource().getGithub();
-                return new GithubAPIImporter(logger, githubConfig.getProject(), githubConfig.getOwner(), githubConfig.getToken());
+                return new GithubAPIImporter(logger, storynatorConfig);
             default:
                 throw new StoriesException(StoriesException.ERR_SOURCE_ENABLED_MISSING);
         }

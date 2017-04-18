@@ -1,6 +1,8 @@
 package org.craftsmenlabs.stories.importer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.craftsmenlabs.stories.api.models.config.SourceConfig;
+import org.craftsmenlabs.stories.api.models.config.StorynatorConfig;
 import org.craftsmenlabs.stories.api.models.exception.StoriesException;
 import org.craftsmenlabs.stories.api.models.items.base.Backlog;
 import org.craftsmenlabs.stories.api.models.logging.StorynatorLogger;
@@ -28,11 +30,12 @@ public class TrelloAPIImporter implements Importer {
 
     private TrelloJsonParser parser;
 
-    public TrelloAPIImporter(StorynatorLogger logger, String projectKey, String authKey, String token) {
+    public TrelloAPIImporter(StorynatorLogger logger, StorynatorConfig config) {
         this.logger = logger;
-        this.projectKey = projectKey;
-        this.authKey = authKey;
-        this.token = token;
+        SourceConfig.TrelloConfig trelloConfig = config.getSource().getTrello();
+        this.projectKey = trelloConfig.getProjectKey();
+        this.authKey = trelloConfig.getAuthKey();
+        this.token = trelloConfig.getToken();
 
         this.parser = new TrelloJsonParser();
     }
@@ -41,7 +44,7 @@ public class TrelloAPIImporter implements Importer {
     public Backlog getBacklog() {
         try {
 
-                String url = "https://api.trello.com/1/boards/" + httpEncode(projectKey) + "/cards?" + "key=" + httpEncode(authKey) + "&" + "token=" + httpEncode(token);
+            String url = "https://api.trello.com/1/boards/" + httpEncode(projectKey) + "/cards?" + "key=" + httpEncode(authKey) + "&" + "token=" + httpEncode(token);
             logger.info("Retrieving data from:" + url);
 
             try {
