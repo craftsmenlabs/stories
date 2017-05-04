@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Data
@@ -34,6 +36,19 @@ public class ValidationConfig {
 
     @JsonProperty("teamTask")
     private ValidatorEntry teamTask;
+
+    public static ValidationConfig createDefault() {
+        return  ValidationConfig.builder()
+                .backlog(new ValidationConfig.ValidatorEntry(60.0, true))
+                .feature(new ValidationConfig.ValidatorEntry(60.0, true))
+                .bug(BugValidatorEntry.createDefault())
+                .criteria(CriteriaValidatorEntry.createDefault())
+                .estimation(new ValidationConfig.ValidatorEntry(60.0, true))
+                .epic(EpicValidatorEntry.createDefault())
+                .story(StoryValidatorEntry.createDefault())
+                .teamTask(new ValidationConfig.ValidatorEntry(60.0, true))
+                .build();
+    }
 
     @Data
     @NoArgsConstructor
@@ -72,6 +87,16 @@ public class ValidationConfig {
         private List<String> iKeywords;
         private List<String> soKeywords;
 
+        public static StoryValidatorEntry createDefault() {
+            StoryValidatorEntry entry = new StoryValidatorEntry();
+            entry.setActive(true);
+            entry.setRatingThreshold(60.0);
+            entry.setAsKeywords(Collections.singletonList("As a"));
+            entry.setIKeywords(Collections.singletonList("I want"));
+            entry.setSoKeywords(Collections.singletonList("So that"));
+            return entry;
+        }
+
         @Override
         public String toString() {
             return super.toString() +
@@ -91,6 +116,16 @@ public class ValidationConfig {
         private List<String> whenKeywords;
         private List<String> thenKeywords;
 
+        public static CriteriaValidatorEntry createDefault() {
+            CriteriaValidatorEntry entry = new CriteriaValidatorEntry();
+            entry.setActive(true);
+            entry.setRatingThreshold(60.0);
+            entry.setGivenKeywords(Collections.singletonList("given"));
+            entry.setWhenKeywords(Collections.singletonList("when"));
+            entry.setThenKeywords(Collections.singletonList("then"));
+            return entry;
+        }
+
         @Override
         public String toString() {
             return super.toString() +
@@ -106,12 +141,25 @@ public class ValidationConfig {
     @NoArgsConstructor
     @ToString(callSuper = true)
     public static class BugValidatorEntry extends FillableValidatorEntry {
-
+        public static BugValidatorEntry createDefault() {
+            BugValidatorEntry entry = new BugValidatorEntry();
+            entry.setActive(true);
+            entry.setRatingThreshold(60.0);
+            entry.setEnabledFields(Arrays.asList("priority", "reproduction_path", "environment", "expected_behaviour", "acceptation_criteria"));
+            return entry;
+        }
     }
 
     @Data
     @NoArgsConstructor
     @ToString(callSuper = true)
     public static class EpicValidatorEntry extends FillableValidatorEntry {
+        public static EpicValidatorEntry createDefault() {
+            EpicValidatorEntry entry = new EpicValidatorEntry();
+            entry.setActive(true);
+            entry.setRatingThreshold(60.0);
+            entry.setEnabledFields(Collections.singletonList("goal"));
+            return entry;
+        }
     }
 }

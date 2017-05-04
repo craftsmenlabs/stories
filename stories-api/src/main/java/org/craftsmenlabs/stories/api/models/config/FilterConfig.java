@@ -11,4 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class FilterConfig {
     private String status;
+
+    public static FilterConfig createDefault() {
+        return FilterConfig.builder().status("To Do").build();
+    }
 }

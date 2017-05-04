@@ -17,6 +17,17 @@ public class FieldMappingConfig {
     private TeamTaskMapping teamTask;
     private String rank;
 
+
+    public static FieldMappingConfig createDefault() {
+        return FieldMappingConfig.builder()
+                .rank("")
+                .feature(FieldMappingConfig.FeatureMapping.builder().build())
+                .bug(FieldMappingConfig.BugMapping.builder().build())
+                .epic(FieldMappingConfig.EpicMapping.builder().build())
+                .teamTask(FieldMappingConfig.TeamTaskMapping.builder().build())
+                .build();
+    }
+
     @Data
     @Builder
     @NoArgsConstructor

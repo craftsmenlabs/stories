@@ -16,6 +16,15 @@ public class SourceConfig {
     private GithubConfig github;
     private FileConfig file;
 
+    public static SourceConfig createDefault() {
+        return SourceConfig.builder()
+                .type("jira")
+                .trello(SourceConfig.TrelloConfig.builder().build())
+                .jira(SourceConfig.JiraConfig.builder().build())
+                .github(SourceConfig.GithubConfig.builder().build())
+                .build();
+    }
+
     @Data
     @Builder
     @NoArgsConstructor
@@ -36,6 +45,7 @@ public class SourceConfig {
         private String authKey;
         private String projectKey;
     }
+
     @Data
     @Builder
     @NoArgsConstructor
