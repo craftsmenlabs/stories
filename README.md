@@ -13,7 +13,7 @@ With Stories we are able to determine the "coverage" of a backlog.
 
 Things we meassure:
 * Is the user story format used? (As a ... I want ... So ...)
-* Does the story include acceptance criteria (Gherkin)? (Given ... when ... then ...)
+* Does the story include acceptance criteria? (Given ... when ... then ...)
 * Is the story estimated?
 * What is the age of story (with a threshold of x week)
 * When was the story mutated?
