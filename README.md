@@ -9,7 +9,7 @@
 Stories is a issue validation framework that continuously validates the quality of a backlog (checking all user stories). 
 
 We want to apply the same principles we apply to code quality to the input (the product backlog). 
-With Stories we are able to determine the "coverage" of a backlog. 
+With Stories we are able to determine the "coverage" of a product backlog. 
 
 Things we meassure:
 * Is the user story format used? (As a ... I want ... So ...)
