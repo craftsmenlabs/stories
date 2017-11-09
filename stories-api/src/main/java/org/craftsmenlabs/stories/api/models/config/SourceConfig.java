@@ -1,5 +1,6 @@
 package org.craftsmenlabs.stories.api.models.config;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,6 +33,7 @@ public class SourceConfig {
     public static class JiraConfig {
         private String url;
         private String username;
+        @JsonIgnore
         private String password;
         private String projectKey;
     }
@@ -42,6 +44,7 @@ public class SourceConfig {
     @AllArgsConstructor
     public static class TrelloConfig {
         private String token;
+        @JsonIgnore
         private String authKey;
         private String projectKey;
     }
@@ -51,6 +54,7 @@ public class SourceConfig {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class GithubConfig {
+        @JsonIgnore
         private String token;
         private String owner;
         private String project;
