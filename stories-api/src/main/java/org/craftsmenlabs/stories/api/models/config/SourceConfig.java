@@ -1,6 +1,7 @@
 package org.craftsmenlabs.stories.api.models.config;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,10 +31,10 @@ public class SourceConfig {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonIgnoreProperties(value = {"password"}, allowSetters = true)
     public static class JiraConfig {
         private String url;
         private String username;
-        @JsonIgnore
         private String password;
         private String projectKey;
     }
@@ -42,9 +43,9 @@ public class SourceConfig {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonIgnoreProperties(value = {"authKey"}, allowSetters = true)
     public static class TrelloConfig {
         private String token;
-        @JsonIgnore
         private String authKey;
         private String projectKey;
     }
@@ -53,6 +54,7 @@ public class SourceConfig {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonIgnoreProperties(value = {"token"}, allowSetters = true)
     public static class GithubConfig {
         @JsonIgnore
         private String token;
