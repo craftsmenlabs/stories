@@ -17,7 +17,7 @@ import java.util.Arrays;
  * @param <T>
  */
 public abstract class AbstractJiraConverter<T extends BacklogItem> {
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d'T'H:m:s['.000']Z");
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d'T'H:m:s[.SSS][Z]");
     protected FieldMappingConfig config;
     protected SourceConfig sourceConfig;
 
